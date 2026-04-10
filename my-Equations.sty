@@ -1,0 +1,82 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{my-Equations}[2020]
+\RequirePackage{amsmath}
+\RequirePackage{mathrsfs}
+
+% -------------------------------
+% General Formating
+% -------------------------------
+% for table padding
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+% for table padding (Using \tabularnewline)
+\newcommand\Tn{\rule{0pt}{0.2in}}       % Top strut
+\newcommand\Bn{\rule[-0.65in]{0pt}{0pt}} % Bottom strut
+
+% -------------------------------
+% My Special Fractions
+% -------------------------------
+\newcommand{\piOtwo}{\frac{\pi}{2}}
+
+% ----------------------------------
+%  (Partial) differential formating
+% ----------------------------------
+\newcommand{\dt}{d_t\,}
+\newcommand{\pdtt}[1]{\frac{\partial^2\, #1}{\partial t^2}}
+\newcommand{\ddt}[1]{\frac{d\, #1}{d t}}
+\newcommand{\ddz}[1]{\frac{d\, #1}{d z}}
+
+\newcommand{\lin}{^{(1)}}
+\newcommand{\nlin}{^{NL}}
+\newcommand{\snd}{^{(2)}}
+\newcommand{\trd}{^{(3)}}
+
+\newcommand{\ijkl}{_{ijkl}}
+% -----------------------------------------------------
+%  Special/Bold Characters (Because I use a Lot of E&M)
+% -----------------------------------------------------
+\newcommand{\epsO}{\epsilon_o}
+\newcommand{\scD}{\mathcal{D}\,}
+\newcommand{\scF}{\mathscr{F}}
+\newcommand{\xyz}{x,y,z}
+\newcommand{\fxyz}{f_x,f_y,f_z}
+\newcommand{\kxyz}{k_x,k_y,k_z}
+\newcommand{\xyzp}{(x,y,z)\,}
+
+\newcommand{\bE}{{\bf E}}
+\newcommand{\bD}{{\bf D}}
+\newcommand{\bB}{{\bf B}}
+\newcommand{\bH}{{\bf H}}
+\newcommand{\bM}{{\bf M}}
+\newcommand{\bJ}{{\bf J}}
+\newcommand{\bP}{{\bf P}}
+\newcommand{\br}{{\bf r}}
+\newcommand{\tE}{{\widetilde{E}}}
+
+% -------------
+%  Paranthesis
+% -------------
+\newcommand{\sqrP}[1]{\left[ #1 \right]}
+\newcommand{\rndP}[1]{\left( #1 \right)}
+
+% ---------------------
+%  LaTeX eqantion mode
+% ---------------------
+\newcommand{\eqnNum}[2]{\begin{equation} {#1} \label{#2} \end{equation}}
+\newcommand{\eqnNN}[1]{\begin{equation*} {#1}\end{equation*}}
+
+\newcommand{\diffEqn}[1]{d_t{#1}=\mathcal{D}\,\nabla{#1}}
+
+% -----------------------------------------
+%  Formatting for the Really Long Equations
+% -----------------------------------------
+
+\newcommand{\wwo}{(2\omega;\omega,\omega,0)}
+\newcommand{\wow}{(2\omega;\omega,0, \omega)}
+\newcommand{\oww}{(2\omega;0,\omega,\omega)}
+\newcommand{\Ewwo}[3]{ E_{#1}(\omega) E_{#2}(\omega) E_{#3}}
+\newcommand{\Ewow}[3]{ E_{#1}(\omega) E_{#2} E_{#3}(\omega)}
+\newcommand{\Eoww}[3]{ E_{#1} E_{#2}(\omega) E_{#3}(\omega)}
+\newcommand{\EEwwo}[3]{\wwo E_{#1}(\omega) E_{#2}(\omega) E_{#3}}
+\newcommand{\EEwow}[3]{\wow E_{#1}(\omega) E_{#2} E_{#3}(\omega)}
+\newcommand{\EEoww}[3]{\oww E_{#1} E_{#2}(\omega) E_{#3}(\omega)}

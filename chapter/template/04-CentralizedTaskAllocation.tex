@@ -1,0 +1,483 @@
+\chapter{The Centralized Regime}\label{chap:centralized}
+
+\subsection{Executive Summary}
+
+This chapter formalizes the \emph{centralized} version of the Heterogeneous/Interdependent Task Allocation Problem (HTAP/ITAP) as a family of scheduling problems with precedence constraints and heterogeneous (unrelated) processing capabilities, then develops a rigorous complexity and approximation theory baseline. Under standard ``static, deterministic, known-capability'' simplifications, centralized HTAP \emph{is equivalent} to precedence-constrained scheduling on unrelated parallel machines, i.e. \(R\mid \mathrm{prec}\mid C_{\max}\), in the classical three-field notation. The chapter then (i) proves NP-hardness by restriction from \(R\parallel C_{\max}\), (ii) derives sharp inapproximability barriers inherited from \(R\parallel C_{\max}\), (iii) presents LP relaxations and the canonical 2-approximation rounding framework for unrelated-machine makespan, and (iv) contrasts this clean static theory with the stochastic/budgeted and dynamically evolving-DAG settings, which require \emph{policies} (not schedules) and move the problem into stochastic/online/adaptive scheduling. The final section formalizes the planner's information requirements and explains why private capability information makes ``centralization by elicitation'' fundamentally limited in the worst case, via the deterministic-truthfulness lower bounds culminating in the resolution of the Nisan--Ronen conjecture.
+
+This chapter expands the draft outline you provided for \texttt{\textbackslash chapter\{The Centralized Regime\}}.
+
+\subsection{Formal Model of Centralized HTAP}
+
+We fix a finite set of agents (machines) and tasks (jobs).
+
+\subsubsection{Agents, Tasks, and Dependencies}
+
+Let \(M := \{1,\dots,m\}\) denote the set of agents. Let \(J := \{1,\dots,n\}\) denote the set of tasks.
+
+Dependencies are modeled by a directed acyclic graph (DAG)
+\[
+G := (J, E),\qquad E \subseteq J\times J,
+\]
+where \((u,v)\in E\) means task \(u\) must be completed before task \(v\) may start. We write \(u\prec v\) if there is a directed path \(u\to\cdots\to v\) in \(G\). A task \(v\) is \textbf{available/ready} at time \(t\) iff all its predecessors \(u\) with \(u\prec v\) have completed by time \(t\).
+
+Define the \textbf{critical-path lower bound} for a given choice of processing times \(p\) (defined below) by
+\[
+L(p) \;:=\; \max_{(v_1\prec v_2\prec \cdots \prec v_k)}\;\sum_{\ell=1}^k p_{v_\ell},
+\]
+where the maximum ranges over all directed paths (chains) in \(G\), and \(p_{v}\) denotes the processing time of task \(v\) under whatever machine assignment is being analyzed (made precise in the scheduling definitions below).
+
+\subsubsection{Processing Times and Capabilities}
+
+Centralized HTAP can be specialized along three axes:
+
+\begin{enumerate}
+\item \textbf{Deterministic, known}: each agent-task pair has a known processing time \(p_{i,j}\in \mathbb{R}_{>0}\cup\{\infty\}\) (with \(\infty\) denoting infeasibility / lack of capability).
+
+\item \textbf{Stochastic}: each agent-task pair has a processing-time random variable \(P_{i,j}\) (distribution known to the planner), possibly with additional structure (e.g., Bernoulli/geometric success). Stochastic scheduling typically requires a \emph{policy} rather than a static schedule.
+
+\item \textbf{Budgeted success / controllable effort}: completing task \(j\) on agent \(i\) may require repeated attempts, and the planner chooses a per-attempt compute budget \(b\ge 0\) affecting success probability. One canonical abstraction (compatible with ``Bernoulli success with budget-dependent probability'') is:
+\begin{itemize}
+\item each attempt consumes time \(b\),
+\item succeeds with probability \(q_{i,j}(b)\in[0,1]\),
+\item upon failure, the task remains incomplete and may be retried (possibly on another agent, possibly with a different budget).
+\end{itemize}
+\end{enumerate}
+
+This immediately enlarges the action space from ``choose who runs what'' to ``choose who runs what \emph{with how much effort} and \emph{when to stop/retry},'' pushing the centralized problem toward stochastic control/MDPs; see the stochastic scheduling policy framework below.
+
+\subsubsection{Schedules, Preemption, and Objectives}
+
+A \textbf{(nonpreemptive) schedule} for a deterministic instance consists of:
+
+\begin{itemize}
+\item an assignment \(\sigma:J\to M\) (choose a machine for each job),
+\item start times \(S_j\in\mathbb{R}_{\ge 0}\),
+\item completion times \(C_j := S_j + p_{\sigma(j),j}\),
+\end{itemize}
+
+such that:
+
+\begin{enumerate}
+\item \textbf{Machine capacity}: if \(\sigma(j)=\sigma(k)=i\) and \(j\neq k\), then their processing intervals do not overlap:
+\[
+[S_j, C_j)\cap [S_k, C_k)=\emptyset .
+\]
+\item \textbf{Precedence feasibility}: for all \((u,v)\in E\),
+\[
+C_u \le S_v .
+\]
+\end{enumerate}
+
+The \textbf{makespan} is \(C_{\max}:=\max_{j\in J} C_j\). Other canonical centralized objectives include:
+\[
+\sum_{j\in J} w_j C_j\quad\text{(total weighted completion time)},
+\qquad
+\sum_{j\in J} w_j U_j\quad\text{(weighted on-time completions)},
+\qquad
+\mathbb{E}\Big[\sum_{j} w_j C_j\Big]\ \text{in stochastic models}.
+\]
+The weighted-completion-time objective and its precedence-constrained variants are classical and extensively studied; adding general precedence constraints yields NP-hardness in many settings and motivates LP-based approximations.
+
+A \textbf{preemptive schedule} allows splitting a job \(j\) into pieces over time (possibly migrating across machines in some models). In the unrelated-machines makespan setting, allowing preemption changes the computational landscape dramatically: the preemptive version of unrelated-machine makespan scheduling can be formulated and solved via linear programming, and an optimal schedule can be constructed from an optimal LP solution in the model with all jobs available at time \(0\).
+
+(Preemption's relationship to nonpreemptive schedules is also quantitatively studied via the ``power of preemption,'' but that is orthogonal to the present chapter's main reductions.)
+
+\subsection{Reduction to Scheduling with Dependencies}
+
+This section makes the equivalence between (a simplified) centralized HTAP and classical scheduling formal, using the standard three-field scheduling notation \(\alpha\mid\beta\mid\gamma\) introduced and popularized in the scheduling literature.
+
+\subsubsection{Static Assignment with Known Deterministic Capabilities}
+
+We define the following restricted centralized HTAP:
+
+\textbf{Definition (Static deterministic centralized HTAP).} An instance is a tuple
+\[
+\mathcal{I}=(M,J,G=(J,E),(p_{i,j})_{i\in M, j\in J}),
+\]
+where \(G\) is a DAG and \(p_{i,j}\in\mathbb{R}_{>0}\cup\{\infty\}\) are deterministic processing times. The planner chooses a nonpreemptive schedule minimizing \(C_{\max}\).
+
+This is precisely \(R\mid \mathrm{prec}\mid C_{\max}\):
+
+\begin{itemize}
+\item \(R\) (``unrelated machines'') means processing times depend on both machine and job, i.e. \(p_{i,j}\) is arbitrary.
+\item \(\mathrm{prec}\) encodes the precedence DAG.
+\item \(C_{\max}\) is makespan.
+\end{itemize}
+
+We now state and prove the equivalence rigorously.
+
+\textbf{Theorem (Exact reduction/equivalence).} Static deterministic centralized HTAP instances are in bijection with instances of \(R\mid \mathrm{prec}\mid C_{\max}\), and feasible schedules correspond with identical objective value.
+
+\textbf{Proof.}
+
+\begin{enumerate}
+\item \textbf{(Map HTAP \(\to\) scheduling.)} Given \(\mathcal{I}=(M,J,G,(p_{i,j}))\), define a scheduling instance:
+\begin{itemize}
+\item machines \(M\),
+\item jobs \(J\),
+\item precedence constraints \(E\),
+\item processing times \(p_{i,j}\) (with the convention that \(p_{i,j}=\infty\) forbids assigning \(j\) to \(i\)).
+\end{itemize}
+
+Any HTAP schedule \((\sigma,S)\) satisfies nonoverlap constraints per machine and precedence constraints across tasks by definition, hence is a feasible \(R\mid\mathrm{prec}\mid C_{\max}\) schedule with the same completion times and makespan.
+
+\item \textbf{(Map scheduling \(\to\) HTAP.)} Conversely, given any feasible schedule for \(R\mid\mathrm{prec}\mid C_{\max}\), interpret machines as agents and jobs as tasks, and take the identical assignment and start times. The feasibility constraints are identical, so we obtain a feasible HTAP schedule with the same \(C_{\max}\).
+
+\item Objective preservation is immediate since \(C_{\max}\) is defined identically.
+\end{enumerate}
+
+Thus the problems are equivalent under this restriction. \(\square\)
+
+\textbf{Remark (where this sits in your draft).} This theorem is the precise content of the ``Reduction to Scheduling with Dependencies'' paragraph in your outline.
+
+\subsubsection{Unit Processing Times and the ``Fixed \(m\)'' Subtlety}
+
+Your outline currently suggests stating NP-hardness ``even for \(P\mid \mathrm{prec}, p_j=1\mid C_{\max}\) with 3+ machines.'' The literature is more nuanced:
+
+\begin{itemize}
+\item If the number of identical machines is part of the input, then \(P\mid \mathrm{prec}, p_j=1\mid C_{\max}\) is NP-complete (classic reductions include those in the 1970s).
+\item However, for \emph{fixed} \(m\ge 3\), the exact complexity status of \(P_m\mid \mathrm{prec}, p_j=1\mid C_{\max}\) is a long-standing open problem appearing in the classical Garey--Johnson open-problem list; in particular the case \(m=3\) is explicitly highlighted as open in later work.
+\item The case \(m=2\) \emph{is} polynomial-time solvable via the Coffman--Graham algorithm (for unit-time tasks with precedence constraints on two processors).
+\end{itemize}
+
+So, a clean thesis-safe statement is:
+
+\begin{quote}
+\(P\mid \mathrm{prec}, p_j=1\mid C_{\max}\) is NP-complete when \(m\) is part of the input, but for fixed \(m\ge 3\) (including \(m=3\)) the status remains open.
+\end{quote}
+
+This correction matters because you later want to use ``NP-hard even for unit tasks on 3+ machines'' as a strength-of-hardness claim; you should not overstate beyond the known results.
+
+\subsubsection{Stochastic Assignment as Stochastic Scheduling Policies}
+
+When processing times are stochastic, a static schedule is generally not well-defined: decisions may depend on realized completion times. The classical stochastic scheduling literature therefore defines a \textbf{policy} (a nonanticipatory rule mapping histories to actions) rather than a fixed schedule.
+
+A typical formalization consistent with the ``policy'' viewpoint is:
+
+\begin{itemize}
+\item A filtered probability space \((\Omega,\mathcal{F},(\mathcal{F}_t)_{t\ge 0},\mathbb{P})\).
+\item Random processing times \(\{P_{i,j}\}\) with known distributions.
+\item A \textbf{policy} \(\pi\) specifies at each decision time \(t\) (measurable w.r.t. \(\mathcal{F}_t\)) which available job is executed on which idle machine, possibly with preemption rules.
+\item Feasibility requires respecting precedence constraints at all times (jobs are eligible only when predecessors complete) and machine capacity constraints.
+\end{itemize}
+
+This is the framework emphasized in foundational stochastic scheduling strategy work and later LP-based approximation developments.
+
+\subsubsection{Budgeted Success and Endogenous ``Effort Allocation''}
+
+In the Bernoulli/budgeted-success model, each job \(j\) does not have a single processing time; it has an \emph{effort-dependent} chance of completion. Formally, let \(b\in \mathbb{R}_{\ge 0}\) be the amount of compute (time) spent in an attempt. Let \(q_{i,j}(b)\) be the success probability. Then the \emph{effective completion time} becomes a stopping time chosen by the planner: the planner decides a sequence \((i_1,b_1),(i_2,b_2),\dots\) of attempts until success.
+
+Even for a single job, the planner's problem is an optimal stopping / sequential decision problem; with multiple jobs and precedence constraints it becomes a coupled stochastic control problem (and thus naturally an MDP/POMDP in richer observability models). This is precisely the kind of setting where the ``policy'' concept is essential.
+
+\subsection{Stochastic and Budgeted Centralized HTAP}
+
+This section connects the stochastic/budgeted versions in your outline to formal stochastic scheduling literature, and isolates the new ``budget allocation'' difficulty.
+
+\subsubsection{Formal Problem Statement as an Optimization over Policies}
+
+A rigorous centralized stochastic HTAP instance can be written as:
+\[
+\mathcal{I}_{\mathrm{stoch}}=(M,J,G,(P_{i,j})_{i,j},\text{(optional) }q_{i,j}(\cdot),\text{objective}).
+\]
+
+A \textbf{nonanticipatory policy} \(\pi\) induces random completion times \(C_j^\pi\). Typical objectives include:
+\[
+\min_\pi\ \mathbb{E}[C_{\max}^\pi],
+\qquad
+\min_\pi\ \mathbb{E}\Big[\sum_j w_j C_j^\pi\Big].
+\]
+
+The distinction between deterministic ``one-shot schedules'' and stochastic ``policies'' (and the formal measurability/nonanticipation requirements) is standard in stochastic scheduling foundations and in LP-based approximation work for stochastic scheduling.
+
+\subsubsection{A Clean Hardness Inheritance Argument}
+
+Even without proving any new stochastic hardness, you can make a mathematically airtight statement:
+
+\textbf{Proposition (Stochastic HTAP is at least as hard as deterministic HTAP).} Deterministic centralized HTAP reduces to stochastic centralized HTAP.
+
+\textbf{Proof.} Given any deterministic instance \((p_{i,j})\), define a stochastic instance by letting \(P_{i,j}\) be the degenerate random variable equal to \(p_{i,j}\) almost surely. Then any policy induces a deterministic schedule, and optimal values coincide. Therefore, any algorithmic hardness for the deterministic case carries to the stochastic case. \(\square\)
+
+This proposition is simple but important: it justifies stating that stochasticity cannot make the problem easier in the worst case.
+
+\subsubsection{What Is Genuinely New: Effort/Budget Decisions}
+
+Your outline highlights the ``added complexity of budget allocation.'' Formally, controllable success transforms each \(P_{i,j}\) into an \emph{endogenous} random time whose distribution depends on the policy. This is qualitatively different from classical stochastic scheduling where the job-size distributions are exogenous and fixed.
+
+A thesis-appropriate formal way to present this is:
+
+\begin{itemize}
+\item Classical stochastic scheduling: job size distribution \(P_j\) is part of the instance; policy chooses ordering/dispatching but does not change the distribution.
+\item Budgeted HTAP: policy chooses actions that \emph{change} success chances and/or effective size distribution (via retries and budget choices).
+\end{itemize}
+
+\textbf{TODO (citation/positioning).} If you want an explicit ``named'' linkage, this is close in spirit to ``stochastic scheduling with controllable processing times'' / ``adaptive resource allocation'' models; you may want to locate a primary-source anchor specific to controllable distributions (not just exogenous stochastic sizes).
+
+\subsection{Dynamic Task Creation and Why It Exceeds Standard Scheduling}
+
+Your outline's ``dynamic task creation'' (agents conjecturing new subtasks) means \(J\) and \(G\) are not fixed at time \(0\). This can be formalized as an \emph{adaptive revelation} process:
+
+\begin{itemize}
+\item There is an (unknown) underlying task universe \(\mathcal{U}\).
+\item The planner initially sees a subset \(J_0\subset \mathcal{U}\) and a partial precedence structure.
+\item Completing (or attempting) certain tasks may reveal or generate new tasks and/or new precedence edges.
+\end{itemize}
+
+A mathematically clean model is:
+
+\begin{itemize}
+\item At each time \(t\), the visible instance is \((J_t, E_t)\) with \(J_t\subseteq J_{t'}\) for \(t\le t'\) (monotone growth), and \(E_t\subseteq E_{t'}\).
+\item New tasks arrive according to a (possibly stochastic) revelation rule depending on the completed set (and possibly additional internal state).
+\end{itemize}
+
+\subsubsection{Reduction from Online Precedence Scheduling}
+
+To argue ``this goes beyond standard scheduling,'' it is enough to show that the dynamic-creation model strictly generalizes known online scheduling models.
+
+One relevant modern formalization is \textbf{online precedence constraints}: the algorithm learns about a job only when all its predecessors have been completed, so the dependency structure is not known ex ante. This fits your endogenous-DAG language: ``new jobs arrive only if certain jobs have been completed, but the set of jobs and their dependencies are unknown.''
+
+Furthermore, classical online scheduling with precedence constraints (with known or unknown processing times) is itself a substantial literature with nontrivial lower bounds and separations from the no-precedence case.
+
+\textbf{Proposition (Dynamic task creation generalizes online precedence scheduling).} Any online precedence scheduling instance where jobs/dependencies are revealed over time can be embedded as a dynamic task creation instance.
+
+\textbf{Proof sketch (formalizable).} Let the ``conjecture/new-subtask generator'' be the environment's revelation mechanism. Initialize \(J_0\) to the set of initially revealed jobs; whenever the online model would reveal a new job \(j\) (because its predecessors have completed), define the dynamic-creation rule to add \(j\) to \(J_t\) at that time. Precedence edges are revealed analogously. The planner's feasible actions (dispatch ready jobs) coincide. \(\square\)
+
+This justifies the claim that dynamic task creation pushes centralized HTAP into an online/adaptive regime, not merely an offline precedence-constrained scheduling regime.
+
+\subsection{Complexity and Inapproximability Results}
+
+This section gives rigorous hardness statements (with proofs where the reductions are short, and citation-backed proof kernels where they are long).
+
+\subsubsection{NP-Hardness of Static Centralized HTAP}
+
+Your outline asks to prove NP-hardness ``via reduction from \(R\parallel C_{\max}\).'' We do that precisely.
+
+\textbf{Theorem (NP-hardness).} Static deterministic centralized HTAP (equivalently \(R\mid \mathrm{prec}\mid C_{\max}\)) is NP-hard.
+
+\textbf{Proof.} Consider the special case where \(E=\emptyset\) (no precedence constraints). Then the problem becomes:
+
+\begin{itemize}
+\item choose an assignment \(\sigma:J\to M\),
+\item since there are no precedences, tasks on each machine can be processed in any order without affecting makespan, so the makespan is simply
+\[
+C_{\max} = \max_{i\in M}\ \sum_{j:\sigma(j)=i} p_{i,j}.
+\]
+\end{itemize}
+
+This is exactly the unrelated-machines makespan minimization problem \(R\parallel C_{\max}\). Since \(R\parallel C_{\max}\) is NP-hard (indeed, the literature proves NP-completeness for tight makespan thresholds and derives approximation lower bounds), the restricted case of HTAP is NP-hard; therefore HTAP is NP-hard. \(\square\)
+
+\subsubsection{Inapproximability Inherited from \(R\parallel C_{\max}\)}
+
+Your outline suggests using a ``Lenstra--Shmoys--Tardos lower bound'' of \(3/2\). The precise classical statement is:
+
+\begin{itemize}
+\item For unrelated-machine makespan, there is no polynomial-time approximation with ratio \(<3/2\) unless \(P=NP\).
+\end{itemize}
+
+We can convert this into a theorem for centralized HTAP by restriction.
+
+\textbf{Theorem (Inherited \(3/2\) barrier).} If there exists a polynomial-time \(\rho\)-approximation algorithm for static deterministic centralized HTAP, then there exists a polynomial-time \(\rho\)-approximation algorithm for \(R\parallel C_{\max}\). In particular, for every \(\rho<3/2\), such an algorithm would imply \(P=NP\).
+
+\textbf{Proof.} Restrict HTAP to instances with \(E=\emptyset\). In that restriction, HTAP and \(R\parallel C_{\max}\) are identical optimization problems (as shown in the NP-hardness proof). Therefore, applying the HTAP \(\rho\)-approximation algorithm to such restricted instances yields a \(\rho\)-approximation for \(R\parallel C_{\max}\). The inapproximability result for \(R\parallel C_{\max}\) then applies. \(\square\)
+
+\textbf{Proof kernel for the \(3/2\) barrier (why it follows from NP-completeness at makespan 2).} The classical argument (made explicit in the unrelated-machine makespan literature) is:
+
+\begin{itemize}
+\item show that deciding whether OPT \(\le 2\) is NP-complete,
+\item then any \((3/2-\varepsilon)\)-approximation would distinguish OPT \(\le 2\) from OPT \(\ge 3\) by checking whether the produced schedule has makespan \(<3\), contradicting NP-completeness.
+\end{itemize}
+
+(That NP-completeness construction is given via reductions from 3-dimensional matching in the same source.)
+
+\subsubsection{How Precedence Structure Affects Approximability}
+
+Two separate phenomena matter:
+
+\begin{enumerate}
+\item \textbf{Even on identical machines, improving the factor-2 frontier is hard/open.} For \(P\mid \mathrm{prec}\mid C_{\max}\), the classical list scheduling algorithm achieves approximation ratio \(2-\frac{1}{m}\) and hence a 2-approximation in the limit. The best-known ratio for general precedences on identical machines has remained a central open direction, with conditional hardness results suggesting that improving significantly beyond 2 may be difficult under certain conjectures.
+
+\item \textbf{On unrelated machines, precedence constraints are not just ``additive structure.''} The clean \(R\parallel C_{\max}\) LP rounding gives a constant-factor guarantee without precedences. Once precedences are added (\(R\mid \mathrm{prec}\mid C_{\max}\)), the assignment and time-feasibility constraints interact; constant-factor approximation results are known for certain restricted precedence structures (e.g., tree/arborescence-like constraints) but the general case does not reduce to a simple ``assignment + list schedule'' with a straightforward global guarantee.
+\end{enumerate}
+
+\textbf{TODO (citation/precision).} If you want a definitive statement about the \emph{best known approximation ratio} for general \(R\mid\mathrm{prec}\mid C_{\max}\), you should cite a contemporary survey or handbook chapter specific to this problem class.
+
+\subsubsection{Beyond Makespan: Weighted Completion Time Objectives}
+
+Your outline asks to connect ``total weighted utility'' objectives to weighted completion-time scheduling. Two clean, canonical anchor points are:
+
+\begin{itemize}
+\item On unrelated machines \emph{without} precedence constraints, minimizing expected or deterministic weighted completion time admits LP-based approximation algorithms via randomized rounding of time-indexed formulations.
+\item With precedence constraints (even on a single machine), the weighted-completion-time objective becomes NP-hard, and constant-factor approximation algorithms are known in some settings via LP/ordering relaxations.
+\end{itemize}
+
+These results justify (for thesis narrative purposes) that ``switching the objective away from makespan'' does not simplify centralized HTAP; it typically introduces additional hardness and requires different relaxations (time-indexed or ordering-based), which is relevant when later chapters compare welfare-style objectives under decentralized/market regimes.
+
+\subsection{Approximation Algorithms and Heuristic Baselines}
+
+This section supplies the rigorous algorithmic baseline you will want later as (i) a theoretical reference point and (ii) a set of scripted baselines in experiments.
+
+\subsubsection{LP Relaxation and Rounding for \(R\parallel C_{\max}\)}
+
+Even though this chapter focuses on dependencies, the strongest clean, fully-rigorous algorithmic core to include is the classical LP rounding for unrelated-machine makespan (the ``LST framework''), because (a) it is the central baseline for heterogeneous assignment and (b) it gives the inapproximability barrier you cite.
+
+\paragraph{Time-threshold feasibility LP}
+
+Fix a candidate makespan \(T>0\). Consider the LP:
+
+\[
+\begin{aligned}
+\text{find}\quad & x_{i,j}\ge 0 \\
+\text{s.t.}\quad
+& \sum_{i\in M} x_{i,j} = 1 \qquad &&\forall j\in J \\
+& \sum_{j\in J} p_{i,j}\, x_{i,j} \le T \qquad &&\forall i\in M \\
+& x_{i,j}=0 \qquad &&\forall (i,j)\text{ with }p_{i,j}>T .
+\end{aligned}
+\]
+Feasibility is necessary for an integral schedule of makespan \(\le T\) and can be checked in polynomial time.
+
+\paragraph{Rounding theorem (matching in the fractional graph)}
+
+Let \(x\) be a basic feasible solution (extreme point) of the LP. Consider the bipartite graph on \(M\cup J\) with edges \((i,j)\) where \(x_{i,j}\in(0,1)\). A key structural fact is that this graph is sparse (pseudoforest/pseudotree structure), enabling a matching that covers all fractional job nodes, and hence a rounding in which each machine receives at most one additional ``fractional'' job.
+
+A constructive statement sufficient for the 2-approximation is:
+
+\textbf{Lemma (Existence of a job-covering matching).} Let \(G'\) be the subgraph induced by fractional variables of an extreme point solution. Then \(G'\) has a matching that covers all job vertices.
+
+\textbf{Proof (outline with explicit construction).} For each connected component:
+\begin{itemize}
+\item If it is a tree, root it and match each job node to one of its children (possible because of the degree properties in the extreme-point structure); since each machine node has at most one parent, no machine is matched twice.
+\item If it contains a single even cycle, select alternating edges on the cycle for the matching, then match remaining job nodes in trees attached to the cycle similarly.
+\end{itemize}
+This is the classical constructive argument used for unrelated-machine LP rounding. \(\square\)
+
+\paragraph{2-approximation guarantee}
+
+Using the matching, assign each integral job \(j\) (with some \(x_{i,j}=1\)) to its unique machine, and assign each remaining fractional job \(j\) to the machine it is matched to. Each machine's load from integrally assigned jobs is \(\le T\) by the LP constraint; each machine receives at most one additional job \(j\) with \(p_{i,j}\le T\) (since edges with \(p_{i,j}>T\) were removed), so the total load is \(\le 2T\).
+
+Thus we obtain:
+
+\textbf{Theorem (2-approximation for \(R\parallel C_{\max}\)).} There is a polynomial-time algorithm that outputs a schedule with makespan at most \(2\cdot \mathrm{OPT}\) for unrelated-machine makespan.
+
+This serves as the canonical centralized ``heterogeneous assignment'' baseline.
+
+\subsubsection{List Scheduling for Precedence Constraints on Identical Machines}
+
+For the dependency-aware baseline (especially if you later compare against DAG-aware heuristics), the clean classical theorem is the list scheduling bound.
+
+Consider \(P\mid \mathrm{prec}\mid C_{\max}\) with processing times \((p_j)\), \(m\) identical machines, and a fixed priority list. The \textbf{list scheduling} algorithm repeatedly schedules the first available job on the first idle machine.
+
+\textbf{Theorem (List scheduling guarantee).} For \(P\mid \mathrm{prec}\mid C_{\max}\), list scheduling yields
+\[
+C_{\max}^{\mathrm{LS}} \le \Big(2-\frac{1}{m}\Big)\, \mathrm{OPT}.
+\]
+This is due to the classical analysis of list scheduling for precedence-constrained makespan.
+
+\textbf{Proof (self-contained).} Let \(W:=\sum_{j\in J} p_j\) be total work and let \(L:=\max\) path length in the precedence DAG (critical path). Any feasible schedule satisfies
+\[
+\mathrm{OPT}\ \ge\ \max\Big\{\frac{W}{m},\, L\Big\}.
+\]
+Consider the list schedule, and let \(j^\star\) be the job that finishes last. Let \(S:=S_{j^\star}\) be its start time. Over \([0,S)\), either:
+\begin{itemize}
+\item at a time when a machine is idle, no job is available (otherwise LS would schedule one), hence all unfinished jobs are blocked by precedences, implying that the set of jobs executed during idle intervals can be charged to a chain of total length \(\le L\);
+\item during non-idle time, total processing across all machines sums to at most \(W - p_{j^\star}\).
+\end{itemize}
+
+A standard charging argument yields:
+\[
+mS \le (W - p_{j^\star}) + (m-1)L,
+\]
+because at most \(m-1\) machines can be idle while one machine is processing the chain that ``witnesses'' unavailability, and the total such chain length is bounded by \(L\). Rearranging,
+\[
+S \le \frac{W-p_{j^\star}}{m} + \Big(1-\frac{1}{m}\Big)L.
+\]
+Therefore,
+\[
+C_{\max}^{\mathrm{LS}} = S + p_{j^\star}
+\le \frac{W}{m} + \Big(1-\frac{1}{m}\Big)L + \frac{p_{j^\star}}{m}
+\le \frac{W}{m} + \Big(1-\frac{1}{m}\Big)L + \frac{L}{m}
+= \frac{W}{m} + L.
+\]
+Finally,
+\[
+\frac{W}{m} + L \le \Big(2-\frac1m\Big)\max\Big\{\frac{W}{m}, L\Big\}
+\le \Big(2-\frac1m\Big)\mathrm{OPT},
+\]
+which proves the claim. \(\square\)
+
+This theorem is worth including verbatim in your thesis because it is one of the few places where a complete proof is short and very instructive.
+
+\subsubsection{Greedy/Myopic Policies as Scripted Baselines}
+
+To set up later MARL experiments, you can define ``scripted'' centralized baselines as policies \(\pi\) that at each time choose among currently ready tasks.
+
+A clean deterministic definition (for preemptive or nonpreemptive simulation environments) is:
+
+\begin{itemize}
+\item \textbf{Feasibility-first (FF):} if there is any ready task, schedule some ready task immediately on any idle machine, using a fixed tie-break order.
+\item \textbf{Utility-greedy (UG):} among ready tasks \(j\), schedule the one maximizing \(w_j / \min_i p_{i,j}\) (or using a per-machine ratio \(w_j/p_{i,j}\) when choosing machine \(i\)).
+\item \textbf{Critical-path greedy (CP):} let \(\ell(j)\) be the remaining critical-path length from \(j\) to a sink (computed in the precedence DAG with assumed processing times); choose the ready job with largest \(\ell(j)\).
+\end{itemize}
+
+You can then include the following \textbf{rigorous caution} (often overlooked in ML papers):
+
+\textbf{Proposition (Unbounded approximation for naive greedy under unrelatedness + precedence).} There exist instances where a purely myopic ``largest weight/shortest time'' greedy dispatch rule yields an arbitrarily large approximation ratio for \(C_{\max}\) or \(\sum w_j C_j\), even when an optimal schedule is small.
+
+\textbf{Proof idea.} Construct two chains where the greedy rule repeatedly prioritizes a locally attractive chain whose early jobs are short (or high ratio), but that blocks a long critical chain whose first job is slightly less attractive. By scaling the tail lengths, the greedy schedule can be forced to delay the critical chain by an arbitrarily large additive term while OPT runs it earlier.
+
+\textbf{TODO (for thesis):} write the full explicit instance with parameters and compute the exact ratio bound.
+
+This proposition justifies why your MARL baselines should include dependency-aware rules (critical-path-like) rather than only ratio rules.
+
+\subsection{Information Requirements and the Cost of Elicitation}
+
+Your outline's transition point is: even if centralization is computationally meaningful, it may be \emph{informationally impossible} to implement well when capabilities are private. This can be made precise.
+
+\subsubsection{What the Planner Must Know}
+
+In the static deterministic model, optimal (or approximately optimal) centralized planning requires access to:
+
+\begin{itemize}
+\item the precedence DAG \(G=(J,E)\),
+\item processing times \(p_{i,j}\) (or at least sufficient statistics/estimates),
+\item task weights/values \(w_j\) (if optimizing welfare-style objectives),
+\item feasibility constraints (\(p_{i,j}=\infty\) meaning agent \(i\) cannot do task \(j\)).
+\end{itemize}
+
+In stochastic/budgeted models, the planner additionally needs distributional information (or hazard/success functions) to justify policy decisions.
+
+\subsubsection{Why Eliciting Private Processing Times Is Fundamentally Limited}
+
+The mechanism-design version of unrelated-machine scheduling treats machines/agents as strategic players who privately know the vector \((p_{i,j})_{j\in J}\). The seminal ``algorithmic mechanism design'' formulation shows both upper bounds and lower bounds on truthful approximation for minimizing makespan, and initiated the ``Nisan--Ronen conjecture.''
+
+The status you want for your thesis (and that you cite in your outline) is now a theorem:
+
+\begin{itemize}
+\item No deterministic truthful mechanism can approximate makespan on \(n\) unrelated machines within a factor better than \(n\) (matching the trivial truthful \(n\)-approx upper bound).
+\end{itemize}
+
+This result supplies a \emph{principled} reason to move from centralized to decentralized/market-mediated regimes: even if you could solve the central optimization problem, you cannot generally \emph{implement} it via truthful elicitation without losing essentially all approximation power.
+
+\textbf{TODO (proof integration).} The full proof is long and mechanism-design-specific; for a master's thesis, the standard approach is:
+
+\begin{itemize}
+\item state the theorem formally with exact assumptions (deterministic truthfulness, quasilinear utilities, etc.),
+\item cite the resolution paper and/or its official overview,
+\item optionally include a small illustrative ``weak monotonicity / cycle monotonicity'' lemma to give intuition without re-proving the full result.
+\end{itemize}
+
+\subsubsection{How This Connects Forward}
+
+This chapter's outcomes determine the agenda for the rest of your thesis:
+
+\begin{itemize}
+\item \textbf{Hardness} motivates approximation, relaxations, and baselines (already established here via LP rounding and list scheduling).
+\item \textbf{Stochasticity + dynamic creation} motivates policy-based methods (MDPs, learning, adaptive algorithms) rather than static schedules.
+\item \textbf{Elicitation impossibility} motivates decentralized/market-mediated approaches, since ``optimal central planning'' is not truthfully implementable with good guarantees under private heterogeneous capabilities.
+\end{itemize}
+
+\textbf{Open problems to list explicitly (chapter end material).}
+
+\begin{enumerate}
+\item Develop a constant-factor approximation (or hardness barrier) for general \(R\mid \mathrm{prec}\mid C_{\max}\) adapted to your HTAP structure. \textbf{TODO (survey + best-known bound)}.
+\item Formalize budgeted success as a controllable stochastic scheduling model and characterize optimal single-task and small-DAG policies (as analytic lemmas usable later). \textbf{TODO (primary source anchor)}.
+\item Identify competitive/approximation benchmarks for online precedence revelation consistent with endogenous task creation.
+\end{enumerate}

@@ -1,0 +1,219 @@
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%       CMU UNOFFICIAL LaTeX Thesis Template - ENSURE YOUR DEPARTMENT DOES NOT HAVE A SPECIFIC REQUIRED TEMPLATE.
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+% This template was written for pdfLaTex Compilers
+
+%======================================
+%     Notes on Accessibility
+%======================================
+% Provide alternative text using the tagpdf package for figures, tables, code, and equations so that screen readers can read them. There are examples provided in the Chapter 2 and Chapter 3 sections of this template.
+% Do not change the font from the default sans-serif. That is the easiest for screen readers to read.
+% Any hyperlinks should be embedded into the text using \href{www.url.com}{text}
+% If you are emphasizing text using color, also ensure it is bolded or italicized. You can do this by wrapping the text in either \textbf{} or \textit{}
+% Update the options in \usepackage[]{hyperref} with the key details of your thesis. This updates metadata for the PDF.
+
+\documentclass[letterpaper,12pt]{article} %% <-- INPUT: Font size below, change the number to 10, 11 or 12pt
+
+% =====================================
+%       Packages & Setup
+% =====================================
+\usepackage[insane]{cmu-thesis} % Proper Thesis Formatting. 'insane' disables the template's strict draft-structure checks
+
+% \usepackage{tagpdf}             %This package can be used to make mathematical equations accessible for screen readers when converting to a PDF
+% \tagpdfsetup{
+%   activate-all=true,
+%   tabsorder=structure,
+%   interwordspace=true
+% }
+
+\usepackage{array}              % For inserting large multi-page tables
+\usepackage{longtable}
+
+\usepackage[numbers]{natbib}    % For proper citations
+\usepackage[
+    colorlinks=true, 
+    linkcolor=blue,
+    urlcolor=blue, 
+    citecolor=blue,
+    pdfauthor={Riyaz Ahuja},
+    pdftitle={Accessible PDF Example},
+    pdfsubject={Demonstration of metadata inclusion},
+    pdfkeywords={LaTeX, accessibility, PDF metadata}
+]{hyperref}
+      % For referencing though out the document. Can change, look at user manual how to change
+\usepackage{pdflscape}          % For inserting landscape-mode objects 
+\usepackage{amsmath}            % For matrices
+\usepackage{amsthm}            % For matrices
+\usepackage{amssymb}            % For symbols like \mathbb
+\usepackage{listings}           % For inserting programming code
+\usepackage{rotating}           % For inserting sideways tables and figures
+\usepackage{lipsum}             % For dummy text. You can remove this once you have remove all of the example text. 
+
+\usepackage{my-Equations}       % Where I define frequently used equations or symbols for easy use
+
+% For using row-spanning and column-spanning in tables:
+%\usepackage{multirow}
+
+% =====================================
+%       Place To Look For Figures
+% =====================================
+% This tells the pdf builder where to look for the figures that are added in the document
+% you can add more paths if you wish, example:
+% \graphicspath{{./figures/}{./figures/try-me}}
+\graphicspath{{./figures/}}
+
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%       GENERAL USER INFO: Title, Authors, Advisors...
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+% >>>>>>>>>>>>>>>> TITLE <<<<<<<<<<<<<<<<
+
+%please input your information under this section
+
+%Your thesis title
+\title{Task Allocation via Verifiable Market Games}
+% \subtitle{Multiagent Reinforcement Learning and Applications to Formal Mathematics}
+
+% >>>>>>>>> PERSONAL INFORMATION <<<<<<<<<
+\degreetitle{Master of Science}     % Degree Title like Master of Science or Doctor of Philosophy
+\discipline{Mathematics}    % Area of research, eg. Applied Physics, Computer Science
+
+\college{Mellon College of Science}           % Your college - department, eg. Physics
+
+\department{Mathematics}           % Your college - department, eg. Physics
+
+
+
+\author{Riyaz Ahuja}        % your NAME, don't forget your middle names.
+
+% Optional Metadata for Title Page
+\thesisdate{March 26, 2026}
+% Thesis committee (declare individually), you can also include their affliations, if they are not faculty members at CMU
+\committeememberone{Dr. Prasad Tetali, Chair}
+\committeemembertwo{Dr. Jeremy Avigad}
+\committeememberthree{Dr. Sean Welleck}
+% \committeememberfour{Professor 4, \textit{MIT, META}} % add their affiliation if outside CMU 
+% \committeememberfive{Karen Liu, \textit{Stanford University}}
+
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+
+
+
+
+
+\begin{document}
+% \tagstructbegin{tag=Document} %This enables many screen readers to provide alternative text for things like figures and equations
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%       FRONT MATTER
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+% If you do not want any of the following 'optional' items, either comment 
+%   out those lines, or remove them from the document. Or if you do not have
+%   any Figures, Tables, Symbols, or Abbreviations you can remove those lists.
+
+\frontmatter                       % Leave this line here, it sets the formatting 
+                                   % requirements for the front matter of the document
+\maketitle\newpage                 % >>>>>>>>> Title Page (required) <<<<<<<<<
+
+
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% >>>>>>>>>> Dedication (optional) <<<<<<<<<<
+\begin{dedication}
+\input{chapter/i-dedication}
+\end{dedication}\newpage
+
+% >>>>>>>> Acknowledgments (optional) <<<<<<<<
+\begin{acknowledgments}
+\input{chapter/i-acknowledgments}
+\end{acknowledgments} \newpage
+
+
+% >>>>>>>>> Abstract (required) <<<<<<<<<
+\clearpage
+\begin{abstract}
+\input{chapter/i-abstract}
+% you can also directly type your abstract here if you prefer.
+\end{abstract} \newpage
+
+
+% >>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<
+
+\tableofcontents\newpage        % >>>>>>>>> Table of Contents (required) <<<<<<<<<<<
+
+\listoffigures\newpage          % >>>>>>>>> List of Figures (if applicable) <<<<<<<<
+
+\listoftables\newpage           % >>>>>>>>> List of Tables (if applicable) <<<<<<<<<
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%                   BODY: All Chapters and Sections
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\bodymatter     % Leave this line here, it sets the formatting requirements for the front matter of the document
+
+% You can directly add you chapter text into this document. But to keep organized you
+% are advised to separate you chapters into their own files, as this example shows
+\input{chapter/01-Introduction}
+\input{chapter/02-SchedulingTheory.tex}
+\input{chapter/03-TaskAllocation}
+% \input{chapter/04-CentralizedTaskAllocation}
+\input{chapter/04-DecentralizedTaskAllocation}
+\input{chapter/05-VAMP}
+% \input{chapter/07-Equilibria}
+\input{chapter/06-MARL}
+\input{chapter/07-Implementation}
+\input{chapter/08-Experiments}
+\input{chapter/09-Application}
+\input{chapter/10-Conclusion}
+
+
+% \input{chapter/03-Journal-Chapter}
+% \input{chapter/04-Journal-Chapter}
+
+% Extra Example Chapters If you want to See Special Cases with Table, Figure, or Equation formatting
+% \input{chapter/05-Figure-Examples}
+% \input{chapter/06-Table-Examples}
+% \input{chapter/07-Equations}
+
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%                   BACK MATTER: Reference Cited
+% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\backmatter     % Leave this line here, it sets the formatting requirements for the back matter of the document
+
+% >>>>>>>>> References Cited (required) <<<<<<<<<<
+\urlstyle{rm}               % <-- Sets the URL font to be the same as the other text
+\bibliography{supporting-files/thesis}
+
+% >>>>>>>>> Selected Bibliography (optional) <<<<<<<<<<
+
+
+% Make sure the citations in you .bib file are correct. Especially double check that the resources type is correct. This will dictate how the items in the bibliography are formatted.
+
+% Highly recommend using a citation/reference management tool to create your .bib file. This make your references machine readable in the click of a button. Attend a  workshop, visit the Libraries's website, or speak to a librarian about getting started with a citation management tool. This will make your life much easier. READ: MUCH EASIER! https://www.library.cmu.edu/services/citations-referencing
+
+% Look at http://bib-it.sourceforge.net/help/fieldsAndEntryTypes.php#phdthesis to find some information on the types of fields that exist. Also recommend using a reference manger. 
+
+
+% >>>>>>>>> Appendices (if applicable) <<<<<<<<<<
+% \input{chapter/A-Proofs}
+% \input{chapter/B-ImplementationDetails}
+% \input{chapter/C-AdditionalExperimentalResults}
+% \input{chapter/D-InfrastructureDetails}
+
+
+% \tagstructend
+\end{document}

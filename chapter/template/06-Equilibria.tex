@@ -1,0 +1,297 @@
+\chapter{Complexity of VAMP Equilibria}\label{chap:equilibria}
+
+This chapter proves that equilibrium computation for a verifiable allocation market POSG (VAMP) is intractable in general and therefore cannot serve as a practical solution method for decentralized HTAP except in highly restricted subclasses. Our arguments are organized around two orthogonal hardness sources already implicit in the VAMP formalization from prior chapters: (i) \textbf{game-theoretic} hardness (PPAD) arising from Nash equilibrium computation, and (ii) \textbf{control-theoretic} hardness (NEXP) arising from decentralized partially observable planning even when preferences are perfectly aligned.
+
+Throughout, we work with the finite-horizon, finite-state/action instantiations of VAMP described earlier: finite agent set \(\mathcal N\), finite world state space \(\mathcal W\), finite observation sets \(\mathcal O^\alpha\), finite action sets \(A^\alpha = A^\alpha_{\mathrm{nm}}\sqcup A^\alpha_{\mathrm{mkt}}\), and a Markov transition kernel \(T\) on \(\mathcal W\) driven by joint actions. The market mechanism \(\mathcal M\) and Verify oracle are part of the environment; for hardness it suffices to consider degenerate mechanisms (e.g., no-op markets) so that VAMP strictly contains ordinary extensive-form games and Dec-POMDPs as special cases.
+
+\subsection{Overview of Hardness Sources}
+
+\subsubsection{Nash equilibrium computation problem for VAMPs}
+
+Fix a finite-horizon VAMP instance \(\mathsf V=(\mathcal N,\mathcal W,(O^\alpha),(A^\alpha),T,(r^\alpha),b_0,\dots)\) with horizon \(H\). A (behavioral) strategy for agent \(\alpha\) is a policy
+\[
+\pi^\alpha : (\mathcal O^\alpha)^* \to \Delta(A^\alpha),
+\]
+and the expected return of \(\pi=(\pi^\alpha)_{\alpha\in\mathcal N}\) is defined in the standard way by expectation over the trajectory distribution induced by \((b_0,T)\) and the action sampling under \(\pi\).
+
+A (behavioral) \textbf{Nash equilibrium} is a profile \(\pi\) such that for every agent \(\alpha\) and every alternative policy \(\tilde\pi^\alpha\),
+\[
+\mathbb E\big[U^\alpha(\pi)\big] \;\ge\; \mathbb E\big[U^\alpha(\tilde\pi^\alpha,\pi^{-\alpha})\big].
+\]
+Existence holds for the finite extensive-form game induced by the VAMP (by standard finite-game fixed-point arguments; see the classic equilibrium existence theorem of John Nash).
+
+The computational question is: \textbf{given a succinct description of \(\mathsf V\), compute a Nash equilibrium policy profile} (or, in search-problem form, output one). Hardness will follow by embedding the standard Nash search problem for normal-form games into a one-step VAMP.
+
+\subsubsection{Optimal cooperative control problem for cooperative VAMPs}
+
+A VAMP is \textbf{cooperative} (a team game) if all agents share the same per-step reward, i.e.
+\[
+r^\alpha \equiv r \quad\forall \alpha\in\mathcal N,
+\]
+so every agent maximizes the same objective \(\mathbb E[\sum_{t=0}^{H-1} r(w_t,a_t)]\). This removes strategic conflict, but not partial observability.
+
+The associated decision problem is:
+\[
+\textsc{VAMP-TEAM}( \mathsf V, K) := \text{``Is there a joint policy profile } \pi \text{ with } \mathbb E[U(\pi)] \ge K\text{?''}
+\]
+
+We will show \(\textsc{VAMP-TEAM}\) is NEXP-hard by direct reduction from Dec-POMDP decision problems, which are NEXP-complete by the foundational results of Daniel S.\ Bernstein, Shlomo Zilberstein, and Neil Immerman (and coauthors).
+
+\subsubsection{Orthogonality}
+
+These two sources are logically independent:
+\begin{itemize}
+\item If we restrict to cooperative VAMPs (eliminating game-theoretic conflict), we still face NEXP-complete decentralized control.
+\item If we restrict to fully observable, single-step (horizon \(H=1\)) VAMPs (eliminating the decentralized control difficulty), equilibrium computation still contains PPAD-complete bimatrix Nash.
+\end{itemize}
+
+This orthogonality is precisely why equilibrium computation is not a realistic algorithmic goal for general VAMP instances: ``making the problem easier'' requires simultaneously restricting both the strategic and informational structure.
+
+\subsection{PPAD-Hardness of Nash Equilibria in VAMPs}
+
+We first recall the base PPAD-complete problem and then give a fully explicit embedding into VAMP.
+
+\subsubsection{Reduction from bimatrix games}
+
+\paragraph{The PPAD baseline.}
+Let \(\textsc{BIMATRIX}\) denote the search problem: given rational payoff matrices \(A\in\mathbb Q^{m\times n}\), \(B\in\mathbb Q^{m\times n}\), output a mixed Nash equilibrium \((x,y)\in\Delta([m])\times\Delta([n])\) of the two-player game with payoffs \(u_1(i,j)=A_{ij}\), \(u_2(i,j)=B_{ij}\). This problem is PPAD-complete, building on the PPAD framework introduced by Christos H.\ Papadimitriou and the PPAD-completeness theorem of Xi Chen, Xiaotie Deng, and Shang-Hua Teng.
+
+\paragraph{Construction of the VAMP instance.}
+Given a bimatrix game \((A,B)\), we construct a finite-horizon VAMP \(\mathsf V(A,B)\) with horizon \(H=1\) and trivial HTAP/market structure such that Nash equilibria correspond exactly.
+
+\paragraph{Definition (one-shot embedding VAMP).}
+Let \(\mathsf V(A,B)\) be the VAMP with:
+\begin{itemize}
+\item Agents: \(\mathcal N=\{1,2\}\).
+\item World states: \(\mathcal W=\{w_\star\}\) (singleton).
+\item Initial distribution: \(b_0(w_\star)=1\).
+\item Observations: \(\mathcal O^1=\mathcal O^2=\{\omega_\star\}\) and \(O^1(w_\star)=O^2(w_\star)=\omega_\star\).
+\item Actions: \(A^1=[m]\), \(A^2=[n]\). (All actions are ``non-market''; market actions can be taken empty, or included but made inadmissible. Either choice yields the same induced game.)
+\item Transition: since \(H=1\), we need only define the terminal event; equivalently, define \(T(w_\star\mid w_\star,(i,j))=1\) and terminate after one stage.
+\item Rewards: \(r^1(w_\star,(i,j))=A_{ij}\), \(r^2(w_\star,(i,j))=B_{ij}\).
+\end{itemize}
+
+This is a valid VAMP instance because the HTAP and market layers may be degenerated: the Verify oracle, contract space, and market state exist but are never invoked; the game reduces to a standard one-shot extensive-form (indeed normal-form) interaction.
+
+\paragraph{Exact correspondence of equilibria.}
+
+\paragraph{Lemma (strategy correspondence).}
+Behavioral strategies in \(\mathsf V(A,B)\) are in one-to-one correspondence with mixed strategies in the bimatrix game \((A,B)\).
+
+\emph{Proof.} In \(\mathsf V(A,B)\) each agent observes the same single observation \(\omega_\star\) at the only decision point. A behavioral strategy for agent 1 is therefore a distribution \(x\in\Delta([m])\) over \(A^1=[m]\); similarly agent 2 chooses \(y\in\Delta([n])\). This is exactly a mixed strategy profile for \((A,B)\). \(\square\)
+
+\paragraph{Lemma (payoff correspondence).}
+For any mixed strategies \((x,y)\), the expected utilities in \(\mathsf V(A,B)\) equal those in \((A,B)\):
+\[
+\mathbb E[U^1_{\mathsf V}(x,y)] = x^\top A y,\qquad
+\mathbb E[U^2_{\mathsf V}(x,y)] = x^\top B y.
+\]
+
+\emph{Proof.} Immediate by the definition of the single-stage reward function and the independence of action draws under \((x,y)\). \(\square\)
+
+\paragraph{Theorem (equilibrium-preserving embedding).}
+A mixed strategy profile \((x,y)\) is a Nash equilibrium of the bimatrix game \((A,B)\) if and only if it is a Nash equilibrium of the one-shot VAMP \(\mathsf V(A,B)\).
+
+\emph{Proof.} By the two lemmas above, the set of unilateral deviations for each player is identical in the bimatrix game and in the VAMP, and the payoff function of each deviation is identical. Therefore the Nash inequalities defining equilibrium hold in one model if and only if they hold in the other. \(\square\)
+
+\paragraph{PPAD-hardness consequence.}
+
+\paragraph{Corollary (PPAD-hardness for VAMP Nash).}
+Any algorithm that computes a Nash equilibrium of finite-horizon VAMPs (even restricted to horizon \(H=1\) and singleton state) can be used to compute a Nash equilibrium of an arbitrary bimatrix game. Therefore, Nash equilibrium computation for VAMPs is PPAD-hard.
+
+\emph{Proof.} The map \((A,B)\mapsto \mathsf V(A,B)\) is computable in time polynomial in the encoding size of \((A,B)\), and the theorem gives an exact reduction preserving solutions. Since \(\textsc{BIMATRIX}\) is PPAD-complete, the claim follows. \(\square\)
+
+\subsubsection{Inapproximability}
+
+We now show that \emph{even approximate} Nash equilibrium computation remains PPAD-hard in VAMPs for constant approximation parameters, by embedding a class of games for which this inapproximability is known.
+
+\paragraph{Approximate Nash equilibrium.}
+For an \(n\)-player normal-form game with payoff functions \(u_i\) and mixed profile \(\sigma\), \(\sigma\) is an \(\varepsilon\)-Nash equilibrium if for every player \(i\),
+\[
+u_i(\sigma)\ \ge\ \max_{\sigma_i'} u_i(\sigma_i',\sigma_{-i}) - \varepsilon.
+\]
+
+This definition transfers verbatim to the one-shot VAMPs constructed below, since they induce normal-form games.
+
+\paragraph{PPAD-hardness for constant \(\varepsilon\).}
+The key external theorem we use is due to Aviad Rubinstein: computing an \(\varepsilon\)-approximate Nash equilibrium is PPAD-hard for constant \(\varepsilon\) in succinctly represented polymatrix/graphical games of bounded degree and two actions.
+
+\paragraph{Embedding polymatrix games as one-shot VAMPs.}
+A polymatrix game on graph \(G=(V,E)\) with \(|V|=n\) can be specified by giving for each edge \((i,j)\in E\) a \(2\times 2\) payoff matrix \(A^{ij}\) for player \(i\) (and \(A^{ji}\) for player \(j\)), and defining each player's total payoff as the sum over incident edges. Such games are a standard succinct representation for multi-player interactions.
+
+Given a polymatrix game instance \(\mathcal P\), define a one-shot VAMP \(\mathsf V(\mathcal P)\) with:
+\begin{itemize}
+\item \(\mathcal N = V\),
+\item \(\mathcal W=\{w_\star\}\), trivial observation,
+\item each player \(i\) has action set \(A^i=\{0,1\}\),
+\item reward \(r^i(w_\star,a)=\sum_{j:(i,j)\in E} A^{ij}_{a_i,a_j}\).
+\end{itemize}
+
+As before, all task/market components are degenerate (never invoked), so this is a valid VAMP.
+
+\paragraph{Lemma (polymatrix \(\leftrightarrow\) VAMP equivalence).}
+\(\varepsilon\)-Nash equilibria of \(\mathcal P\) are exactly \(\varepsilon\)-Nash equilibria of \(\mathsf V(\mathcal P)\).
+
+\emph{Proof.} The normal-form game induced by \(\mathsf V(\mathcal P)\) has identical action sets and identical payoff functions by construction. Therefore all best-response values and Nash deviation inequalities coincide. \(\square\)
+
+\paragraph{Corollary (PPAD-hardness of \(\varepsilon\)-Nash in VAMP).}
+For the constant \(\varepsilon\) supplied by Rubinstein's theorem, computing an \(\varepsilon\)-Nash equilibrium of VAMPs is PPAD-hard.
+
+\emph{Proof.} Combine Rubinstein's PPAD-hardness theorem with the polynomial-time embedding \(\mathcal P\mapsto \mathsf V(\mathcal P)\). \(\square\)
+
+This should be read as a strong negative result: ``weakening equilibrium'' from exact Nash to constant-\(\varepsilon\) approximate Nash does not remove the PPAD barrier in the VAMP setting.
+
+\subsection{NEXP-Hardness from Decentralized Control}
+
+We now turn to the second, orthogonal hardness source: decentralized control under partial observability.
+
+\subsubsection{Reduction from Dec-POMDPs}
+
+\paragraph{The Dec-POMDP decision problem.}
+A finite-horizon Dec-POMDP instance consists of: finite agent set, finite state space, finite action and observation sets for each agent, a transition kernel, an observation kernel, a common reward function, an initial state distribution, and a horizon. A joint policy specifies for each agent a mapping from its observation history to an action. The decision problem asks whether there exists a joint policy achieving expected return at least \(K\).
+
+The fundamental complexity theorem states: this decision problem is NEXP-complete (already for a small number of agents).
+
+\paragraph{Cooperative VAMP as a super-class of Dec-POMDP.}
+We show that Dec-POMDPs embed directly as cooperative VAMPs by disabling the HTAP/market structure and using the VAMP world state to carry the Dec-POMDP state.
+
+Let a Dec-POMDP be
+\[
+\mathcal D = (\mathcal N, S, (A^\alpha)_{\alpha\in\mathcal N}, P, (O^\alpha)_{\alpha\in\mathcal N}, Z, R, b_0, H),
+\]
+in the standard notation where \(P\) is the controlled transition kernel and \(Z\) the observation kernel.
+
+\paragraph{Construction (Dec-POMDP \(\to\) VAMP).}
+Define a cooperative VAMP \(\mathsf V(\mathcal D)\) by:
+\begin{itemize}
+\item Agents: same \(\mathcal N\).
+\item World state: \(\mathcal W := S \times \{\ell_\star\} \times \{\mathfrak m_\star\}\), where \(\ell_\star\) and \(\mathfrak m_\star\) are fixed dummy components representing constant ``libraries'' and constant ``market state'' (so the instance remains syntactically a VAMP).
+\item Initial distribution: \(b_0^{\mathsf V}(s,\ell_\star,\mathfrak m_\star)=b_0(s)\).
+\item Observations: \(\mathcal O^\alpha\) as in \(\mathcal D\), with observation kernel inherited from \(Z\): when the underlying state is \(s'\), agent \(\alpha\) receives \(o^\alpha \sim Z^\alpha(\cdot\mid s')\).
+\item Actions: set \(A^\alpha_{\mathrm{nm}} := A^\alpha\) and take \(A^\alpha_{\mathrm{mkt}}=\emptyset\) (or make all market actions inadmissible). Thus agents only take the Dec-POMDP actions.
+\item Transition: on \(\mathcal W\), define
+\[
+T\big((s',\ell_\star,\mathfrak m_\star)\mid (s,\ell_\star,\mathfrak m_\star), a\big) := P(s'\mid s,a).
+\]
+\item Rewards: common reward \(r^\alpha \equiv r\) with
+\[
+r\big((s,\ell_\star,\mathfrak m_\star), a\big) := R(s,a).
+\]
+\end{itemize}
+
+This is a cooperative VAMP because all agents share the same reward, and all other VAMP components are present but inert.
+
+\paragraph{Correctness of the reduction.}
+
+\paragraph{Lemma (policy correspondence).}
+Joint policies in \(\mathcal D\) correspond bijectively to joint policies in \(\mathsf V(\mathcal D)\).
+
+\emph{Proof.} Each agent's observation process is identical in \(\mathcal D\) and \(\mathsf V(\mathcal D)\), and the available actions at each step are the same by construction. Therefore a mapping from observation histories to actions is a valid policy in one model iff it is valid in the other. \(\square\)
+
+\paragraph{Lemma (trajectory distribution agreement).}
+For any joint policy \(\pi\), the distribution over state-action trajectories \((s_t,a_t)_{t=0}^{H-1}\) under \(\mathcal D\) equals the distribution over the projected trajectories \((\mathrm{proj}_S(w_t),a_t)\) under \(\mathsf V(\mathcal D)\).
+
+\emph{Proof.} By induction on \(t\). Base \(t=0\) holds since the initial distribution on the \(S\)-component matches. For the step \(t\to t+1\), conditioned on \(s_t\) and \(a_t\), both dynamics use the same next-state kernel \(P(\cdot\mid s_t,a_t)\); observation distributions match by construction; hence the law of the process matches. \(\square\)
+
+\paragraph{Theorem (value preservation).}
+For any joint policy \(\pi\),
+\[
+\mathbb E_{\mathcal D}\Big[\sum_{t=0}^{H-1} R(s_t,a_t)\Big]
+=
+\mathbb E_{\mathsf V(\mathcal D)}\Big[\sum_{t=0}^{H-1} r(w_t,a_t)\Big].
+\]
+
+\emph{Proof.} Immediate from trajectory distribution agreement and the definition \(r((s,\ell_\star,\mathfrak m_\star),a)=R(s,a)\). \(\square\)
+
+\paragraph{NEXP-hardness consequence.}
+
+\paragraph{Corollary (NEXP-hardness of cooperative VAMP planning).}
+The decision problem \(\textsc{VAMP-TEAM}\) is NEXP-hard (indeed NEXP-complete under standard encodings), even for cooperative VAMPs with no market actions and no active HTAP task graph.
+
+\emph{Proof.} The mapping \(\mathcal D \mapsto \mathsf V(\mathcal D)\) is polynomial in the size of \(\mathcal D\) (it is essentially a relabeling). By the value preservation theorem, \(\mathcal D\) has a joint policy achieving return \(\ge K\) iff \(\mathsf V(\mathcal D)\) does. Since Dec-POMDP decision is NEXP-complete, \(\textsc{VAMP-TEAM}\) is NEXP-hard. \(\square\)
+
+This proves the intended statement: even if the ``game-theoretic'' dimension is removed by making all incentives identical, the decentralized partially observable control problem remains computationally intractable at the NEXP level.
+
+\subsubsection{Implications for finite-horizon and infinite-horizon VAMPs}
+
+The NEXP-completeness theorem cited above is for finite horizon. We now show that infinite-horizon discounted VAMPs are at least as hard in the standard reduction sense.
+
+Let \(\textsc{VAMP-TEAM}_\infty\) denote the discounted infinite-horizon decision problem: given cooperative VAMP \(\mathsf V\), discount \(\gamma\in(0,1]\), and threshold \(K\), decide whether there exists a joint policy with expected discounted return at least \(K\).
+
+\paragraph{Proposition (finite-horizon reduces to infinite-horizon discounted).}
+\(\textsc{VAMP-TEAM}\) many-one reduces to \(\textsc{VAMP-TEAM}_\infty\).
+
+\emph{Proof.} Given a finite-horizon cooperative VAMP \(\mathsf V\) with horizon \(H\), construct an infinite-horizon cooperative VAMP \(\mathsf V'\) by adding a time counter to the state:
+\[
+\mathcal W' := \mathcal W \times \{0,1,\dots,H\},
+\]
+starting at \((w_0,0)\). When the counter reaches \(H\), move deterministically to an absorbing terminal mode \(\{H\}\) in which the world state no longer changes and reward is identically zero forever. For \(t<H\), let dynamics and rewards coincide with those of \(\mathsf V\) on the \(\mathcal W\)-component, and increment the counter by one. Take discount factor \(\gamma:=1\) (allowed in our episodic termination setting; the tail reward is zero, so the sum is finite). Then for any joint policy, the infinite-horizon return equals the original finite-horizon return because all mass after time \(H\) contributes zero. Therefore \(\mathsf V\) has a policy with return \(\ge K\) iff \(\mathsf V'\) has a policy with discounted return \(\ge K\). \(\square\)
+
+Thus, the NEXP barrier persists beyond the finite-horizon formalization.
+
+\subsection{Hardness of Weaker Equilibrium Concepts}
+
+It is natural to ask whether replacing Nash equilibrium with weaker equilibrium notions yields tractability. For VAMPs, the answer is: weaker game-theoretic notions help only in settings where the control problem is already tractable.
+
+\subsubsection{Correlated equilibria}
+
+For normal-form games with explicitly enumerated action profiles, correlated equilibrium (CE) is a convex polytope defined by linear constraints and can be computed in polynomial time by linear programming; moreover, for broad classes of succinctly represented multiplayer games, Tim Roughgarden and Papadimitriou develop polynomial-time algorithms for computing correlated equilibria. Correlated equilibrium originates with Robert J.\ Aumann.
+
+However, a finite-horizon VAMP is not naturally given as an explicit normal-form game: each agent's pure strategy is a mapping from its observation history to actions. If \(|\mathcal O^\alpha|\ge 2\) and \(H\) is part of the input, the number of pure strategies grows exponentially in \(H\). Concretely, the number of deterministic policies for agent \(\alpha\) is at least
+\[
+|A^\alpha|^{|\mathcal O^\alpha|^H},
+\]
+since an observation history is a length-\(H\) word over \(\mathcal O^\alpha\). Thus the explicit normal-form representation is doubly exponential in \(H\) in the worst case.
+
+Therefore, the ``CE is polynomial-time via LP'' statement is not directly algorithmic for VAMPs: the corresponding LP written over pure strategies is exponentially large in the compact VAMP description. This is the sense in which the POSG/VAMP structure reintroduces hardness even if CE is game-theoretically ``easier'' than Nash.
+
+A stronger statement connects directly to the NEXP result: in cooperative settings, asking for a welfare-maximizing CE (or even an optimal correlation device over policies) recovers the cooperative planning problem, which is NEXP-hard by the Dec-POMDP reduction above.
+
+\subsubsection{Coarse correlated equilibria and no-regret dynamics}
+
+For repeated play of a fixed normal-form game, if each player minimizes external regret, the empirical distribution of play converges to the set of coarse correlated equilibria (CCE); algorithms for regret minimization and regret matching provide such dynamics, including the regret-matching procedure of Sergiu Hart and Andreu Mas-Colell.
+
+In the VAMP context, the relevant repeated game is typically a \textbf{meta-game over policies}: each ``round'' is an episode, and each agent's action in the repeated game is a full policy (or a policy from a restricted family, e.g., a parameterized neural policy class used in MARL). Let \(\Pi^\alpha\) be a finite policy class for agent \(\alpha\). Define the induced normal-form meta-game payoff
+\[
+\mathcal U^\alpha(\pi^1,\dots,\pi^n)
+:= \mathbb E\Big[\sum_{t=0}^{H-1} r^\alpha(w_t,a_t)\Big],
+\qquad \pi^\alpha\in\Pi^\alpha.
+\]
+Then standard no-regret guarantees apply \textbf{in this meta-game}: if each agent achieves external regret \(o(T)\) with respect to \(\Pi^\alpha\) over \(T\) episodes, the empirical distribution over joint policies is an \(o(1)\)-CCE of the meta-game.
+
+What changes relative to one-shot normal-form games is the scale of \(\Pi^\alpha\). If \(\Pi^\alpha\) is the set of all deterministic policies over observation histories, \(|\Pi^\alpha|\) is exponential/doubly-exponential in horizon as above, and computationally meaningful ``no regret over all policies'' is out of reach. The learning-theoretic response, used in later chapters, is to restrict to a manageable policy family (e.g., neural sequence policies) and accept that convergence is only to a CCE of the restricted meta-game, not to an equilibrium of the full VAMP.
+
+\subsection{Positive Results for Tractable Special Cases}
+
+Hardness results for general VAMPs do not preclude tractability in structured subclasses. We highlight three such subclasses that match the subsection prompts in the draft outline.
+
+\subsubsection{Fully observable special cases}
+
+If the VAMP is fully observable (each agent observes the full world state), then the setting reduces from POSG/Dec-POMDP complications to (fully observed) stochastic games / Markov games. In two-player \textbf{zero-sum} Markov games, equilibria can be computed in polynomial time using linear programming or dynamic programming methods based on the Shapley operator; the foundational existence/value theorem is due to Lloyd Shapley, with algorithmic LP formulations popularized in Markov-game treatments such as Littman's minimax-Q framework.
+
+In contrast, for \textbf{general-sum} stochastic games, equilibrium computation remains hard in general (recent work places Markov perfect equilibrium computation in PPAD for broad classes), so full observability removes the NEXP barrier but not the PPAD barrier except in special payoff structures (notably zero-sum).
+
+\subsubsection{Cooperative special cases with full observability}
+
+If the VAMP is cooperative and fully observable, it reduces to an ordinary finite-horizon MDP (the ``team'' becomes a single decision-maker controlling a joint action). Finite-horizon MDPs are solvable in time polynomial in \(|\mathcal W|\), \(\prod_\alpha |A^\alpha|\), and \(H\) by backward induction / dynamic programming, so this subclass is tractable, in stark contrast to the NEXP-complete Dec-POMDP case.
+
+\subsubsection{One-shot VAMPs}
+
+If \(H=1\) (one-shot), then VAMPs reduce to normal-form games (possibly with additional market bookkeeping, but no dynamic state). In this case:
+\begin{itemize}
+\item Nash equilibrium computation is PPAD-hard (and PPAD-complete for bimatrix).
+\item Correlated equilibrium computation is polynomial-time (LP).
+\end{itemize}
+
+Thus ``one-shot'' eliminates the NEXP/partial-observability hardness source, and exposes the pure game-theoretic complexity landscape.
+
+\subsection{Implications for Learning-Based Approaches}
+
+The results above justify the thesis methodology:
+\begin{itemize}
+\item VAMP equilibrium computation inherits \textbf{PPAD-hardness} even in extremely degenerate one-shot cases, by embedding bimatrix games.
+\item VAMP optimal cooperative control inherits \textbf{NEXP-hardness} even when all strategic conflict is removed, by embedding Dec-POMDPs.
+\item Weakening equilibrium notions (CE/CCE) addresses PPAD-related obstacles in explicit one-shot games, but in VAMPs the principal barrier is often the explosion of the policy space and the Dec-POMDP-style control hardness.
+\end{itemize}
+
+Consequently, the algorithmic target in later chapters is not exact equilibrium computation in the full VAMP, but rather \textbf{empirical approximation of weak equilibrium behavior} in restricted policy families using MARL---formally, approximate no-regret in a policy-population meta-game, which corresponds to approximate CCE in that restricted meta-game.

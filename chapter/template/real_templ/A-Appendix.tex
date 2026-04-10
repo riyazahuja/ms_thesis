@@ -1,0 +1,96 @@
+\appendix{Magical Encoding Awesomeness}\label{app:encoding}
+\ref{tab:encoding} shows how several symbols appear in the rendered document.
+
+\begin{table}[H]
+	\caption{\label{tab:encoding}This is where we have fun testing encoding}
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			& Normal & Math \\
+			\hline
+			The greater than: & > & $>$ \\
+			\hline
+			The less than: & < & $<$ \\
+			\hline
+			The tilde: & \textasciitilde{} & $\sim$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsection{Test Appendix Sub-Section}\label{sec:longtable}
+\ref{tab:longtable} is an example of a very large ``longtable.''
+\begin{landscape}
+\begin{longtable}{|>{\centering}p{1.02in}|>{\centering}p{1.15in}|>{\centering}p{1in}|>{\centering}p{0.7in}|>{\centering}p{0.7in}|>{\centering}p{0.67in}|>{\centering}p{2.55in}|} %
+	\endfirsthead % Remove this line to use the main header for the first page
+	\hline%
+	Age & Formation  & Thickness (feet)   & Thickness (feet)  & Thickness (feet)  & Aquifer?  & Lithology 	
+	\endhead%
+	\caption{Stratigraphy of the Granite Mountains and Lost Creek areas\label{tab:longtable}}\\ %
+	\hline
+	Age & Formation \footnote{Only major unconformities shown, indicated by break in table.} & Thickness (feet) \footnote{Generalized thicknesses from.}  & Thickness (feet) \footnote{Thicknesses shown are approximate and apply to Lost Creek vicinity
+	only.} & Thickness (feet) \footnote{Thicknesses shown are from a public screened dataset of logged formation
+	tops from the 12 townships surrounding Lost Creek. } & Aquifer? \footnote{Aquifer designations \textendash{} Lost Creek vicinity only.%
+	} & Lithology \tabularnewline
+	\hline 
+	Quaternary  & Alluvium & - & 0-20 & - & Yes & Sands and clays derived chiefly from the Tertiary formations in the
+	area. \tabularnewline
+	\hline 
+	Paleocene & Fort Union  & up to 3,000 & 4,650 & 6,500? & Yes & Consists of alternating fine to coarse grained sandstone siltstone
+	and mudstone. Contains various layers of lignitic coal beds. \tabularnewline
+	\hline
+	\hline 
+	Cretaceous  & Lance  & 1,700 to 2,700 & 2,950 & 4,000? & Yes & Interbedded sandstone, siltstone and mudstone. Gray to brownish gray.
+	Locally carbonaceous. Sandstone is white to grayish orange. \tabularnewline
+	\hline 
+	Cretaceous & Fox Hills  &  & 550 & 1,800? & No & Consists of coarsening upward shale and fine-grained sand with thin
+	coal beds near the top. Represents a transition from marine to non-marine
+	environment. Grades into Lewis Shale at the base. \tabularnewline
+	\hline 
+	Cretaceous & Lewis Shale  & 1,250 & 1,200 & 1,050 to 2,000 & No & Interbedded dark-gray and olive-gray shale and olive-gray sandstone. \tabularnewline
+	\hline
+	\hline 
+	Cretaceous & Mesaverde Group  & 0 to 1,000 & 800 & 300 to 500? & No & Gray to dark gray shales with interbedded buff to tan fine to medium
+	grained sandstones. \tabularnewline
+	\hline 
+	Cretaceous & Steele and Niobrara Shales  & Cody Shale 4,500 to 5,000 & 2,000 to 2,500 & 2,400 to 5,000 & No & Steele shale is soft gray marine, Niobrara shale is dark gray and
+	contains calcareous zones. \tabularnewline
+	\hline 
+	Cretaceous & Frontier  & 700 to 900 & 500 to 1,000 & 750 to 1,500 & Yes & Gray sandstone and sandy shale. \tabularnewline
+	\hline 
+	Cretaceous & Dakota  &  & 300 to 400 &  & Yes & Marine sandstone, tan to buff, fine to medium grained may contain
+	carbonaceous shale layer. \tabularnewline
+	\hline 
+	Jurassic  & Nugget Sandstone  & 400 to 525 & 500 &  & Yes & Grayish to dull red coarse grained cross-bedded quartz sandstone. \tabularnewline
+	\hline 
+	Triassic  & Chugwater  & 1,275 & 1,500 &  & No & Red shale and siltstone contains gypsum partings near the base. \tabularnewline
+	\hline 
+	Permian  & Phosphoria  & 275 to 325 & 300 &  & No & Black to dark gray shale, chert and phosphorite. \tabularnewline
+	\hline 
+	Pennsylvanian  & Tensleep and Amsden and Madison  & 600 to 700 & 750 &  & No & White to gray sandstone containing thin limestone and dolomite partings.
+	Red and green shale and dolomite, sandstone near base. \tabularnewline
+	\hline 
+	Cambrian  & Undifferentiated  & 900 to 1,000 & 1,000 &  & No & Siltstone and quartzite, including Flathead sandstone. \tabularnewline
+	\hline
+	\hline 
+	Precambrian  & Basement  & - & - &  & No & Granites, metamorphic and igneous rocks. \tabularnewline
+	\hline
+\end{longtable}
+\end{landscape}
+
+\begin{landscape}
+\begin{longtable}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+	\endfirsthead
+	\caption{Test of a small longtable on the alternate page.} \\
+	\hline
+	1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
+	\hline
+	A & B & C & D & E & F & G & H & I & J & K & L \\
+	\hline
+\end{longtable}
+\end{landscape}
+
+\subsection{This subsection will follow on a new page that is portrait}
+Here it is, just an example
+
+\lipsum[3]

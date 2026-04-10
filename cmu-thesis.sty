@@ -1,0 +1,1183 @@
+%% This is file `cmu-thesis.sty' based off of the unofficial Latex Templates 
+%% made previously by some mines students.
+%%      Editor: C.A.M. Schrama, cschrama@mines.edu
+%%      Original Autors:  Erich E. Hoover 
+%%
+%% Most of the original code is still here because it works! and works pretty well
+%% I have added a manual for users to understand how to properly use the template. Also significant changes were made to meet the cmu Thesis 
+%% Writing Guidelines and have it be stable for many users.
+%% 
+%% This file may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.2 of this license
+%% or (at your option) any later version.  The latest version of this
+%% license is in:
+%% 
+%%    http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.2 or later is part of all distributions of LaTeX version
+%% 1999/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{cmu-thesis}
+    [2020/01/10 v1.0 cmu-thesis file]
+
+
+%% Define convenient ``true'' and ``false'' variables
+\gdef\@true{1}
+\gdef\@false{0}
+
+%%   Text Alignment
+%% ==================
+\raggedright % < Text alignment to the left: Required by OGS Guidelines
+% \parindent = 1.5em
+
+%%   Line Spacing
+%% ================
+%%  >>> For double spacing use \doublespacing
+%%  >>> For 1.5 spacing use \onehalfspacing
+\RequirePackage{setspace}
+\onehalfspacing % <--- Change line spacing HERE, default is onehalf is enough, can change to double etc.
+
+\AtBeginDocument{
+\@ifpackageloaded{hyperref}{%
+\global\let\orig@footnotetext=\footnotetext
+\gdef\footnotetext[#1]{\orig@footnotetext}
+}{}
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Package Options
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% Turn off sanity checks: \usepackage[insanity]{cmu-thesis}
+\global\let\cmu@thesis@nochecks=\@false
+\DeclareOption{insane}{\global\let\cmu@thesis@nochecks=\@true}
+
+%% Enable bold chapter headings: \usepackage[chapterbold]{cmu-thesis}
+\global\let\cmu@thesis@chapterbold=\@false
+\DeclareOption{chapterbold}{\global\let\cmu@thesis@chapterbold=\@true}
+
+%% Turn off automatic Figure/Table labeling: \usepackage[nolabel]{cmu-thesis}
+\global\let\cmu@thesis@nolabel=\@false
+\DeclareOption{nolabel}{\global\let\cmu@thesis@nolabel=\@true}
+
+\ProcessOptions
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Global Convenience Routines
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% Hook for adding outputpage functionality
+\global\let\cmu@outputpage@hook\@empty
+%% Hook for adding code to occur at the \backmatter command
+\global\let\cmu@backmatter@hook\@empty
+%% Hook for adding code to occur at the \chapter command
+\global\let\cmu@chapter@hook\@empty
+
+%% *************************
+%%      For Loop
+%% *************************
+%% >>> The following ``for loop'' command is a convenience function for 
+%%     looping a counter over a variable. This is used for sorting lists (among other things).
+\newcommand{\cmu@ForLoop}[5][1]{%
+\setcounter{#2}{#3}%
+\ifnum#4\relax%
+#5%
+\addtocounter{#2}{#1}%
+\cmu@ForLoop[#1]{#2}{\value{#2}}{#4}{#5}%
+\fi%
+}%
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Internal Packages
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\RequirePackage{cmu-style-files/cmu-thesis-sanity}          %% Allow fancy sanity checking
+\RequirePackage{cmu-style-files/cmu-thesis-environments}    %% Use custom environments for additional error checking
+\RequirePackage{cmu-style-files/cmu-thesis-title}           %% Title shape handling
+\RequirePackage{cmu-style-files/cmu-thesis-lists}           %% Lists of tables, figures, symbols, etc.
+\RequirePackage{cmu-style-files/cmu-thesis-sections}        %% The cmu Thesis uses special section types
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      NO Double Sided
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\if@twoside
+\cmu@thesis@error
+%{The OGS guidelines no longer permitted double-sided documents (disable ``twoside'' option).}
+\fi
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Hyperred Check
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% >>> Detect hyperref when document loads (do not use \cmu@hyperref before
+%%     document beginning)
+\gdef\cmu@hyperref{\cmu@thesis@error{This command is only valid within the document, sorry!}{}}
+\AtBeginDocument{%
+\@ifpackageloaded{hyperref}{%
+\global\let\cmu@hyperref=\@true%
+}{%
+\global\let\cmu@hyperref=\@false%
+}%
+}
+
+%% >>Handle labeling pages for both old and new hyperref (and users without hyperref)
+\def\cmu@page@label#1{%
+\@ifundefined{thispdfpagelabel}{%
+\gdef\thepage{#1}%
+}{%
+\ifx&#1&%
+\thispdfpagelabel{#1}%
+\gdef\thepage{emptypage-\@arabic\c@emptypage}%
+\else%
+\gdef\thepage{#1}%
+\fi
+}%
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      General Formatting: page numbers, page alignment/sizing, 
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% Allow redefining the page number
+\newcounter{cmupage}
+\newcounter{truepage}
+\newcounter{emptypage}
+\setcounter{emptypage}{0}
+\setcounter{cmupage}{\value{page}}
+\setcounter{truepage}{\value{page}}
+\def\pagenumbering#1{\global\c@cmupage\@ne \cmu@page@label{\csname @#1\endcsname \c@cmupage}}
+
+
+%%  Margins & Page Alignment
+%% ==========================
+%%  Align pages to the top without warnings & Set general page size with 1im margins
+\raggedbottom
+\RequirePackage[left=1in,top=1in,right=1in,bottom=1in,bindingoffset=0.0in,nohead,foot=0.5in]{geometry}
+
+%% I Think This Was an Old Requirement!!
+%% The pages of the front matter must be printed single sided. The first page of each new chapter in the thesis body must begin on an odd numbered (right-handed) page, leaving the opposing page blank if necessary.
+%% The built-in \cleardoublepage prints a page number, this special version does not
+\newcommand{\newoddpage}{\cleardoublepage}
+
+%% Set Front Matter Page number Roman
+\let\@frontmatter@exists\@empty
+\let\@frontmatter@active\@false
+\let\@cmu@newpage@call\@false
+\newcommand{\frontmatter}{
+\global\let\@frontmatter@active\@true
+\global\let\@frontmatter@exists\@true
+\pagenumbering{roman}
+\pagestyle{plain}
+}
+\newcommand{\backmatter}{%
+\cmu@backmatter@hook%
+}
+
+%% Set Body Matter Page number Arabic
+\let\@bodymatter@exists\@empty
+\newcommand{\bodymatter}{
+\global\let\@frontmatter@active\@false
+\global\let\@bodymatter@exists\@true
+\gdef\c@cmupage{\c@page}
+\gdef\c@truepage{\c@page}
+\pagenumbering{arabic}
+}
+
+% FONTS
+\AtBeginDocument{
+\long\def\cmu@cmp@string@{\sfdefault} %Fonts should be sans serif in order to allow screen readers to function properly 
+\ifx\familydefault\cmu@cmp@string@\relax
+\usepackage{sfmath}
+\fi
+}
+
+%Page numbering
+\let\recursive@output\@false
+\let\latex@outputpage\@outputpage
+\def\@outputpage{
+\cmu@outputpage@hook%
+\latex@outputpage%
+\begingroup
+\ifx\@frontmatter@active\@true
+\addtocounter{cmupage}{1}
+\addtocounter{truepage}{1}
+\setcounter{page}{\value{cmupage}} %% for proper numbering with hyperref
+\fi
+\endgroup
+
+% \ifx\cmu@customnumber@output\@true
+% \pagenumbering{roman}
+% \setcounter{cmupage}{2}
+% \setcounter{page}{1}
+% \global\let\cmu@customnumber@output\@false
+% \fi
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Atom in Title (Still Valid? MyQuestion)
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% >>> Command enters atom in title of thesis
+%% >>> Usage: \atom{mass number}{proton number}{symbol}{ionization}{# atoms}
+\@ifpackageloaded{hyperref}{}{\let\texorpdfstring\@empty} %% Make \texorpdfstring empty, but don't redefine it if hyperref is already loaded.
+\gdef\cmu@texorpdfstring#1#2{%
+\ifx \texorpdfstring \@empty%
+#1%
+\else%
+\texorpdfstring{#1}{#2}%
+\fi%
+}
+\newcommand{\atom}[5]{%
+\cmu@texorpdfstring{$^{#1}_{#2}$}{}%
+\protect\NoCaseChange{#3}%
+\cmu@texorpdfstring{$^{#4}_{#5}$}{#5}%
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Title Page
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% >>> The ``textcase'' package is used to capitalize the title but allow 
+%%     non-capitalized atoms/molecules
+\usepackage{textcase}
+
+%% >>> \global\let\maketitle\relax % NOTE: Some TeX distributions define 
+%%     ``maketitle'' funny, clear that definition before starting
+\let\@title\@empty
+
+
+%% define new metadata for the title page
+\let\@thesisdate\@empty
+\let\@committee\@empty
+
+\let\@author\@empty
+\let\@degree\@empty
+\let\@department\@empty
+\let\@discipline\@empty
+\let\@college\@empty
+
+
+\let\@cmumemberone\@empty
+\let\@cmumembertwo\@empty
+\let\@cmumemberthree\@empty
+\let\@cmumemberfour\@empty
+\let\@cmumemberfive\@empty
+
+
+\newcommand{\thesisdate}[1]{\def\@thesisdate{#1}}
+\newcommand{\committee}[1]{\def\@committee{#1}}
+
+\newcommand{\degreetitle}[1]{\def\@degree{#1}}
+\global\let\degree\degreetitle
+\newcommand{\discipline}[1]{\def\@discipline{#1}}
+\newcommand{\department}[1]{\def\@department{#1}}
+\newcommand{\college}[1]{\def\@college{#1}}
+
+
+\newcommand{\committeememberone}[1]{\def\@cmumemberone{#1}}
+\newcommand{\committeemembertwo}[1]{\def\@cmumembertwo{#1}}
+\newcommand{\committeememberthree}[1]{\def\@cmumemberthree{#1}}
+\newcommand{\committeememberfour}[1]{\def\@cmumemberfour{#1}}
+\newcommand{\committeememberfive}[1]{\def\@cmumemberfive{#1}}
+
+
+
+\let\@maketitle@exists\@empty
+\global\let\cmu@customnumber@output\@false
+\newbox\cmu@titletext
+
+
+\renewcommand{\maketitle}{
+\global\let\@maketitle@exists\@true
+\sanitize{\@title}{title}
+\leavevmode
+\vspace*{-2 em} % Reduce white space at the top
+
+\begin{center}
+% ===== TITLE =====
+{\Huge \bfseries \@title \par} % Bigger, bolder
+\vspace{1 em}
+
+% ===== AUTHOR =====
+{\Large \@author \par}
+\vspace{4 em}
+
+% ===== DATE =====
+\ifx\@thesisdate\@empty\else
+    {\large \@thesisdate \par}
+    \vspace{4 em}
+\fi
+
+% ===== DEPARTMENT + UNIVERSITY =====
+\begingroup
+\setstretch{1.0}  % or 0.9 for even tighter
+\ifx\@college\@empty\else
+    {\large \@college \par}
+\fi
+\ifx\@department\@empty\else
+    {\large Department of \@department \par}
+\fi
+{\large Carnegie Mellon University \par}
+{\large Pittsburgh, Pennsylvania 15213 \par}
+\endgroup
+\vspace{4 em}  % also tighten gap after block (was 2.5em)
+
+
+% ===== COMMITTEE BLOCK =====
+\ifx\@cmumemberone\@empty\else
+    {\large
+    {\bfseries Thesis Committee: \par}
+    \vspace{0.25em}
+    \begingroup
+    \setstretch{1.0}  % << try 0.9 or 0.95 for tighter spacing if needed
+    \@cmumemberone \\
+    \ifx\@cmumembertwo\@empty\else
+        \@cmumembertwo \\
+    \fi
+    \ifx\@cmumemberthree\@empty\else
+        \@cmumemberthree \\
+    \fi
+    \ifx\@cmumemberfour\@empty\else
+        \@cmumemberfour \\
+    \fi
+    \ifx\@cmumemberfive\@empty\else
+        \@cmumemberfive \\
+    \fi
+    \endgroup
+    }
+    \vspace{4 em}
+\fi
+
+% ===== SUBMISSION NOTE =====
+\begingroup
+\setstretch{1}  % or 0.95 for slight tightening
+{\itshape
+Thesis submitted in partial fulfillment of the\\
+requirements for the degree of \@degree\ in \@discipline\par}
+\endgroup
+
+\vfill
+
+% ===== COPYRIGHT =====
+
+% define function to extract the year from the thesis date that user input
+\def\extract@year ##1 ##2, ##3\@nil{##3}
+\edef\thesisyear{\expandafter\extract@year\@thesisdate\@nil}
+
+© \@author, \thesisyear
+\end{center}
+
+\thispagestyle{empty}
+\cmu@page@label{title}
+\global\let\cmu@customnumber@output\@true
+}
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      copyright Page
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% The thesis copyright page contains the 1) author's name, 2) the date, and 3) the statement, ``All Rights Reserved,'' centered on the page. See the example in \ref{apx:examples}.
+\newcommand{\makecopyright}[1]{
+\vspace*{\fill}
+\begin{center}
+\textbf{{\textcopyright} Copyright by {\@author}, {#1}} \\
+All Rights Reserved OR provide Creative Commons License
+%Choose your copyright status
+\end{center}
+\vspace*{\fill}
+\thispagestyle{empty} % no page number for the copyright page
+\cmu@page@label{copyright} % use a special hyperref ``page seek'' for the copyright page
+\global\let\cmu@customnumber@output\@true % needs to be turned off after page is output
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Dedication
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+\global\let\@dedication@exists\@empty
+\renewenvironment{dedication}{
+  \global\let\@dedication@exists\@true
+  
+  \clearpage
+
+  \pagenumbering{roman}   % <-- Start roman page numbering here
+  \setcounter{page}{1}    % <-- Make dedication page start at ii
+  
+  \thispagestyle{plain}
+  \null % ensures we're in vertical mode
+  \vfill
+  \begin{center}
+    \itshape % apply italic shape here
+}{
+  \end{center}
+  \vfill
+  \clearpage
+}
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Acknowledgments
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\usepackage{ragged2e}  % For justification
+\AtBeginDocument{
+    \newcommand{\acknowledgmentspart}{Acknowledgments}}
+
+\renewenvironment{acknowledgments}
+{
+  \clearpage
+
+  \thispagestyle{plain}
+  \vspace*{2cm}
+  \noindent{\Huge \bfseries Acknowledgments}
+  \vspace{3em}
+  \begingroup
+    \setstretch{1.15}
+    \justifying
+    \normalsize
+    \setlength{\parindent}{1.5em}
+    \setlength{\parskip}{0em}
+
+}
+{
+  \par
+  \endgroup
+  \clearpage
+}
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Abstract
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\usepackage{ragged2e}  % For justification
+\AtBeginDocument{
+    
+    \renewcommand{\abstractname}{Abstract}}
+
+\renewenvironment{abstract}
+{
+  \clearpage
+
+  \thispagestyle{plain}
+  \vspace*{2cm}
+\noindent{\Huge \bfseries Abstract}
+  \vspace{3em}
+  \begingroup
+    \setstretch{1.15}
+    \justifying
+    \normalsize
+    \setlength{\parindent}{1.5em}
+    \setlength{\parskip}{0em}
+
+}
+{
+  \par
+  \endgroup
+  \clearpage
+}
+
+
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Table of Content (new)
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+%\usepackage{tocloft}
+%% IMPORTANT NOTE: ``babel'' scews up \contentsname, so we use our own special \cmu@contentsname
+\newcommand{\cmu@contentsname}{Table of Contents}
+\let\@tableofcontents@exists\@empty
+
+\AtBeginDocument{
+\renewcommand{\tableofcontents}{
+  \global\let\@tableofcontents@exists\@true
+  \ifx \cmu@hyperref\@true
+    \hypersetup{
+        % set up hyperlink for TOC, jump to document page when clicking
+      % colorlinks=true, 
+      linktoc=page,     % Only page numbers are clickable in TOC
+      linkcolor=blue,   % Page numbers will be blue
+      urlcolor=blue,    % Also blue for URLs, optional
+      citecolor=blue    % Also blue for citations, optional
+    }
+    \pdfbookmark[1]{Contents}{toc}
+  \fi
+  \cleardoublepage
+  \thispagestyle{plain}
+  \vspace*{2cm}
+  \noindent{\Huge\bfseries \cmu@contentsname\par}
+
+  \vspace{3em}
+  \@mkboth{\cmu@contentsname}{\cmu@contentsname}  % <--- removed MakeUppercase
+
+    % we only want to include up to subsection
+  \setcounter{tocdepth}{2}
+  %% format the TOC lines
+  \let\oldnumberline\numberline
+  % \def\numberline#1{\textbf{#1}\hspace{1em}}  % Add spacing after number
+    \let\orig@numberline\numberline
+    \def\numberline##1{%
+      \ifnum\c@tocdepth=0
+        {##1}%
+      \else
+        ##1\hspace{0.75em}%
+      \fi
+    }
+    
+
+  \@starttoc{toc}
+
+  % Restore
+  % \let\numberline\oldnumberline
+}
+}
+
+
+\newtoks\cmu@saved@contents
+\cmu@saved@contents{}
+\long\def\cmu@addtocontents@#1#2{%
+\global\cmu@saved@contents\expandafter{%
+\the\cmu@saved@contents%
+{%
+\let\protect\@unexpandable@protect%
+\immediate\write\@auxout{\string\@writefile{#1}{#2}}%
+}%
+}%
+}
+\AtEndDocument{%
+\clearpage%
+\the\cmu@saved@contents%
+}%
+\newcommand{\cmu@addtocontents}[4]{%
+
+\ifx\cmu@hyperref\@true%
+\cmu@addtocontents@{#1}{\protect\contentsline{#2}{\protect{#3}}{#4}{\@currentHref}}%
+\else%
+\cmu@addtocontents@{#1}{\protect\contentsline{#2}{\protect{#3}}{#4}}%
+
+}
+
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      List of Figures (new)
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+\newcommand{\cmu@listfigurename}{List of Figures}
+
+\AtBeginDocument{
+  \renewcommand{\listoffigures}{
+    \global\let\@LoF@exists\@true
+
+    \ifx \cmu@hyperref\@true
+      \hypersetup{
+        % colorlinks=true,
+        linktoc=page,
+        linkcolor=blue,
+        urlcolor=blue,
+        citecolor=blue
+      }
+      \pdfbookmark[1]{\cmu@listfigurename}{lof}
+    \fi
+
+    \cleardoublepage
+    \thispagestyle{plain}
+    \addcontentsline{toc}{chapter}{\textbf{\cmu@listfigurename}}
+
+
+
+    \vspace*{2cm}
+    {\noindent\Huge\bfseries \cmu@listfigurename\par}
+    \vspace{3em}
+    \@mkboth{\cmu@listfigurename}{\cmu@listfigurename}
+
+    \let\orig@numberline\numberline
+    \def\numberline##1{##1\hspace{0.75em}}
+
+    \@starttoc{lof}
+
+    \let\numberline\orig@numberline
+  }
+}
+
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      List of Table (new)
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\newcommand{\cmu@listtablename}{List of Tables}
+
+\AtBeginDocument{
+  \renewcommand{\listoftables}{
+    \global\let\@LoT@exists\@true
+
+    \ifx \cmu@hyperref\@true
+      \hypersetup{
+        % colorlinks=true,
+        linktoc=page,
+        linkcolor=blue,
+        urlcolor=blue,
+        citecolor=blue
+      }
+      \pdfbookmark[1]{\cmu@listtablename}{lot}
+    \fi
+
+    \cleardoublepage
+    \thispagestyle{plain}
+    \addcontentsline{toc}{chapter}{\textbf{\cmu@listtablename}}
+  % add to table of contents
+
+    \vspace*{2cm}
+    {\noindent\Huge\bfseries \cmu@listtablename\par}
+    \vspace{3em}
+    \@mkboth{\cmu@listtablename}{\cmu@listtablename}
+
+    \let\orig@numberline\numberline
+    \def\numberline##1{##1\hspace{0.75em}}
+
+    \@starttoc{lot}
+
+    \let\numberline\orig@numberline
+  }
+}
+
+
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Sub figures
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%% <<NOTE:>> Interpretted to read: subfigure captions are not required.
+\newcommand{\abbrvcaption}[2]{\caption[#1]{#1#2}}
+
+\cmu@AtEndPreamble{
+\@ifpackageloaded{subfigure}{
+\cmu@thesis@error{The subfigure package is deprecated, disable it to continue.}
+}{
+\def\cmu@subfig@format{%
+labelsep=space,%
+font=footnotesize,%
+labelformat=simple,%
+listofformat=subsimple,%
+subrefformat=subsimple%
+}
+\@ifpackageloaded{subfig}{
+%% \captionsetup[subfloat]{\cmu@subfig@format}
+\captionsetup[subfloat]{%
+labelsep=space,%
+font=footnotesize,%
+labelformat=simple,%
+listofformat=subsimple,%
+subrefformat=subsimple%
+}
+}{
+\RequirePackage[\cmu@subfig@format]{subfig}
+}
+%% Make \ref{} reference the subfigure more sensically (with parentheses around the subfigure):
+\renewcommand{\thesubfigure}{(\alph{subfigure})}
+%% Redefine the subfigure/subtable calls to be backward-compatible with old documents:
+\@ifundefined{c@subfigure}{\newsubfloat{figure}}{}
+\def\subfigure{\subfloat}
+\@ifundefined{c@subtable}{\newsubfloat{table}}{}
+\def\subtable{\subfloat}
+}
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Error Messagers
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+\newcommand{\addpocketcontents}[1]{%
+\cmu@ogs@error{\string\addpocketcontents\space no-longer supported, use a ``Supplemental Electronic Files'' appendix instead.}
+}
+\newcommand{\addpocketappendix}[1]{%
+\cmu@ogs@error{\string\addpocketappendix\space no-longer supported, use a ``Supplemental Electronic Files'' appendix instead.}
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Heading Numbering
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\gdef\@subsection@style{\Large\bfseries\cmu@header@spacing}
+\gdef\@subsubsection@style{\normalfont\large\bfseries\cmu@header@spacing}
+\gdef\@paragraph@style{\normalfont\normalsize\bfseries\cmu@header@spacing}
+\AtBeginDocument{
+\newcommand\cmu@header@spacing{\setstretch{1}}
+\newcommand{\subsection@}[1]{
+\cmu@section@check %% Redefine section commands with section check
+\global\let\@currentlabel\thesubsection
+\@startsection{subsection}{-1}{\z@}{-3.25ex\@plus -1ex \@minus -.2ex}{1.5ex \@plus .2ex}
+{\@subsection@style}{#1}%
+\reset@cmu@section@check%
+}
+\newcommand{\subsubsection@}[1]{
+\cmu@section@check %% Redefine section commands with section check
+\global\let\@currentlabel\thesubsubsection
+\@startsection{subsubsection}{-1}{\z@}{-3.25ex\@plus -1ex \@minus -.2ex}{1.5ex \@plus .2ex}
+{\@subsubsection@style}{#1}%
+\reset@cmu@section@check%
+}
+\newcommand{\paragraph@}[1]{%
+\global\let\@currentlabel\theparagraph
+\@startsection{paragraph}{-1}{\z@}{-3.25ex\@plus -1ex \@minus -.2ex}{1.5ex \@plus .2ex}
+{\@paragraph@style}{#1}%
+}
+\gdef\subsection{\@ifstar{\subsection@}{\subsection@}}%
+\gdef\subsubsection{\@ifstar{\subsubsection@}{\subsubsection@}}%
+\gdef\paragraph{\@ifstar{\paragraph@}{\paragraph@}}%
+}
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Must not have 1 lines paragraphs at end of the page
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\clubpenalty=10000
+
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+%%      Image Placement and Apacing
+%% ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+\newcounter{cmu@figure@heredefinitely}
+\global\let\cmu@figure@heredefinitely@enable\@false
+\gdef\cmu@check@herefloat#1{%
+\def\cmu@cmp@string@{#1}\gdef\cmu@cmp@string@@{H}%
+\ifx\cmu@cmp@string@\cmu@cmp@string@@\relax%
+\setcounter{cmu@figure@heredefinitely}{\the\value{truepage}}%
+\global\let\cmu@figure@heredefinitely@enable\@true%
+\else%
+\global\let\cmu@figure@heredefinitely@enable\@false%
+\fi%
+}
+\gdef\cmu@check@herefloat@false{%
+\global\let\cmu@figure@heredefinitely@enable\@false%
+}
+\gdef\cmu@check@herefloat@moved{%
+\ifx \cmu@figure@heredefinitely@enable\@true%
+\leavevmode% This command is necessary to increment the page number (if the float moved pages)
+\vspace{-\baselineskip}% This command is to remove the undesired space added by the above command
+\ifnum \c@truepage>\c@cmu@figure@heredefinitely%
+\cmu@ogs@error{'Here Definitely' added space to page \on@line.}%
+\fi%
+\fi%
+}
+
+%% Figures and tables are identified both by a number and by descriptive text contained in a caption.
+%% This combination of figure number and caption must appear below figures, while the corresponding table number and caption must appear above tables.
+\global\let\cmu@found@caption=\@false
+\gdef\cmu@caption{%
+\global\let\cmu@found@caption=\@true%
+\cmu@internal@caption%
+}
+\gdef\cmu@start@custom@caption{%
+\global\let\cmu@internal@caption=\caption%
+\global\let\caption=\cmu@caption%
+\global\let\cmu@found@caption=\@false%
+\global\let\cmu@internal@center=\center%
+\global\let\center=\cmu@center%
+}
+\gdef\cmu@end@custom@caption{%
+\global\let\caption=\cmu@internal@caption%
+\global\let\center=\cmu@internal@center%
+}
+\gdef\cmu@test@custom@caption#1#2{%
+\ifx\cmu@found@caption#1\relax%
+\if@cmu@within@article@\else% do not generate errors in article mode
+\cmu@ogs@error{#2}%
+\fi%
+\fi%
+\global\let\cmu@found@caption=\@false%
+}
+%% Fix \begin{center} so it creates the same space as \centering
+\gdef\cmu@center{%
+\vspace{-\baselineskip}%
+\cmu@internal@center%
+}
+
+%% Below we had convenience functions for figure creation (not necessary, but nice for LaTeX users)
+\RequirePackage{float} %% The float package includes the [H] option (absolutely place it here)
+\RequirePackage{graphicx}
+\newcommand{\@cmulongfigure}[6]{%
+\begin{figure}[#1]
+\centering
+\resizebox{#4}{!}{\includegraphics{#3}}
+\abbrvcaption{#5\label{fig:#2}}{#6}
+\end{figure}
+}
+\newcommand{\@cmufigure}[5]{%
+\@cmulongfigure{#1}{#2}{#3}{#4}{#5}{}
+}
+\gdef\@cmulongfigure@pos[#1]{\@cmulongfigure{#1}}
+\gdef\@cmufigure@pos[#1]{\@cmufigure{#1}}
+
+% \newcommand{\@cmusplitfigure}[4]{%
+% \global\let\cmu@thesis@nolabel=\@true
+% \begin{figure}
+% \centering
+% \abbrvcaption{#2\label{fig:#1}}
+% \end{figure}
+
+
+% \begin{figure}
+% \centering
+% \resizebox{#3}{!}{\includegraphics{#4}}
+% \end{figure}
+% \global\let\cmu@thesis@nolabel=\@false
+% }
+
+
+\gdef\cmulongfigure{%
+\@ifnextchar[%
+{\@cmulongfigure@pos}%
+{\@cmulongfigure{\fps@figure}}%
+}
+\gdef\cmufigure{%
+\@ifnextchar[%
+{\@cmufigure@pos}%
+{\@cmufigure{\fps@figure}}%
+}
+% \gdef\cmusplitfigure{%
+% \@ifnextchar[%
+% {\@cmusplitfigure@pos}%
+% {\@cmusplitfigure{\fps@figure}}%
+% }
+
+%% <<NOTE:>> In order to implement Figure Formating properly on ALL figures (rather than just \cmufigure and \cmulongfigure) we redefine the figure environment at a fundamental TeX level (much easier to use with other packages than using renewenvironment).
+\global\let\cmu@internal@beginfigure=\figure
+\global\let\cmu@internal@includegraphics=\includegraphics
+\gdef\cmu@internal@beginfigure@{%
+\singlespacing%
+\global\let\cmu@internal@endfigure=\endfigure%
+\global\let\ref=\cmu@internal@ref%{}
+\let\endfigure=\cmu@endfigure%
+}
+\gdef\cmu@internal@beginfigureA[#1]{%
+\begingroup%
+\cmu@check@herefloat{#1}%
+%% Note: the expansions below are required for proper processing of macros in the parameter
+\expandafter\cmu@internal@beginfigure\expandafter[#1]%
+\cmu@internal@beginfigure@%
+}
+\gdef\cmu@internal@beginfigureB{%
+\begingroup%
+\cmu@check@herefloat@false%
+\cmu@internal@beginfigure%
+\cmu@internal@beginfigure@%
+}
+\AtBeginDocument{
+\gdef\figure{%
+\cmu@start@require@label%
+\cmu@start@custom@caption%
+\global\let\includegraphics=\cmu@includegraphics%
+%% Very carefully redefine the \figure command so that the single spacing occurs
+%% inside of the figure (rather than messing up the spacing on the outside)
+\@ifnextchar[%
+{\cmu@internal@beginfigureA}%
+{\cmu@internal@beginfigureB}%
+}
+\gdef\cmu@endfigure{%
+\cmu@test@custom@caption{\@false}{Figure must have a caption below the figure \on@line}%
+\cmu@end@custom@caption%
+\cmu@end@require@label%
+\cmu@internal@endfigure%
+\cmu@check@herefloat@moved%
+\global\let\includegraphics=\cmu@internal@includegraphics%
+\global\let\ref=\cmu@ref%{}
+\endgroup%
+}
+\gdef\cmu@includegraphics{%
+\cmu@test@custom@caption{\@true}{Caption must be below figure \on@line}%
+\cmu@internal@includegraphics%
+}
+}
+
+\global\let\cmu@thesis@appendix@active\@false %% <<NOTE:>> This is changed in cmu-thesis-environments when an appendix is created
+%% <<NOTE:>> DO NOT PUT ANY RETURNS OR SPACES IN THE \cmu@sectionlabel COMMAND
+\newlength{\cmu@table@indent}
+\global\cmu@table@indent=5.3em
+\global\let\cmu@orig@numberline\numberline
+\global\let\cmu@hit@numberline\@false
+\newcommand{\cmu@sectionlabel}{\ifx\cmu@thesis@appendix@active\@false\relax\@arabic\c@section\else\@Alph\c@section\fi}
+\newcommand{\cmu@define@label}[1]{
+%% Define the command \the<label> after everything else in the beginning of the document (otherwise \thelstlisting will not work)
+\cmu@AtBeginDocumentLast{%
+\expandafter\gdef\csname the#1\endcsname{%
+\ifx\cmu@thesis@nolabel\@false%
+\ifcsname #1name\endcsname\relax%
+\csname #1name\endcsname\nobreakspace%
+\fi%
+\else%
+\if@cmu@within@contents@%
+\ifcsname #1name\endcsname\relax%
+\csname #1name\endcsname\nobreakspace%
+\fi%
+\fi%
+\fi%
+{\cmu@sectionlabel}.\@arabic\csname c@#1\endcsname%
+}
+\expandafter\gdef\csname l@#1\endcsname{\@dottedtocline{1}{0.0em}{\the\cmu@table@indent}}
+\expandafter\def\csname fnum@#1\endcsname{%
+\ifx\cmu@thesis@nolabel\@false%
+\csname the#1\endcsname%
+\else%
+\csname #1name\endcsname\nobreakspace\csname the#1\endcsname%
+\fi%
+}
+}
+%% hyperref doesn't like our \the<label> commands, fix it:
+\AtBeginDocument{%
+\expandafter\gdef\csname theH#1\endcsname{\cmu@sectionlabel.\@arabic\csname c@#1\endcsname}%
+}
+}
+\cmu@define@label{figure}
+\cmu@define@label{table}
+\cmu@define@label{lstlisting}
+\cmu@define@label{lstnumber}
+\cmu@define@label{equation}
+
+%% The first reference in the text to a figure or table must precede it. If the figure or table is incorporated in the text, then the reference is in the preceding paragraph or on the same page. If the figure or table is on a separate page, then the reference to it must be on the preceding text page. If two or more figures are referred to consecutively on one page, then they must follow on the page or the next pages consecutively.
+%% The text reference should identify a figure or table by number (e.g., write, ``See Figure 7.''), rather than by a relative location (e.g., do not write, ``In the following figure . . .'').
+%% <<NOTE:>> The reference location will automatically be handled by LaTeX.  The code below ensures that all of the figures and tables are actually referenced SOMEWHERE in the text (to detect ``in the following figure'' type behavior).
+\global\let\cmu@found@label=\@false
+\newcounter{cmu@label@j}
+\newcounter{cmu@label@k}
+\newcounter{cmu@label@count}
+\gdef\cmu@require@label#1#2#3{%
+\setcounter{cmu@label@j}{-1}%
+\cmu@ForLoop{cmu@label@k}{0}{\value{cmu@label@k} < \value{cmu@label@count}}{%
+\gdef\cmu@cmp@string@{#2}%
+\expandafter\let\expandafter\cmu@cmp@string@@\csname label@id@\the\c@cmu@label@k\endcsname%
+\ifx\cmu@cmp@string@\cmu@cmp@string@@\relax%
+\setcounter{cmu@label@j}{\value{cmu@label@k}}%
+\fi%
+}%
+\let\cmu@new@label=\@false%
+\ifnum\value{cmu@label@j}=-1\relax%
+\let\cmu@new@label=\@true%
+\expandafter\gdef\csname label@id@\the\c@cmu@label@count\endcsname{%
+#2%
+}%
+\setcounter{cmu@label@j}{\value{cmu@label@count}}%
+\stepcounter{cmu@label@count}%
+\fi%
+\ifx#3\@true\relax%
+%% If third parameter is true we're clearing the value
+\expandafter\gdef\csname label@error@\the\c@cmu@label@j\endcsname{}%
+\else%
+%% If not, we're setting the error value (if the label has already been referenced then we're good already)
+\ifx\cmu@new@label\@true%
+\expandafter\gdef\csname label@error@\the\c@cmu@label@j\endcsname{%
+\cmu@ogs@error{Unreferenced label `#2' on input line #1}%
+}%
+\fi%
+\fi%
+}
+\newif\if@cmu@require@label@
+\@cmu@require@label@true
+\gdef\cmu@label#1{%
+\global\let\cmu@found@label=\@true%
+\expandafter\cmu@require@label\expandafter{\the\inputlineno}{#1}{\@false}%
+\cmu@internal@label{#1}%
+}
+\gdef\cmu@start@require@label{%
+\global\let\cmu@found@label=\@false%
+\global\let\cmu@internal@label=\label%
+\global\let\label=\cmu@label%
+}
+\gdef\cmu@end@require@label{%
+\ifx\cmu@found@label\@false\relax%
+\if@cmu@require@label@%
+\cmu@ogs@error{No label given to float \on@line}%
+\fi%
+\fi%
+\global\let\label=\cmu@internal@label%
+}
+\cmu@AtEndPreamble{
+\AtBeginDocument{
+\global\let\cmu@internal@ref=\ref%{}
+\global\let\ref=\cmu@ref%{}
+}
+}
+\gdef\cmu@ref@#1#2{%
+\expandafter\cmu@require@label\expandafter{\the\inputlineno}{#2}{\@true}%
+\cmu@internal@ref#1{#2}%
+}
+\gdef\cmu@ref{%
+\@ifstar{\cmu@ref@{*}}{\cmu@ref@{}}%
+}
+\AtEndDocument{
+\cmu@ForLoop{cmu@label@k}{0}{\value{cmu@label@k} < \value{cmu@label@count}}{%
+\csname label@error@\the\c@cmu@label@k\endcsname%
+}
+}
+
+%% Add compatibility with cleveref
+\global\let\cmu@cleveref=\@false
+\cmu@AtEndPreamble{
+\@ifpackageloaded{cleveref}{
+\global\let\cmu@cleveref=\@true
+\global\let\internal@setcref\@setcref
+\gdef\@setcref#1{%
+\expandafter\cmu@require@label\expandafter{\the\inputlineno}{#1}{\@true}%
+\internal@setcref{#1}%
+}
+\global\let\internal@cref@gettype\cref@gettype
+\gdef\cref@gettype#1{%
+\expandafter\cmu@require@label\expandafter{\the\inputlineno}{#1}{\@true}%
+\internal@cref@gettype{#1}%
+}
+}{}
+}
+\cmu@AtBeginDocumentLast{
+\ifx \cmu@cleveref\@true \relax
+\crefname{figure}{\@gobble}{\@gobble}
+\crefname{table}{\@gobble}{\@gobble}
+\fi
+}
+
+%% Handle table captions
+\global\let\cmu@internal@begintable=\table
+\global\let\cmu@internal@begintabular=\tabular
+\gdef\cmu@internal@begintable@{%
+\singlespacing%
+\global\let\ref=\cmu@internal@ref%{}
+\global\let\cmu@internal@endtable=\endtable%
+\let\endtable=\cmu@endtable%
+}
+\gdef\cmu@internal@begintableA[#1]{%
+\begingroup%
+\cmu@check@herefloat{#1}%
+\cmu@internal@begintable[#1]%
+\cmu@internal@begintable@%
+}
+\gdef\cmu@internal@begintableB{%
+\begingroup%
+\cmu@check@herefloat@false%
+\cmu@internal@begintable%
+\cmu@internal@begintable@%
+}
+\AtBeginDocument{
+\gdef\table{%
+\cmu@start@require@label%
+\cmu@start@custom@caption%
+\@ifnextchar[%
+{\cmu@internal@begintableA}%
+{\cmu@internal@begintableB}%
+}
+\gdef\cmu@endtable{%
+\cmu@test@custom@caption{\@true}{Caption must be above table [2] \on@line}%
+\cmu@end@custom@caption%
+\cmu@end@require@label%
+\cmu@internal@endtable%
+\cmu@check@herefloat@moved%
+\global\let\ref=\cmu@ref%{}
+\endgroup%
+}
+\gdef\tabular{%
+\cmu@test@custom@caption{\@false}{Caption must be above table [1] \on@line}%
+\cmu@internal@begintabular%
+}
+\expandafter\global\expandafter\let\expandafter\cmu@internal@begintabularstar\csname tabular*\endcsname
+\@namedef{tabular*}{%
+\cmu@test@custom@caption{\@false}{Caption must be above table [1] \on@line}%
+\cmu@internal@begintabularstar%
+}
+\@ifpackageloaded{tabulary}{
+\@namedef{tabular*}{\tabulary}
+\@namedef{endtabular*}{\endtabulary}
+}{}
+}
+%% <<NOTE:>> Figures are handled below (along with other operations)
+
+%% All equations \emph{referred to} in the text must be numbered, although not all displayed equations must be numbered. As in numbering figures and tables, a double numbering system is used for equations; for example, Equation 2.1, where 2 is the chapter, and 1 is the first numbered equation in that chapter,
+\renewcommand{\theequation}{\@arabic\c@section.\@arabic\c@equation}
+
+%% natbib requires some special configuration
+\global\let\cmu@disallow@bibtopic=\@false%
+\cmu@AtEndPreamble{
+%% Create a special bibliography style so the last defined style is the one used
+\global\let\cmu@orig@bibliographystyle=\bibliographystyle
+\gdef\cmu@bibliographystyle@set#1{%
+\gdef\cmu@bibliographystyle{#1}%
+}
+%% Warn about changing the bibliography style
+\gdef\bibliographystyle{%
+\cmu@thesis@warning@with@line{The bibliography style is already defined by the template}%
+\cmu@bibliographystyle@set%
+}
+\AtEndDocument{
+\expandafter\cmu@orig@bibliographystyle{\cmu@bibliographystyle}
+}
+\@ifpackageloaded{natbib}{
+%% Activate the "sort and compress" natbib option and choose the correct reference style
+\def\NAT@sort{\@ne}\def\NAT@cmprs{\@ne}
+\ifNAT@numbers
+\cmu@bibliographystyle@set{unsrtnat}
+\global\let\cmu@disallow@bibtopic=\@true
+\else
+\cmu@bibliographystyle@set{authordate1}
+\fi
+%% Fix a bug in author-date references where titles appear like so:
+%% (Reference et al. , 2009)
+\gdef\repair@authordate@space{}
+\gdef\repair@authordate@start#1{%
+\global\let\repair@authordate@savespace=\ %
+\global\let\ =\repair@authordate@space#1%
+}
+\gdef\repair@authordate@done{%
+\global\let\ =\repair@authordate@savespace%
+}
+\def\citename#1#2(@)(@)\@nil#3{\expandafter\repair@authordate@start\expandafter\NAT@apalk#1#2, \@nil{#3}\repair@authordate@done}
+}{
+\cmu@bibliographystyle@set{unsrt}% assume traditional unsorted style
+}
+}
+
+%% Force footnotes to always appear at the very bottom of the page
+\RequirePackage[hang,flushmargin,bottom]{footmisc}
+
+%% <<NOTE:>> No directions are given for inserting code in an Appendix, assuming that single spacing is desired.
+\AtBeginDocument{
+\@ifpackageloaded{listings}{
+\def\lst@basicstyle{\small \singlespacing}
+\lstKV@SetIf{t}{\lst@ifbreaklines}
+}{}
+}
+
+
+\let\@chapter@call\@empty
+
+\newcounter{cmu@symbol@symbolnote}
+\newcommand{\authornotesymbol}[1]{%
+\stepcounter{cmu@symbol@symbolnote}%
+\global\let\cmu@old@footnote=\thefootnote%
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\setcounter{footnote}{\arabic{cmu@symbol@symbolnote}}\footnotetext[\arabic{cmu@symbol@symbolnote}]{#1}%
+\setcounter{footnote}{0}%
+\global\let\thefootnote=\cmu@old@footnote%
+}
+\newcounter{cmu@symbol@numberednote}
+\newcommand{\authornotenumbered}[1]{%
+\stepcounter{cmu@symbol@numberednote}%
+\global\let\cmu@old@footnote=\thefootnote%
+\renewcommand{\thefootnote}{\arabic{footnote}}%
+\setcounter{footnote}{\arabic{cmu@symbol@numberednote}}\footnotetext[\arabic{cmu@symbol@numberednote}]{#1}%
+\setcounter{footnote}{0}%
+\global\let\thefootnote=\cmu@old@footnote%
+}
+
+%========================================
+%             Table and Figure Formatting                              
+%========================================
+\usepackage{caption}                    % Formatting the Captions
+\captionsetup[table]{labelsep=period, justification=raggedright, singlelinecheck=true}    % No ':' between Table A.4: caption 
+%change labelsep but period is the default setting
+\captionsetup[figure]{labelsep=period, justification=raggedright, singlelinecheck=true}   % Same but for figures.
+%========================================
+%                          Another Eq Ref                              
+%========================================
+\newcommand{\Eqref}[1]{Equation \ref{#1}}
+
+%========================================
+%                        Require Packages                              
+%========================================
+%% >>> Handle compatibility with a variety of packages (note: important to do this near the end)
+\RequirePackage{cmu-style-files/cmu-thesis-compat}
+
+%% >>> Fix bibliographical references that use special characters (for users without hyperref):
+\RequirePackage{url}
+
+%% >>> Fix some character encoding to produce sane results (note: important to do this last)
+\RequirePackage{cmu-style-files/cmu-thesis-encoding}
+
+\endinput
+
+%%
+%% End of file `cmu-thesis.sty'.

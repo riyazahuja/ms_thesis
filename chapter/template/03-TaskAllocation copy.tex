@@ -1,0 +1,332 @@
+\chapter{The Interdependent Task Allocation Problem}\label{chap:task_allocation}
+
+At the modeling level, the interdependent task allocation problem (ITAP) generalizes classical machine scheduling by adding four structural ingredients. First, tasks are linked by a dependency relation, typically represented by a precedence DAG that may itself evolve over time. Second, agents are heterogeneous and may hold private or uncertain information about their own capabilities. Third, tasks may be preemptible and progress may be stochastic, either through random processing times or through success probabilities that depend on invested effort. Fourth, agents may perform endogenous task creation, for example by proposing intermediate lemmas or auxiliary subtasks that enlarge the task graph during execution.
+
+This chapter separates two coordination regimes. In the centralized regime, a planner chooses a joint allocation policy to optimize a system objective such as makespan, weighted completion time, or expected welfare. In the decentralized regime, agents act strategically under partial observability and the problem is naturally viewed as a stochastic game. This distinction sets up the later transition from classical allocation problems to the market-mediated VAMP framework.
+
+Finally, the chapter records several canonical problem variants, explains how ITAP inherits hardness from the scheduling and allocation problems it subsumes, and presents baseline relaxations and heuristics that will serve as both theoretical references and practical comparators in later chapters.
+
+\subsection{Formal Model of ITAP}
+
+This section defines the primitives of ITAP in a form that reduces cleanly to classical scheduling when the task graph is fixed and agents are obedient, but that can also be lifted to a decentralized stochastic game when agents are strategic.
+
+\subsubsection{Notation and Time Model}
+
+Let \(N := \{1,\dots,n\}\) be the set of agents. Time may be modeled either in discrete steps or continuously. In a discrete-time formulation,
+\[
+  t \in \{0,1,\dots,H\},
+\]
+for some finite horizon \(H \in \mathbb{N}\). This viewpoint is convenient for stochastic-game and reinforcement-learning formulations. In a continuous-time formulation,
+\[
+  t \in [0,H],
+\]
+which is often more natural in scheduling.
+
+The remainder of this chapter is written in discrete time for concreteness. The continuous-time analogue is conceptually similar and differs mainly in the representation of start times, durations, and interruptions.
+
+\subsubsection{Tasks, States, and Verifiability}
+
+A task is an abstract object \(f\) together with state and reward information. At time \(t\), task \(f\) has a resolution state
+\[
+  x_t(f) \in \{\mathsf{unseen},\mathsf{available},\mathsf{in\_progress},\mathsf{resolved},\mathsf{failed}\}.
+\]
+Each task may also carry a value \(w(f) \ge 0\), a release time \(r(f)\), a deadline \(d(f)\), and any other task-specific metadata relevant to the planner or to the agents.
+
+The feature that distinguishes the motivating theorem-proving domain from many ordinary scheduling settings is verifiability. A completion claim is accompanied by a certificate \(c\), and the environment supplies a verification rule
+\[
+  \mathsf{Verify} : \mathcal{F} \times \mathcal{C} \to \{0,1\},
+\]
+where \(\mathcal{F}\) is the universe of tasks and \(\mathcal{C}\) is the universe of certificates.
+
+We assume a basic soundness condition: if \(\mathsf{Verify}(f,c)=1\), then the environment accepts \(f\) as resolved. In theorem proving, this role is played by a proof kernel; in other domains, it may be a test suite, a formal specification checker, or some other public verification mechanism.
+
+\subsubsection{Dependency Graphs and Feasibility}
+
+At time \(t\), the currently known tasks form a graph
+\[
+  G_t = (V_t, E_t),
+\]
+where \(V_t \subseteq \mathcal{F}\) and \(E_t \subseteq V_t \times V_t\). An edge \(g \to f\) means that \(g\) is a prerequisite for \(f\). Write
+\[
+  \mathrm{Pred}_t(f) := \{g \in V_t : (g,f)\in E_t\}.
+\]
+
+A task is hard-feasible exactly when all of its predecessors have been resolved:
+\[
+  \mathsf{Feasible}_t(f)
+  \iff
+  \forall g \in \mathrm{Pred}_t(f), \ x_t(g)=\mathsf{resolved}.
+\]
+This is the standard precedence-constraint notion from scheduling, generalized here to a setting in which the graph may change over time and information about completion may be partially private.
+
+\subsubsection{Evolving Graphs and Endogenous Task Creation}
+
+Unlike classical fixed-instance scheduling, ITAP permits the task graph itself to evolve. To model discovery or decomposition, introduce a task-generation operator
+\[
+  (g, E^{\mathrm{new}}) \sim \mathsf{Gen}(s_t, i, a_t^i),
+\]
+where \(s_t\) is the global state, \(i\) is an agent, and \(a_t^i\) is an action such as conjecturing, decomposing, or proposing an intermediate artifact. The new task \(g\) and new edges \(E^{\mathrm{new}}\) are incorporated by setting
+\[
+  V_{t+1} := V_t \cup \{g\},
+  \qquad
+  E_{t+1} := E_t \cup E^{\mathrm{new}}.
+\]
+
+This is the key mechanism by which ITAP departs from static scheduling. In theorem proving, a newly generated node may correspond to an auxiliary lemma. In a planning domain, it might correspond to a discovered subgoal or intermediate artifact.
+
+A common regularity assumption is that each \(G_t\) remains acyclic. This preserves the interpretation of edges as hard precedences and excludes circular dependency pathologies.
+
+\subsubsection{Agent Capabilities, Uncertainty, and Privacy}
+
+Each agent \(i \in N\) has a latent type \(\theta_i\) encoding its capability profile. Several useful submodels fit inside this abstraction.
+
+\textit{Deterministic processing-time model.}
+Each pair \((i,f)\) has a processing time \(p_{i,f} \in \mathbb{R}_{\ge 0}\). This recovers unrelated-machine scheduling when tasks are independent.
+
+\textit{Stochastic processing-time model.}
+Each pair \((i,f)\) has a completion-time distribution \(P_{i,f}\). This is useful when execution outcomes are noisy or when success is uncertain.
+
+\textit{Budget-to-success model.}
+For effort level \(\tau\), define a success function
+\[
+  \pi_{i,f}(\tau)
+  :=
+  \Pr(\text{success on } f \text{ after budget } \tau)
+  \in [0,1].
+\]
+This form is especially natural in theorem proving, search, and scientific discovery, where effort increases the chance of success without guaranteeing it.
+
+In a centralized model, the planner may observe \(\theta_i\) directly or through reports. In a decentralized model, \(\theta_i\) is typically private, which creates the mechanism-design and strategic-information issues that motivate later market formulations.
+
+\subsubsection{Preemption and Progress Variables}
+
+To model preemption, let \(y_t(i,f)\) denote the accumulated progress made by agent \(i\) on task \(f\) up to time \(t\). In a preemptive-resume model, work is preserved across interruptions:
+\[
+  y_{t+1}(i,f) = y_t(i,f) + \tau_t(i,f),
+\]
+where \(\tau_t(i,f)\) is the effort or time budget allocated at step \(t\). In a preemptive-restart model, interruption may discard partial progress or incur a restart penalty.
+
+The task resolves when progress crosses a threshold in a deterministic model, or when a stochastic completion event occurs according to the agent-task hazard model. This distinction matters algorithmically: preemption often changes both the tractability and the quality of available approximation algorithms.
+
+\subsubsection{Knowledge States and Public vs. Private Libraries}
+
+The motivating application suggests splitting the global state into a public library and private libraries. Let \(L_t^0\) denote the public library and \(L_t^i\) the private library of agent \(i\). A minimal consistency condition is
+\[
+  L_t^0 \subseteq L_t^i
+  \qquad
+  \forall i,t,
+\]
+meaning that every agent knows everything in the public library, while an agent may additionally know private results that have not yet been published.
+
+This abstraction is not specific to theorem proving, but it is particularly natural there: private libraries may contain partially developed proof objects or unpublished lemmas, whereas the public library contains statements whose resolution is publicly verifiable.
+
+\subsection{Coordination Regimes}
+
+The same underlying primitives can be controlled in two fundamentally different ways.
+
+\subsubsection{Centralized Regime}
+
+In the centralized regime, a planner chooses all agents' actions. Let \(s_t\) be the full system state, including the known task set, dependency structure, task states, progress variables, and any revealed capability information. A planner policy is a map
+\[
+  \Pi : s_t \mapsto a_t = (a_t^1,\dots,a_t^n),
+\]
+where \(a_t^i\) specifies the action assigned to agent \(i\) at time \(t\).
+
+The defining assumption is obedience: agents follow assigned actions. Under this assumption, ITAP becomes a stochastic or deterministic control problem whose classical special cases include assignment, scheduling, and precedence-constrained planning.
+
+\subsubsection{Decentralized Regime}
+
+In the decentralized regime, each agent acts based only on its own information. Let
+\[
+  o_t^i = \mathsf{Obs}_i(s_t)
+\]
+be the observation available to agent \(i\). A decentralized policy is then
+\[
+  \pi_i : (o_0^i,\dots,o_t^i) \mapsto a_t^i.
+\]
+
+This leads naturally to a partially observable stochastic game: the state evolves under joint actions, observations are local, and incentives may be misaligned. The later VAMP formulation can be viewed as a structured decentralized regime in which economic interaction is layered on top of task allocation and public verifiability.
+
+\subsubsection{Market-Mediated Sketch}
+
+To anticipate later chapters, introduce a transferable utility variable \(m_t^i\) for each agent and a contract space \(\mathcal{K}\) whose payoffs depend on publicly verifiable events. A simple bounty contract on task \(f\) is represented by
+\[
+  k = (f,B),
+\]
+which pays \(B\) when \(f\) is resolved and publicly verified. A market mechanism \(\mathcal{M}\) then specifies how bids, asks, and current market state determine trades and transfers.
+
+At this level of abstraction, the essential point is only that public verification makes contract settlement well defined. The details of market state, collateral, and price formation are deferred to the later formal VAMP development.
+
+\subsection{Objectives and Formal Problem Statements}
+
+The ITAP framework supports several objective functions, depending on whether one wants a classical planner formulation or a decentralized strategic formulation.
+
+\subsubsection{Canonical System Objectives}
+
+Let \(T \subseteq \mathcal{F}\) be the set of target tasks.
+
+\textit{Makespan.}
+If \(C_f\) is the completion time of task \(f\), define
+\[
+  C_{\max}(T) := \max_{f\in T} C_f.
+\]
+This is the standard scheduling objective.
+
+\textit{Weighted completion time.}
+Given weights \(w_f \ge 0\), define
+\[
+  \sum_{f\in T} w_f C_f.
+\]
+This objective rewards early completion of high-priority tasks.
+
+\textit{Expected discounted welfare.}
+In a stochastic model, a planner may optimize
+\[
+  \mathbb{E}\!\left[
+    \sum_{t=0}^{H}
+    \gamma^t
+    \left(
+      \sum_{f\in\mathcal{F}} r_f \mathbf{1}\{x_t(f)=\mathsf{resolved}\}
+      -
+      \sum_{i\in N} c_i(a_t^i)
+    \right)
+  \right],
+\]
+where \(r_f\) is the reward for resolving task \(f\), \(c_i\) is the cost of action, and \(\gamma\in(0,1]\) is the discount factor.
+
+In decentralized settings, each agent instead has its own utility \(U_i\), and the gap between private incentives and social welfare becomes part of the problem.
+
+\subsubsection{Static Deterministic Centralized ITAP}
+
+A simple baseline variant has a fixed task set \(V\), a fixed DAG \(G=(V,E)\), deterministic processing times \(p_{i,f}\), and a target set \(T \subseteq V\). The goal is to assign each task to an agent and choose start times \(S_f\) such that:
+\begin{enumerate}
+\item precedence is respected, so \(S_f \ge C_g\) whenever \(g \to f\),
+\item each agent processes at most one task at a time, and
+\item if task \(f\) is assigned to agent \(i\), then \(C_f = S_f + p_{i,f}\).
+\end{enumerate}
+The objective is to minimize \(C_{\max}(T)\). This is a direct generalization of precedence-constrained unrelated-machine scheduling.
+
+\subsubsection{Dynamic Stochastic ITAP}
+
+In the dynamic stochastic version, the task graph evolves, task outcomes are uncertain, and the output is a policy rather than a static schedule. The centralized version asks for a planner policy \(\Pi\); the decentralized version asks for a joint policy \((\pi_i)_{i\in N}\). This is the formulation most closely connected to the later learning-based chapters.
+
+\subsubsection{Mathematical Programming Relaxations}
+
+When tasks are independent and processing times are deterministic, the standard unrelated-machine makespan LP is a natural baseline:
+\[
+\begin{aligned}
+\min \ & T \\
+\text{s.t. } &
+\sum_{i\in N} x_{i,f} = 1
+&& \forall f\in V, \\
+&
+\sum_{f\in V} p_{i,f} x_{i,f} \le T
+&& \forall i\in N, \\
+&
+0 \le x_{i,f} \le 1
+&& \forall i,f.
+\end{aligned}
+\]
+This relaxation provides a principled centralized baseline for frozen snapshots of the task pool, and it motivates later assignment-based heuristics and rounding schemes.
+
+\subsection{Complexity and Relationship to Classical Models}
+
+ITAP inherits hardness from the scheduling and allocation models it contains as special cases.
+
+\subsubsection{Relationship to Classical Scheduling Models}
+
+If the dependency graph is empty, ITAP reduces to independent-task scheduling. If the graph is a fixed DAG, ITAP contains precedence-constrained scheduling. If processing times vary arbitrarily across agent-task pairs, ITAP contains the unrelated-machines model. If tasks are further allowed to appear online, the framework connects to online scheduling and dynamic allocation. Thus ITAP is best understood as a superstructure over classical scheduling, rather than as an unrelated new model.
+
+\subsubsection{NP-Hardness by Restriction}
+
+Even highly restricted forms of ITAP are NP-hard. For example, if one removes dependencies, endogenous task creation, stochasticity, and strategic behavior, while retaining arbitrary deterministic processing times \(p_{i,f}\), the problem already contains unrelated-machine makespan minimization. Likewise, if one further restricts to identical machines, one recovers the classical identical-machines makespan problem. Therefore the general ITAP formulation cannot be easier than these standard subcases.
+
+\subsubsection{Precedence Constraints and Approximation Barriers}
+
+Dependency-aware allocation contains precedence scheduling as a special case. This immediately explains why even centralized planning remains difficult once unlocking structure matters: locally attractive tasks need not lie on the critical path, and delaying the wrong prerequisite can increase overall completion time substantially. This phenomenon will reappear later when comparing myopic policies with dependency-aware baselines.
+
+\subsubsection{Strategic and Decentralized Hardness}
+
+Once agents are strategic, one must reason not only about planning difficulty but also about incentive and equilibrium difficulty. If capabilities are private, truthful elicitation itself can be hard. If the regime is decentralized and partially observable, the problem inherits the general difficulty of multiagent stochastic control. This provides the high-level justification for later using approximate equilibria, market structure, and learning-based methods rather than exact global optimization.
+
+\subsection{Baseline Algorithms and Heuristics}
+
+Because ITAP contains multiple classical substructures, it admits several natural baseline families.
+
+\subsubsection{Assignment-Based Baselines}
+
+When the feasible task pool is frozen and dependencies are ignored or already resolved, assignment-based relaxations provide a natural centralized baseline. These methods estimate task-agent costs and choose allocations by solving or approximating a linear assignment or generalized assignment subproblem.
+
+\subsubsection{List Scheduling and Priority Rules}
+
+For dependency-constrained instances, a natural baseline is list scheduling with a priority rule. Several useful priorities are:
+\begin{itemize}
+\item critical-path priority, which emphasizes tasks that unlock long downstream chains,
+\item level or height priority, which favors tasks that sit high in the DAG, and
+\item utility-aware greedy priority, which balances estimated value against expected effort.
+\end{itemize}
+These heuristics are attractive because they are simple, interpretable, and often competitive on structured instances even when global optimization is out of reach.
+
+\subsubsection{Preemption-Aware Baselines}
+
+If preemption is allowed, one can compare resume-allowed list scheduling against policies that penalize frequent switching. This matters especially when partial work has setup cost or when interruptions destroy useful search state.
+
+\subsubsection{Online and Dynamic-Task Baselines}
+
+When endogenous task creation is important, a baseline online planner repeatedly recomputes the currently feasible task pool and assigns idle agents greedily according to an estimated value-per-effort score. Such a policy is not globally optimal, but it captures the behavior of a system that reacts to discoveries rather than solving a static planning problem once and for all.
+
+\subsection{Illustrative Examples}
+
+Two small examples are useful for intuition.
+
+\subsubsection{Dependency Graph with Endogenous Creation}
+
+Figure~\ref{fig:itap-small-example} illustrates a small ITAP instance. A target task \(A\) depends on a lemma \(B\), which depends on supporting tasks \(C\) and \(D\). During execution, an agent may generate a new auxiliary task \(L\), which then becomes an additional prerequisite for the target.
+
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox[c][2.2in][c]{0.92\textwidth}{
+    \centering
+    \textbf{ITAP Dependency Graph Example}\\[0.5em]
+    Initial tasks: \(C,D \rightarrow B \rightarrow A\)\\
+    Endogenous creation: \(C \dashrightarrow L \rightarrow A\)
+  }}
+  \caption{A small ITAP instance. Solid arrows indicate hard dependencies. The dashed arrow indicates endogenous task creation: a new auxiliary task \(L\) is generated during execution and becomes relevant to the target \(A\).}
+  \label{fig:itap-small-example}
+\end{figure}
+
+\subsubsection{Myopic Greedy Allocation Can Fail}
+
+Consider two agents and a target task \(A\) that depends on prerequisite \(B\). Suppose there is also an easy, low-value task \(E\) that is immediately available. A myopic value-per-time heuristic may allocate effort to \(E\) because it yields quick local reward, while the globally important prerequisite \(B\) is delayed. The result is that high-value downstream progress is postponed even though a dependency-aware policy would have attacked \(B\) first.
+
+This simple example captures a central feature of ITAP: the value of a task is often indirect, coming from the tasks it unlocks rather than from its own immediate reward.
+
+\subsubsection{Model-Comparison Table}
+
+Table~\ref{tab:itap-model-comparison} compares ITAP variants with several nearby classical models.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lccccccc}
+\hline
+Model & Heterog. & Precedence & Preempt. & Stochastic & Evolving tasks & Strategic agents & Verifiable \\
+\hline
+\(P||C_{\max}\) & no & no & optional & no & no & no & not assumed \\
+\(Q||C_{\max}\) & speeds & no & optional & no & no & no & not assumed \\
+\(R||C_{\max}\) & yes & no & optional & no & no & no & not assumed \\
+\(P|\mathrm{prec}|C_{\max}\) & no & yes & optional & no & no & no & not assumed \\
+Generalized assignment & yes & no & n/a & no & no & no & not assumed \\
+Divisible load theory & yes & implicit & yes & sometimes & usually fixed & no & not assumed \\
+Market-based MRTA & yes & sometimes & sometimes & often & often & sometimes & domain dependent \\
+\hline
+ITAP (centralized) & yes & yes & yes & yes & yes & no & optional \\
+ITAP (decentralized) & yes & yes & yes & yes & yes & yes & optional \\
+VAMP-style ITAP & yes & yes & yes & yes & yes & yes & yes \\
+\hline
+\end{tabular}
+\caption{Comparison of ITAP variants with classical and neighboring models.}
+\label{tab:itap-model-comparison}
+\end{table}
+
+The point of the table is not that every row is identical to ITAP, but rather that each row isolates one of the structures that ITAP combines: heterogeneity, dependencies, stochasticity, strategic interaction, or public verifiability.

@@ -1,0 +1,67 @@
+\chapter{Experiments}\label{chap:experiments}
+
+\textbf{TODO PASTE FROM OVERLEAF WRITEUP}
+
+% \subsection{Experimental Setup}
+
+% \subsubsection{Instance Generation Protocol}
+% Describe the procedural generation pipeline: graph parameters (number of nodes, DAG depth, branching factor, edge density), agent parameters (number of agents, capability diversity), market parameters, time horizon, discount factor. Discuss the curriculum stages used during training.
+
+% \subsubsection{Evaluation Protocol}
+% Describe how trained policies are evaluated: held-out instance distributions, episode length, number of evaluation episodes, statistical significance testing. Define the metrics.
+
+% \subsubsection{Baselines}
+% - **Scripted baselines**: heuristic agents from Section 9.4.
+% - **Centralized oracle**: a centralized planner with full information (from Chapter 4), providing an upper bound.
+% - **Independent learners**: agents trained with independent PPO (no population training, no centralized critic).
+% - **Ablations**: no population training, no curriculum, no behavior cloning warm-start, etc.
+
+% \subsection{Metrics}
+
+% \subsubsection{System-Level Metrics}
+% - **Total resolved utility**: sum of utility weights of all publicly resolved tasks.
+% - **Time-to-resolution**: average timesteps to resolve high-value target tasks.
+% - **Duplication rate**: fraction of redundant proof attempts (multiple agents working on the same task).
+% - **Publication efficiency**: fraction of privately resolved tasks that are eventually published.
+
+% \subsubsection{Agent-Level Metrics}
+% - **Cumulative return**: discounted sum of per-step rewards (balance changes).
+% - **Regret**: difference from best-response utility against the realized opponent policies.
+% - **Proof efficiency**: utility gained per unit of compute budget spent.
+% - **Conjecture quality**: average utility relevance of successfully conjectured subtasks.
+
+% \subsubsection{Market-Level Metrics}
+% - **Price accuracy**: correlation between market prices and ground-truth resolution probabilities.
+% - **Market efficiency**: bid-ask spreads, volume, and liquidity.
+% - **Credit assignment quality**: correlation between agents' causal contributions and their rewards.
+
+% \subsection{Training Results}
+
+% \subsubsection{Learning Curves}
+% Training reward vs. environment steps for each market mechanism. Compare MAPPO + population training vs. ablations. Show convergence behavior and discuss stability.
+
+% \subsubsection{Curriculum Effects}
+% Performance at each curriculum stage. Demonstrate that progressive complexity scaling enables learning that fails with direct training on hard instances.
+
+% \subsubsection{Population Diversity}
+% Analyze the learned population: policy diversity metrics, meta-game structure, exploitability of the final meta-strategy.
+
+% \subsection{Evaluation Results}
+
+% \subsubsection{Comparison Across Market Mechanisms}
+% Compare all four mechanisms on system-level and agent-level metrics. Which mechanism achieves highest total resolved utility? Best credit assignment? Lowest duplication? Discuss the tradeoffs.
+
+% \subsubsection{Learned vs. Scripted Agents}
+% Show that MARL-trained agents outperform scripted baselines on all key metrics. Quantify the improvement and discuss which learned behaviors drive it (strategic publication timing, adaptive budget allocation, market exploitation).
+
+% \subsubsection{Decentralized vs. Centralized Oracle}
+% Quantify the **cost of decentralization**: the gap between the centralized oracle (full information, cooperative) and the best decentralized market. Discuss how different market mechanisms reduce this gap.
+
+% \subsubsection{Emergent Behaviors}
+% Qualitative analysis of learned agent behaviors: specialization (agents focusing on specific task regions), collaborative publication chains, strategic information withholding, market arbitrage, etc.
+
+% \subsubsection{Ablation Studies}
+% Systematically ablate each component: population training, curriculum, behavior cloning warm-start, centralized critic, action masking. Show the contribution of each.
+
+% \subsection{Scaling Analysis}
+% How do results change with: number of agents, number of tasks, DAG depth, time horizon? Identify scaling bottlenecks and discuss implications for real-world deployment.

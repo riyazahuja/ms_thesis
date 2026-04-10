@@ -1,0 +1,83 @@
+\chapter{VAMP --- Formal Definition and Properties}\label{chap:vamp}
+
+This chapter contains the rigorous mathematical definition of the VAMP, building on the preliminary definitions from Chapter 3. It is the formal core of the thesis.
+
+\subsection{Preliminary Definitions (Recap and Extension)}
+
+\subsubsection{Syntax and Semantics of Formulas}
+Formal definition of the formula space $\mathcal{F}$, involution $\neg$, sequents $[\Gamma \vdash \phi]$, and the concrete/ghost partition. (Extend from Chapter 3 as needed.)
+
+\subsubsection{Libraries and Library Invariants}
+Full formal definition of library states $L_t = (C_t, RS_t, \delta_t, \Theta_t)$. State and prove all invariants: monotonicity ($C_t \subseteq C_{t+1}$, $RS_t \subseteq RS_{t+1}$), negation-pair closure, consistency ($[\Gamma \vdash \phi] \in RS_t \implies [\Gamma \vdash \neg\phi] \notin RS_t$), upward closure of $RS_t$, acyclicity of the dependency graph $D(\delta_t)$.
+
+\subsubsection{Private and Shared Libraries}
+Define the multiagent library structure with private $L^\alpha$ and shared $L^0$ libraries. State and prove the inclusion invariant $L^0_t \subseteq L^\alpha_t$.
+
+\subsubsection{Fully Resolved Sequents}
+Inductive definition of $FRS_t \subseteq RS_t$. Discuss the distinction between "locally resolved" (dependencies may be unresolved) and "fully resolved" (all transitive dependencies resolved). Note: under the implementation assumption of canonical local contexts, all resolved sequents are automatically fully resolved.
+
+\subsection{Action Primitives (Formal Definitions)}
+
+\subsubsection{The Proof Kernel}
+Full formal definition of $K^\alpha_{\text{proof}} : Y_{\text{proof}} \times X_{\text{proof}} \to [0,1]$. Input space, output space, admissibility conditions. State the key behavioral properties: truth gate, dependency gate, budget monotonicity, diminishing returns, difficulty modulation, utility modulation, heterogeneous agent capabilities.
+
+\subsubsection{The Conjecture Kernel}
+Full formal definition of $K^\alpha_{\text{conj}}$. Bernoulli success with conditional proposal distribution. Budget monotonicity, utility-guided relevance, local opportunity modulation, budget-improved proposal quality. The proposal distribution as a softmax over ghost formulas weighted by utility scores.
+
+\subsubsection{Publication and Dependency Closure}
+Formal definition of the dependency closure operator $\text{cl}^\alpha_t(R)$ and the closure-completion of publication payloads. Prove that publication preserves all library invariants (monotonicity, negation-pair closure, consistency, acyclicity). Describe the propagation to shared and other agents' private libraries.
+
+\subsubsection{The Query Model}
+Formal definition of the query model as a stateful estimator. Feature buckets, discrete-time survival model with hazard sequences, MAP-smoothed hazard estimates, query readout ($\hat{p}^\alpha_t$, $\hat{\tau}^\alpha_t$). Update rule $\Delta^\alpha$ via sufficient statistics with associativity/commutativity.
+
+\subsection{Market Mechanism (Abstract Interface)}
+Define the abstract market mechanism $\mathcal{M} = (\mathcal{N}, \mathcal{M}, \beta, \mathcal{W}, \{A^\alpha_{\text{mkt}}\}, \{\text{Adm}^\alpha_{\text{mkt}}\}, T_{\text{mkt}})$. Discuss the design space: what a mechanism must specify (action spaces, admissibility, transition kernel) and what it leaves free (agent strategies).
+
+\subsection{The VAMP as a POSG}
+
+\subsubsection{World State Space}
+Full definition of $w_t = (\{L^\alpha_t\}, L^0_t, M_t, \{J^\alpha_t\}, \{Q^\alpha_t\}, \{\Omega^\alpha_t\}, \{U^\alpha_{t,\text{proof}}\}, \{U^\alpha_{t,\text{conj}}\})$. Explain each component. Define the world state space $\mathcal{W}$ as the set of tuples satisfying all invariants.
+
+\subsubsection{Observation Spaces and Kernels}
+Define agent $\alpha$'s observation $o^\alpha_t = (L^\alpha_t, P^\alpha_t, B^\alpha_t, \Omega^\alpha_t; L^0_t, ML_t)$. The observation kernel is deterministic (perfect recall of own state, perfect observation of public state).
+
+\subsubsection{Action Spaces and Admissibility}
+Define the tagged non-market action space $A^\alpha_{\text{nm}}$ and the full action space $A^\alpha = A^\alpha_{\text{nm}} \sqcup A^\alpha_{\text{mkt}}$. Define the admissibility predicate $\text{Adm}^\alpha : \mathcal{W} \times A^\alpha \to \{0,1\}$ covering idle/busy agents, concrete formula constraints, and market admissibility.
+
+\subsubsection{Transition Kernel (Two-Stage Construction)}
+Define the full transition as a two-stage composition:
+1. **Non-market transition** $T_{\text{nm}}$: deterministic pre-update (decrement timers, start jobs, apply publications, update query buffers) $\to$ stochastic job completion (sample from proof/conjecture kernels for completing jobs) $\to$ deterministic post-update (resolve proofs, apply conjectures, clear jobs).
+2. **Market transition** $T_{\text{mkt}}$: mechanism-specific update of portfolios, ledger, and any mechanism state.
+
+State and prove well-definedness: the composition preserves all world state invariants.
+
+\subsubsection{Reward, Discount, and Initial Distribution}
+Define the per-step reward $r^\alpha(w, a) = \mathbb{E}[B^\alpha(w') - B^\alpha(w)]$ (expected balance change). Discuss the discount factor $\gamma$ and the initial distribution $b_0$.
+
+\subsubsection{VAMP Consistency}
+State the consistency condition: a VAMP is consistent with its market mechanism $\mathcal{M}$ iff the POSG components agree with $\mathcal{M}$'s specifications. Prove that the generator tuple $(\mathcal{N}, \mathcal{P}, \mathcal{L}, \beta, \{A^\alpha_{\text{mkt}}\}, \{\text{Adm}^\alpha_{\text{mkt}}\}, T_{\text{mkt}}, \gamma, b_0)$ uniquely specifies a well-defined VAMP.
+
+\subsection{Solution Concepts for VAMPs}
+
+\subsubsection{Policies and Expected Returns}
+Define history-dependent behavioral policies $\pi^\alpha$, joint policies $\pi$, and expected discounted returns $R^\alpha(\pi)$. Boundedness under bounded rewards.
+
+\subsubsection{Nash Equilibrium in VAMPs}
+Define Nash equilibrium for the VAMP POSG. Discuss existence (need not exist in pure strategies; exists in mixed strategies by Nash's theorem when action/observation spaces are finite).
+
+\subsubsection{Correlated and Coarse Correlated Equilibria}
+Define CE and CCE for the VAMP. Discuss the relaxation hierarchy: Nash $\subseteq$ CE $\subseteq$ CCE.
+
+\subsubsection{Approximate Equilibria and $\varepsilon$-Best Response}
+Define $\varepsilon$-Nash, $\varepsilon$-CCE, and related notions. These are the targets for the MARL framework.
+
+\subsection{Structural Properties of VAMPs}
+
+\subsubsection{Monotonicity and Irreversibility}
+Library monotonicity means the game has **irreversible dynamics**: once a theorem is proven, it stays proven. Discuss implications for strategy (no "unmaking" of progress, sunk-cost considerations).
+
+\subsubsection{Information Asymmetry and Signaling}
+Private libraries create fundamental information asymmetry. An agent's publication decisions are **signals** about the contents of its private library. Discuss strategic publication timing.
+
+\subsubsection{Positive and Negative Externalities}
+Prove or argue: proving a task creates a positive externality (others can use it), but also a negative externality (reduces the scarcity value of related claims). Market mechanisms mediate these externalities.

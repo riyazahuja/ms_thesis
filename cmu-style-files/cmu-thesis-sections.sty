@@ -1,0 +1,388 @@
+% A good portion of the section handling code is handled here, this keeps the main style clean of this awful low-level code.
+% This code is primarily a modification of the code in latex.ltx and article.cls
+%
+% IMPORTANT NOTE: The following things will break amsmath!
+% 1) Using '\renewcommand{\section}{' instead of '\renewcommand\section{'
+% 2) Having an extra enter at the end of a command
+
+\newcommand{\magicsection}{%
+	\ifx \cmu@hyperref\@true%
+		\phantomsection
+	\fi
+}
+\setcounter{secnumdepth}{0}
+\let\@afterindentfalse\@afterindenttrue % indent after sections
+\def\@dottedtocline#1#2#3#4#5{\ThesisContentsEntry{#1}{#2}{#3}{#4}{#5}}
+\def\@centeredsect#1#2#3#4#5#6[#7]#8{%
+	\ifnum #2>\c@secnumdepth
+		\let\@svsec\@empty
+		\magicsection%
+	\else
+		\refstepcounter{#1}%
+		\protected@edef\@svsec{\@seccntformat{#1}\relax}%
+	\fi
+	\@tempskipa #5\relax
+	\ifdim \@tempskipa>\z@
+		\begin{center}
+		\begingroup
+			#6{%
+				\ifx\cmu@section@bold\@true\relax%
+					\bfseries%
+					\global\let\cmu@section@bold=\@false%
+				\fi%
+				\@hangfrom{\hskip #3\relax\@svsec}%
+					\interlinepenalty \@M {#8} \@@par}%
+		\endgroup
+		\end{center}
+		\csname #1mark\endcsname{#7}%
+	\else
+		\def\@svsechd{%
+			#6{\hskip #3\relax
+			\@svsec #8}%
+			\csname #1mark\endcsname{#7}%
+			}%
+	\fi
+	\@xsect{#5}}
+\def\@scenteredsect#1#2#3#4#5{%
+	\@tempskipa #3\relax
+	\ifdim \@tempskipa>\z@
+		\begin{center}
+			\begingroup#4{
+				\ifx\cmu@section@bold\@true\relax%
+					\bfseries%
+					\global\let\cmu@section@bold=\@false%
+				\fi%
+				\@hangfrom{\hskip #1}%
+				\interlinepenalty \@M {#5}\@@par}%
+			\endgroup
+		\end{center}
+	\else
+		\def\@svsechd{#4{\hskip #1\relax #5}}%
+	\fi
+	\@xsect{#3}
+}
+\def\@startcenteredsection#1#2#3#4#5#6{%
+	%% For placing the section exactly one line down:
+	\begingroup
+		\nobreak
+		\vspace*{0pt}
+		% For lining up exactly with the top when using vspace:
+		%\vspace*{-\topskip}
+		%\vspace{0pt}
+		%\global\let\old@stretch\baselinestretch
+		%\setstretch{1}
+		%\vspace{-\baselineskip}
+		%\setstretch{\old@stretch}%
+		\nointerlineskip
+	\endgroup
+	%%
+	\if@noskipsec \leavevmode \fi
+	\par
+	\@tempskipa #4\relax
+	\@afterindenttrue
+	\ifdim \@tempskipa <\z@
+		\@tempskipa -\@tempskipa \@afterindentfalse
+	\fi
+	\if@nobreak
+		\everypar{}%
+	\else
+		\addpenalty\@secpenalty\addvspace\@tempskipa
+	\fi
+	\@ifstar
+		{\@scenteredsect{#3}{#4}{#5}{#6}}%
+		{\@dblarg{\@centeredsect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+% Be careful with the \section command or you will break amsmath compatibility:
+\AtBeginDocument{
+	\ifx \cmu@thesis@chapterbold\@true \relax%
+		\global\let\cmu@sectionfontstyle\bfseries%
+	\else%
+		\global\let\cmu@sectionfontstyle\normalfont%
+	\fi
+	\renewcommand\section{
+		\if\@chapter@call\=\@empty
+			\cmu@thesis@error{You may not call \noexpand\section directly, you must use \noexpand\chapter instead.}
+		\fi
+		\@startcenteredsection{section}{1}{\z@}%
+		{-3.5ex \@plus -1ex \@minus -.2ex}%
+		{2.3ex \@plus.2ex}%
+		{\cmu@sectionfontstyle}
+        }
+}
+
+% At least one paragraph of text must follow each heading or subheading. Headings and subheadings may not follow each other without some text between, and may not stand alone at the bottom of a page.
+%% <<NOTE: Inspired by lineno.sty>>
+\newcounter{cmusectionline}
+\setcounter{cmusectionline}{0}
+\global\let\cmu@ln@output\@@par
+\gdef\@@par{%
+	\ifvmode\else%
+		\ifinner\else%
+			\addtocounter{cmusectionline}{1}%
+		\fi%
+	\fi%
+	\cmu@ln@output%
+}
+\gdef\reset@cmu@section@check{\setcounter{cmusectionline}{0}}
+\gdef\cmu@section@check{%
+	% Only perform the empty section check when the ``insane'' option is off
+	\ifx\cmu@thesis@nochecks\@false%
+		% And when we're not in ``journal article mode''
+		\if@cmu@within@article@\else%
+			\expandafter\ifnum\value{cmusectionline}=0%
+				\expandafter\cmu@ogs@error{You have an empty section \on@line}%
+			\fi%
+		\fi%
+	\fi%
+}
+
+%% Convenience command for converting text to upper case in hyperref-sensitive areas
+\newcommand{\texorpdfupper}[1]{%
+	\ifx \cmu@hyperref\@true%
+		\texorpdfstring{\uppercase{#1}}{#1}%
+	\else%
+		\uppercase{#1}%
+	\fi%
+}
+
+%% Override the default float placement to be a little more forgiving than usual
+\global\let\cmu@old@topfraction=\@empty
+\global\let\cmu@chapter@firstpage=\@false
+\gdef\cmu@default@fps{htbp} % <-- Default float placement of 'here, top, bottom, or special page'. ('here' is not in the list in base latex)
+\global\let\fps@figure=\cmu@default@fps
+\global\let\fps@table=\cmu@default@fps
+
+% Reset all applicable section counters
+\newcommand{\cmu@reset@counters}{%
+	\setcounter{equation}{0}%
+	\setcounter{subsection}{0}%
+	\setcounter{subsubsection}{0}%
+	\setcounter{paragraph}{0}%
+	\setcounter{table}{0}%
+	\setcounter{figure}{0}%
+	\setcounter{cmu@symbol@symbolnote}{0}%
+	\setcounter{cmu@symbol@numberednote}{0}%
+}
+
+% The chapter or section title for each part of the body is typed only on the first page of that part in all capital letters (for example, INTRODUCTION) and not underlined. The title is centered between the left and right text margins, one keyboard return below the one inch top page margin.
+\global\let\cmu@firstchapter\@true
+\newbox{\cmu@temp@box}
+\newcounter{chapter}
+\setcounter{chapter}{0}
+\newcommand{\chapter}[1]{
+	% Make sure that appendix mode is reset if we're in journal mode and start a new chapter
+	\setcounter{appendix}{0}
+	\gdef\thesection{\@arabic\c@section}%
+	\global\let\cmu@thesis@appendix@active\@false%
+	\gdef\theHsection{\@arabic\c@section}%
+	%
+	\ifx\cmu@firstchapter\@true\relax%
+		\global\let\cmu@firstchapter\@false%
+		\cmu@reset@indents%
+	\fi%
+	\cmu@section@check%
+	\cleardoublepage%
+	% Label the chapter properly for cross-referencing
+	\global\let\@currentlabel\thesection%
+	% On the first page of a chapter the figure placement should not result in figures at the top of the page
+	\suppressfloats[t]%
+	% Reset section number counters
+	\addtocounter{chapter}{1}%
+	\setcounter{section}{\value{chapter}}%
+	\cmu@reset@counters%
+	% Measure the length of ``Chapter X'' for the ToC
+	\setbox\cmu@temp@box=\hbox{
+    % \setbox\cmu@temp@box=\hbox{
+    {Chapter\space\thesection\space}}%
+	\ifnum\wd\cmu@temp@box > \l@chapter@indent\relax%
+		\setlength{\l@chapter@indent}{\wd\cmu@temp@box}%
+	\fi%
+	% Output the chapter title
+	\let\@chapter@call\@true%
+
+
+    \vspace*{1cm}   {\raggedright\LARGE\textbf {Chapter \thesection}\par}
+    \vspace{1cm}
+    {\setstretch{1.05}\raggedright\Huge \bfseries #1\par}
+    \vspace{1cm}
+    \justifying
+
+	\let\@chapter@call\@empty%
+	% \expandafter\addcontentsline{toc}{chapter}{\protect\texorpdfupper{\protect\numberline{Chapter \thesection}#1}}%
+	\magicsection%
+        \addcontentsline{toc}{\cmu@section@type}{\protect\numberline{\thesection\hspace{1em}}~\textbf{#1}}
+
+
+
+
+
+        
+
+
+
+	\reset@cmu@section@check%
+	\cmu@chapter@hook%
+}
+% Special command to mark internal \section calls
+\gdef\cmu@section@type{section}
+\newcommand{\internalsection}[1]{
+	\let\@chapter@call\@true%
+	\magicsection%
+	% \addcontentsline{toc}{\cmu@section@type}{\protect\texorpdfupper{#1}}%
+        \addcontentsline{toc}{\cmu@section@type}{\protect{#1}}
+	\section*{#1}%
+	\let\@chapter@call\@empty%
+}
+
+% EXTRA: Treat ``\part'' just like a chapter wrt. the heading.
+\renewcommand{\part}[1]{
+	\cmu@section@check
+	\cleardoublepage
+	\refstepcounter{part}%
+	% Label the chapter properly for cross-referencing
+	\global\let\@currentlabel\thepart
+	% On the first page of a chapter the figure placement should not result in figures at the top of the page
+	\suppressfloats[t]
+	% Output the chapter title
+	\let\@chapter@call\@true
+	\global\let\cmu@section@bold=\@true%
+	\section{Part \thepart\protect\\ #1}
+	\let\@chapter@call\@empty
+	\expandafter\addcontentsline{toc}{part}{\protect\texorpdfupper{\protect\numberline{Part \thepart}#1}}
+	\reset@cmu@section@check
+}
+\AtBeginDocument{
+	\gdef\toclevel@part{0}
+}
+
+% EXTRA: Make a special section command for appendices so that all \section calls are done internally
+% NOTE: This section is optional
+\newif\if@cmu@backmatter@
+\global\@cmu@backmatter@false
+\g@addto@macro\cmu@backmatter@hook{%
+	\global\@cmu@backmatter@true%
+}
+\newcounter{appendix}
+\setcounter{appendix}{0}
+\newcommand{\newappendixnum}{%
+	\addtocounter{appendix}{1}%
+	\expandafter\def\expandafter\cmu@appendix@text{\raggedleft \bfseries Appendix \Alph{appendix}}
+	\ifx \cmu@appendicies\@empty \relax \else
+		\ifnum \cmu@appendicies<2
+			\setcounter{cmu@redefined@appendix}{1}
+			\def\cmu@appendix@text{Appendix}
+		\fi
+	\fi
+}
+\newcommand{\appendixnum}{\Alph{appendix}}
+\global\let\cmu@appendicies\@empty
+\newcounter{cmu@redefined@appendix}
+\setcounter{cmu@redefined@appendix}{0}
+\global\newcount\cmu@redefined@appendix@saved \global\cmu@redefined@appendix@saved=0
+\newenvironment{cmu@appendix}[1]{
+	\if@cmu@backmatter@%
+		\cleardoublepage%
+	\fi%
+	% Once an appendix is created then section numbering changes
+	\gdef\thesection{\@Alph\c@section}%
+	\gdef\cmu@thesis@appendix@active{\@true}%
+	\gdef\theHsection{\@Alph\c@section}%
+	\global\let\@currentlabel\thesection%
+	% Reset section counters
+	\newappendixnum%
+	\setcounter{section}{\value{appendix}}%
+	\cmu@reset@counters%
+	% Measure the length of ``Appendix A'' for the ToC
+	\setbox\cmu@temp@box=\hbox{{\cmu@appendix@text}\space}%
+	\ifnum\wd\cmu@temp@box > \l@appendix@indent\relax%
+		\setlength{\l@appendix@indent}{\wd\cmu@temp@box}%
+	\fi%
+	%%% Output the appendix title %%%
+	% Old code:
+	%\internalsection{{\cmu@appendix@text} - #1}
+	% New code:
+	\let\@chapter@call\@true%
+
+        \if@cmu@backmatter@%
+          \vspace*{1cm}
+          {\raggedright\LARGE\bfseries Appendix \appendixnum\par}
+          {\raggedright\LARGE\bfseries #1\par}
+          \vspace{1cm}
+        \else%
+          {\raggedright\large\bfseries Appendix \appendixnum\par}
+          {\raggedright\Large\bfseries #1\par}
+          \vspace{1cm}
+        \fi%
+        
+
+
+	\let\@chapter@call\@empty%
+	\if@cmu@backmatter@%
+		\expandafter\addcontentsline{toc}{appendix}{\protect{\protect\numberline{\cmu@appendix@text}#1}}%
+	\fi%
+}{}
+% The following redefinition allows ``\appendix'' to be used both with and without a parameter, when called without a parameter we're likely being called by LyX (nothing needs to be done).
+\AtBeginDocument{
+	\gdef\appendix{%
+		\@ifnextchar\bgroup%
+			{\cmu@appendix}%
+			{\global\let\chapter=\cmu@appendix}%
+	}
+}
+\AtEndDocument{
+	\ifx \cmu@appendicies\@empty
+		\@tempswatrue % Request interpretter to automatically regenerate the document.
+		\cmu@thesis@warning{Number of appendicies is not known. Rerun to get appendicies right.}
+	\else
+		\ifnum \cmu@redefined@appendix@saved=\value{cmu@redefined@appendix} \relax \else
+			\@tempswatrue % Request interpretter to automatically regenerate the document.
+			\cmu@thesis@warning{Appendix labels have changed. Rerun to get appendicies right.}
+		\fi
+	\fi
+	% Save configuration for next run
+	\immediate\write\@auxout{%
+		\string\global\string\newcount\string\cmu@redefined@appendix@saved
+		\string\global\string\cmu@redefined@appendix@saved=\arabic{cmu@redefined@appendix}
+	}
+	\immediate\write\@auxout{%
+		\string\global\string\newcount\string\cmu@appendicies
+		\string\global\string\cmu@appendicies=\arabic{appendix}
+	}
+}
+
+% Create a special convenience environment for journal articles so that the empty section rules can be relaxed
+\newif\if@cmu@within@article@
+\newenvironment{journalarticle}{%
+	\global\@cmu@within@article@true%
+}{
+	\global\@cmu@within@article@false%
+}
+
+% Allow a special convenience function for journal articles where the sections are internally ``bumped'' so that they match the thesis guidelines
+\global\let\cmu@section@bumping=\@false
+\gdef\cmu@depth@error#1{%
+	\cmu@thesis@error{Bumped section ``#1'' resulted in too deep of a document.}%
+}
+\newcommand{\bumpsections}{%
+	\ifx\cmu@section@bumping\@true\relax%
+		\cmu@thesis@error{Cannot bump sections, section bumping already enabled!}%
+	\fi%
+	\global\let\cmu@old@section=\section%
+	\global\let\cmu@old@subsection=\subsection%
+	\global\let\cmu@old@subsubsection=\subsubsection%
+	\global\let\cmu@old@paragraph=\paragraph%
+	\global\let\section=\cmu@old@subsection%
+	\global\let\subsection=\cmu@old@subsubsection%
+	\global\let\subsubsection=\cmu@old@paragraph%
+	\global\let\paragraph=\cmu@depth@error%
+	\global\let\cmu@section@bumping=\@true%
+}
+\newcommand{\unbumpsections}{%
+	\ifx\cmu@section@bumping\@false\relax%
+		\cmu@thesis@error{Cannot un-bump sections, section bumping is not enabled!}%
+	\fi%
+	\global\let\section=\cmu@old@section%
+	\global\let\subsection=\cmu@old@subsection%
+	\global\let\subsubsection=\cmu@old@subsubsection%
+	\global\let\paragraph=\cmu@old@paragraph%
+	\global\let\cmu@section@bumping=\@false%
+}

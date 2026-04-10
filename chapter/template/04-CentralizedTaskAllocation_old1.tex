@@ -1,0 +1,38 @@
+\chapter{The Centralized Regime}\label{chap:centralized}
+
+\subsection{Reduction to Scheduling with Dependencies}
+Show that centralized HTAP, under appropriate simplifications, reduces to variants of precedence-constrained scheduling on unrelated machines. The planner must assign agents to tasks respecting the dependency DAG, with agent-task-specific processing time distributions.
+
+\subsubsection{Static Assignment (Known Capabilities, Fixed Task Set)}
+When the task set is fixed (no conjecture), capabilities are known, and processing times are deterministic: HTAP reduces to $R | \text{prec} | C_{\max}$ (scheduling on unrelated machines with precedence constraints and makespan objective). State the known complexity: NP-hard even for $P | \text{prec}, p_j = 1 | C_{\max}$ with 3+ machines.
+
+\subsubsection{Stochastic Assignment}
+When processing times are stochastic (Bernoulli success with budget-dependent probability, as in the proof kernel): connect to stochastic scheduling. Discuss the added complexity of budget allocation (how much compute to spend per attempt, when to abandon and retry, etc.).
+
+\subsubsection{Dynamic Task Creation}
+When agents can conjecture new subtasks: the task DAG is no longer fixed. This creates an online, adaptive scheduling problem where the "job set" evolves based on agents' conjecture actions. Argue this goes beyond standard scheduling models.
+
+\subsection{Complexity Results}
+
+\subsubsection{NP-Hardness of Static Centralized HTAP}
+Prove (or cite the reduction to) NP-hardness of the static version via reduction from $R || C_{\max}$.
+
+\subsubsection{Inapproximability}
+Apply the Lenstra-Shmoys-Tardos lower bound: no polynomial-time algorithm achieves better than 3/2-approximation for $R||C_{\max}$ unless P = NP. Discuss how the dependency structure affects approximability.
+
+\subsubsection{Beyond Makespan: Weighted Utility Objectives}
+When the objective is total weighted utility (not makespan), connect to weighted completion time scheduling. State relevant hardness and approximation results.
+
+\subsection{Approximation Algorithms and Heuristics}
+
+\subsubsection{LP Relaxation and Rounding}
+Apply the Lenstra-Shmoys-Tardos LP-rounding framework to centralized HTAP. Discuss the 2-approximation and its adaptation to dependency-aware settings.
+
+\subsubsection{List Scheduling Heuristics}
+Adapt Graham's list scheduling and priority-based heuristics (e.g., critical-path scheduling) to the HTAP setting. Analyze worst-case guarantees.
+
+\subsubsection{Greedy and Myopic Policies}
+Define feasibility-first, utility-greedy, and dependency-aware heuristics. These serve as **scripted baselines** for the MARL experiments later. Analyze their performance guarantees.
+
+\subsection{Information Requirements and the Cost of Elicitation}
+Discuss what the planner needs to know: agent capabilities (kernels), task difficulties, dependency structure. When any of these are private, the planner must elicit them — but the Nisan-Ronen conjecture (now theorem) shows that truthful elicitation of capabilities for scheduling is fundamentally limited. This provides a **principled transition** from centralized to decentralized analysis: even if you *want* to centralize, you may not be able to, because agents' private information cannot be truthfully elicited with good approximation guarantees.

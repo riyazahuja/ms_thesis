@@ -1,0 +1,44 @@
+\chapter{My first chapter with some good content}
+
+After creating every new chapter or heading there must be one paragraph before you add a new section. If you forget to add text between 'headers' (such as chapters, subsections, subsubsections ...) there will be an error that pops up, and to fix it you just need to add text.
+
+\subsection{Level 1}\label{sec:firstSection}
+This is what a subsection title looks like with some text following. Here ia a tip: Stay consistent. This counts for how you write your headers (all mayor words capitalize or only the first word). 
+Below are some equations with some simple math here are tree different ways to reference equations: (1) using ref  gives \ref{eqn:energy}, (2) using eqref leads to \eqref{eqn:Maxell1}), (3) and using the template defined Eqref gives \Eqref{eqn:Evalue}. You can not just use option (1) without indicating you are referencing an equation. Choose one and stick with it, they want you to be consistent in the way you reference Tables, Figures and equations alike. Automatically 'Table' and 'Figure' are added in fort of a reference number when you use ref\{\} for tables and figures (see in later chapters).
+
+Please make sure that if you are linking to an outside resource, you embed the hyperlinks in text such as I have done \href{http://www.overleaf.com}{here}. 
+
+\begin{align}
+    E =&\, m c^2 \label{eqn:energy}\\
+    \nabla \times \bE =&\, -\frac{\partial {\bf B}}{\partial t} \label{eqn:Maxell1}
+\end{align}
+beginning a sentence right after the equation tells the documents that the paragraph is continuing and this sentence does not start with any indent. 
+
+\begin{align}
+	{\left[\begin{matrix}
+	A_{11} & A_{12}\\ 
+	A_{21} & A_{22}
+	\end{matrix}\right]} {\bf v}=\lambda {\bf v}
+	\label{eqn:Evalue}
+\end{align}
+
+  This is an example of an accessible equation. Not all PDF screen readers are yet compatible with this technology, but the goal is to have the screen readers state the equation using the provided alternative text.
+  \tagstructbegin{tag=Formula,alttext={a squared plus b squared equals c squared}}
+    \begin{align}
+      {a^2 + b^2 = c^2}
+      \label{eqn:Evalue}
+    \end{align}
+  \tagstructend
+
+We can now add a sub-sub section. This is also an example of an equation that is mid paragraph. If you eliminated the space between the math environment and the next line, then there should be no indent of the line right after the equation.
+
+\subsubsection{Level 2}
+
+This is what a sub-subsection looks like with some text following. \lipsum[2]
+
+We can now add a sub-sub-sub section. But before we do that I need to add some text to check if the (a) ragged right is working, and (b) if the sub-sub-sub section will be pushed to the next page if the sub heading and 2 lines don't fit on the page. Ta-Da it works.
+
+
+\paragraph{Level 3}
+
+This does not look appealing, so you are discourage going "three deep" with headings. This does not look appealing, so you are discourage going "three deep" with headings.

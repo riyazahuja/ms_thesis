@@ -1,0 +1,279 @@
+\chapter{The Decentralized Regime and Game-Theoretic Formulation}\label{chap:decentralized}
+
+\subsection{Executive Summary}
+
+This chapter formalizes the decentralized regime of HTAP/ITAP as a \emph{dynamic, partially observable, strategic} interaction and motivates the Verifiable Allocation Market POSG (VAMP) as the most natural mathematical embodiment of that interaction. In the centralized regime, the planner selects actions; in the decentralized regime, each agent chooses actions to maximize \emph{private} utility under partial information and strategic interdependence. The resulting object is naturally a partially observable stochastic game (POSG), and the key new challenge is \emph{incentive alignment}: absent transfers, agents rationally underprovide publication of useful intermediate results (a public goods/free-rider effect). A market layer fixes this by making ``publish useful information'' a compensated action, turning positive externalities into priced, tradable claims whose settlement is anchored in public verifiability. This chapter therefore introduces two intermediate formalisms:
+
+\begin{itemize}
+\item \textbf{VAP (Verifiable Allocation POSG):} the ``bare'' decentralized HTAP as a POSG, without market-based transfers;
+\item \textbf{VAMP:} a VAP augmented with a market mechanism \(\mathcal{M}\) that enables trading and settlement against verifiable events in the public library.
+\end{itemize}
+
+This chapter is \emph{conceptual and formal}: it sets up the game object and the incentive story; the fully rigorous ``definition-as-a-tuple,'' implementation details, equilibrium complexity, and market-mechanism variants are deferred to the later chapters you already earmarked for them.
+
+\subsection{Why Decentralize?}
+
+This section expands the ``cost of elicitation'' theme from your centralized chapter and isolates three logically independent reasons the decentralized regime is not merely a modeling choice but a structural necessity.
+
+\subsubsection{Information-theoretic argument}
+
+In HTAP/ITAP, each agent \(i\) has a private capability type \(\theta_i\) governing (possibly stochastic) success distributions, attempt costs, conjecture quality, and internal heuristics. Even if a central planner had unbounded compute, \emph{the planner cannot in general know \(\theta_i\) without information supplied by agent \(i\)}, because \(\theta_i\) encodes internal state, proprietary models, and local data. Said differently: the planner faces a structural \emph{knowledge dispersion} constraint.
+
+A classical economic articulation of this point is the dispersed-knowledge thesis: relevant information is local, tacit, and not ``given to a single mind,'' and coordination must therefore function without assuming global access to the necessary microstate. This is not merely philosophical; it is a formal modeling cue: if the primitives that govern outcomes (completion/success kernels) are private and high-dimensional, then a ``central router with perfect models'' is not a robust baseline assumption.
+
+A complementary formal warning comes from information asymmetry: when one side of an interaction knows more about type/quality than the other, efficient centralized allocation based on direct inference can fail without carefully designed mechanisms. In HTAP terms, capabilities are the ``quality,'' and attempts to route tasks without truthful/accurate capability access can systematically misallocate compute.
+
+\subsubsection{Incentive-theoretic argument}
+
+Even if the planner \emph{could} ask agents to report capabilities, mechanism design shows that eliciting private information truthfully while optimizing a global scheduling objective can be fundamentally limited. The seminal algorithmic mechanism design framework (including its scheduling instantiations) formalizes agents as strategic and shows truthful mechanism constraints sharply restrict achievable approximation guarantees.
+
+Moreover, your thesis already emphasizes that the Nisan--Ronen conjecture has been resolved (as a theorem): deterministic truthful mechanisms for unrelated-machine makespan minimization cannot achieve good approximation in general. This directly motivates decentralization: if centralized optimization requires private information that cannot be truthfully elicited with good guarantees, then ``centralize anyway'' is not a principled option in worst-case theory.
+
+\subsubsection{Practical argument}
+
+Finally, many target domains for HTAP/ITAP are genuinely \emph{non-sovereign}: there is no authoritative planner with the power to assign work, enforce obedience, or compel informational disclosure. Examples include open-source research communities, multi-institution collaborations, and emerging multi-agent AI ecosystems where services are provided by different organizations with different incentives and privacy constraints.
+
+From a modeling standpoint, this corresponds to the basic shift from ``obedient machines'' to ``autonomous agents'' studied in distributed problem solving and market-based coordination frameworks (e.g., contract-net style coordination), where allocation emerges from strategic interaction rather than centralized dispatch.
+
+\subsection{Decentralized HTAP as a Strategic Interaction}
+
+HTAP/ITAP becomes a \emph{game} as soon as agents choose actions to maximize private utility under coupling effects. This section makes that statement formal by presenting a standard POSG formalization tailored to the HTAP primitives in your Chapter 2 (public/private libraries, verifiable task completion, evolving task graph, and conjecture/publish actions).
+
+\subsubsection{The underlying game template}
+
+A \textbf{partially observable stochastic game (POSG)} is a standard mathematical model for sequential strategic interaction under uncertainty and private observations. A representative formal definition is a tuple
+\[
+\mathcal{G} = (N, S, (A_i)_{i\in N}, (O_i)_{i\in N}, T, (R_i)_{i\in N}, \Omega, \gamma),
+\]
+where \(S\) is the state space, \(A_i\) are action sets, \(O_i\) are observation sets, \(T\) is the transition kernel, \(R_i\) are reward functions, \(\Omega\) is the observation kernel, and \(\gamma\) is a discount factor (or a finite horizon replaces \(\gamma\)).
+
+In a POSG, a (behavioral) strategy for agent \(i\) is a policy
+\[
+\pi_i : (O_i)^* \to \Delta(A_i),
+\]
+mapping the agent's local observation history to a distribution over actions.
+
+\subsubsection{HTAP-specific state, actions, and observations}
+
+To instantiate decentralized HTAP as a POSG, specialize the tuple as follows (consistent with your Chapter 2 splits between global state and public/private libraries).
+
+\paragraph{State.}
+A convenient minimal global state is
+\[
+s_t := \big(G_t=(V_t,E_t),\ x_t,\ (L_t^0,\ (L_t^i)_{i\in N}),\ \text{(optional) progress } y_t,\ \text{(optional) market state}\big),
+\]
+where:
+\begin{itemize}
+\item \(G_t\) is the currently known task graph (possibly evolving),
+\item \(x_t\) encodes each task's resolution state,
+\item \(L_t^0\) is the public library and \(L_t^i\) are private libraries.
+\end{itemize}
+
+\paragraph{Actions.}
+The decentralized regime includes the same ``action primitives'' you already use elsewhere: attempt/prove, conjecture (endogenous creation), and publish. In Chapter 4 we only need the abstract action interface:
+\[
+A_i = A_i^{\mathrm{work}} \cup A_i^{\mathrm{conj}} \cup A_i^{\mathrm{pub}} \cup A_i^{\mathrm{idle}}.
+\]
+(Your later ``VAMP formal definition and properties'' chapter can fully specify these as kernels with cost structure and verifiability interfaces.)
+
+\paragraph{Observations.}
+A canonical observation structure is:
+\[
+o_t^i = \mathrm{Obs}_i(s_t) := \big(L_t^i,\ L_t^0,\ \text{(possibly) public market info}\big),
+\]
+i.e., agent \(i\) observes its private library and the public library, but not other agents' private libraries nor their internal capability types. This gives the \textbf{partial observability} feature in your outline.
+
+\subsubsection{Strategic interdependence and coupled payoffs}
+
+The ``this is a game'' claim is not rhetorical; it is mathematically grounded in payoff coupling:
+
+\begin{itemize}
+\item \textbf{Duplication externality:} If two agents simultaneously attempt the same task, the first success makes the other's effort largely wasted (a negative externality).
+\item \textbf{Publication externality:} Publishing a solved lemma can make other agents' future tasks easier (a positive externality).
+\item \textbf{Conjecture externality:} Generating new subtasks can change the opportunity set of others by expanding (or restructuring) the task graph.
+\end{itemize}
+
+Formally, these are captured by reward functions \(R_i(s_t, a_t)\) that depend on the joint action \(a_t=(a_t^1,\dots,a_t^n)\) through the induced transition and resolution events. This is the ``interdependent payoff'' feature in your outline.
+
+\subsection{The Need for Incentive Alignment}
+
+This section formalizes your ``publication dilemma'' as a social dilemma and then states precisely how markets can internalize the externality via transfers anchored on verifiability.
+
+\subsubsection{The publication dilemma as a public-goods game}
+
+The core phenomenon is a textbook public-goods/free-rider structure: publication produces a benefit that is \emph{non-excludable} (once public, everyone can use it) and often largely \emph{non-rival}. Classical public goods theory shows that voluntary provision typically underprovides relative to the socially efficient level under standard incentives.
+
+A minimal formalization is the following one-shot game extracted from the full POSG:
+
+\paragraph{Model (Lemma publication stage game).}
+Two agents \(i\in\{1,2\}\) each hold a privately solved lemma \(\ell_i\) that could help the other agent if published. Each chooses an action \(a_i\in\{\mathsf{publish},\mathsf{withhold}\}\). Payoffs are:
+\[
+u_i(a_i,a_{-i}) \;=\; B\cdot \mathbf{1}\{a_{-i}=\mathsf{publish}\} \;-\; c\cdot \mathbf{1}\{a_i=\mathsf{publish}\},
+\]
+where \(B>0\) is the benefit to a recipient from the other's publication, and \(c>0\) is the private cost of publishing (time, competitive exposure, loss of priority, opportunity cost).
+
+\paragraph{Proposition (Underpublication in Nash equilibrium).}
+If \(c>0\), then \((\mathsf{withhold},\mathsf{withhold})\) is a Nash equilibrium; if additionally \(B>c\), then it is Pareto-inefficient.
+
+\paragraph{Proof.}
+Fix agent \(i\). If agent \(-i\) publishes, then \(u_i(\mathsf{publish},\mathsf{publish}) = B-c\) while \(u_i(\mathsf{withhold},\mathsf{publish})=B\), so withholding strictly dominates publishing. If agent \(-i\) withholds, then \(u_i(\mathsf{publish},\mathsf{withhold})=-c\) while \(u_i(\mathsf{withhold},\mathsf{withhold})=0\), again withholding strictly dominates publishing. Hence \(\mathsf{withhold}\) is strictly dominant for both players, yielding the unique Nash equilibrium \((\mathsf{withhold},\mathsf{withhold})\). If \(B>c\), then \((\mathsf{publish},\mathsf{publish})\) yields payoff \(B-c>0\) to each, strictly improving upon 0, so the equilibrium is inefficient. \(\square\)
+
+This captures the exact ``social dilemma'' you describe: rational agents underprovide publication absent transfer mechanisms.
+
+\subsubsection{Market mechanisms as incentive alignment}
+
+The economic content of ``a market resolves the dilemma'' is that transfers can make the publisher internalize the external benefit. The mechanism design literature contains many ways to do this in principle (e.g., Groves-style mechanisms for public goods), but your thesis's distinctive feature is \textbf{verifiability}, which allows contracts to settle against publicly checkable events.
+
+A minimal ``market-style fix'' is the following bounty mechanism:
+
+\paragraph{Mechanism (posted bounty for publication).}
+A public contract pays \(b\ge 0\) to any agent who publishes a valid certificate of lemma \(\ell\) (verifiable by \(\mathrm{Verify}\)). The publisher's modified payoff becomes
+\[
+u_i^{(b)}(a_i,a_{-i}) \;=\; B\cdot \mathbf{1}\{a_{-i}=\mathsf{publish}\} \;-\; c\cdot \mathbf{1}\{a_i=\mathsf{publish}\} \;+\; b\cdot \mathbf{1}\{a_i=\mathsf{publish}\}.
+\]
+
+\paragraph{Proposition (Bounty eliminates the free-rider equilibrium when \(b\ge c\)).}
+If \(b>c\), then \((\mathsf{publish},\mathsf{publish})\) is the unique Nash equilibrium; if \(b=c\), then publishing is weakly dominant and \((\mathsf{publish},\mathsf{publish})\) is a Nash equilibrium.
+
+\paragraph{Proof.}
+For any fixed \(a_{-i}\), compare \(u_i^{(b)}(\mathsf{publish},a_{-i})\) vs. \(u_i^{(b)}(\mathsf{withhold},a_{-i})\). The difference is \(b-c\), independent of \(a_{-i}\). If \(b>c\), publishing strictly dominates withholding and the unique Nash equilibrium is mutual publication. If \(b=c\), publishing weakly dominates and mutual publication is an equilibrium. \(\square\)
+
+This is the core mathematical statement you need: the publication dilemma is not ``mysterious''---it is precisely a public-goods externality, and any transfer mechanism with sufficiently high reward for publication repairs incentives in the simplest model.
+
+\paragraph{Important thesis nuance (to avoid overclaiming).}
+A \emph{market} is richer than a posted bounty: it allows endogenous price discovery and trades among agents, and it can operate without a single designer choosing \(b\) in advance. Whether a given market mechanism actually produces efficient publication depends on liquidity, manipulation, strategic behavior, and admissibility/collateral constraints, topics you explicitly defer to later chapters.
+
+\subsubsection{Isomorphism to a market game}
+
+Your outline contains a strong interpretive claim: decentralized HTAP is ``isomorphic to a market game'' under natural assumptions. To make that mathematically defensible, the word \emph{isomorphic} should mean: there is an explicit mapping from a decentralized-HTAP-with-transfers model to a strategic market game such that strategies, state evolution, and payoffs correspond.
+
+A clean way to do this is to define an abstract \textbf{task-security economy}.
+
+\paragraph{Definition (Task-security representation).}
+Fix a horizon \(H\). For each task \(f\), define a binary verifiable event
+\[
+E_f := \{x_H(f)=\mathsf{resolved\ in\ } L_H^0\}.
+\]
+Define a security \(\mathbf{S}_f\) that pays 1 unit of num\'eraire at time \(H\) iff \(E_f\) occurs.
+
+Agents have:
+\begin{itemize}
+\item an initial endowment of num\'eraire \(m_0^i\),
+\item a portfolio \(q_t^i(f)\in\mathbb{R}\) of holdings in each \(\mathbf{S}_f\),
+\item action choices that include both (i) HTAP ``compute actions'' that affect the probability of \(E_f\) through the task dynamics and (ii) market actions that exchange portfolios for num\'eraire.
+\end{itemize}
+
+A market mechanism \(\mathcal{M}\) defines feasible trades and prices, and settlement is determined by \(\mathrm{Verify}\) through whether \(E_f\) occurs.
+
+This representation is directly in the spirit of contingent-commodity equilibrium (Arrow--Debreu) and of strategic market games (Shapley--Shubik style), except that here outcomes are \emph{endogenous to agent effort} rather than purely exogenous states of nature.
+
+\paragraph{Proposition (Embedding HTAP+transfers into a market game).}
+Any decentralized HTAP model with (i) transferable utility, (ii) publicly verifiable completion events, and (iii) a contract space rich enough to encode state-contingent transfers on events \(\{E_f\}\), can be represented as a strategic market game over the securities \(\{\mathbf{S}_f\}\), where ``compute'' is a form of production that changes event realization probabilities.
+
+\paragraph{Proof (construction).}
+Given the HTAP+transfer model, define the security set \(\{\mathbf{S}_f\}\) and define the settlement function by \(\mathbf{S}_f\mapsto \mathbf{1}_{E_f}\). Define ``trade actions'' as the admissible transfer actions in the original model; define ``compute actions'' as the original task actions. Then:
+\begin{itemize}
+\item the joint state \(s_t\) is augmented by portfolios and num\'eraire to obtain a market-game state,
+\item the transition kernel is the original kernel plus deterministic bookkeeping for trade,
+\item each agent's utility is its original utility plus terminal portfolio liquidation.
+\end{itemize}
+By construction, any strategy profile in the HTAP+transfer model corresponds to a strategy profile in the market game producing the same distribution over (task outcomes, transfers), hence the same expected utilities. \(\square\)
+
+This is the mathematically safe form of the ``isomorphism'': it is an \emph{explicit representation theorem} once you commit to the contract space and settlement interface. The point is not that prices automatically become ``true difficulty,'' but that the decentralized allocation problem with transfers \emph{is naturally expressible} as a market game because tasks are verifiable events and utility is transferable.
+
+\paragraph{Price interpretation (what can be stated cleanly now).}
+In prediction-market models based on proper scoring rules or convex cost-function market makers, equilibrium prices aggregate beliefs about event probabilities under strong assumptions (risk-neutral, price-taking traders, no manipulation, exogenous events). In HTAP, events are endogenous (agents can influence them), so ``price = probability'' becomes ``price = equilibrium-implied marginal valuation under strategic influence,'' which you can develop later once \(\mathcal{M}\) is fixed.
+
+\subsection{The Verifiable Allocation POSG}
+
+This section defines the VAP as the ``bare'' decentralized HTAP game without market mechanisms.
+
+\subsubsection{Definition of VAP}
+
+\paragraph{Definition (Verifiable Allocation POSG, VAP).}
+A VAP is a POSG
+\[
+\mathcal{G}_{\mathrm{VAP}} = (N,S,(A_i),(O_i),T,(R_i),\Omega,H)
+\]
+(or with discount \(\gamma\) instead of horizon \(H\)) with the following HTAP structure:
+
+\begin{enumerate}
+\item \textbf{State decomposition.} \(S\) includes (at minimum) \((G_t, x_t, L_t^0, (L_t^i)_{i\in N})\), i.e., the evolving task graph, task resolution states, public library, and private libraries.
+\item \textbf{Action primitives.} Each \(A_i\) includes:
+\begin{itemize}
+\item \(\mathsf{work}(f,\tau)\): allocate effort \(\tau\) to attempt/advance task \(f\),
+\item \(\mathsf{conj}(\cdot)\): generate or propose a new task/subtask (endogenous creation),
+\item \(\mathsf{publish}(f,c)\): publish a certificate \(c\) for task \(f\) into the public library (if \(\mathrm{Verify}(f,c)=1\)),
+\end{itemize}
+plus any ``noop/idle'' action.
+\item \textbf{Verifiability and publication update.} The transition kernel \(T\) is constrained so that if an agent takes \(\mathsf{publish}(f,c)\) and \(\mathrm{Verify}(f,c)=1\), then \(x_{t+1}(f)=\mathsf{resolved}\) and \(f\in L_{t+1}^0\).
+\item \textbf{Observation kernel.} \(\Omega\) ensures each agent observes at least \((L_t^i,L_t^0)\); other agents' private libraries and types are not directly observed.
+\item \textbf{Private utilities.} Each \(R_i\) encodes private reward for achieving/using tasks plus cost of effort, without transfers beyond what is generated by task completion itself.
+\end{enumerate}
+
+This definition is ``bare'': it contains the correct strategic structure (partial observability, sequential dynamics, externalities), but it intentionally lacks a mechanism that compensates externalities.
+
+\subsubsection{Why VAP is already strategically complex}
+
+Even without markets, VAP inherits the core sources of difficulty you already cite in the thesis abstract:
+
+\begin{itemize}
+\item Solving decentralized partially observable control problems is NEXP-complete in general (Dec-POMDP baseline), which indicates severe algorithmic intractability even in cooperative settings.
+\item Equilibrium computation in games is PPAD-hard/PPAD-complete in broad settings, and POSGs combine equilibrium reasoning with dynamic partial information.
+\end{itemize}
+
+Thus VAP is a mathematically faithful ``pre-market'' object: it captures the strategic obstacles but highlights the incentive-alignment gap (publication underprovision).
+
+\subsection{From VAP to VAMP: Adding Markets}
+
+This section defines the VAMP as a VAP augmented by a market mechanism \(\mathcal{M}\), matching your intended modular design and deferring the full formal interface to the next chapter.
+
+\subsubsection{The VAMP framework at the correct abstraction level for this chapter}
+
+Let \(\mathcal{M}\) denote a market mechanism specifying: tradeable objects, execution rules, settlement rules, and admissibility/collateral constraints (as in your outline). The key point for Chapter 4 is that \(\mathcal{M}\) can be treated as a \textbf{pluggable module} that adds action components and state components to VAP.
+
+Formally, define an augmented game
+\[
+\mathcal{G}_{\mathrm{VAMP}}(\mathcal{M}) = (N, S', (A_i')_{i\in N}, (O_i')_{i\in N}, T', (R_i')_{i\in N}, \Omega', H),
+\]
+where:
+
+\begin{itemize}
+\item \(S' := S \times \mathsf{MarketState}\), including portfolios, outstanding contracts, market maker state, etc.
+\item \(A_i' := A_i \times A_i^{\mathsf{market}}\), where \(A_i^{\mathsf{market}}\) are trade actions allowed by \(\mathcal{M}\).
+\item \(T'\) couples HTAP transitions with market clearing and settlement bookkeeping.
+\item \(R_i'\) adds transfer terms generated by \(\mathcal{M}\) (e.g., payouts from contracts) to the baseline utility.
+\end{itemize}
+
+This chapter stops here; Chapter 5 can (and should) provide the exact interface for \(\mathcal{M}\), contract syntax, collateral rules, and settlement.
+
+\subsubsection{Why VAMP is the natural formulation}
+
+Your outline claims VAMP is ``not arbitrary'' but forced by three requirements. Here is the rigorous version.
+
+\paragraph{Requirement: verifiability.}
+Contract settlement requires an objective, publicly checkable event. HTAP is unusual (relative to many collaborative work domains) because it naturally supplies a verification primitive \(\mathrm{Verify}\) and a public library \(L^0\) that can act as the settlement oracle. This is exactly the condition required by market designs that pay on event outcomes (including prediction-market-style securities).
+
+\paragraph{Requirement: transferable utility.}
+Incentive alignment for publication requires compensating agents for positive externalities. This demands a transferable medium (money/credits) or contracts that implement transfers contingent on events. Without transferable utility, markets cannot generally ``pay'' publishers; they can at best coordinate actions through norms or repeated-game punishments.
+
+\paragraph{Requirement: modularity.}
+Treating \(\mathcal{M}\) as an interface is methodologically essential: different market mechanisms implement different incentive gradients and strategic behaviors (posted bounties vs.\ bilateral bargaining vs.\ AMMs vs.\ LMSR-style cost functions). Your thesis abstract explicitly commits to comparing multiple market mechanisms, so modularity must be built into the definition.
+
+As a conceptual anchor, this ``market-as-information-and-incentive system'' viewpoint is precisely the Hayekian role of prices: a mechanism for aggregating dispersed information and motivating adjustments without a central planner.
+
+\subsection{How This Chapter Interfaces with Later Chapters}
+
+This Chapter 4 draft is the hinge between Chapters 2--3 (problem definition and centralized scheduling view) and Chapters 5--6 (formal VAMP definition and equilibrium hardness). It should therefore end by explicitly stating what is deferred:
+
+\begin{itemize}
+\item \textbf{Deferred to Chapter 5 (formal definition):} the exact VAMP tuple, action primitives as kernels, contract syntax, collateral/admissibility constraints, and the precise definition of \(\mathcal{M}\).
+\item \textbf{Deferred to Chapter 6 (equilibrium complexity):} rigorous PPAD-hardness and NEXP-hardness reductions tailored to your VAMP formalization, building on classical PPAD/NEXP sources.
+\item \textbf{Deferred to Chapters 7--9 (learning and experiments):} approximation of equilibrium behavior via MARL, and empirical comparison across mechanisms (bounties, bilateral contracts, LMSR, etc.).
+\end{itemize}
+
+A clean closing paragraph for this chapter (thesis-ready and consistent with your abstract) is:
+
+\begin{quote}
+The VAP captures the strategic structure of decentralized HTAP but generically produces inefficient outcomes due to misaligned incentives, most notably, underprovision of publication. Adding a verifiable market mechanism yields the VAMP, a POSG with endogenous structure and transfers. The VAMP viewpoint reframes decentralized task allocation as a market game in which agents allocate compute not only to solve tasks, but also to acquire, trade, and settle claims on verifiable intermediate results. The next chapter makes this precise by giving the formal VAMP definition and enumerating the market mechanisms studied in the remainder of the thesis.
+\end{quote}

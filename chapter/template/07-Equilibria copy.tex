@@ -1,0 +1,43 @@
+\chapter{Complexity of VAMP Equilibria}\label{chap:equilibria}
+
+This chapter establishes that computing equilibria of a VAMP is intractable in general, providing the theoretical motivation for the MARL approach in subsequent chapters.
+
+\subsection{Overview of Hardness Sources}
+The VAMP inherits hardness from two independent sources:
+1. **Game-theoretic hardness**: computing Nash equilibria is PPAD-complete, even in simple normal-form games.
+2. **Control-theoretic hardness**: optimal decentralized partially observable control is NEXP-complete, even in cooperative settings (Dec-POMDPs).
+
+These are **orthogonal** sources of difficulty: even if agents were cooperative (removing game-theoretic hardness), the POSG structure makes optimal policy computation NEXP-hard. Even if the world were fully observable (removing partial observability), Nash computation remains PPAD-hard.
+
+\subsection{PPAD-Hardness of Nash Equilibria in VAMPs}
+
+\subsubsection{Reduction from Bimatrix Games}
+Show that any two-player bimatrix game can be embedded as a VAMP instance (with a suitably degenerate task structure and market mechanism). By the Chen-Deng-Teng (2009) result, computing Nash equilibria in the embedded game is PPAD-complete; therefore computing Nash equilibria in VAMPs is at least PPAD-hard.
+
+\subsubsection{Inapproximability}
+Apply Rubinstein's (2018) inapproximability result: computing $\varepsilon$-approximate Nash equilibria in VAMPs is PPAD-hard for constant $\varepsilon$.
+
+\subsection{NEXP-Hardness from Decentralized Control}
+
+\subsubsection{Reduction from Dec-POMDPs}
+Show that cooperative VAMPs (where all agents share a common reward) with appropriate task structures encode Dec-POMDP instances. By Bernstein et al. (2002), this is NEXP-complete. Discuss what this means: even the *cooperative* decentralized case is devastatingly hard.
+
+\subsubsection{Implications for Finite-Horizon VAMPs}
+The NEXP-completeness applies to finite-horizon problems. For infinite-horizon discounted VAMPs, the problem is at least as hard (the finite-horizon problem reduces to it).
+
+\subsection{Hardness of Weaker Equilibrium Concepts}
+
+\subsubsection{Correlated Equilibria}
+Discuss the complexity of computing CE in VAMPs. In normal-form games, CE can be found in polynomial time (Papadimitriou-Roughgarden 2008). But in POSGs, the exponential state/history space means even formulating the LP is intractable. Argue that while CE is "easier" game-theoretically, the POSG structure makes it hard control-theoretically.
+
+\subsubsection{Coarse Correlated Equilibria and No-Regret Dynamics}
+CCE can be approximated by no-regret learning in normal-form games in polynomial time. In POSGs, the policy space is exponential in horizon, so no-regret guarantees apply only in a weaker empirical sense (per-round regret, not per-policy regret). Discuss what convergence to "approximate no-regret" means in this setting.
+
+\subsection{Positive Results: Tractable Special Cases}
+Identify restricted VAMP classes where equilibrium computation becomes tractable or better-approximable:
+- **Fully observable VAMPs** (remove partial observability): reduce to Markov games; Nash in two-player zero-sum Markov games is in P (via LP).
+- **Cooperative VAMPs** with specific structure (e.g., tree-structured dependencies, limited branching): may reduce to tractable Dec-POMDP subclasses.
+- **Single-step / one-shot VAMPs**: reduce to normal-form games; CE computable in polynomial time.
+
+\subsection{Implications: The Case for Learning-Based Approaches}
+Synthesize the hardness results: exact equilibrium computation is intractable for all interesting VAMP instances. Even approximate computation is hard for Nash. The most promising avenue is **empirical no-regret dynamics via MARL**, which provide weak convergence guarantees to CCE-like solution concepts. This motivates the next chapter.

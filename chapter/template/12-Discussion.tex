@@ -1,0 +1,42 @@
+\chapter{Discussion}\label{chap:discussion}
+
+\subsection{Summary of Contributions}
+Recap the main results in 1--2 pages.
+
+\subsection{Limitations}
+
+\subsubsection{Modeling Limitations}
+- Fixed truth labels and unique dependency structures (real proofs have multiple strategies).
+- Finite formula universe (real mathematics is open-ended).
+- Simplified proof/conjecture kernels (real LLM provers have complex failure modes).
+- No modeling of communication beyond publication (real agents could discuss strategies).
+
+\subsubsection{Theoretical Limitations}
+- Convergence guarantees are weak (meta-game CCE, not full-game Nash or even CCE).
+- The gap between meta-game equilibria and full-game equilibria is not characterized.
+- PPAD and NEXP hardness are worst-case; average-case complexity is unknown.
+
+\subsubsection{Empirical Limitations}
+- Synthetic experiments on relatively small instances; scalability to real-world size is not demonstrated.
+- The Lean experiments use a limited set of LLM provers; diversity is artificially constrained.
+- Market mechanisms are tested in isolation; hybrid mechanisms are not explored.
+
+\subsection{Future Work}
+
+\subsubsection{Theoretical Extensions}
+- Sharper characterization of the cost of decentralization (price-of-anarchy-style bounds for specific VAMP classes).
+- Average-case complexity analysis for natural distributions over VAMP instances.
+- Mechanism design: optimal market mechanism selection given a VAMP instance class.
+
+\subsubsection{Architectural Extensions}
+- Graph neural network observation encoders for better scalability.
+- Hierarchical policies for long-horizon credit assignment.
+- Communication channels between agents (beyond publication).
+
+\subsubsection{Applications Beyond Theorem Proving}
+- Formal verification of software (proof obligations = verification conditions).
+- Drug discovery (tasks = biological assays, agents = heterogeneous screening platforms).
+- Collaborative AI research (agents = different LLMs with different training, tasks = research sub-questions).
+
+\subsection{Broader Impact}
+Discuss the implications of market-mediated AI coordination: potential for more efficient scientific discovery, risks of market manipulation by sophisticated agents, fairness considerations, and the relationship between market efficiency and social welfare.

@@ -1,0 +1,56 @@
+\chapter{Multiagent Reinforcement Learning for VAMPs}\label{chap:marl}
+
+This chapter develops the MARL framework for finding approximate equilibria in VAMPs, describes the theoretical convergence guarantees (such as they are), and details the architecture.
+
+\subsection{Learning-Based Equilibrium Approximation}
+Frame the goal: we seek a joint policy $\pi$ such that each agent's policy is an approximate best response to the others' policies, in the sense of empirical no-regret. Discuss why this is the right target given the hardness results: we cannot hope for Nash, but no-regret dynamics converge to the CCE set in repeated normal-form games (Hart-Mas-Colell 2000), and population-based training approximates this in large sequential games (Lanctot et al. 2017).
+
+\subsection{Convergence Theory}
+
+\subsubsection{No-Regret Learning in Normal-Form Games}
+Review the classical result: if all agents use no-regret algorithms in a repeated normal-form game, the empirical distribution of play converges to the set of CCE (Cesa-Bianchi-Lugosi 2006, Hart-Mas-Colell 2000).
+
+\subsubsection{Extension to Extensive-Form and POSG Settings}
+Discuss the gap: in POSGs, policies are functions of exponentially long histories, so "no-regret" must be interpreted carefully. The relevant notion is **no-regret in the space of policy parameters** (not in the space of pure strategies). Discuss known results: PSRO converges to Nash in two-player zero-sum games (Lanctot et al. 2017); for general-sum multiplayer games, convergence is to empirical meta-game CCE.
+
+\subsubsection{Weak Convergence Guarantees for VAMP-MARL}
+State the convergence guarantee achievable by the thesis's framework:
+- **PSRO/population-based meta-game convergence**: the empirical meta-game (over the population of learned policies) converges to CCE of the meta-game.
+- **Per-agent no-regret**: if each agent's online policy updates achieve sublinear regret against the population, the system converges to approximate CCE in the sense of the empirical play distribution.
+- Discuss the caveats: these are guarantees about the meta-game, not the full POSG; the approximation quality depends on the expressiveness of the policy class and the diversity of the population.
+
+\subsection{Architecture}
+
+\subsubsection{Trajectory Tokenization}
+Describe the structured tokenization scheme: observation blocks (library tokens with entity embeddings + node features, portfolio tokens, market tokens), action tokens (type + target + parameters), public event tokens. Discuss design choices: why entity-ID embeddings (permutation-equivariant nametags), why structured features rather than raw state vectors, why causal ordering.
+
+\subsubsection{Observation Encoder}
+Detail the per-token embedding: entity ID embeddings $e_{\text{id}}(i)$ + feature MLPs $\phi_{\text{node}}$, $\phi_{\text{asset}}$, $\phi_{\text{balance}}$. Discuss the variable-length observation structure and how it's handled.
+
+\subsubsection{Causal Transformer Actor}
+The core architecture: a causal (GPT-style) transformer processes the tokenized history. The final hidden state $h_t$ drives multiple output heads:
+1. **Action-type head**: categorical distribution over action families (prove, conjecture, publish, market actions, no-op).
+2. **Target-selection head**: pointer-style attention over candidate entities (library nodes, market offers) for the selected action type.
+3. **Parameter heads**: budget allocation (discretized or continuous), contract parameters (strike time, quantity, max-loss), etc.
+
+Discuss the factored policy output and its advantages: compact representation, variable-size candidate sets, structured exploration.
+
+\subsubsection{Centralized Critic}
+The critic receives richer information than any single agent: environment-level aggregates (all agents' library statistics, market summaries, graph metadata) plus the joint public state. Outputs value estimates $V(w_t)$ for policy optimization. Only used during training (CTDE).
+
+\subsection{Training Pipeline}
+
+\subsubsection{Stage 1: Offline Initialization (Behavior Cloning)}
+Initialize actor policies on trajectories from scripted/heuristic baselines (from Chapter 4's algorithms). Supervised prediction of action types, targets, and parameters. Purpose: reduce exploration burden and prevent early degenerate behaviors.
+
+\subsubsection{Stage 2: Online CTDE Fine-Tuning (MAPPO)}
+PPO-style policy optimization with centralized critic. Describe the rollout $\to$ advantage estimation $\to$ clipped PPO update $\to$ critic update cycle. Action masking for admissibility. Discuss hyperparameters and training stability considerations.
+
+\subsubsection{Stage 3: Population-Based Training}
+Maintain a diverse population: current policies, lagged checkpoints, scripted agents. Sample opponents from the population during rollouts (league-style). Discuss how this approximates PSRO: each new best-response policy is added to the population, and meta-game strategies are computed over the population.
+
+\subsubsection{Curriculum Learning}
+Training begins on small instances (few nodes, shallow DAGs, few agents, simple markets) and progressively increases complexity along multiple axes: graph size, DAG depth, agent count, market complexity, information asymmetry.
+
+\subsection{Connecting Architecture to Convergence}
+Discuss how the training pipeline relates to the theoretical convergence framework of Section 8.2: the population approximates PSRO's oracle, the PPO updates approximate best-response computation, and the meta-game over the population converges (weakly) to CCE. State the assumptions under which these connections hold and the assumptions that are violated in practice (finite compute, approximate best responses, etc.).

@@ -1,0 +1,407 @@
+\chapter{VAMP --- Formal Definition and Properties}\label{chap:vamp}
+
+\subsection{Executive Summary}
+
+We formalize a \textbf{Verifiable Allocation Market POSG (VAMP)} as a market-mediated, partially observable stochastic game that arises when HTAP is decentralized: agents allocate compute across proof/conjecture/publication actions and may additionally trade \textbf{verifiable, state-contingent contracts} whose settlement is triggered by a public \textbf{Verify} oracle. This section gives a LaTeX-ready VAMP tuple aligned with our existing library/market notation and two-stage transition construction. We then define a contract space (bounties, securities/claims, bundles), admissibility/collateral rules, and a modular market mechanism interface \(\mathcal{M}\). We instantiate canonical mechanisms---posted bounties, bilateral OTC contracts, convex-cost/LMSR and CFMM-style AMMs, and combinatorial auctions---and state the appropriate equilibrium concepts (Bayesian Nash, subgame-perfect refinements, Markov perfect equilibria) with existence remarks grounded in fixed-point theorems. Finally, we analyze incentive alignment (bounties internalize publication externalities via a short proof), manipulation modes (front-running, sybil, withholding), core complexity barriers (PPAD/NEXP), and baseline algorithmic benchmarks that connect directly to the implementation and MARL chapters.
+
+\subsection{VAMP Tuple and Primitives}
+
+\subsubsection{Core syntactic objects carried over from HTAP}
+
+We assume the underlying HTAP ``verifiable task'' substrate already defined earlier: a formula space \(\mathcal{F}\) with involution \(\neg\), a sequent space \(\mathcal{S}=\mathcal{P}_{\mathrm{fin}}(\mathcal{F})\times\mathcal{F}\) with typical element \([\Gamma\vdash\phi]\), and discrete time \(t\in\mathbb{N}\).
+
+Each agent \(\alpha\in\mathcal{N}\) maintains a private library
+\[
+\mathcal{L}_t^\alpha=(\mathcal{C}_t^\alpha,\mathcal{RS}_t^\alpha,\delta_t^\alpha,\Theta_t^\alpha)\in\mathscr{L},
+\]
+and the environment maintains a public library \(\mathcal{L}_t^0\), with monotonicity and inclusion invariants \(\mathcal{L}_t^0\subseteq \mathcal{L}_t^\alpha\).
+
+The market is a discrete-time process \(\mathcal{M}_t=(\{\mathcal{P}_t^\alpha\}_{\alpha\in\mathcal{N}},\mathcal{ML}_t)\), where \(\mathcal{P}_t^\alpha\) is a private portfolio state and \(\mathcal{ML}_t\) is a public ledger; a balance map \(\beta:\mathfrak{P}\to\mathbb{R}\) induces \(B_t^\alpha=\beta(\mathcal{P}_t^\alpha)\).
+
+\subsubsection{Verify oracle and verifiable events}
+
+We model verifiability with an oracle
+\[
+\mathrm{Verify}:\mathcal{S}\times\mathcal{C}\to\{0,1\},
+\]
+where \(\mathcal{C}\) is a certificate space. A sequent \(s\in\mathcal{S}\) is \textbf{publicly resolved at time \(t\)} iff \(s\in\mathcal{RS}_t^0\) (or \(s\in\mathcal{FRS}_t^0\) if we settle only on fully-resolved witnesses; this choice is a design parameter).
+
+We write the settlement event for sequent \(s\) at horizon \(H\) as
+\[
+E_s := \{\,s\in \mathcal{RS}_H^0\,\},
+\]
+and the \textbf{first-publication time} as \(\tau_s:=\inf\{t:\ s\in\mathcal{RS}_t^0\}\in\mathbb{N}\cup\{\infty\}\).
+
+\subsubsection{Formal VAMP tuple}
+
+\paragraph{Definition (Verifiable Allocation Market POSG (VAMP)).}
+Fix a finite agent set \(\mathcal{N}\) and discount factor \(\gamma\in(0,1)\) (or finite horizon \(H\)). A \emph{VAMP} is a tuple
+\[
+\mathsf{VAMP} \;=\;
+(\mathcal{N},\mathcal{W},\{O^\alpha\}_{\alpha\in\mathcal{N}},
+\{A^\alpha\}_{\alpha\in\mathcal{N}},
+\{\mathrm{Adm}^\alpha\}_{\alpha\in\mathcal{N}},
+T,\{r^\alpha\}_{\alpha\in\mathcal{N}},b_0;\;
+\mathcal{K},\mathrm{Verify},\mathcal{M},\mathrm{Settle}),
+\]
+where:
+\begin{itemize}
+\item \(\mathcal{W}\) is the world-state space (defined below), with initial distribution \(b_0\).
+\item \(O^\alpha:\mathcal{W}\to\mathcal{O}^\alpha\) are observation maps (perfect recall via histories).
+\item \(A^\alpha=A^\alpha_{\mathrm{nm}}\sqcup A^\alpha_{\mathrm{mkt}}\) are action sets (non-market and market).
+\item \(\mathrm{Adm}^\alpha:\mathcal{W}\times A^\alpha\to\{0,1\}\) are admissibility predicates.
+\item \(T\) is the state-transition kernel on \(\mathcal{W}\), constructed as \(T=T_{\mathrm{mkt}}\circ T_{\mathrm{nm}}\).
+\item \(r^\alpha:\mathcal{W}\times A\to\mathbb{R}\) are per-step rewards (default: balance increments).
+\item \(\mathcal{K}\) is a contract space; \(\mathrm{Settle}\) maps \((\mathcal{K},\mathcal{W}\to\mathbb{R}^{\mathcal{N}})\) to transfers.
+\item \(\mathcal{M}\) is a market mechanism specifying \((A^\alpha_{\mathrm{mkt}},\mathrm{Adm}^\alpha_{\mathrm{mkt}},T_{\mathrm{mkt}})\).
+\end{itemize}
+
+This matches the ``VAMP as a POSG'' and ``market mechanism as a modular interface'' structure already planned in the draft chapter outline.
+
+\subsubsection{World state and transition kernel}
+
+\paragraph{Definition (World state).}
+A world state is a tuple
+\[
+w_t=\Big(\{\mathcal{L}_t^\alpha\}_{\alpha\in\mathcal{N}},\ \mathcal{L}_t^0,\ \mathcal{M}_t,\ \Xi_t\Big)\in\mathcal{W},
+\]
+where \(\Xi_t\) denotes mechanism- and implementation-dependent auxiliary components (e.g.\ job timers, in-flight actions, query buffers, market-maker reserves). \(\mathcal{W}\) is the set of all such tuples satisfying the library invariants and market admissibility invariants.
+
+We adopt a two-stage transition \(T=T_{\mathrm{mkt}}\circ T_{\mathrm{nm}}\) (non-market evolution then market update), as in the planned chapter structure: non-market actions invoke proof/conjecture kernels and publication closure, while market actions update portfolios and the ledger.
+
+\subsection{Contracts, Collateral, and Settlement}
+
+\subsubsection{Contract space and payoff semantics}
+
+A contract is a verifiable, state-contingent transfer specification. The most general object is a bounded measurable payoff functional on trajectories. For thesis use we restrict to ``event-based'' payoffs determined by public resolution events.
+
+\paragraph{Definition (Event-based contract).}
+Fix a horizon \(H\). An \emph{event-based contract} is a tuple
+\[
+\kappa=(\mathcal{E},\pi,\eta)
+\]
+where:
+\begin{enumerate}
+\item \(\mathcal{E}\) is a finite set of verifiable events (e.g.\ \(\{E_{s_1},\dots,E_{s_k}\}\)),
+\item \(\pi:\{0,1\}^{\mathcal{E}}\to\mathbb{R}^{\mathcal{N}}\) is a payoff map (net transfers sum to \(0\) unless an exogenous sponsor exists),
+\item \(\eta\) stores contract metadata (counterparties, quantities, timestamps, tie-breaking rules).
+\end{enumerate}
+
+\paragraph{Settlement.}
+\(\mathrm{Verify}\) is used indirectly by the definition of ``resolved in the public library.'' The settlement operator \(\mathrm{Settle}\) maps a contract \(\kappa\) and a realized public terminal state \(w_H\) to a transfer vector \(\pi(z)\), where \(z\in\{0,1\}^{\mathcal{E}}\) is the event realization vector.
+
+This ``contracts settle on verifiable events'' paradigm is precisely what makes market mediation credible in domains like formal verification (and is central in your draft's VAMP motivation).
+
+\subsubsection{Canonical contract types}
+
+We use the following named subclasses (all are expressible as event-based contracts):
+
+\paragraph{Posted bounty.}
+On a sequent \(s\): pays \(b\) to the first publisher of \(s\) into \(\mathcal{L}^0\) (tie-break rule required).
+
+\paragraph{Binary security/claim.}
+On \(s\): a unit share pays \(1\) to the holder iff \(E_s\) occurs (by time \(H\)); continuous quantities allow hedging and speculation. LMSR markets implement trading in such shares via a convex cost function.
+
+\paragraph{Contingent payments.}
+Pay only if multiple events occur, e.g.\ \(E_{s_1}\wedge E_{s_2}\). This captures dependency-aware bundles.
+
+\paragraph{Combinatorial bundles.}
+A bidder offers a valuation for a bundle \(B\subseteq\mathcal{E}\) of event-securities (or for a truth assignment pattern on \(\mathcal{E}\)); clearing becomes the combinatorial winner-determination problem.
+
+\subsubsection{Admissibility and collateral rules}
+
+Collateral is \textbf{unspecified} in your request, so we state a formal interface and list reasonable design options.
+
+Let \(\mathcal{P}\) be the portfolio space (cash + contract positions + locked collateral). Define a \emph{risk measure} \(\rho:\mathcal{P}\to\mathbb{R}\) representing ``worst-case post-settlement balance.'' A generic admissibility predicate for a market action that would update \(\mathcal{P}_t^\alpha\to\mathcal{P}_{t+1}^\alpha\) is:
+\[
+\mathrm{Adm}_{\mathrm{mkt}}^\alpha(w_t,a_t^\alpha)=1 \iff \rho(\mathcal{P}_{t+1}^\alpha)\ge 0.
+\]
+
+Common choices (with different theoretical/engineering tradeoffs):
+\begin{itemize}
+\item \textbf{Fully collateralized:} \(\rho\) is the minimum value over all settlement outcomes \((E_s)_{s\in\mathcal{E}}\); safest, most conservative (limits leverage).
+\item \textbf{Margin-based:} \(\rho\) uses a stress set of outcomes (VaR/CVaR-like), permitting leverage but enabling insolvency events (requires liquidation rules).
+\item \textbf{Sponsor-funded:} bounties are funded by an external treasury; agents take no downside on bounty posting.
+\item \textbf{Netting + clearinghouse:} obligations are netted at the mechanism level before margin is computed.
+\end{itemize}
+
+(TODO: choose one for the implementation chapter and prove ``no-negative-balance invariant'' under the chosen \(\rho\) and liquidation semantics.)
+
+\subsection{Market Mechanisms and Canonical Instantiations}
+
+\subsubsection{Abstract market mechanism interface}
+
+We treat the market mechanism as a pluggable module that determines (i) market actions, (ii) admissibility, and (iii) the market transition kernel, consistent with your draft.
+
+\paragraph{Definition (Market mechanism interface).}
+A market mechanism is a tuple
+\[
+\mathcal{M}=
+(\mathfrak{M},\beta,\mathcal{K},\{A^\alpha_{\mathrm{mkt}}\}_{\alpha\in\mathcal{N}},
+\{\mathrm{Adm}^\alpha_{\mathrm{mkt}}\}_{\alpha\in\mathcal{N}},T_{\mathrm{mkt}},\mathrm{Settle}),
+\]
+where:
+\begin{itemize}
+\item \(\mathfrak{M}\) is the market-state space (portfolios + public ledger + mechanism state),
+\item \(\beta\) is the balance map,
+\item \(\mathcal{K}\) is the contract space,
+\item \(A^\alpha_{\mathrm{mkt}}\) are market actions,
+\item \(\mathrm{Adm}^\alpha_{\mathrm{mkt}}\) are collateral/admissibility constraints,
+\item \(T_{\mathrm{mkt}}\) updates the market state (trading/clearing/AMM updates),
+\item \(\mathrm{Settle}\) defines how contracts pay out against verifiable events.
+\end{itemize}
+
+\subsubsection{Posted bounties}
+
+A posted-bounty mechanism maintains a bounty table \(b_t:\mathcal{S}\to\mathbb{R}_{\ge 0}\) (finite support). Market actions are ``post bounty'' and ``cancel bounty'' (cancellation may require unfilled-only rules); settlement pays \(b_t(s)\) to the first public publisher of \(s\). This is the simplest way to price publication externalities and is used widely in practice as a coordination primitive. (TODO: cite an empirical bounty-market reference if desired.)
+
+\subsubsection{Bilateral OTC contracts}
+
+A bilateral-contract mechanism maintains an order book of offers. An offer can be written as
+\[
+\mathsf{offer}=(\alpha,\kappa,q,p,\mathrm{side}),
+\]
+meaning agent \(\alpha\) offers quantity \(q\) at unit price \(p\), either selling or buying payoff \(\kappa\). Another agent \(\beta\) accepts, trades execute atomically, and portfolios update by standard bookkeeping:
+\begin{itemize}
+\item cash transfers \(p q\),
+\item position updates \(\pm q\) units of \(\kappa\),
+\item collateral locks if required by \(\mathrm{Adm}\).
+\end{itemize}
+
+(TODO: formalize whether offers are public and persistent, or private and ephemeral; both fit the interface.)
+
+\subsubsection{LMSR and convex-cost automated market makers}
+
+Hanson's LMSR is a canonical automated market maker with a \textbf{convex cost function} that yields path-independent pricing for event-securities. The general convex-cost market-maker model is:
+\begin{itemize}
+\item state: outstanding share vector \(q\in\mathbb{R}^d\) over \(d\) securities,
+\item cost function \(C:\mathbb{R}^d\to\mathbb{R}\), convex and differentiable,
+\item price vector \(p(q)=\nabla C(q)\),
+\item a trade \(\Delta q\) costs \(C(q+\Delta q)-C(q)\), paid (in cash) to the market maker.
+\end{itemize}
+
+For LMSR over outcomes \(\omega\in\Omega\), with liquidity parameter \(b>0\),
+\[
+C(q)=b\log\Big(\sum_{\omega\in\Omega} e^{q_\omega/b}\Big),
+\qquad
+p_\omega(q)=\frac{e^{q_\omega/b}}{\sum_{\omega'} e^{q_{\omega'}/b}}.
+\]
+
+For a binary task event \(E_s\), take \(\Omega=\{E_s,\neg E_s\}\) (or an equivalent one-security representation with a cash numeraire). When outcomes are combinatorial (many tasks), maintaining correct LMSR prices can be computationally hard; Chen et al.\ analyze such complexity for combinatorial market makers.
+
+\subsubsection{CFMM-style AMMs}
+
+CFMMs generalize automated trading via a concave ``trading function'' or via equivalent convex dual formulations; Angeris et al.\ provide a convex-optimization analysis of CFMMs and ``price oracles'' for a broad class. In VAMP, CFMMs become relevant if we maintain pools over \textbf{multiple} event-securities and cash, allowing multi-asset swaps. (TODO: decide whether your implementation uses ``pure prediction-market'' (LMSR-style) or ``DEX-style'' CFMM mechanics; both fit \(\mathcal{M}\).)
+
+\subsubsection{Combinatorial auctions}
+
+A combinatorial-auction mechanism is useful when bidders value bundles (e.g., ``I want claims on all prerequisites of a target''). Agents submit bids \((B,v)\) for bundle \(B\subseteq \mathcal{I}\) of items (items = contracts or securities). Clearing solves the winner-determination problem (maximize reported welfare subject to feasibility), which is NP-hard in general by reduction from weighted set packing; Sandholm's foundational notes summarize the NP-hardness and standard reductions.
+
+If payments are set by VCG, the mechanism is DSIC under standard assumptions (quasilinear utilities, etc.), but computational feasibility of exact VCG is itself a major issue. (TODO: decide how deeply you want to treat ``computational VCG'' vs.\ using auctions only as a conceptual comparator.)
+
+\subsection{Strategies and Equilibrium Concepts}
+
+\subsubsection{Policies combining compute and market actions}
+
+Let \(h_t^\alpha=(o_0^\alpha,a_0^\alpha,\dots,o_t^\alpha)\) be agent \(\alpha\)'s observation history (perfect recall). A behavioral policy is
+\[
+\pi^\alpha:\mathcal{H}^\alpha\to\Delta(A^\alpha),
+\qquad
+A^\alpha=A_{\mathrm{nm}}^\alpha\sqcup A_{\mathrm{mkt}}^\alpha.
+\]
+This matches the POSG framing in your decentralized chapter and the planned ``policies and returns'' section in the VAMP chapter.
+
+If agents have private types \(\theta^\alpha\) (capabilities, costs), we use the standard Harsanyi transformation: nature draws \(\theta\sim\mu\), each agent observes \(\theta^\alpha\), and plays the induced complete-information extensive-form game.
+
+\subsubsection{Nash and Bayesian Nash equilibrium}
+
+For finite-horizon, finite state/action VAMPs, Nash equilibria in mixed (behavioral) strategies exist by Nash's theorem applied to the equivalent finite extensive-form game. The computational-gamet-theory literature uses this existence as the backdrop for PPAD-hardness results.
+
+A \textbf{Bayesian Nash equilibrium (BNE)} is a type-contingent policy profile \(\pi=(\pi^\alpha)_{\alpha\in\mathcal{N}}\) such that for each \(\alpha\), no deviation \(\pi'^\alpha\) yields higher expected discounted utility given beliefs \(\mu(\theta^{-\alpha}\mid \theta^\alpha)\). (TODO: write the full measure-theoretic definition if you allow continuous type spaces.)
+
+\subsubsection{Subgame-perfect and sequential refinements}
+
+In imperfect-information extensive-form games, SPNE is defined on proper subgames, which may be trivial. A more appropriate refinement is \textbf{sequential equilibrium} or \textbf{perfect Bayesian equilibrium} (TODO: cite Kreps--Wilson and define formally if you use it operationally). For most of the thesis, we will use equilibrium concepts that are compatible with learning targets (CCE/approximate equilibria) and Markov restrictions.
+
+\subsubsection{Markov perfect equilibria in stochastic games}
+
+When the VAMP is fully observable (or when we work with belief states), Markov strategies are a natural restriction. Existence of stationary equilibria for discounted finite stochastic games is classical (Fink 1964; related earlier/parallel results exist).
+
+We therefore define:
+\begin{itemize}
+\item A \textbf{Markov policy} depends only on the current (observed) world state (or belief state).
+\item A \textbf{Markov perfect equilibrium (MPE)} is a Nash equilibrium within the class of Markov policies.
+\end{itemize}
+
+(TODO: specify whether your environment is fully observable at the Markov level or whether MPE is defined over beliefs; the latter is conceptually cleaner but heavier.)
+
+\subsubsection{Correlated equilibria, coarse correlated equilibria, and regret}
+
+Because later chapters target learning dynamics, we record the classical no-regret connection. Hart--Mas-Colell show regret-matching dynamics lead to correlated equilibrium in repeated play (finite normal-form).
+
+For VAMPs (POSGs), the clean statement is about the \textbf{meta-game} over a finite policy population (as your decentralized chapter draft already suggests). We define external regret for agent \(\alpha\) over \(T\) episodes:
+\[
+\mathrm{Reg}^\alpha(T)=
+\max_{\pi'^\alpha}\ \sum_{t=1}^T u^\alpha(\pi'^\alpha,\pi^{-\alpha};\omega_t)
+-\sum_{t=1}^T u^\alpha(\pi^\alpha,\pi^{-\alpha};\omega_t),
+\]
+where \(\omega_t\) indexes episode randomness. (TODO: align with the exact episodic/training protocol in the MARL chapter.)
+
+\subsection{Incentive Alignment and Manipulation}
+
+\subsubsection{Bounties internalize publication externalities}
+
+We give a textbook-level proof in the simplest setting that captures the publication dilemma.
+
+\paragraph{Model.}
+Fix a subtask \(s\) that (i) is privately known solved by agent \(\alpha\), (ii) is valuable to some other agent \(\beta\) if published, and (iii) publication has private cost \(c_\alpha>0\) to \(\alpha\). Let the external benefit conferred to \(\beta\) (net of its own costs) be \(B_\beta>0\). Consider the one-shot publication stage game with actions \(\{\mathsf{pub},\mathsf{withhold}\}\), and assume no transfers.
+
+\paragraph{Lemma (Underpublication without transfers).}
+If \(c_\alpha>0\) and \(\alpha\) receives no private benefit from \(\beta\)'s improved capability after publication, then \(\mathsf{withhold}\) is (weakly) dominant for \(\alpha\).
+
+\emph{Proof.} Payoff difference between publishing and withholding is \(-c_\alpha\), independent of \(\beta\)'s action. \(\square\)
+
+Now introduce a bounty contract paying \(b\ge 0\) to the first publisher of \(s\) into the public library (settled via \(\mathrm{Verify}\) and the event \(\tau_s<\infty\)).
+
+\paragraph{Theorem (Dominant-strategy publication under sufficiently large bounty).}
+If \(b>c_\alpha\), then publishing is strictly dominant for \(\alpha\) within the stage game; if \(b=c_\alpha\), then publishing is weakly dominant. Hence the mechanism eliminates underpublication in this stylized model.
+
+\emph{Proof.} With bounty, \(\alpha\)'s payoff difference becomes \(b-c_\alpha\), independent of \(\beta\). If \(b>c_\alpha\), publishing strictly increases payoff. If \(b=c_\alpha\), publishing weakly improves payoff. \(\square\)
+
+This theorem is elementary but structurally important: it isolates the precise way verifiable transfer payments ``buy'' public-goods provision.
+
+\subsubsection{Strategic pathologies and attack surfaces}
+
+Market mediation introduces new failure modes; for each, one can define the deviation formally as a profitable unilateral policy deviation within the VAMP.
+
+\begin{itemize}
+\item \textbf{Front-running / MEV:} an agent who observes pending trades or publications may place advantageous orders before settlement. CFMM settings have a well-developed literature on MEV-style strategic behavior; see modern CFMM game-theoretic treatments. (TODO: specify the observability/latency model in your implementation; without latency, ``front-running'' is not well-defined.)
+\item \textbf{Sybil attacks:} if identities are cheap, an agent can split its strategy across multiple accounts to evade collateral constraints or to manipulate thin markets. (TODO: formalize the identity model and admissibility rules, e.g., one-identity-per-capability vs.\ arbitrary.)
+\item \textbf{Withholding to trade:} an agent may solve privately, trade on the event, and delay publication strategically. Formally, this is a deviation in the joint (compute+market) strategy space; it may be beneficial unless the mechanism includes disclosure incentives or anti-manipulation rules. (TODO: analyze under each \(\mathcal{M}\) you implement.)
+\item \textbf{Price manipulation:} in LMSR/cost-function markets, a trader can move prices by paying the cost; interpretation depends on whether the market is being used for information aggregation or for incentive payments. The connection between convex-cost markets and no-regret learning clarifies that ``prices'' behave like dual variables of a regularized objective, not necessarily truthful probabilities in strategic settings.
+\end{itemize}
+
+\subsection{Complexity Barriers and Benchmark Algorithms}
+
+\subsubsection{Equilibrium computation: PPAD and NEXP sources}
+
+Two orthogonal hardness sources apply in VAMPs and motivate learning-based approximations.
+
+\begin{itemize}
+\item \textbf{PPAD-hardness (strategic equilibrium):} computing Nash equilibria is PPAD-complete even for two-player bimatrix games. A one-shot VAMP with trivial task dynamics and a market mechanism whose payoff mapping encodes a bimatrix game yields a polynomial-time reduction (full construction TODO, but the embedding is standard in equilibrium-hardness arguments).
+\item \textbf{NEXP-hardness (decentralized partial observability):} finite-horizon decentralized control (Dec-POMDP) is NEXP-complete, implying intractability even in the cooperative special case. VAMPs can encode Dec-POMDPs via task dynamics plus private observations (full reduction TODO; cite is the load-bearing complexity fact).
+\item \textbf{Approximate equilibrium hardness:} Rubinstein proves PPAD-completeness/inapproximability for constant-\(\varepsilon\) approximate Nash in succinct games, supporting the thesis stance that even approximation may be hard in general.
+\end{itemize}
+
+\subsubsection{Welfare-maximizing allocation and contract-design hardness}
+
+\begin{itemize}
+\item \textbf{Combinatorial auction clearing} (winner determination) is NP-hard in general. Hence any VAMP instantiation that requires exact welfare-maximizing clearing over bundles inherits NP-hardness at the mechanism layer.
+\item \textbf{Combinatorial market makers} can incur \#P-hard or otherwise intractable pricing/maintenance when the outcome space is exponential, even for LMSR-style makers.
+\item \textbf{Optimal contract design} (``choose bounties or scoring rules to maximize social welfare under strategic response'') is typically a bilevel optimization/mechanism-design problem; in general settings this is computationally hard. (TODO: locate and cite a primary hardness theorem specific to optimal mechanism or contract design for dynamic games, or prove an NP-hardness reduction from HTAP/scheduling variants.)
+\end{itemize}
+
+\subsubsection{Baseline solution concepts and algorithms}
+
+We record benchmarks used later for evaluation and for MARL baselines:
+\begin{itemize}
+\item \textbf{Centralized oracle benchmark:} planner with full access to all private libraries/types chooses compute allocations (Chapter 3 baseline).
+\item \textbf{Market-clearing planner benchmark:} a hypothetical social planner chooses both compute allocations and contract allocations to maximize expected welfare subject to collateral feasibility (an upper bound; typically intractable).
+\item \textbf{LP relaxation for contract allocation (sketch):} if contract payoffs are linear in event indicators and markets clear by linear constraints (e.g., posted bounties + budgets), one can relax ``choose which bounties to post'' as a knapsack-like LP (TODO: specify the precise primal variables and constraints used in experiments).
+\item \textbf{Price-taking heuristic agents:} assume agents treat prices as exogenous and solve a myopic best response ``expected marginal value per compute'' against current prices; this is analytically tractable and can be used as a scripted baseline (TODO: formalize under each \(\mathcal{M}\)).
+\item \textbf{No-regret learning baseline:} interpret trading as a no-regret update over actions/claims; convex-cost markets are formally connected to follow-the-regularized-leader algorithms.
+\end{itemize}
+
+\subsection{Worked Examples, Diagrams, Mechanism Comparison, and Open Problems}
+
+\subsubsection{A small two-agent, two-task VAMP instance}
+
+We give an illustrative instance showing how market trades compensate publication.
+\begin{itemize}
+\item Agents: \(\mathcal{N}=\{1,2\}\).
+\item Tasks: \(s_B\) (lemma) and \(s_A\) (target), with dependency \(s_B\to s_A\).
+\item Capabilities: agent 1 can resolve \(s_B\) cheaply; agent 2 can resolve \(s_A\) cheaply once \(s_B\) is public.
+\item Without transfers: agent 1 withholds \(s_B\) to preserve advantage, delaying \(s_A\).
+\item With posted bounty \(b>c_1\) on \(s_B\): agent 1 publishes \(s_B\) immediately (dominant strategy in the stylized lemma above), gets paid \(b\), agent 2 proceeds to solve \(s_A\).
+\end{itemize}
+
+\paragraph{Example (Two-agent VAMP with a dependency and a bounty).}
+Let \(s_B\to s_A\) be a precedence constraint in the public dependency graph. Assume agent 1 can resolve \(s_B\) at cost \(c_1\), agent 2 values \(s_B\) at \(B_2\) because it unlocks \(s_A\). If a bounty \(b>c_1\) is posted on \(s_B\), then publishing \(s_B\) is strictly dominant for agent 1 in the publication stage game.
+
+\subsubsection{Interaction between task graph and market}
+
+\begin{figure}[t]
+\centering
+\begin{tabular}{c}
+\fbox{\begin{minipage}{0.85\textwidth}
+\centering
+\textbf{Task Dynamics}\\[4pt]
+Task \(s_B\) (lemma) \(\rightarrow\) Task \(s_A\) (target)\\
+Publish (Verify) \(\rightarrow\) adds to public library\\[10pt]
+\textbf{Market}\\[4pt]
+Order/Trade Actions \(\rightarrow\) Mechanism state \(M_t\) (order book / AMM \(q\) / auction bids)\\
+\(\rightarrow\) Settlement (pays on \(E_s\) or \(\tau_s\))\\[10pt]
+Publish \(\rightarrow\) Settlement \(\rightarrow\) updates portfolios \(\rightarrow\) Order/Trade Actions\\
+Mechanism state \(M_t\) \(\rightarrow\) price signal \(\rightarrow\) Task Dynamics
+\end{minipage}}
+\end{tabular}
+\caption{Interaction between the task graph and the market.}
+\label{fig:vamp-task-market}
+\end{figure}
+
+\subsubsection{Mechanism comparison table}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lcccc}
+\hline
+Mechanism & Truthfulness & Clearing cost & Liquidity & Manipulation surface \\
+\hline
+Posted bounties & (partly) IC for publish & low & low/medium & low \\
+Bilateral OTC contracts & no & medium & low & medium \\
+LMSR / convex-cost AMM & no (strategic) & low/medium & high & medium/high \\
+CFMM-style AMM & no (strategic) & low & high & high (MEV) \\
+Combinatorial auction (VCG) & DSIC (ideal) & high (NP-hard WDP) & batch & collusion/comp.\ issues \\
+\hline
+\end{tabular}
+\caption{Qualitative comparison of market mechanisms usable as \(\mathcal{M}\) in a VAMP.}
+\label{tab:vamp-mechanisms}
+\end{table}
+
+The ``NP-hard winner determination'' claim is classical for combinatorial auctions. The LMSR definition and convex-cost market maker framework are due to Hanson and subsequent convex-cost analyses. CFMM optimization structure is analyzed in Angeris et al.
+
+\subsubsection{Prioritized bibliography to cite}
+
+Primary sources most central for this section:
+\begin{itemize}
+\item Robin Hanson on LMSR/market scoring rules.
+\item Yiling Chen and Jennifer Wortman Vaughan on convex-cost markets \(\leftrightarrow\) no-regret learning equivalence.
+\item Daniel S.\ Bernstein, Shlomo Zilberstein, and Neil Immerman on NEXP-completeness of decentralized control.
+\item Constantinos Daskalakis, Paul W.\ Goldberg, and Christos Papadimitriou on PPAD and Nash-equilibrium complexity; plus Xi Chen / Xiaotie Deng for two-player PPAD-completeness.
+\item Aviad Rubinstein on constant-\(\varepsilon\) inapproximability.
+\item William Vickrey, Edward H.\ Clarke, and Theodore Groves for VCG foundations.
+\item Lloyd Shapley and Martin Shubik for stochastic games / strategic market games background.
+\item Kenneth Arrow and Gerard Debreu for existence of competitive equilibrium (context for ``market as coordination'').
+\item Sergiu Hart and Andreu Mas-Colell on regret-matching \(\rightarrow\) correlated equilibrium.
+\item Guillermo Angeris for CFMM convex-optimization foundations.
+\item Reid G.\ Smith for market-like task allocation precedents.
+\item Brian P.\ Gerkey for formal MRTA task-allocation taxonomy.
+\end{itemize}
+
+\subsubsection{Open problems and connection to later chapters}
+
+Open problems (for a short ``future work'' bridge):
+\begin{itemize}
+\item Formalize a robust collateral/liquidation model and prove a no-default invariant under the chosen \(\rho\) (TODO).
+\item Characterize equilibria in ``endogenous-outcome markets'' where traders can influence the event they trade on (decision-market phenomena) under each \(\mathcal{M}\) you implement (TODO; likely mechanism-specific).
+\item Quantify price-of-anarchy style welfare loss under each mechanism class (posted bounties vs.\ AMM vs.\ auctions) under partial observability (TODO; likely needs strong assumptions).
+\item Identify tractable special cases (finite/acyclic dependency graphs, restricted contract types) where computing an MPE or a CE is polynomial-time (TODO; connect to the tractable-subclasses section in the complexity chapter).
+\end{itemize}
+
+This section provides the formal substrate for:
+\begin{itemize}
+\item the later ``VAMP---Formal Definition and Properties'' chapter (full invariants, admissibility, implementation semantics),
+\item the ``Complexity of VAMP Equilibria'' chapter (PPAD/NEXP reductions instantiated in your exact tuple),
+\item the MARL chapter, where approximate equilibrium concepts (CCE/meta-game CCE) and no-regret dynamics become the operational targets.
+\end{itemize}

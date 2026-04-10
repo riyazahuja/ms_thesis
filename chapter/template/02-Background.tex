@@ -1,0 +1,86 @@
+\chapter{Background and Related Work}\label{chap:background}
+
+\subsection{Scheduling Theory and Task Allocation}
+\subsubsection{Classical Scheduling Models}
+
+Review the $\alpha|\beta|\gamma$ classification (Graham et al. 1979). Define the key problem classes: identical machines (P||C max), uniform machines (Q||C max), unrelated machines (R||C max). State the key complexity results: P||C max is NP-hard (reduction from PARTITION), R||C max admits a 2-approximation (Lenstra-Shmoys-Tardos 1990) with a 3/2 inapproximability lower bound. Discuss weighted completion time, flow time, and other objectives briefly.
+
+\subsubsection{Precedence-Constrained Scheduling}
+Review DAG scheduling: Hu's algorithm for unit-time tree-structured precedences (Hu 1961), Coffman-Graham for two processors (Coffman-Graham 1972). Discuss the general case: scheduling with arbitrary precedence constraints on parallel machines is NP-hard even for unit processing times and three machines. State known approximation results.
+
+\subsubsection{Online and Stochastic Scheduling}
+Review competitive analysis for online scheduling (Aspnes et al. 1997). Briefly discuss stochastic scheduling models where processing times are random variables — connect to the thesis's stochastic proof/conjecture kernels.
+
+\subsubsection{The Assignment Problem and Generalizations}
+Hungarian algorithm (Kuhn 1955), the generalized assignment problem (GAP), and the LP-rounding approach of Shmoys-Tardos (1993). These provide the combinatorial optimization backbone for centralized allocation.
+
+\subsubsection{Divisible Load Theory and Task Decomposition}
+Review DLT (Bharadwaj et al. 1996, 2003) as a model for tasks that can be arbitrarily subdivided. Contrast with the thesis's model where decomposition is structured (DAG of subtasks with logical dependencies rather than arbitrary fractions).
+
+\subsection{Mechanism Design and Markets}
+\subsubsection{Mechanism Design Fundamentals}
+Revelation principle, incentive compatibility, VCG mechanisms. State the key impossibility: Myerson-Satterthwaite theorem (no efficient, individually rational, budget-balanced, incentive-compatible mechanism for bilateral trade). Discuss the Nisan-Ronen conjecture and its resolution (Christodoulou et al. 2023) — no truthful deterministic mechanism for R||C max beats an n-approximation.
+
+\subsubsection{Combinatorial Auctions and VCG Limitations}
+VCG for combinatorial allocation. Discuss computational hardness of winner determination (NP-hard), vulnerability to collusion (Ausubel-Milgrom 2006), and revenue non-monotonicity. These limitations motivate departure from pure VCG toward market-based mechanisms.
+
+\subsubsection{Prediction Markets and Market Scoring Rules}
+Proper scoring rules (Gneiting-Raftery 2007), Hanson's LMSR (Hanson 2003, 2007), combinatorial prediction markets and their \#P-hardness (Chen et al. 2008). The duality between market scoring rules and no-regret learning (Chen-Vaughan 2010). Dreber et al. (2015) on prediction markets for scientific reproducibility.
+
+\subsubsection{Market-Based Task Allocation}
+Contract Net Protocol (Smith 1980), MRTA taxonomy (Gerkey-Matarić 2004), market-based multi-robot coordination (Dias et al. 2006), and task trees for hierarchical decomposition (Zlot-Stentz 2006). These are the closest existing systems to VAMP's market-based architecture.
+
+\subsubsection{Automated Market Makers}
+Constant function market makers (Angeris-Chitra 2020), multi-asset CFMMs (Angeris et al. 2022). Unified prediction market frameworks (Agrawal et al. 2011). These inform the VAMP's AMM-based pricing mechanisms.
+
+\subsection{Game Theory and Equilibria}
+\subsubsection{Normal-Form and Extensive-Form Games}
+Definitions, Nash equilibrium, correlated equilibrium (CE), coarse correlated equilibrium (CCE). Nash's existence theorem. The sequence form for extensive-form games (Koller-Megiddo-von Stengel 1996).
+
+\subsubsection{Computational Complexity of Equilibria}
+PPAD and Nash (Papadimitriou 1994, Daskalakis-Goldberg-Papadimitriou 2009, Chen-Deng-Teng 2009). Inapproximability of Nash (Rubinstein 2018). Polynomial-time computation of correlated equilibria via LP/ellipsoid (Papadimitriou-Roughgarden 2008). Complexity hierarchy: CCE (polynomial via no-regret) $\subset$ CE (polynomial via LP) vs. Nash (PPAD-complete).
+
+\subsubsection{Stochastic Games}
+Fully observable stochastic games (Shapley 1953), complexity results (Condon 1992). Markov games as a special case.
+
+\subsection{Partially Observable Stochastic Games and Decentralized Control}
+\subsubsection{POSGs: Definition and Properties}
+Formal POSG definition. Observation kernels, belief states, history-dependent policies. Relationship to extensive-form games with imperfect information.
+
+\subsubsection{Dec-POMDPs as a Special Case}
+Dec-POMDPs as cooperative POSGs. The NEXP-completeness result (Bernstein et al. 2002) and its implications: even the cooperative case is computationally devastating.
+
+\subsubsection{Solution Methods for POSGs}
+Exact dynamic programming (Hansen-Bernstein-Zilberstein 2004), approximate methods (Emery-Montemerlo et al. 2004), policy iteration with correlation devices (Bernstein et al. 2009). Discuss why exact methods scale only to tiny instances, motivating learning-based approaches.
+
+\subsection{Multiagent Reinforcement Learning}
+\subsubsection{Single-Agent RL Foundations}
+MDP formulation, Bellman equations, policy gradient theorem, PPO (Schulman et al. 2017). Keep concise — assume reader familiarity.
+
+\subsubsection{MARL Paradigms}
+Independent learning, centralized training with decentralized execution (CTDE). MAPPO (Yu et al. 2022), QMIX (Rashid et al. 2018), MADDPG (Lowe et al. 2017). Discuss challenges: non-stationarity, credit assignment, scalability.
+
+\subsubsection{Game-Theoretic MARL}
+PSRO (Lanctot et al. 2017), Pipeline PSRO (McAleer et al. 2020), NFSP (Heinrich-Silver 2016). Fictitious play (Brown 1951) as the classical ancestor. No-regret learning and convergence to CCE (Hart-Mas-Colell 2000).
+
+\subsubsection{Sequence Models for RL}
+Decision Transformer (Chen et al. 2021), Trajectory Transformer (Janner et al. 2021). Discuss the reframing of RL as conditional sequence modeling and its implications for multi-agent history encoding.
+
+\subsubsection{Population-Based Training and League Training}
+AlphaStar (Vinyals et al. 2019), OpenAI Five (Berner et al. 2019), PBT (Jaderberg et al. 2019). Discuss how structured opponent populations improve robustness and approximate equilibrium quality.
+
+\subsection{Neural Theorem Proving}
+\subsubsection{Language Models for Formal Mathematics}
+GPT-f (Polu-Sutskever 2020), PACT (Han et al. 2022), LeanDojo/ReProver (Yang et al. 2023). Tactic generation as sequence modeling.
+
+\subsubsection{Search and Planning for Theorem Proving}
+HTPS (Lample et al. 2022), expert iteration (Polu et al. 2022), Draft-Sketch-Prove (Jiang et al. 2023). Integration with classical hammers (Thor, Jiang et al. 2022).
+
+\subsubsection{RL-Based Theorem Proving}
+AlphaProof (Hubert et al. 2025), AlphaGeometry (Trinh et al. 2024), FunSearch (Romera-Paredes et al. 2024). The emerging paradigm of RL over formal proof search.
+
+\subsubsection{Autoformalization}
+Wu et al. (2022). The pipeline from informal mathematics to formal Lean/Isabelle specifications that enables scaling training data for neural provers.
+
+\subsubsection{Benchmarks}
+MiniF2F (Zheng et al. 2022), Lean 4 mathlib.

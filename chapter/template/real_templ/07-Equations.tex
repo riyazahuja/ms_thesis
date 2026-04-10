@@ -1,0 +1,42 @@
+\chapter{Equations: simple and more complicated examples.}
+
+Here I will add a Tip for users. If you use certain symbols frequently in your math, and they are always longer than you want to type out, you can add new command in the "my-Equations.sty" file to make things go quicker. For example, if you use a vector electric field ($\bE$) often you could either
+
+\begin{enumerate}
+    \item type out \verb+{\bf E}+ - or - 
+    \item add \verb+\newcommand{\bE}{{\bf E}}+ to the my-Equations.sty file and type \verb+\bE+ any time you need it inside an equation environment.
+\end{enumerate}
+Please note that there are a few examples of things that I have found use full to make short hand notation for. Always make sure to check that the command you are making does not already exist. 
+
+
+Here are several other examples.
+
+% ========================================================================================
+% ========================================================================================
+\subsection{Equations}
+
+Sometimes you just have a run on equation. Here are some long equation examples for Claudia Schrama's Masters Thesis \cite{cite-Schrama2018}, that was written in \LaTeX{} before this version of the Temple. (I am Claudia Schrama, so I have access to those text files, and I can just add them here).
+
+I had defined a lot of bold math characters such as $\bE,\ \bH,\ \bD$ because I used a lot of the bold vector notation and having to define one bold character each time you need it is a lot more typing then I wanted to do.
+
+\subsection{Long Equation on Two Lines}
+Here is a long equation, showing you the structure of the polarization of light due to second harmonic generation.... Not all to important. The important this is showing you how it is formatted. This equation can not fit on one line and be with in the margins, so it is split over two lines using an align. Leaving it with only one number and not two.
+
+\begin{align}
+\bP_Q(\omega_1+\omega_2) = \chi_Q(\omega_1,\omega_2) \sqrP{-\frac{2}{3}(\nabla
+\cdot \bE_1)\bE_2 + (\nabla\bE_1)\cdot\bE_2 + \bE_2\cdot(\nabla\bE_1)} \nonumber\\
++\chi_Q(\omega_2,\omega_1) \sqrP{-\frac{2}{3}(\nabla
+\cdot \bE_2)\bE_1 + (\nabla\bE_2)\cdot\bE_1 + \bE_1\cdot(\nabla\bE_2)} 
+\label{eqn_quad_pol_gen}
+\end{align}
+
+This equation come from this paper \cite{cite-bethune1981}. If we place this equation in and 'equation' environment, the number is placed below but the equation itself goes of the page. That is why you need to write it with and align. (or other equation mode that allows for line breaks)
+
+\begin{equation}
+\bP_Q(\omega_1+\omega_2) = \chi_Q(\omega_1,\omega_2) \sqrP{-\frac{2}{3}(\nabla
+\cdot \bE_1)\bE_2 + (\nabla\bE_1)\cdot\bE_2 + \bE_2\cdot(\nabla\bE_1)}
++\chi_Q(\omega_2,\omega_1) \sqrP{-\frac{2}{3}(\nabla
+\cdot \bE_2)\bE_1 + (\nabla\bE_2)\cdot\bE_1 + \bE_1\cdot(\nabla\bE_2)} 
+\end{equation}
+
+Note that if you equation fits with in the margins, but the equation number can not go right behind it, the number will automatically be pushed to the next line. You do not have to format that in yourself. 

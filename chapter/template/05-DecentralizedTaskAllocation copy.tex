@@ -1,0 +1,48 @@
+\chapter{The Decentralized Regime and Game-Theoretic Formulation}\label{chap:decentralized}
+
+This is the pivotal chapter: it shows that decentralized HTAP naturally admits a game-theoretic interpretation, and that this interpretation is most naturally embodied as a VAMP.
+
+\subsection{Why Decentralize?}
+Expand on Section 3.4.3. Three independent arguments for studying the decentralized case:
+1. **Information-theoretic**: agents understand their own capabilities better than any external observer (even with unlimited compute, an external router cannot perfectly model heterogeneous agent internals).
+2. **Incentive-theoretic**: the Nisan-Ronen impossibility limits truthful centralized mechanisms.
+3. **Practical**: in open multi-agent ecosystems (heterogeneous LLM providers, open-source research communities), no central authority exists.
+
+\subsection{Decentralized HTAP as a Strategic Interaction}
+When agents choose their own actions to maximize private utility, the problem becomes a **game**. Each agent's optimal action depends on what other agents are doing (e.g., proving a theorem is less valuable if someone else is already proving it). Formalize this as a strategic interaction and identify the key game-theoretic features:
+- **Partial observability**: agents see only their private library and the public library.
+- **Sequential and dynamic**: the game unfolds over time with evolving state.
+- **Interdependent payoffs**: one agent's proof can help or compete with another's.
+
+\subsection{The Need for Incentive Alignment}
+
+\subsubsection{The Publication Dilemma}
+Without incentives, agents face a fundamental tension: publishing resolved subtasks helps others (positive externality) but may reduce the publishing agent's competitive advantage. This is a **public goods problem** — rational agents underprovide publication. Formalize this as a social dilemma.
+
+\subsubsection{Market Mechanisms as Incentive Alignment}
+Argue that introducing a market — where agents can trade claims on subtask completion — resolves the publication dilemma by internalizing the externality. An agent who publishes a useful lemma can be compensated through the market. This transforms the social dilemma into a market interaction where publication is incentive-compatible.
+
+\subsubsection{Isomorphism to a Market Game}
+State and argue the key interpretive result: under natural assumptions (transferable utility, verifiable task completion, rational agents), the decentralized HTAP is **isomorphic to a market game** where tasks are financial assets and agents invest compute to acquire and trade claims on task completion. The market price of a task reflects the collective assessment of its difficulty and value.
+
+\subsection{The Verifiable Allocation POSG (VAP)}
+Define a **Verifiable Allocation POSG (VAP)** as the game-theoretic formulation of decentralized HTAP *without* market mechanisms. This is the "bare" game where agents choose prove/conjecture/publish actions but have no mechanism for trading information or claims. Establish that the VAP already captures the strategic complexity of decentralized allocation, but lacks the incentive alignment needed for efficient outcomes.
+
+Note: this is an intermediate object that motivates the VAMP. The VAP has the "right" action primitives but the "wrong" incentives (underprovision of publication, no price discovery).
+
+\subsection{From VAP to VAMP: Adding Markets}
+
+\subsubsection{The VAMP Framework}
+Define the VAMP as a VAP augmented with a **market mechanism** $\mathcal{M}$. The market mechanism specifies:
+- What agents can trade (contract types, claims, bounties).
+- How trades are executed (posted offers, AMM, auctions).
+- How contracts settle (against publicly verifiable events — resolution of tasks in the public library).
+- Collateralization and admissibility constraints.
+
+The VAMP is parameterized by the choice of market mechanism: different mechanisms yield different VAMPs with different equilibrium properties.
+
+\subsubsection{Why VAMP is the Natural Formulation}
+Argue that the VAMP structure is not arbitrary but arises naturally from three requirements:
+1. **Verifiability**: task completion must be publicly verifiable (as in formal mathematics) for contracts to settle.
+2. **Transferable utility**: agents must be able to compensate each other for useful work (i.e., money/credits exist).
+3. **Modularity**: the market mechanism should be a pluggable component, allowing the study of different incentive structures.

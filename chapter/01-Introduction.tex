@@ -1,0 +1,49 @@
+\chapter{Introduction}\label{chap:intro}
+
+
+\begin{figure}
+    \centering
+    % \includegraphics[width=\textwidth]{figures/flt_dependency_graph_placeholder.pdf}
+    \fbox{\parbox[c][5.4in][c]{0.9\textwidth}{
+        \centering
+        Placeholder for dependency graph of the Lean FLT project.
+    }}
+    \caption{Schematic dependency graph for the Lean formalization effort around Fermat's Last Theorem. The intent is to visualize a theorem not as an isolated statement, but as the endpoint of a large directed dependency structure spanning multiple mathematical domains. Such a graph highlights why theorem proving, formal verification, and related activities may be viewed as allocation problems over interdependent tasks.}
+    \label{fig:flt-dependency-graph}
+\end{figure}
+
+\subsection{Motivation}
+
+
+In 1637, Pierre de Fermat famously conjectured that for $n>2$, there are no positive integer solutions to the equation $x^n + y^n = z^n$. Despite Fermat's claim to have a proof of this statement, his textbook margins provided too little space for his supposed proof, and thus this conjecture remained unproven for 358 years. It was only in 1994 that Andrew Wiles, building on decades of work by many mathematicians across domains, finally proved Fermat's Last Theorem.
+
+Wiles' proof of Fermat's Last Theorem did not arise from a direct attack on the original equation. Instead, it emerged from deep developments and decades of study of domains seemingly - at first glance - far removed from the scope of the original conjecture. Throughout the 20th century, the theory of elliptic curves and modular forms was developed extensively, not only for the purposes of resolving FLT, but rather for a more fundamental understanding of the connections between arithmetic and geometric objects (elliptic curves over $\mathbb{Q}$) with complex analysis. Indeed, even Wiles' own proof of FLT was but a corrolary of his proof of the deeper Taniyama-Shimura conjecture, which was developed as a central question of the unification of large branches of mathematics. And yet, without these foundational contributions to the theory -- motivated not by the resolution of a particular conjecture but rather in search of a deeper understanding of the mathematical landscape -- the proof of FLT would not have been conceivable, as the language to discuss it would not exist.
+
+\textbf{TODO POLISH}
+
+[Now discuss how this pattern is common in mathematics, and how it is the fundamental collaborative, community efforts that lead to these large breakthroughs. Looking at the dependency graph for the Lean formalization of FLT, we see that the proof of a single target theorem may require the coordinated development of many supporting results across multiple domains that did not exist at the time of conjecture [fig 1]. And to a certain extent, this pattern of corpus creation directly leading to major breakthroughs is common even beyond mathematics, as these corpora provide the infrastructure and language that shape the way we think about problems and their solutions. [Like the meme about god being a shepherd, pilot, author, or computer scientist]]
+
+[Now, with the acceration of computational tooling and the rise of machine learning, we are seeing the rapid emergence of new tools for trustworthy automation and scaled collaboration in mathematics, and the integration of these tools through agentic AI systems. These systems are increasingly being used to tackle large, interdependent bodies of mathematical work by high profile scientists, and are being deployed at scale for the formalization of research-level mathematics. However, these systems are still in their infancy, viewing mathematical development as a search problem rather than an allocation problem.]
+
+[Towards the advancement of such digitized mathemtical ecosystems, we interpret the problem of mathematical development as an instance of a more general problem of allocating heterogeneous, distributed agents over a large pool of interdependent tasks: proving, conjecturing, collaborating, or even competing. Namely, this thesis states and studies this interdependent task allocation problem, both in centralized and decentralized regimes, and develops a game-theoretic framework for the latter in which coordination is mediated by a market mechanism. We study equilibria in this game, and develop learning-based methods for approximating weak equilibria behavior in large instances. We implement and evaluate these methods on synthetic environments, and we instantiate the framework in neural theorem proving within Lean, studying its performance on research-level theorem proving tasks against agentic LLM baselines.]
+
+
+\subsection{Core Contributions}
+
+The main contributions of this thesis are as follows.
+
+\begin{enumerate}
+    \item We formalize the \emph{Interdependent Task Allocation Problem} (ITAP), a framework for allocating heterogeneous agents over tasks linked by logical or operational dependencies, with support for recursive task generation.
+
+    \item We distinguish two coordination regimes for ITAP, centralized and decentralized, and identify the structural assumptions that separate them.
+
+    \item In the centralized regime, we relate ITAP to scheduling and assignment problems with dependency constraints, and derive complexity-theoretic and approximation-theoretic consequences from this connection.
+
+    \item In the decentralized regime, we introduce the \emph{Verifiable Allocation Market POSG} (VAMP), a partially observable stochastic game in which agents coordinate through market-mediated incentives over subtasks and intermediate results.
+
+    \item We show that equilibrium computation in VAMPs is intractable in general, which motivates the search for approximate solution methods rather than exact ones.
+
+    \item We develop a multiagent reinforcement learning framework for approximating useful low-regret behavior in VAMPs, combining sequence-based policies, centralized training with decentralized execution, and population-based training.
+
+    \item We evaluate the resulting methods on synthetic task-allocation environments under several market mechanisms, and we instantiate the framework in neural theorem proving within Lean.
+\end{enumerate}

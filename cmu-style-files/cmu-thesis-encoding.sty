@@ -1,0 +1,64 @@
+% This is a list of the symbols that encode differently between LyX and LaTeX
+% where it makes sense to redefine them for both (if there is a good reason
+% to NOT do this for a symbol then please let me know)
+
+% Variables needed by this package
+\newif\if@cmu@within@contents@
+\@cmu@within@contents@false
+\newcounter{cmu@encoding@count}
+
+\newif\if@cmu@flexisym@
+\@ifpackageloaded{flexisym}{\@cmu@flexisym@true}{\@cmu@flexisym@false}
+
+% Code to redefine a symbol as needed
+\newcommand{\cmu@redefine@char@}[3]{
+	% NOTE: This expansion is so that we don't screw with flexisym (which is an important part of breqn)
+	\if@cmu@flexisym@
+		\expandafter\let\csname cmu@orig@symbol@#1@\endcsname=#2
+	\else
+		\expandafter\gdef\csname cmu@orig@symbol@#1@\endcsname{\char `#2}
+	\fi
+	\catcode`#2=\active
+	\gdef #2{%
+		\ifmmode%
+			\csname cmu@orig@symbol@#1@\endcsname%
+		\else%
+			\if@cmu@within@contents@%
+				\protect\csname cmu@orig@symbol@#1@\endcsname%
+			\else%
+				#3%
+			\fi%
+		\fi%
+	}
+}
+\gdef\cmu@redefine@char#1#2{
+	% Define the character
+	\cmu@AtBeginDocumentLast{
+		\expandafter\cmu@redefine@char@\the\c@cmu@encoding@count{#1}{#2}
+		\addtocounter{cmu@encoding@count}{1}
+	}
+	% Undefine the character at the end of the document
+	\AtEndDocument{
+		\catcode`#1=12
+	}
+}
+
+
+% Redefine some UTF-8 symbols (mostly used in bibtex files)
+\AtBeginDocument{
+	\def\cmu@cmp@string@{utf8}
+	\ifx\inputencodingname\cmu@cmp@string@\relax
+		\DeclareUnicodeCharacter{03BC}{\textmu{}}
+		\DeclareUnicodeCharacter{2010}{-}
+	\fi
+}
+
+% Add special code to keep from expanding the symbol inside of contents entries
+\AtBeginDocument{
+	\global\let\cmu@orig@addcontentsline=\addcontentsline
+	\gdef\addcontentsline#1#2#3{%
+		\@cmu@within@contents@true%
+		\cmu@orig@addcontentsline{#1}{#2}{#3}%
+		\@cmu@within@contents@false%
+	}
+}
