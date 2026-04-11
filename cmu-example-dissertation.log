@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  10 APR 2026 13:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  10 APR 2026 23:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -694,15 +694,13 @@ Overfull \hbox (36.55226pt too wide) detected at line 38
 \OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 F\OML/cmm/m/it/12 ; \U/msb/m/n/12 P\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ;  \OT1/cmr/m/n/12 (^^B\OML/cmm/m/it/12 ; \OMS/cmsy/m/n/12 T\OML/cmm/m/it/12 ; ^^R\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ;  \U/euf/m/n/12 R\OML/cmm/m/it/12 ;  \OMS/cmsy/m/n/12 f\OML/cmm/m/it/12 L[]\OMS/cmsy/m/n/12 g[]\OML/cmm/m/it/12 ;  \OMS/cmsy/m/n/12 f\OML/cmm/m/it/12 ^^Z[]\OMS/cmsy/m/n/12 g[]\OML/cmm/m/it/12 ;  \U/euf/m/n/12 Z\OML/cmm/m/it/12 ;  \OT1/cmr/m/n/12 ^^@[]\OML/cmm/m/it/12 ;
  []
 
-[22] [23] [24] [25] [26] [27]) (./chapter/04-DecentralizedTaskAllocation.tex [28] [29]) (./chapter/05-VAMP.tex [30
+[22] [23] [24] [25] [26] [27]) (./chapter/05-VAMP.tex [28] [29] [30
 
-] [31
+] [31] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47]) (./chapter/06-MARL.tex [48]) (./chapter/07-Implementation.tex [49
 
-] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48]) (./chapter/06-MARL.tex [49]) (./chapter/07-Implementation.tex [50
+] [50
 
-] [51
-
-] [52] [53]
+] [51] [52]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 136.
@@ -715,7 +713,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 136.
 
-[54] [55]
+[53] [54]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 201.
@@ -728,11 +726,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 201.
 
-[56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66]) (./chapter/08-Experiments.tex [67]) (./chapter/09-Application.tex [68
+[55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65]) (./chapter/08-Experiments.tex [66]) (./chapter/09-Application.tex [67
 
-]) (./chapter/10-Conclusion.tex [69
+]) (./chapter/10-Conclusion.tex [68
 
-]) [70
+]) [69
 
 ] (./cmu-example-dissertation.bbl
 
@@ -794,7 +792,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 Package natbib Warning: Empty `thebibliography' environment on input line 8.
 
-) [71
+) [70
 
 ] (./cmu-example-dissertation.aux
 \cmu@redefined@appendix@saved=\count370
@@ -805,21 +803,21 @@ LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-11>
  ***********
 Package rerunfilecheck Info: File `cmu-example-dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: 3263DC1B4D4FB1E633EAEABBA06F21AE;6028.
+(rerunfilecheck)             Checksum: EE9FACDAF44F082C368F382265807921;6066.
  ) 
 Here is how much of TeX's memory you used:
- 16293 strings out of 475189
- 266446 string characters out of 5763832
+ 16281 strings out of 475189
+ 266014 string characters out of 5763832
  1930254 words of memory out of 5000000
- 37022 multiletter control sequences out of 15000+600000
+ 37014 multiletter control sequences out of 15000+600000
  576016 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  80i,12n,94p,1415b,705s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on cmu-example-dissertation.pdf (80 pages, 450854 bytes).
+Output written on cmu-example-dissertation.pdf (79 pages, 450803 bytes).
 PDF statistics:
- 825 PDF objects out of 1000 (max. 8388607)
- 690 compressed objects within 7 object streams
- 248 named destinations out of 1000 (max. 500000)
+ 821 PDF objects out of 1000 (max. 8388607)
+ 687 compressed objects within 7 object streams
+ 247 named destinations out of 1000 (max. 500000)
  281 words of extra memory for PDF output out of 10000 (max. 10000000)
 

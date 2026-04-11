@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex cmu-example-dissertation"] 1775842116 "cmu-example-dissertation.aux" "cmu-example-dissertation.bbl" "cmu-example-dissertation" 1775842121 0
+["bibtex cmu-example-dissertation"] 1775879943 "cmu-example-dissertation.aux" "cmu-example-dissertation.bbl" "cmu-example-dissertation" 1775879960 0
   "./supporting-files/thesis.bib" 1774601974 3221 2815446414f02ccc153adecb70a9b99b ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1233624470 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "cmu-example-dissertation.aux" 1775842120 18835 d73c58a92128877dc97e9e3de9aeebd6 "pdflatex"
+  "cmu-example-dissertation.aux" 1775879960 18721 d1b47c0cbdecae2fa01198927f80a50e "pdflatex"
   (generated)
   "cmu-example-dissertation.bbl"
   "cmu-example-dissertation.blg"
   (rewritten before read)
-["pdflatex"] 1775842119 "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" "cmu-example-dissertation.pdf" "cmu-example-dissertation" 1775842121 0
-  "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" 1775772485 9382 6b16d10931c838721745174772bfb1c3 ""
+["pdflatex"] 1775879959 "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" "cmu-example-dissertation.pdf" "cmu-example-dissertation" 1775879960 0
+  "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" 1775879880 9384 f43cce85b83a2d280266e689b69b1dc9 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -158,8 +158,7 @@
   "chapter/01-Introduction.tex" 1775714839 6243 e0006ce153ff6f09528259862a3155b7 ""
   "chapter/02-SchedulingTheory.tex" 1775714518 36863 ace678225080f4f770dfc0a8d584881f ""
   "chapter/03-TaskAllocation.tex" 1775717122 17714 b6d619e71a8b7724650f4150de316de2 ""
-  "chapter/04-DecentralizedTaskAllocation.tex" 1775720113 85 bf8d8d16fc6c0d8d402717ad19e2f8b9 ""
-  "chapter/05-VAMP.tex" 1775718228 46810 e52436b7bc12ff297c02a568e3457b25 ""
+  "chapter/05-VAMP.tex" 1775879959 46910 6586b2ea36284c4ac9a2c9ef0a0ca1eb ""
   "chapter/06-MARL.tex" 1775720783 19543 96888b787552b6a1164c83262b623b5c ""
   "chapter/07-Implementation.tex" 1775720802 34077 f2550d93f6c46d274c28f96da470cfde ""
   "chapter/08-Experiments.tex" 1775842102 4300 b87e3fe56499e9c0c51560425103ab6d ""
@@ -168,13 +167,13 @@
   "chapter/i-abstract.tex" 1775775586 1098 d656dcde4d6d0f424eda05fcad6a2272 ""
   "chapter/i-acknowledgments.tex" 1774601974 4 ea5cb8ff0abf6b4ca0080069daaeada0 ""
   "chapter/i-dedication.tex" 1774601974 17 ca1c6ea307fcd8c08e1ed8faa7fd9b4c ""
-  "cmu-example-dissertation.aux" 1775842120 18835 d73c58a92128877dc97e9e3de9aeebd6 "pdflatex"
-  "cmu-example-dissertation.bbl" 1775842116 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex cmu-example-dissertation"
-  "cmu-example-dissertation.lof" 1775842120 527 5d671f7eb8ef2dbf23c9d6f48de6b366 "pdflatex"
-  "cmu-example-dissertation.lot" 1775842120 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "cmu-example-dissertation.out" 1775842120 6028 3263dc1b4d4fb1e633eaeabba06f21ae "pdflatex"
-  "cmu-example-dissertation.tex" 1775772485 9382 6b16d10931c838721745174772bfb1c3 ""
-  "cmu-example-dissertation.toc" 1775842120 11469 884a6d032efb2584cbb732344fd64dc8 "pdflatex"
+  "cmu-example-dissertation.aux" 1775879960 18721 d1b47c0cbdecae2fa01198927f80a50e "pdflatex"
+  "cmu-example-dissertation.bbl" 1775879943 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex cmu-example-dissertation"
+  "cmu-example-dissertation.lof" 1775879960 527 5d671f7eb8ef2dbf23c9d6f48de6b366 "pdflatex"
+  "cmu-example-dissertation.lot" 1775879960 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "cmu-example-dissertation.out" 1775879960 6066 ee9facdaf44f082c368f382265807921 "pdflatex"
+  "cmu-example-dissertation.tex" 1775879880 9384 f43cce85b83a2d280266e689b69b1dc9 ""
+  "cmu-example-dissertation.toc" 1775879960 11443 eb2ebf631bf9fe3fe61b2d3c423855a7 "pdflatex"
   "cmu-style-files/cmu-thesis-compat.sty" 1774601974 9019 414c07748cdfcd24d67b660858d595cf ""
   "cmu-style-files/cmu-thesis-encoding.sty" 1774601974 1796 6c766732b7399601fac5443205c48d55 ""
   "cmu-style-files/cmu-thesis-environments.sty" 1774601974 23165 d0a8ab185a7adcc1762976ad166bb525 ""
