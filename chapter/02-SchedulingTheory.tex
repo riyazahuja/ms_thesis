@@ -6,9 +6,8 @@ This problem of interdependent task allocation is closely related to classical s
 
 More fundamentally, one may consider the problem of scheduling along three orthogonal axes: deterministic vs. stochastic environment, offline vs. online environment, and deterministic vs. stochastic policy. We review the relevant scheduling theory along these axes, noting that deterministic environments are a special case of the more general stochastic environment, and that offline environments are a special case of the more general online environment, and deterministic policies are a special case of the more general stochastic policies.
 
-\subsection{Classical Scheduling Theory}
 
-\subsubsection{Offline Deterministic Scheduling}
+\subsection{Offline Deterministic Scheduling}
 
 Classical scheduling theory provides a mathematical foundation for understanding how to optimally allocate jobs to machines under various constraints. Its importance lies in offering formal models and algorithms for resource allocation problems that arise ubiquitously in manufacturing, computing, project management, and logistics. By developing a taxonomy of machine environments, job characteristics, and objectives, scheduling theory enables the robust analysis and study of such resource allocation tasks.
 
@@ -21,7 +20,7 @@ More rigorously, given $n$ jobs $\{J_j\}_{j=1}^n$ and $m$ machines $\{M_i\}_{i=1
         \begin{itemize}
             \item $\alpha_1 = \epsilon$: single machine $p_{1j}=p_j$
             \item $\alpha_1 = P$: identical parallel machines $p_{ij}=p_j$
-            \item $\alpha_1 = Q$: uniform parallel machines $p_{ij} = q_ip_j$ where $q_i$ is the speed of machine $M_i$
+            \item $\alpha_1 = Q$: uniform parallel machines $p_{ij} = p_j/q_i$ where $q_i$ is the speed of machine $M_i$
             \item $\alpha_1 = R$: unrelated parallel machines with arbitrary $p_{ij}$
         \end{itemize}
         \item $\alpha_1 = O$: open shop with operation set $\{O_{1j},\cdots,O_{mj}\}$ for each job $J_j$. $O_{ij}$ must be processed on machine $M_i$ in $p_{ij}$ time, but the order is arbitrary., each operation processable on any machine with processing time $p_{ij}$.
@@ -82,7 +81,7 @@ With this, we may naturally define an instance of the (offline) deterministic sc
 \end{definition}
 
 
-\subsubsection{Offline Stochastic Scheduling}
+\subsection{Offline Stochastic Scheduling}
 
 Real-world environments are often subject to various sources of uncertainty, such as variability in processing times, machine breakdowns, etc. To model such phenomena, one may extend the classical scheduling framework to incorporate stochastic primitives, leading to the study of optimal scheduling under uncertainty.
 
@@ -101,7 +100,7 @@ Namely, we consider such an instance with job set $\mathcal{J} = \{J_1,\dots,J_n
 More rigorously, a stochastic scheduling instance of type $\alpha\mid \beta\mid \gamma$ is defined analogously to the deterministic case, but with the following modifications:
 \begin{itemize}
     \item processing times $p_{ij}$ may be given as random variables $P_{ij}:\Omega\to(0,\infty)$
-    \item if $\alpha_1=Q$, machine speeds $q_i$ may be given as random variables $Q_i:\Omega\to(0,\infty)$, and processing times are given by $P_{ij} = Q_i P_j$.
+    \item if $\alpha_1=Q$, machine speeds $q_i$ may be given as random variables $Q_i:\Omega\to(0,\infty)$, and processing times are given by $P_{ij} = P_j / Q_i$.
     \item if $\alpha_1\in\{O,J,F\}$, for each job $J_j$, the processing time of each operation $O_{ij} \in \{O_{1j},\dots,O_{m_j j}\}$ may be given as a random variable $P_{ij}:\Omega\to (0,\infty)$. 
     \item If $\beta_2 = \mathrm{res}$, the resource requirements $r_{hj}$ for a job $J_j$ may be given as random variables $R_{hj}:\Omega\to[0,\infty)$.
     \item If $\beta_4 = r_j$, the release date of job $J_j$ may be given as random variables $R_j:\Omega\to[0,\infty)$.
@@ -127,18 +126,25 @@ The bare instance definition specifies the latent random primitives, but not yet
 
 In this setting, the scheduler must make decisions based on the information available at each point in time, without knowledge of future random outcomes. Indeed, our objective in stochastic scheduling is not simply to design algorithms that optimize our desired objective $\gamma$, but rather to do so in a nonanticipative manner. This will be formalized in more rigor and generality in the following section.
 
-\subsubsection{Stochastic Online Scheduling}
+\subsection{Stochastic Online Scheduling}
 
 In online scheduling, the defining feature is not merely uncertainty, but sequential revelation of the instance. The scheduler does not know the full instance at time \(0\); instead, jobs, operations, precedence constraints, or other problem data are revealed over time, and decisions must be made using only the information currently available. In the fully stochastic regime, the unrevealed portion of the instance may itself be random. Here, we consider the more general stochastic online scheduling setting, which subsumes the deterministic online scheduling setting as a special case.
 
 
-\begin{definition}[Stochastic online scheduling instance]\textbf{TODO: OOPSIE FORGOT TO TALK ABOUT PRECEDENCE DAG!!!}
+\begin{definition}[Stochastic online scheduling instance]
 A stochastic online scheduling instance \(I\) is given by a tuple
 \[
 I=(\mathcal J^\ast,\mathcal M,\alpha\mid\beta\mid\gamma,(\Omega,\mathcal F,\mathbb P),\mathcal V),
 \]
 
 Namely, we consider an instance with a (perhaps countable) latent job set $\mathcal{J}^*$ and machine set $\mathcal{M} = \{M_1,\dots,M_m\}$ of type $\alpha\mid \beta\mid \gamma$ defined with respect to a probability space $(\Omega, \mathcal{F}, \mathbb{P})$. Here, we additionally include a family of revelation-time random variables $\mathcal{V}=(V_j)_{J_j\in\mathcal J^\ast}$, where $V_j:\Omega\to[0,\infty)$ denotes the time at which job $J_j$ becomes visible to the scheduler.
+
+
+
+Note that if $\beta_3 = \mathrm{prec}$ or $\beta_3 = \mathrm{tree}$, the precedence DAG $G^* = (\mathcal{J}^*, E^*)$ is also latent and revealed over time as jobs are revealed. In particular, if we have the set of currently revealed jobs $\mathcal{J}_t(\omega) = \{J_j \in \mathcal{J}^* : V_j(\omega) \le t\}$, then the scheduler only observed precedence constraints between jobs in $\mathcal{J}_t(\omega)$ induced via the sub-DAG $G_t(\omega) = (\mathcal{J}_t(\omega), E_t(\omega))$ for $E_t(\omega) = \{(J_j, J_k) \in E^* : J_j, J_k \in \mathcal{J}_t(\omega)\}$.
+
+
+Moreover, in this precedence-constrained setting, we note that an instance is valid only if the revelation times are consistent with the precedence constraints. Namely, if $J_j \prec J_k$, then we must have $V_j \le V_k$ almost surely.
 
 As in the offline stochastic case, the numerical primitives attached to each latent job may be random variables on \((\Omega,\mathcal F,\mathbb P)\). In particular, consider the random variables:
 \begin{itemize}
@@ -154,7 +160,7 @@ The defining feature of the online model is that the full latent job set \(\math
 \end{definition}
 
 \begin{remark}[Revealed job set]
-For each \(t\ge 0\) and \(\omega\in\Omega\), the set of jobs visible to the scheduler by time \(t\) is
+As noted above, For each \(t\ge 0\) and \(\omega\in\Omega\), we define the set of jobs visible to the scheduler by time \(t\) as
 \[
 \mathcal J_t(\omega):=\{J_j\in\mathcal J^\ast : V_j(\omega)\le t\}.
 \]
@@ -172,123 +178,595 @@ With this, we may simply define the deterministic online scheduling setting as a
 A deterministic online scheduling instance is a stochastic online scheduling instance in which all primitives are deterministic, i.e. all random variables are degenerate.
 \end{definition}
 
-\subsubsection{States, Actions, and Policies}
+\subsection{States, Actions, and Policies}
 
+With the scheduling instance now defined across the deterministic/stochastic and
+offline/online axes, we turn to formalizing the scheduler's decision problem. The central
+question is: given a stochastic online scheduling instance, what does it mean to make
+decisions optimally, and what mathematical objects describe the scheduler's strategy?
+
+In the offline deterministic setting, this question is trivial to formulate (though not to
+solve): the scheduler knows the full instance at time $0$, and the problem reduces to
+combinatorial optimization over the set of feasible schedules. No sequential
+decision-making under uncertainty is involved.
+
+Once stochasticity or online revelation is introduced, however, the problem acquires a
+fundamentally sequential character. The scheduler must choose actions at each time step
+based only on the information available so far, without knowledge of unrevealed jobs or
+unrealized processing times. The natural mathematical framework for such problems is
+the theory of partially observable Markov decision processes (POMDPs), in which a
+latent Markov process evolves according to a transition kernel, and the controller
+observes only a partial projection of the true state at each step.
+
+We now recall the general POMDP framework, then show that the stochastic online
+scheduling problem admits a natural POMDP formulation. The offline stochastic, online
+deterministic, and offline deterministic settings will each be recovered as special cases.
+We work throughout in discrete time $t \in \mathbb{N}_0$.
+
+\subsubsection{Partially Observable Markov Decision Processes}
+
+A partially observable Markov decision process models sequential decision-making in an
+environment whose true state is hidden from the controller. At each time step, the
+controller receives a partial observation of the state, selects an action, and the
+environment transitions to a new state. The controller's goal is to select actions so as
+to optimize a cumulative performance criterion, using only the history of observations
+and actions available to it.
+
+\begin{definition}[POMDP]
+A discrete-time partially observable Markov decision process is a tuple
+\[
+\mathcal{P} = (\mathsf{S},\; \mathsf{A},\; \mathsf{O},\; T,\; T^0,\; Z,\; c),
+\]
+
+for a state space $\mathsf{S}$, a measurable space whose elements encode the full (hidden) state of the environment; an action space $\mathsf{A}$, a measurable space of actions available to the controller; an observation space $\mathsf{O}$, a measurable space of observations received by the controller; a transition kernel $T(\cdot \mid s, a) \in \mathcal{P}(\mathsf{S})$ specifying the distribution of the next state given a current state and action; an initial state distribution $T^0 \in \mathcal{P}(\mathsf{S})$; an observation kernel $Z(\cdot \mid s) \in \mathcal{P}(\mathsf{O})$ specifying the distribution of the observation received by the controller when the environment is in state $s$; and a per-step cost function $c : \mathsf{S} \times \mathsf{A} \to \mathbb{R}$.
+
+\end{definition}
+
+The process evolves as follows. At time $t = 0$, nature draws a latent state
+$s_0 \sim T^0$ and the controller receives an observation $o_0 \sim Z(\cdot \mid s_0)$.
+At each subsequent time $t \ge 0$, the controller selects an action $a_t$, the environment
+transitions to a new state $s_{t+1} \sim T(\cdot \mid s_t, a_t)$, and the controller receives
+a new observation $o_{t+1} \sim Z(\cdot \mid s_{t+1})$.
+
+The controller's observation history at time $t$ is the tuple
+\[
+h_t := (o_0,\, a_0,\, o_1,\, a_1,\, \ldots,\, a_{t-1},\, o_t),
+\]
+which constitutes the controller's complete information record. A randomized nonanticipative policy is a family of stochastic kernels
+$\pi = (\pi_t)_{t \ge 0}$ with $\pi_t : \mathsf{H}_t \to \mathcal{P}(\mathsf{A})$, where $\mathsf{H}_t$ is the space of observation histories of length $t$, such that the action $a_t \sim \pi_t(\cdot \mid h_t)$ depends only on the observation history up to time $t$. 
+
+Equivalently, the action process $(a_t)_{t \ge 0}$ is adapted to the observation filtration $\mathcal{F}_t^{\mathrm{obs}} := \sigma(o_0, a_0, \ldots, a_{t-1}, o_t)$.
+
+\begin{remark}[Belief state]
+By standard POMDP theory, the posterior belief
+$b_t := \mathrm{Law}(s_t \mid h_t) \in \mathcal{P}(\mathsf{S})$ is a sufficient statistic of
+the observation history for optimal control: there exists an optimal policy whose action
+at time $t$ depends on $h_t$ only through $b_t$. One may equivalently reformulate the
+POMDP as a fully observed MDP on the belief space $\mathcal{P}(\mathsf{S})$, the belief MDP, in which the state is $b_t$ and the transition is given by Bayesian updating.
+\end{remark}
+
+When the state space, observation space, and action space carry additional structure, it is common to restrict the action space in a state-dependent or observation-dependent manner. If the controller's available actions depend only on the current observation (as will be the case in our scheduling formulation), one specifies an admissible
+action correspondence $\mathcal{U} : \mathsf{O} \rightrightarrows \mathsf{A}$ and requires that $\pi_t(\mathcal{U}(o_t) \mid h_t) = 1$ for all $t$ and $h_t$.
+
+We will formulate the stochastic online scheduling problem as a stochastic shortest-path POMDP: a POMDP equipped with a terminal set
+$\mathsf{S}^{\mathrm{term}} \subseteq \mathsf{S}$ and per-step cost $c$, where the objective is to minimize the expected cumulative cost until termination,
+\[
+\inf_{\pi} \; \mathbb{E}^{\pi}\!\left[\sum_{t=0}^{\tau_{\mathrm{term}}-1}
+c(s_t, a_t)\right],
+\]
+with $\tau_{\mathrm{term}} := \inf\{t \ge 0 : s_t \in \mathsf{S}^{\mathrm{term}}\}$.
+
+For expected makespan, we will take $c \equiv 1$ until all target jobs complete, so that the cumulative cost equals $\tau_{\mathrm{term}} = C_{\max}$ and the objective reduces to $\inf_\pi \mathbb{E}^\pi[C_{\max}]$.
+
+\subsubsection{Scheduling as a POMDP}
+
+We now show that the stochastic online scheduling problem defined in the preceding sections admits a natural formulation as a stochastic shortest-path POMDP. Namely, we fix a stochastic online scheduling instance $I$ and assume there exists a finite target job set $\mathcal{J}^{\mathrm{target}} \subseteq \mathcal{J}^*$ such that the scheduling
+objective is evaluated with respect to the completion of the jobs in $\mathcal{J}^{\mathrm{target}}$. Notably, if $\mathcal{J}^*$ is finite, one can simply take $\mathcal{J}^{\mathrm{target}} = \mathcal{J}^*$.
+
+With this in mind, we now define the scheduling POMDP induced by a stochastic online scheduling instance.
+
+\begin{definition}[Scheduling POMDP]\label{def:schedpomdp}
 Fix a stochastic online scheduling instance
 \[
-I=(\mathcal J^\ast,\mathcal M,\alpha\mid\beta\mid\gamma,(\Omega,\mathcal F,\mathbb P), \mathcal{V}),
+I = (\mathcal{J}^*,\, \mathcal{M},\, \alpha \mid \beta \mid \gamma,\,
+(\Omega, \mathcal{F}, \mathbb{P}),\, \mathcal{V})
 \]
-where \(\mathcal J^\ast\) is the latent job set and \(V_j:\Omega\to[0,\infty]\) is the revelation time of job \(J_j\in\mathcal J^\ast\). Let \(\mathcal O^\ast\) denote the latent operation set induced by the machine environment \(\alpha\) on $\mathcal J^\ast$.
-
-\begin{definition}[Revealed state space]
-For each \(t\ge 0\) and \(\omega\in\Omega\), define the revealed job set
+with latent operation set $\mathcal{O}^*$ and finite target job set
+$\mathcal{J}^{\mathrm{target}} \subseteq \mathcal{J}^*$. The scheduling
+POMDP induced by $I$ is the stochastic shortest-path POMDP
 \[
-\mathcal J_t(\omega):=\{J_j\in\mathcal J^\ast: V_j(\omega)\le t\},
+\mathcal{P}_I = (\mathsf{S}_I,\; \mathsf{A}_I,\; \mathsf{O}_I,\; T_I,\; T_I^0,\;
+Z_I,\; c_I)
 \]
-and let \(\mathcal O_t(\omega)\subseteq \mathcal O^\ast\) denote the set of operations belonging to revealed jobs.
+defined as follows.
+\end{definition}
 
-A revealed state for the instance \(I\) is a tuple
+\paragraph{Preliminary: Processing requirements and progress rates.}
+
+For each operation $o \in \mathcal{O}^*$ and machine $M_i \in \mathcal{M}$, let $p_{io}(\omega) \in (0, \infty]$ denote the realized processing time: the number of discrete time steps machine $M_i$ would require to complete $o$ from scratch in scenario $\omega$. The machine environment $\alpha$ determines these as follows:
+\begin{itemize}
+    \item $\alpha_1 = \epsilon$: $p_{1o}(\omega) = P_j(\omega)$, where $J_j$ is the parent
+    job of $o$.
+    \item $\alpha_1 = P$: $p_{io}(\omega) = P_j(\omega)$ for all $i$.
+    \item $\alpha_1 = Q$: $p_{io}(\omega) = P_j(\omega) / S_i(\omega)$, where
+    $S_i(\omega)$ is the speed of machine $M_i$.
+    \item $\alpha_1 = R$: $p_{io}(\omega) = P_{io}(\omega)$, arbitrary.
+    \item $\alpha_1 \in \{O, J, F\}$: $p_{io}(\omega) = P_{io}(\omega)$ on the designated
+    machine for $o$; $p_{io}(\omega) = +\infty$ otherwise.
+\end{itemize}
+
+We adopt the transferable-progress convention: each operation $o$ has normalized total work content $1$, and machine $M_i$ contributes progress at rate
 \[
-x=(\mathcal J^x,\mathcal O^x,\mathcal E^x,\mathcal B^x,\mathcal C^x,Y^x,\zeta^x),
+\rho_{io}(\omega) := \frac{1}{p_{io}(\omega)} \in [0, 1).
+\]
+For $\alpha_1 \in \{P, Q\}$, this convention is canonical: the factorized form of processing times gives a natural machine-independent work content, and partial progress transfers across machines without ambiguity. For $\alpha_1 = R$, the bare unrelated-machines notation specifies only that $p_{io}$ is an arbitrary machine-operation-specific quantity; it does not, by itself, endow operations with a common notion of partial progress. The definition $\rho_{io} := 1/p_{io}$ is therefore an additional semantic convention that we impose: it interprets $p_{io}$ as the time $M_i$ would need to complete the entire operation, so that each time step on $M_i$ contributes a $1/p_{io}$ fraction of the total work, and this fractional progress is pooled across machines. This choice is an explicit formulation of the standard $R$-machine environment under preemption rules such that its conventions on partial progress is consistent with the $P$ and $Q$ environments and the transferable-progress convention. 
+
+
+\paragraph{State space $\mathsf{S}_I$.}
+
+A state is a tuple
+\[
+s = (\omega,\, t,\, B,\, Y)
 \]
 where:
 \begin{itemize}
-    \item \(\mathcal J^x\subseteq \mathcal J^\ast\) is the set of jobs currently revealed;
-    \item \(\mathcal O^x\subseteq \mathcal O^\ast\) is the set of operations currently revealed;
-    \item \(\mathcal E^x\subseteq \mathcal O^x\) is the set of revealed operations that are currently eligible for processing, i.e. revealed, not completed, and currently admissible with respect to release constraints, precedence constraints, machine availability, and any other revealed feasibility constraints;
-    \item \(\mathcal B^x:\mathcal M\to \mathcal O^\ast\cup\{\varnothing\}\) records which operation, if any, is currently assigned to each machine;
-    \item \(\mathcal C^x\subseteq \mathcal O^x\) is the set of completed revealed operations;
-    \item \(Y^x:\mathcal O^\ast\to[0,\infty)\) records cumulative processing allocated so far to each operation, with \(Y^x(o)=0\) for \(o\notin\mathcal O^x\);
-    \item \(\zeta^x\) records all other scheduler-visible data at the current time, such as revealed weights, due dates, release dates, revealed precedence arcs, machine states, resource states, processing-time distributions, or other primitive data specified by the observation convention of the instance.
+    \item $\omega \in \Omega$ is the latent scenario, encoding all realized primitive
+    random variables (processing times, revelation times, release dates, due dates,
+    etc.). It is drawn once at $t = 0$ and preserved identically by the transition
+    kernel.
+    \item $t \in \mathbb{N}_0$ is the current discrete time.
+    \item $B : \mathcal{M} \to \mathcal{O}^* \cup \{\varnothing\}$ is the current
+    machine-assignment map, where $B(M_i) = o$ means machine $M_i$ is currently
+    processing operation $o$, and $B(M_i) = \varnothing$ means $M_i$ is idle.
+    \item $Y : \mathcal{O}^* \times \mathcal{M} \to \mathbb{N}_0$ is the per-machine cumulative processing ledger, where $Y(o, M_i)$ records the total number of discrete time steps during which machine $M_i$ has processed operation $o$, up to and including time $t$.
 \end{itemize}
 
-The revealed state space \(\mathsf X_I\) is the collection of all such tuples satisfying the feasibility constraints encoded by the instance \(I\). We endow \(\mathsf X_I\) with the sigma-algebra \(\mathcal X_I\) generated by the coordinate maps.
-\end{definition}
-
-
-\begin{definition}[Action space and admissible actions]
-Fix a stochastic online scheduling instance \(I\) with revealed state space \((\mathsf X_I,\mathcal X_I)\).
-
-The \emph{action space} \((\mathsf A_I,\mathcal A_I)\) is a measurable space whose elements encode instantaneous scheduling decisions, namely which revealed eligible operations are started, continued, resumed, preempted, or left idle on the machines.
-
-For each state \(x\in\mathsf X_I\), let
+The effective transferable progress of operation $o$ at state $s$ is
 \[
-\mathcal U_I(x)\subseteq \mathsf A_I
+Z(o;\, s) := \sum_{i=1}^{m} \rho_{io}(\omega)\, Y(o, M_i) = \sum_{i=1}^{m}
+\frac{Y(o, M_i)}{p_{io}(\omega)}.
 \]
-denote the set of admissible actions at state \(x\), i.e. those actions consistent with:
+Operation $o$ is complete at state $s$ if and only if $Z(o;\, s) \ge 1$. We write
+$\mathcal{C}(s) := \{o \in \mathcal{O}^* : Z(o;\, s) \ge 1\}$ for the set of completed
+operations at state $s$.
+
+The state space is
+\[
+\mathsf{S}_I := \{(\omega, t, B, Y) \in \Omega \times \mathbb{N}_0 \times
+(\mathcal{O}^* \cup \{\varnothing\})^{\mathcal{M}} \times
+\mathbb{N}_0^{\mathcal{O}^* \times \mathcal{M}} :
+(\omega, t, B, Y) \in \mathrm{Feas}_I\},
+\]
+where $(\omega, t, B, Y) \in \mathrm{Feas}_I$ if and only if all of the following hold:
+
 \begin{itemize}
-    \item machine eligibility constraints from \(\alpha\),
-    \item job and operation constraints from \(\beta\),
-    \item the currently revealed information encoded in \(x\),
-    \item and the preemption convention of the instance.
+    \item[\textbf{(F1)}] \textbf{Revelation.} No unrevealed operation accrues
+    processing:
+    \[
+    V_j(\omega) > t \implies Y(o, M_i) = 0 \quad \text{for all operations } o \text{ of }
+    J_j \text{ and all } M_i.
+    \]
+
+    \item[\textbf{(F2)}] \textbf{Machine routing.} The assignment $B$ and ledger $Y$
+    respect the machine constraints of $\alpha$:
+    \begin{itemize}
+        \item If $\alpha_1 = J$: $Y(O_{kj}, M_i) > 0$ only if $M_i = M_{\mu_{kj}}$, and
+        $B(M_i) = O_{kj}$ only if $M_i = M_{\mu_{kj}}$.
+        \item If $\alpha_1 = F$: $Y(O_{kj}, M_i) > 0$ only if $i = k$, and
+        $B(M_i) = O_{kj}$ only if $i = k$.
+        \item If $\alpha_1 = O$: $Y(O_{kj}, M_i) > 0$ only if $i = k$, and
+        $B(M_i) = O_{kj}$ only if $i = k$.
+    \end{itemize}
+
+    \item[\textbf{(F3)}] \textbf{Single processing.} Each machine processes at most one
+    operation: $|\{o \in \mathcal{O}^* : B(M_i) = o\}| \le 1$ for each $M_i$. Each
+    operation is processed on at most one machine simultaneously:
+    $|\{M_i : B(M_i) = o\}| \le 1$ for each $o$.
+
+    \item[\textbf{(F4)}] \textbf{Non-preemption.} If $\beta_1 \neq \mathrm{pmtn}$: if
+    $o \notin \mathcal{C}(s)$ and $Y(o, M_i) > 0$ for some $M_i$, then
+    $B(M_j) \neq o$ and $Y(o, M_j) = 0$ for all $M_j \neq M_i$. That is, once an
+    operation begins on a machine, it stays on that machine until completion.
+
+    \item[\textbf{(F5)}] \textbf{Precedence.} If
+    $\beta_3 \in \{\mathrm{prec}, \mathrm{tree}\}$: if $J_j \prec J_k$ in $G^*$ and
+    any operation of $J_k$ has $B(M_i) = o_k$ or $Y(o_k, M_i) > 0$, then all
+    operations of $J_j$ are complete.
+
+    \item[\textbf{(F6)}] \textbf{Release dates.} If $\beta_4 = r_j$:
+    $B(M_i) = o$ for an operation $o$ of $J_j$ only if $R_j(\omega) \le t$.
+
+    \item[\textbf{(F7)}] \textbf{Resources.} If $\beta_2 = \mathrm{res}$: the
+    simultaneously active operations $\{o : B(M_i) = o \text{ for some } i\}$ satisfy
+    $\sum_{o\,\mathrm{active}} r_{ho}(\omega) \le \mathrm{cap}_h$ for each resource
+    $R_h$.
+
+    \item[\textbf{(F8)}] \textbf{Shop ordering.} If $\alpha_1 \in \{J, F\}$: if
+    $B(M_i) = O_{k+1,j}$ or $Y(O_{k+1,j}, M_i) > 0$, then $O_{kj} \in \mathcal{C}(s)$.
 \end{itemize}
 
-In particular, an admissible action may refer only to revealed operations, and only to operations that are currently eligible in the revealed state \(x\).
-\end{definition}
+We additionally define the following derived quantities at state
+$s = (\omega, t, B, Y)$:
+\begin{itemize}
+    \item \textbf{Revealed job set:}
+    $\mathcal{J}_t(\omega) := \{J_j \in \mathcal{J}^* : V_j(\omega) \le t\}$.
+    \item \textbf{Revealed operation set:} $\mathcal{O}_t(\omega)$, the operations of
+    jobs in $\mathcal{J}_t(\omega)$.
+    \item \textbf{Revealed precedence sub-DAG}
+    (if $\beta_3 \in \{\mathrm{prec}, \mathrm{tree}\}$):
+    $G_t(\omega) := G^*[\mathcal{J}_t(\omega)]$. By assumption of consistency between revelation times and precedence constraints, this sub-DAG contains all predecessors of every
+    revealed job.
+    \item \textbf{Eligible operations:}
+    $\mathcal{E}(s) \subseteq \mathcal{O}_t(\omega) \setminus \mathcal{C}(s)$,
+    consisting of all revealed, incomplete operations satisfying all active constraints
+    from $\alpha, \beta$ at state $s$.
+\end{itemize}
 
-\begin{definition}[Observed history]
-For each \(t\ge 0\), let \(\mathsf H_t^I\) denote the measurable space of feasible revealed-state histories up to time \(t\). An element \(h\in\mathsf H_t^I\) is a path
-\[
-h=(x_s)_{0\le s\le t}
-\]
-with \(x_s\in\mathsf X_I\) for all \(s\le t\), consistent with the revelation and feasibility conventions of the instance \(I\). We write \(x_t(h)\) for the terminal state of the history \(h\).
+\paragraph{Observation space $\mathsf{O}_I$ and observation kernel $Z_I$.}
 
-In discrete time, one may simply take
+The observation kernel is deterministic:
 \[
-\mathsf H_t^I=\mathsf X_I^{\,t+1}
+Z_I(o \mid s) := \mathbf{1}[o = \mathrm{Obs}_I(s)],
 \]
-with the product sigma-algebra.
-\end{definition}
+where $\mathrm{Obs}_I(s)$ for $s = (\omega, t, B, Y)$ produces the tuple
+\[
+o = \bigl(\mathcal{J}_t,\; G_t,\; B,\; Y|_{\mathcal{O}_t},\;
+\mathcal{C}_t^{\mathrm{obs}},\; \Lambda^{\mathrm{prior}},\;
+\Lambda_t^{\mathrm{rev}},\; \Lambda_t^{\mathrm{comp}}\bigr)
+\]
+with the following components.
 
-\begin{definition}[Deterministic nonanticipative policy]
-A \emph{deterministic nonanticipative policy} for a stochastic online scheduling instance \(I\) is a family of measurable maps
-\[
-\varphi_t:\mathsf H_t^I\to\mathsf A_I,\qquad t\ge 0,
-\]
-such that
-\[
-\varphi_t(h)\in \mathcal U_I(x_t(h))
-\qquad\text{for every }h\in\mathsf H_t^I.
-\]
+\medskip
+\noindent\textbf{$\Lambda^{\mathrm{prior}}$: Time-zero knowledge.} This component is
+constant across all time steps and all $\omega$, encoding structural and distributional
+information available to the scheduler from $t = 0$:
+\begin{itemize}
+    \item The machine environment $\alpha$, job environment $\beta$, and objective
+    $\gamma$.
+    \item The number of machines $m$ and their identities.
+    \item Deterministic machine-level parameters (e.g., if $\alpha_1 = Q$ and machine
+    speeds are deterministic, the values $S_i$).
+    \item The prior distributional information for latent primitives: the joint law (or
+    relevant marginals and moments) of processing times, revelation times, release
+    dates, due dates, and any other random primitives under $\mathbb{P}$, to the extent
+    specified by the observation convention of the instance.
+\end{itemize}
 
-Thus, at time \(t\), the action selected by the policy may depend only on the revealed history up to time \(t\), and not on unrevealed future jobs or unrevealed future primitive values.
-\end{definition}
+\medskip
+\noindent\textbf{$\Lambda_t^{\mathrm{rev}}$: Cumulative revelation-time information.}
+For each job $J_j \in \mathcal{J}_t(\omega)$, the metadata revealed upon $J_j$'s arrival
+at time $V_j(\omega)$:
+\begin{itemize}
+    \item The identity of $J_j$, its operation structure, and machine routing (if
+    $\alpha_1 \in \{J, F, O\}$).
+    \item Realized release date $R_j(\omega)$ (if $\beta_4 = r_j$).
+    \item Realized due date $D_j(\omega)$ (if $\gamma$ depends on due dates and the
+    convention specifies they are known upon revelation).
+    \item Job weight $w_j$ (if relevant to $\gamma$).
+    \item Distributional parameters or relevant moments of the unrealized processing
+    requirements of $J_j$'s operations (e.g., $\mathbb{E}[P_j]$ in the
+    Megow--Uetz--Vredeveld convention).
+\end{itemize}
+All precedence arcs among revealed jobs are already encoded in $G_t$.
 
-\begin{definition}[Randomized nonanticipative policy] \textbf{TODO: NOTE THIS IS EQUIVALENT TO A STOCH PROCESS ADAPTED TO FILTRATION GENERATED BY REVEALED HISTORY; ALSO COMPARE STOCHASTIC VS RANDOMIZED POLICY!!!}
-A randomized nonanticipative policy for a stochastic online scheduling instance \(I\) is a family of stochastic kernels
+\medskip
+\noindent\textbf{$\mathcal{C}_t^{\mathrm{obs}}$: Observed completion set.} The set of
+operations whose completion has been revealed to the scheduler by time $t$:
 \[
-K_t(\cdot\mid h)\in \mathcal P(\mathsf A_I),\qquad t\ge 0,\ h\in\mathsf H_t^I,
+\mathcal{C}_t^{\mathrm{obs}} := \{o \in \mathcal{O}_t(\omega) :
+\text{completion of } o \text{ has been revealed by time } t\}.
 \]
-such that, for every \(h\in\mathsf H_t^I\),
-\[
-K_t(\mathcal U_I(x_t(h))\mid h)=1.
-\]
+Concretely, $o \in \mathcal{C}_t^{\mathrm{obs}}$ if and only if $o \in \mathcal{C}(s)$
+and the time step at which $Z(o;\,s)$ first reached $1$ has already passed. Since
+completion is detected at the end of the time step in which cumulative progress crosses
+the threshold, and the realized processing time is revealed at that moment (entering
+$\Lambda_t^{\mathrm{comp}}$), we have $\mathcal{C}_t^{\mathrm{obs}} = \mathcal{C}(s)$
+for all feasible states. Nevertheless, the distinction matters: $\mathcal{C}_t^{\mathrm{obs}}$
+is an observed quantity derived from $\Lambda_t^{\mathrm{comp}}$, while $\mathcal{C}(s)$
+is defined via the latent progress $Z(o;\,s)$ involving the unrevealed $p_{io}(\omega)$.
+Admissibility and policies are stated in terms of $\mathcal{C}_t^{\mathrm{obs}}$, not
+$\mathcal{C}(s)$.
 
-Thus, conditional on the revealed history up to time \(t\), the policy selects a probability distribution supported on the admissible actions at the current state.
-\end{definition}
-\begin{remark}
-A deterministic nonanticipative policy is a special case of a randomized nonanticipative policy, obtained by taking each kernel \(K_t(\cdot\mid h)\) to be a Dirac mass at a single admissible action.
+\medskip
+\noindent\textbf{$\Lambda_t^{\mathrm{comp}}$: Cumulative completion-time information.}
+For each completed operation $o \in \mathcal{C}_t^{\mathrm{obs}}$, the realized
+processing requirements on machines that contributed:
+\[
+\Lambda_t^{\mathrm{comp}} = \bigl\{(o,\, M_i,\, p_{io}(\omega)) :
+o \in \mathcal{C}_t^{\mathrm{obs}},\; Y(o, M_i) > 0\bigr\}.
+\]
+This uses the cumulative convention: $\Lambda_t^{\mathrm{comp}}$ records all completions
+up to time $t$. Since $\mathcal{C}_t^{\mathrm{obs}}$ is monotone in $t$, this is
+equivalent to accumulating the per-step newly-completed operations.
+
+\begin{remark}[Redundancy of $B$]
+The assignment $B$ is included in the observation for convenience. Since the scheduler
+knows its own past actions, it can reconstruct $B$ from the action history. Its
+inclusion carries no extra exogenous information.
 \end{remark}
 
+\begin{remark}[Observation-visible vs.\ hidden information]
+The observation $\mathrm{Obs}_I(s)$ reveals: which jobs exist and their metadata (for
+revealed jobs only); the precedence structure among revealed jobs; the current assignment
+and per-machine cumulative processing on revealed operations; the observed completion
+set; realized processing times of completed operations; and distributional information
+about unrealized primitives. It does \emph{not} reveal: the latent scenario $\omega$;
+revelation times, identities, or existence of unrevealed jobs; realized processing times
+of incomplete operations; or precedence arcs involving unrevealed jobs. In particular,
+$\mathrm{Obs}_I$ is not injective: distinct latent scenarios producing identical visible
+projections yield the same observation.
+\end{remark}
+
+The observation space $\mathsf{O}_I$ is the collection of all tuples of the above form
+arising from feasible states.
+
+\paragraph{Action space $\mathsf{A}_I$ and admissible actions.}
+
+An action is a map
+\[
+a : \mathcal{M} \to \mathcal{O}^* \cup \{\varnothing\},
+\]
+with the interpretation that $a(M_i) = o$ assigns machine $M_i$ to process operation $o$
+during the next time step, and $a(M_i) = \varnothing$ means $M_i$ idles.
+
+The admissible action correspondence is defined on observations:
+\[
+\mathcal{U}_I : \mathsf{O}_I \rightrightarrows \mathsf{A}_I.
+\]
+An action $a \in \mathcal{U}_I(o)$ for observation
+$o = (\mathcal{J}_t,\, G_t,\, B,\, Y|_{\mathcal{O}_t},\,
+\mathcal{C}_t^{\mathrm{obs}},\, \Lambda^{\mathrm{prior}},\,
+\Lambda_t^{\mathrm{rev}},\, \Lambda_t^{\mathrm{comp}})$ if and only if:
+\begin{itemize}
+    \item[\textbf{(A1)}] For each $M_i$ with $a(M_i) = o'$: the operation $o'$ is
+    revealed ($o' \in \mathcal{O}_t$), incomplete
+    ($o' \notin \mathcal{C}_t^{\mathrm{obs}}$), and eligible with respect to all
+    visible constraints: precedence (via $G_t$), release dates (via
+    $\Lambda_t^{\mathrm{rev}}$), shop ordering, and resources.
+
+    \item[\textbf{(A2)}] Machine routing constraints from $\alpha$ are satisfied.
+
+    \item[\textbf{(A3)}] Single processing: each operation is assigned to at most one
+    machine.
+
+    \item[\textbf{(A4)}] If $\beta_1 \neq \mathrm{pmtn}$: if $o'$ has accrued
+    processing ($\sum_i Y(o', M_i) > 0$) and
+    $o' \notin \mathcal{C}_t^{\mathrm{obs}}$, then $a(M_i) = o'$ only on the machine
+    that has been processing $o'$.
+\end{itemize}
+Every quantity referenced in \textbf{(A1)--(A4)} is visible in the observation $o$. The
+scheduler need not (and cannot!) reference the latent scenario $\omega$ to determine
+admissibility.
+
+\paragraph{Transition kernel $T_I$.}
+
+For $s = (\omega, t, B, Y)$ and $a \in \mathcal{U}_I(\mathrm{Obs}_I(s))$, the transition
+is the Dirac measure
+\[
+T_I(\cdot \mid s, a) := \delta_{\mathrm{Step}_I(s, a)},
+\]
+where
+\[
+\mathrm{Step}_I\bigl((\omega, t, B, Y),\; a\bigr) := (\omega,\; t+1,\; a,\; Y')
+\]
+with
+\[
+Y'(o, M_i) := Y(o, M_i) + \mathbf{1}[a(M_i) = o]
+\]
+for all $o \in \mathcal{O}^*,\; M_i \in \mathcal{M}$. Since admissibility enforces single
+processing \textbf{(A3)}, this sum is either $0$ or $1$ for each $o$. The new assignment
+is $B_{t+1} := a$. The latent scenario $\omega$ is preserved identically. Completions,
+newly revealed jobs, and all other derived quantities update implicitly through the
+derived-quantity definitions applied to the new state.
+
+\begin{remark}[Conditional determinism]
+All stochasticity in $\mathcal{P}_I$ is concentrated in the initial draw
+$\omega \sim \mathbb{P}$. Conditional on $\omega$, the controlled process
+$(t, B_t, Y_t)_{t \ge 0}$ is a deterministic dynamical system driven by the action
+sequence. This is the hallmark of a latent-parameter POMDP: uncertainty is purely
+epistemic!
+\end{remark}
+
+\paragraph{Initial state distribution $T_I^0$.}
+
+The initial state is $s_0 = (\omega, 0, B_0, \mathbf{0})$ where
+$\omega \sim \mathbb{P}$, $B_0 \equiv \varnothing$ (all machines idle), and $\mathbf{0}$
+denotes the identically-zero ledger. Thus:
+\[
+T_I^0 := \mathbb{P} \otimes \delta_{(0,\, \varnothing,\, \mathbf{0})}.
+\]
+
+\paragraph{Cost function $c_I$ and objective.}
+
+Define the terminal set
+\[
+\mathsf{S}_I^{\mathrm{term}} := \{s \in \mathsf{S}_I : \text{all operations of jobs in }
+\mathcal{J}^{\mathrm{target}} \text{ lie in } \mathcal{C}(s)\},
+\]
+and the completed-job set
+$\mathcal{C}_{\mathrm{jobs}}(s) := \{J_j : \text{all operations of } J_j \text{ lie in }
+\mathcal{C}(s)\}$. The per-step cost depends on the scheduling objective $\gamma$:
+
+\begin{itemize}
+    \item \textbf{Makespan} ($\Gamma = \mathbb{E}[C_{\max}]$):
+    \[
+    c_I(s, a) := \begin{cases} 1 & \text{if } s \notin \mathsf{S}_I^{\mathrm{term}},
+    \\ 0 & \text{if } s \in \mathsf{S}_I^{\mathrm{term}}. \end{cases}
+    \]
+    Then
+    $\sum_{t=0}^{\infty} c_I(s_t, a_t) = \tau_{\mathrm{term}} = C_{\max}$, where
+    $\tau_{\mathrm{term}} := \inf\{t \ge 0 : s_t \in \mathsf{S}_I^{\mathrm{term}}\}$.
+
+    \item \textbf{Weighted completion time}
+    ($\Gamma = \mathbb{E}[\sum_j w_j C_j]$):
+    \[
+    c_I(s, a) := \sum_{J_j \in \mathcal{J}^{\mathrm{target}} \setminus
+    \mathcal{C}_{\mathrm{jobs}}(s)} w_j.
+    \]
+    Then $\sum_{t=0}^{\infty} c_I(s_t, a_t) = \sum_j w_j C_j$.
+
+    \item Tardiness and unit-penalty objectives are encoded analogously with
+    deadline-dependent per-step costs.
+\end{itemize}
+
+The expectation $\mathbb{E}^{\pi}$ integrates over the initial draw
+$\omega \sim \mathbb{P}$ and the policy $\pi$. The expectation is not part of
+the cost function; it arises from the stochastic shortest-path optimization criterion
+applied to trajectories.
+
+\paragraph{Restriction to special cases.}
+
 \begin{remark}[Restriction to offline stochastic scheduling]
-Suppose that every latent job is revealed at time \(0\), i.e.
-\[
-V_j(\omega)=0 \qquad\text{for all }J_j\in\mathcal J^\ast\text{ and all }\omega\in\Omega.
-\]
-Then the revealed job set is constant:
-\[
-\mathcal J_t(\omega)=\mathcal J^\ast\qquad\text{for all }t\ge 0.
-\]
-Hence the above revealed-state, action, and policy definitions reduce to the corresponding notions for offline stochastic scheduling: the job and operation structure is fully known from time \(0\), while only the realized primitive values remain progressively observable according to the observation convention.
+If $V_j(\omega) = 0$ for all $J_j \in \mathcal{J}^*$ and all $\omega \in \Omega$, then
+$\mathcal{J}_t(\omega) = \mathcal{J}^*$ for all $t \ge 0$. The POMDP remains genuinely
+partially observed: the full job and operation structure is known from $t = 0$ (via
+$\Lambda^{\mathrm{prior}}$ and $\Lambda_0^{\mathrm{rev}}$), but realized processing
+times remain hidden until completion. The revelation component
+$\Lambda_t^{\mathrm{rev}}$ is constant for $t \ge 0$, and all new information arrives
+through $\Lambda_t^{\mathrm{comp}}$.
 \end{remark}
 
 \begin{remark}[Restriction to online deterministic scheduling]
-Suppose that every primitive random variable in the instance is almost surely constant, while the revelation times \(V_j\) may remain nontrivial. Then the latent environment is deterministic, but not fully visible at time \(0\). The above definitions therefore reduce to the usual online deterministic model: the state records only the currently revealed part of the deterministic instance, and policies are nonanticipative with respect to the revealed history.
+If all primitive random variables are almost surely constant (i.e.,
+$|\mathrm{supp}(\mathbb{P})| = 1$ up to the revelation times), then the latent scenario
+$\omega$ carries no hidden information beyond which jobs have not yet been revealed.
+The observation $\mathrm{Obs}_I(s)$ determines the full state $s$ uniquely among
+feasible states with the same revealed job set. The POMDP collapses to a fully-observed
+MDP on the revealed state, with deterministic transitions. The remaining sequential
+difficulty is that jobs arrive over time.
 \end{remark}
 
 \begin{remark}[Restriction to offline deterministic scheduling]
-If, in addition to the previous restriction, every job is revealed at time \(0\), then both the primitive data and the revelation pattern are deterministic and fully known in advance. In that case the above definitions reduce to the ordinary offline deterministic scheduling model.
+If additionally $V_j \equiv 0$, the full instance is known and deterministic from
+$t = 0$. The POMDP collapses to a combinatorial optimization problem over feasible
+schedules: no sequential decision-making under uncertainty remains.
 \end{remark}
+
+%%% ----------------------------------------------------------------
+\subsubsection{Solutions and Policies}
+
+We now define the scheduler's decision rules for the scheduling POMDP
+$\mathcal{P}_I$. First, we more rigorously formalize the notion of nonanticipation via the observation history as touched on in the informal discussion of policies earlier.
+
+\begin{definition}[Observation history]\label{def:obshist}
+For each $t \ge 0$, the observation history up to time $t$ is a tuple
+\[
+h_t := (o_0,\, a_0,\, o_1,\, a_1,\, \ldots,\, a_{t-1},\, o_t)
+\in \mathsf{H}_t^I,
+\]
+where $o_s \in \mathsf{O}_I$ and $a_s \in \mathsf{A}_I$ for all $s$. The space of
+observation histories of length $t$ is
+\[
+\mathsf{H}_t^I := \begin{cases} \mathsf{O}_I & \text{if } t = 0, \\
+(\mathsf{O}_I \times \mathsf{A}_I)^{t} \times \mathsf{O}_I & \text{if } t \ge 1.
+\end{cases}
+\]
+We endow $\mathsf{H}_t^I$ with the product $\sigma$-algebra $\mathcal{H}_t^I$
+generated by the coordinate maps.
+\end{definition}
+
+\begin{definition}[Randomized nonanticipative policy]\label{def:randpolicy}
+A randomized nonanticipative policy for the scheduling POMDP $\mathcal{P}_I$
+is a family of stochastic kernels
+\[
+\pi = (\pi_t)_{t \ge 0}, \qquad
+\pi_t : \mathsf{H}_t^I \to \mathcal{P}(\mathsf{A}_I),
+\]
+such that for every $t \ge 0$ and every observation history $h_t \in \mathsf{H}_t^I$:
+\begin{itemize}
+    \item[\textbf{(P1)}] \textbf{Measurability.} The map
+    $h_t \mapsto \pi_t(\cdot \mid h_t)$ is measurable with respect to
+    $\mathcal{H}_t^I$.
+    \item[\textbf{(P2)}] \textbf{Admissibility.} $\pi_t(\cdot \mid h_t)$ is supported
+    on the admissible action set at the terminal observation:
+    \[
+    \pi_t\bigl(\mathcal{U}_I(o_t) \;\big|\; h_t\bigr) = 1,
+    \]
+    where $o_t$ is the final component of $h_t$.
+\end{itemize}
+The family of all such policies is denoted $\Pi_I$.
+\end{definition}
+
+\begin{remark}[Nonanticipation via the observation filtration]
+The nonanticipation requirement is enforced structurally: at time $t$, the kernel
+$\pi_t$ receives only the observation history
+$h_t = (o_0, a_0, \ldots, a_{t-1}, o_t)$, which is the scheduler's complete
+information record up to time $t$. Since the observation kernel $Z_I$ reveals only
+$\mathrm{Obs}_I(s_t)$ (omitting unrevealed jobs, unrealized processing times, and
+all other latent data) the policy cannot depend on any information not yet available
+to the scheduler.
+
+More precisely, the scheduling POMDP $\mathcal{P}_I$ together with a policy $\pi$
+induces a probability measure $\mathbb{P}^{\pi}$ on the canonical trajectory space.
+Under $\mathbb{P}^{\pi}$, define the observation filtration
+\[
+\mathcal{F}_t^{\mathrm{obs}} := \sigma(o_0, a_0, \ldots, a_{t-1}, o_t),
+\qquad t \ge 0.
+\]
+Then the action $a_t$ selected by $\pi$ is $\mathcal{F}_t^{\mathrm{obs}}$-measurable
+in the sense that $\pi_t(\cdot \mid h_t)$ depends on the trajectory only through
+$\mathcal{F}_t^{\mathrm{obs}}$. This is the standard formalization of nonanticipation:
+the controlled process $(a_t)_{t \ge 0}$ is adapted to
+$(\mathcal{F}_t^{\mathrm{obs}})_{t \ge 0}$.
+\end{remark}
+
+\begin{remark}[Policies depend on observations, not latent states]
+Since admissibility is defined on observations
+($\mathcal{U}_I : \mathsf{O}_I \rightrightarrows \mathsf{A}_I$) and the policy kernel
+conditions on observation histories, no component of the policy references the latent
+scenario $\omega$. Two trajectories of latent states that produce the same observation
+history receive the same action distribution.
+\end{remark}
+
+\begin{remark}[Belief-state sufficient statistic]\label{rmk:belief}
+By standard POMDP theory, the posterior belief
+\[
+b_t := \mathrm{Law}(\omega \mid o_0, a_0, \ldots, a_{t-1}, o_t)
+\in \mathcal{P}(\Omega)
+\]
+is a sufficient statistic of the observation history $h_t$ for optimal control. That is,
+there exists an optimal policy that depends on $h_t$ only through $b_t$. Equivalently,
+one may reformulate the scheduling POMDP as a fully-observed MDP on the belief space
+$\mathcal{P}(\Omega)$, the belief MDP, in which the state at time $t$ is $b_t$
+and the transition is given by Bayesian updating. The optimal cost-to-go is then a
+function of $b_t$ alone. This connects directly to the posterior
+$\Pi_t = \mathrm{Law}(\theta \mid \mathcal{H}_t)$ appearing in the centralized ITAP state defined in the next chapter, and is the structural reason a belief-augmented state space is the natural formulation for that model.
+\end{remark}
+
+\begin{definition}[Deterministic nonanticipative policy]\label{def:detpolicy}
+A deterministic nonanticipative policy is a family of measurable maps
+\[
+\varphi = (\varphi_t)_{t \ge 0}, \qquad \varphi_t : \mathsf{H}_t^I \to \mathsf{A}_I,
+\]
+such that $\varphi_t(h_t) \in \mathcal{U}_I(o_t)$ for every $h_t \in \mathsf{H}_t^I$.
+\end{definition}
+
+\begin{remark}
+A deterministic nonanticipative policy is a special case of a randomized nonanticipative
+policy, obtained by taking $\pi_t(\cdot \mid h_t) := \delta_{\varphi_t(h_t)}$ for each
+$t$ and $h_t$.
+\end{remark}
+
+\begin{definition}[Policy value and the scheduling optimization problem]
+\label{def:policyvalue}
+For a policy $\pi \in \Pi_I$, define the expected cost
+\[
+J_I(\pi) := \mathbb{E}^{\pi}\!\left[\sum_{t=0}^{\infty} c_I(s_t, a_t)\right],
+\]
+where $\mathbb{E}^{\pi}$ denotes expectation under the measure $\mathbb{P}^{\pi}$
+induced by the initial draw $\omega \sim \mathbb{P}$, the transition kernel $T_I$, the
+observation kernel $Z_I$, and the action selection under $\pi$.
+
+The scheduling optimization problem is
+\[
+J_I^* := \inf_{\pi \in \Pi_I} J_I(\pi).
+\]
+For the makespan cost ($c_I \equiv 1$ until termination), this reduces to
+$J_I^* = \inf_\pi \mathbb{E}^{\pi}[C_{\max}]$, recovering the stochastic scheduling
+objective $\Gamma = \mathbb{E}[C_{\max}]$. Analogous reductions hold for weighted
+completion time, tardiness, and unit-penalty objectives via the corresponding per-step
+costs defined previously.
+\end{definition}
 
 \subsection{Examples}
 
@@ -373,102 +851,102 @@ This example also gives a clean online lower-bound. Because deterministic proces
 
 
 
-\subsection{Extensions and Generalizations}
+% \subsection{Extensions and Generalizations}
 
-The classical SOS model above assumes that jobs arrive exogenously over time, that each revealed job comes with fully visible distributional metadata at realization time, that precedence information is fixed and revealed in a simple manner, and that each job is completed only once all of its operations are completed. Towards the development of the centralized ITAP setting in future sections, we extend this online stochastic formalism such that latent primitives may be only partially observed, may depend on the currently revealed history, and may permit richer completion and resource-allocation semantics.
+% The classical SOS model above assumes that jobs arrive exogenously over time, that each revealed job comes with fully visible distributional metadata at realization time, that precedence information is fixed and revealed in a simple manner, and that each job is completed only once all of its operations are completed. Towards the development of the centralized ITAP setting in future sections, we extend this online stochastic formalism such that latent primitives may be only partially observed, may depend on the currently revealed history, and may permit richer completion and resource-allocation semantics.
 
-\begin{definition}[Belief-augmented generalized stochastic online scheduling instance]
-A belief-augmented generalized stochastic online scheduling instance consists of:
+% \begin{definition}[Belief-augmented generalized stochastic online scheduling instance]
+% A belief-augmented generalized stochastic online scheduling instance consists of:
 
-\begin{enumerate}
-    \item a baseline stochastic online scheduling instance
-    \[
-    I_0=(\mathcal J^\ast,\mathcal M,\alpha\mid\beta\mid\gamma,(\Omega,\mathcal F,\mathbb P),\mathcal V),
-    \]
-    as defined above;
+% \begin{enumerate}
+%     \item a baseline stochastic online scheduling instance
+%     \[
+%     I_0=(\mathcal J^\ast,\mathcal M,\alpha\mid\beta\mid\gamma,(\Omega,\mathcal F,\mathbb P),\mathcal V),
+%     \]
+%     as defined above;
 
-    \item a measurable latent parameter space \((\Theta,\mathcal T)\) and a latent random element
-    \[
-    \theta:\Omega\to\Theta,
-    \]
-    where \(\theta\) encodes the hidden primitive data of the environment, such as latent processing laws, latent precedence information, latent tractability of operations, or other scheduler-relevant unknowns;
+%     \item a measurable latent parameter space \((\Theta,\mathcal T)\) and a latent random element
+%     \[
+%     \theta:\Omega\to\Theta,
+%     \]
+%     where \(\theta\) encodes the hidden primitive data of the environment, such as latent processing laws, latent precedence information, latent tractability of operations, or other scheduler-relevant unknowns;
 
-    \item for each revealed history \(h\) and each revealed operation \(o\), a measurable processing-law kernel
-    \[
-    \kappa^{\mathrm{proc}}_o(\,\cdot\,\mid h,\theta)
-    \in \mathcal P((0,\infty]),
-    \]
-    representing the conditional law of the processing requirement of \(o\) given the current revealed history and latent parameter \(\theta\);
+%     \item for each revealed history \(h\) and each revealed operation \(o\), a measurable processing-law kernel
+%     \[
+%     \kappa^{\mathrm{proc}}_o(\,\cdot\,\mid h,\theta)
+%     \in \mathcal P((0,\infty]),
+%     \]
+%     representing the conditional law of the processing requirement of \(o\) given the current revealed history and latent parameter \(\theta\);
 
-    \item a latent precedence structure, represented for example by a latent DAG
-    \[
-    G^\theta=(\mathcal J^\ast,E^\theta),
-    \]
-    together with a revealed-precedence process
-    \[
-    G_t=(\mathcal J_t,E_t),
-    \qquad E_t\subseteq E^\theta\cap(\mathcal J_t\times\mathcal J_t),
-    \]
-    specifying which precedence relations have become visible by time \(t\);
+%     \item a latent precedence structure, represented for example by a latent DAG
+%     \[
+%     G^\theta=(\mathcal J^\ast,E^\theta),
+%     \]
+%     together with a revealed-precedence process
+%     \[
+%     G_t=(\mathcal J_t,E_t),
+%     \qquad E_t\subseteq E^\theta\cap(\mathcal J_t\times\mathcal J_t),
+%     \]
+%     specifying which precedence relations have become visible by time \(t\);
 
-    \item for each job \(J_j\), a completion family
-    \[
-    \mathcal W_j\subseteq 2^{\mathcal O_j},
-    \]
-    where \(\mathcal O_j\) is the operation set of \(J_j\), and the job is declared complete once the set of completed operations contains some \(W\in\mathcal W_j\);
+%     \item for each job \(J_j\), a completion family
+%     \[
+%     \mathcal W_j\subseteq 2^{\mathcal O_j},
+%     \]
+%     where \(\mathcal O_j\) is the operation set of \(J_j\), and the job is declared complete once the set of completed operations contains some \(W\in\mathcal W_j\);
 
-    \item a redundancy/progress rule specifying, for each revealed history \(h\), latent parameter \(\theta\), operation \(o\), and subset of machines \(S\subseteq\mathcal M\), the rate or law by which cumulative processing accrues when the machines in \(S\) are simultaneously assigned to \(o\).
-\end{enumerate}
-\end{definition}
+%     \item a redundancy/progress rule specifying, for each revealed history \(h\), latent parameter \(\theta\), operation \(o\), and subset of machines \(S\subseteq\mathcal M\), the rate or law by which cumulative processing accrues when the machines in \(S\) are simultaneously assigned to \(o\).
+% \end{enumerate}
+% \end{definition}
 
-\begin{definition}[Belief state]
-Fix a belief-augmented generalized stochastic online scheduling instance and let \(H_t\) denote the revealed history up to time \(t\). The corresponding belief state at time \(t\) is the posterior law
-\[
-\Pi_t := \operatorname{Law}(\theta\mid H_t).
-\]
-The belief-augmented state is then
-\[
-\widehat X_t := (X_t,\Pi_t),
-\]
-where \(X_t\) is the revealed state from the baseline SOS formalism.
-\end{definition}
+% \begin{definition}[Belief state]
+% Fix a belief-augmented generalized stochastic online scheduling instance and let \(H_t\) denote the revealed history up to time \(t\). The corresponding belief state at time \(t\) is the posterior law
+% \[
+% \Pi_t := \operatorname{Law}(\theta\mid H_t).
+% \]
+% The belief-augmented state is then
+% \[
+% \widehat X_t := (X_t,\Pi_t),
+% \]
+% where \(X_t\) is the revealed state from the baseline SOS formalism.
+% \end{definition}
 
-\begin{remark}[State-dependent processing laws]
-The generalized formalism permits the processing law of a revealed operation to depend on the currently completed set. This captures situations in which completing some jobs changes the effective difficulty of future jobs, either by unlocking information, enabling reuse of intermediate results, or modifying the latent environment.
-\end{remark}
+% \begin{remark}[State-dependent processing laws]
+% The generalized formalism permits the processing law of a revealed operation to depend on the currently completed set. This captures situations in which completing some jobs changes the effective difficulty of future jobs, either by unlocking information, enabling reuse of intermediate results, or modifying the latent environment.
+% \end{remark}
 
-\begin{remark}[Stochastic and progressively revealed precedence]
-The generalized formalism permits the latent precedence relation itself to be random and only progressively revealed. A particularly relevant convention is that precedence information involving a job is revealed only upon completion of that job, so that the revealed-precedence process \(G_t\) grows at completion times.
-\end{remark}
+% \begin{remark}[Stochastic and progressively revealed precedence]
+% The generalized formalism permits the latent precedence relation itself to be random and only progressively revealed. A particularly relevant convention is that precedence information involving a job is revealed only upon completion of that job, so that the revealed-precedence process \(G_t\) grows at completion times.
+% \end{remark}
 
-\begin{remark}[Noisy priors and partial distributional information]
-In the generalized model, the scheduler need not observe the full processing-time law or other primitive distributions at job revelation. Instead, revelation may provide only partial information, and the scheduler must act on the posterior belief \(\Pi_t\). Classical SOS is recovered as the special case in which the full ex ante processing-time distribution of each revealed job is visible upon revelation.
-\end{remark}
+% \begin{remark}[Noisy priors and partial distributional information]
+% In the generalized model, the scheduler need not observe the full processing-time law or other primitive distributions at job revelation. Instead, revelation may provide only partial information, and the scheduler must act on the posterior belief \(\Pi_t\). Classical SOS is recovered as the special case in which the full ex ante processing-time distribution of each revealed job is visible upon revelation.
+% \end{remark}
 
-\begin{remark}[Redundant scheduling]
-The generalized formalism permits redundant scheduling, in which multiple machines may simultaneously process the same revealed operation. The effect of such assignments is encoded by the redundancy/progress rule. The classical nonredundant model is recovered by imposing that at most one machine may be assigned to any operation at a given time.
-\end{remark}
+% \begin{remark}[Redundant scheduling]
+% The generalized formalism permits redundant scheduling, in which multiple machines may simultaneously process the same revealed operation. The effect of such assignments is encoded by the redundancy/progress rule. The classical nonredundant model is recovered by imposing that at most one machine may be assigned to any operation at a given time.
+% \end{remark}
 
-\begin{remark}[Generalized completion semantics]
-The completion family \(\mathcal W_j\subseteq 2^{\mathcal O_j}\) permits completion semantics more general than the usual shop models. The classical AND-case is recovered by taking
-\[
-\mathcal W_j=\{\mathcal O_j\},
-\]
-so that all operations of \(J_j\) must be completed. An OR-shop is obtained by taking
-\[
-\mathcal W_j=\bigl\{\{o\}:o\in\mathcal O_j\bigr\},
-\]
-so that completing any one operation suffices to complete the job.
+% \begin{remark}[Generalized completion semantics]
+% The completion family \(\mathcal W_j\subseteq 2^{\mathcal O_j}\) permits completion semantics more general than the usual shop models. The classical AND-case is recovered by taking
+% \[
+% \mathcal W_j=\{\mathcal O_j\},
+% \]
+% so that all operations of \(J_j\) must be completed. An OR-shop is obtained by taking
+% \[
+% \mathcal W_j=\bigl\{\{o\}:o\in\mathcal O_j\bigr\},
+% \]
+% so that completing any one operation suffices to complete the job.
 
-Note additionally that the generalized processing-law kernels may assign infinite processing time to some operations, thereby modeling intractable alternatives. In the OR-shop setting, one may consider such intractible operations, assuming each job \(J_j\) has at least one operation in \(\mathcal O_j\) is almost surely tractable, and study allocation under uncertainty about which operations are tractable.
-\end{remark}
+% Note additionally that the generalized processing-law kernels may assign infinite processing time to some operations, thereby modeling intractable alternatives. In the OR-shop setting, one may consider such intractible operations, assuming each job \(J_j\) has at least one operation in \(\mathcal O_j\) is almost surely tractable, and study allocation under uncertainty about which operations are tractable.
+% \end{remark}
 
-Taken together, the above extensions yield an online stochastic scheduling formalism in which:
-\begin{itemize}
-    \item the effective difficulty of a task may depend on the currently completed set;
-    \item the dependency structure itself may be latent and progressively revealed;
-    \item the scheduler may act under partial distributional information and update beliefs over time;
-    \item multiple machines may collaborate redundantly on a single task;
-    \item and a job may admit multiple alternative completion routes.
-\end{itemize}
-This is precisely the level of generality needed for the centralized ITAP model.
+% Taken together, the above extensions yield an online stochastic scheduling formalism in which:
+% \begin{itemize}
+%     \item the effective difficulty of a task may depend on the currently completed set;
+%     \item the dependency structure itself may be latent and progressively revealed;
+%     \item the scheduler may act under partial distributional information and update beliefs over time;
+%     \item multiple machines may collaborate redundantly on a single task;
+%     \item and a job may admit multiple alternative completion routes.
+% \end{itemize}
+% This is precisely the level of generality needed for the centralized ITAP model.

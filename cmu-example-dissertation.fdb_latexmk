@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex cmu-example-dissertation"] 1775879943 "cmu-example-dissertation.aux" "cmu-example-dissertation.bbl" "cmu-example-dissertation" 1775879960 0
+["bibtex cmu-example-dissertation"] 1775963713 "cmu-example-dissertation.aux" "cmu-example-dissertation.bbl" "cmu-example-dissertation" 1775963930 0
   "./supporting-files/thesis.bib" 1774601974 3221 2815446414f02ccc153adecb70a9b99b ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1233624470 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "cmu-example-dissertation.aux" 1775879960 18721 d1b47c0cbdecae2fa01198927f80a50e "pdflatex"
+  "cmu-example-dissertation.aux" 1775963930 20673 15eaf54d549a9f5b85db555f30ba0a84 "pdflatex"
   (generated)
   "cmu-example-dissertation.bbl"
   "cmu-example-dissertation.blg"
   (rewritten before read)
-["pdflatex"] 1775879959 "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" "cmu-example-dissertation.pdf" "cmu-example-dissertation" 1775879960 0
+["pdflatex"] 1775963928 "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" "cmu-example-dissertation.pdf" "cmu-example-dissertation" 1775963930 0
   "/Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex" 1775879880 9384 f43cce85b83a2d280266e689b69b1dc9 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -46,6 +46,7 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm" 1229303445 684 3a51bd4fd9600428d5264cf25f04bb9a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/rsfs/rsfs7.tfm" 1229303445 692 1b6510779f0f05e9cbf03e0f6c8361e6 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb" 1248133631 32166 b0c356b15f19587482a9217ce1d8fa67 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1248133631 30251 6afa5cb1d0204815a708a080681d4674 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1248133631 36741 fa121aac0049305630cf160b86157ee4 ""
@@ -65,6 +66,7 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb" 1248133631 24252 1e4e051947e12dfb50fee0b7f4e26e3a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb" 1248133631 30273 87a352d78b6810ae5cfdc68d2fb827b2 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb" 1336858727 21098 d4aee7c0aac232caac5688b586b9363c ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb" 1229303445 16077 4737ac34f0fb5608550f3780a0202c22 ""
@@ -156,7 +158,7 @@
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1693008761 8173129 13be8c9038d70ef1d5aeb1ac4765d318 ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
   "chapter/01-Introduction.tex" 1775714839 6243 e0006ce153ff6f09528259862a3155b7 ""
-  "chapter/02-SchedulingTheory.tex" 1775714518 36863 ace678225080f4f770dfc0a8d584881f ""
+  "chapter/02-SchedulingTheory.tex" 1775963928 62248 41529aba15b97e7d6bedf94e9884a0af ""
   "chapter/03-TaskAllocation.tex" 1775717122 17714 b6d619e71a8b7724650f4150de316de2 ""
   "chapter/05-VAMP.tex" 1775879959 46910 6586b2ea36284c4ac9a2c9ef0a0ca1eb ""
   "chapter/06-MARL.tex" 1775720783 19543 96888b787552b6a1164c83262b623b5c ""
@@ -167,13 +169,13 @@
   "chapter/i-abstract.tex" 1775775586 1098 d656dcde4d6d0f424eda05fcad6a2272 ""
   "chapter/i-acknowledgments.tex" 1774601974 4 ea5cb8ff0abf6b4ca0080069daaeada0 ""
   "chapter/i-dedication.tex" 1774601974 17 ca1c6ea307fcd8c08e1ed8faa7fd9b4c ""
-  "cmu-example-dissertation.aux" 1775879960 18721 d1b47c0cbdecae2fa01198927f80a50e "pdflatex"
-  "cmu-example-dissertation.bbl" 1775879943 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex cmu-example-dissertation"
-  "cmu-example-dissertation.lof" 1775879960 527 5d671f7eb8ef2dbf23c9d6f48de6b366 "pdflatex"
-  "cmu-example-dissertation.lot" 1775879960 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "cmu-example-dissertation.out" 1775879960 6066 ee9facdaf44f082c368f382265807921 "pdflatex"
+  "cmu-example-dissertation.aux" 1775963930 20673 15eaf54d549a9f5b85db555f30ba0a84 "pdflatex"
+  "cmu-example-dissertation.bbl" 1775963713 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex cmu-example-dissertation"
+  "cmu-example-dissertation.lof" 1775963930 527 5d671f7eb8ef2dbf23c9d6f48de6b366 "pdflatex"
+  "cmu-example-dissertation.lot" 1775963929 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "cmu-example-dissertation.out" 1775963930 6504 52cd6626ea064a7193c01fd1ca2a6298 "pdflatex"
   "cmu-example-dissertation.tex" 1775879880 9384 f43cce85b83a2d280266e689b69b1dc9 ""
-  "cmu-example-dissertation.toc" 1775879960 11443 eb2ebf631bf9fe3fe61b2d3c423855a7 "pdflatex"
+  "cmu-example-dissertation.toc" 1775963930 12437 7e6823c4f2c9a7eae598f3d6f684d083 "pdflatex"
   "cmu-style-files/cmu-thesis-compat.sty" 1774601974 9019 414c07748cdfcd24d67b660858d595cf ""
   "cmu-style-files/cmu-thesis-encoding.sty" 1774601974 1796 6c766732b7399601fac5443205c48d55 ""
   "cmu-style-files/cmu-thesis-environments.sty" 1774601974 23165 d0a8ab185a7adcc1762976ad166bb525 ""
