@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  12 APR 2026 12:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  12 APR 2026 16:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -695,23 +695,21 @@ Overfull \hbox (8.82196pt too wide) in paragraph at lines 27--34
 [27
 
 ] [28] [29] [30]
-Overfull \hbox (10.90115pt too wide) in paragraph at lines 179--183
+Overfull \hbox (10.90115pt too wide) in paragraph at lines 210--214
 []\OT1/cmr/m/n/12 The truth-gating prop-erty is en-coded via the pro-duc-tiv-ity maps: if $\OML/cmm/m/it/12 T\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 j\OT1/cmr/m/n/12 ) = +$, then $\OML/cmm/m/it/12 ^^Z[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 C; #\OT1/cmr/m/n/12 ) =
  []
 
-[31] [32] [33] [34]) (./chapter/04-DecentralizedTaskAllocation.tex [35]) (./chapter/05-VAMP.tex [36
+[31] [32] [33] [34] [35] [36]) (./chapter/05-VAMP.tex [37] [38
 
-] [37
-
-] [38] [39] [40] [41]
-LaTeX Font Info:    Trying to load font information for U+euf on input line 156.
+] [39] [40] [41] [42]
+LaTeX Font Info:    Trying to load font information for U+euf on input line 160.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-) [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54]) (./chapter/06-MARL.tex [55]) (./chapter/07-Implementation.tex [56
+) [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] [54] [55]) (./chapter/06-MARL.tex [56] [57]) (./chapter/07-Implementation.tex [58
 
-] [57
+] [59
 
-] [58] [59]
+] [60] [61]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 136.
@@ -724,7 +722,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 136.
 
-[60] [61]
+[62] [63]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 201.
@@ -737,11 +735,11 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 201.
 
-[62] [63] [64] [65] [66] [67] [68] [69] [70] [71] [72]) (./chapter/08-Experiments.tex [73]) (./chapter/09-Application.tex [74
+[64] [65] [66] [67] [68] [69] [70] [71] [72] [73] [74]) (./chapter/08-Experiments.tex [75]) (./chapter/09-Application.tex [76
 
-]) (./chapter/10-Conclusion.tex [75
+]) (./chapter/10-Conclusion.tex [77
 
-]) [76
+]) [78
 
 ] (./cmu-example-dissertation.bbl
 
@@ -803,7 +801,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 Package natbib Warning: Empty `thebibliography' environment on input line 8.
 
-) [77
+) [79
 
 ] (./cmu-example-dissertation.aux
 \cmu@redefined@appendix@saved=\count370
@@ -814,21 +812,21 @@ LaTeX2e <2023-06-01> patch level 1
 L3 programming layer <2023-08-11>
  ***********
 Package rerunfilecheck Info: File `cmu-example-dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: 7FEAF99C46086B1C7D258AC2E29EC63F;6588.
+(rerunfilecheck)             Checksum: 39E282E833FCBB717C9FFFA515C96057;6176.
  ) 
 Here is how much of TeX's memory you used:
- 16338 strings out of 475189
- 267251 string characters out of 5763832
+ 16331 strings out of 475189
+ 266910 string characters out of 5763832
  1931254 words of memory out of 5000000
- 37056 multiletter control sequences out of 15000+600000
+ 37052 multiletter control sequences out of 15000+600000
  576016 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 80i,13n,94p,1415b,689s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 80i,13n,94p,1415b,660s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on cmu-example-dissertation.pdf (87 pages, 500092 bytes).
+Output written on cmu-example-dissertation.pdf (89 pages, 505794 bytes).
 PDF statistics:
- 894 PDF objects out of 1000 (max. 8388607)
- 747 compressed objects within 8 object streams
+ 892 PDF objects out of 1000 (max. 8388607)
+ 743 compressed objects within 8 object streams
  259 named destinations out of 1000 (max. 500000)
- 313 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 297 words of extra memory for PDF output out of 10000 (max. 10000000)
 

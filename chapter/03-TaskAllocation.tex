@@ -39,12 +39,11 @@ to a setting where redundant assignment is permitted: multiple machines contribu
 additively to a shared work counter, and the operation completes once the cumulative
 total reaches the threshold.
 
-
 These observations suggest a generalization of stochastic online scheduling in which:
 \begin{itemize}
     \item each job corresponds to a mathematical statement with a hidden truth value,
-    and is structured as an OR-open shop with two operations (prove or refute), only
-    one of which has finite processing time;
+    structured as a binary OR-job with two operations (prove or refute), only one of
+    which has finite processing time;
     \item the job set grows endogenously, both passively (completing jobs reveals new
     jobs) and actively (the scheduler conjectures new intermediate statements);
     \item processing times depend on the current set of completed jobs, not merely on
@@ -63,48 +62,67 @@ the decentralized regime of the following chapter.
 
 \subsection{Formal Definition}
 
-We define the centralized ITAP as a stochastic online scheduling instance with five modifications. The resulting POMDP follows the
-same structure as the scheduling POMDP of Definition~\ref{def:schedpomdp}; we specify
-only the points of departure.
+We define the centralized ITAP as a stochastic online scheduling instance with five
+modifications. The resulting POMDP follows the same structure as the scheduling POMDP
+of Definition~\ref{def:schedpomdp}; we specify only the points of departure.
 
-\subsubsection{OR-Open Shop Structure}
+\subsubsection{Binary OR-Job Structure}
 
-In classical scheduling, a job in an open shop ($\alpha_1 = O$) has a set of operations that must \emph{all} be completed (in any
-order) for the job to be complete. We introduce the following variant.
+In the scheduling POMDP, each job consists of one or more operations, all of which
+must be completed for the job to be complete. In the centralized ITAP, jobs have a
+different structure: each job corresponds to a mathematical statement and admits
+exactly two alternative resolutions, only one of which is achievable.
 
-\begin{definition}[OR-open shop]\label{def:oropenshop}
-An \emph{OR-open shop} is an open shop in which a job $J_j$ is complete once
-\emph{any} operation in $O_j$ is complete, rather than all. Formally, the completion
-family is
+\begin{definition}[Binary OR-job]\label{def:binaryorjob}
+A \emph{binary OR-job} is a job $J_j$ with exactly two operations
+$O_j = \{o_j^+, o_j^-\}$ and OR-completion semantics: $J_j$ is complete once
+\emph{either} operation is complete. Formally, the completion family is
 \[
-W_j := \bigl\{\{o\} : o \in O_j\bigr\},
+W_j := \bigl\{\{o_j^+\},\; \{o_j^-\}\bigr\},
 \]
-and $J_j$ is complete at state $s$ if there exists $o \in O_j$ with
-$o \in \mathcal{C}^{\mathrm{op}}(s)$.
+and $J_j$ is complete at state $s$ if
+$O_j \cap \mathcal{C}^{\mathrm{op}}(s) \neq \varnothing$.
 \end{definition}
 
+\begin{remark}[Relationship to classical shop environments]
+The binary OR-job structure is not a special case of any classical shop environment.
+In an open shop ($\alpha_1 = O$), each operation $O_{ij}$ must be processed on a
+designated machine $M_i$, and \emph{all} operations must be completed. In a
+parallel-machine environment ($\alpha_1 \in \{P, Q, R\}$), each job has a single
+operation. The binary OR-job combines features of both: it has two operations (like a
+shop), either of which suffices for completion (unlike a shop), and both operations
+may be processed on any machine (unlike an open shop). This is a genuine extension
+of the $\alpha \mid \beta \mid \gamma$ taxonomy.
+\end{remark}
+
 In the centralized ITAP, every job $J_j$ corresponds to a mathematical statement
-$\varphi_j$ and has exactly two operations:
-\[
-O_j := \{o_j^+,\; o_j^-\},
-\]
-where $o_j^+$ represents ``prove $\varphi_j$'' and $o_j^-$ represents ``prove
-$\neg\varphi_j$.'' The job is resolved once either operation is completed. Thus every
-job in the centralized ITAP is an OR-open shop job with $|O_j| = 2$.
+$\varphi_j$ and is a binary OR-job: $o_j^+$ represents ``prove $\varphi_j$'' and
+$o_j^-$ represents ``prove $\neg\varphi_j$.'' The job is \emph{resolved} once either
+operation is completed.
 
 The latent parameter $\theta(\omega)$ encodes a truth assignment
 $T : \mathcal{J}^* \to \{+, -\}$ determining which operation is tractable:
 \begin{itemize}
     \item if $T(j) = +$, then $o_j^+$ has finite processing time and $o_j^-$ is
-    intractable ($p_{i,o_j^-}(\omega) = +\infty$ for all machines $M_i$);
+    intractable ($\rho_{i,o_j^-} \equiv 0$ for all machines $M_i$);
     \item if $T(j) = -$, the roles are reversed.
 \end{itemize}
 The truth assignment is hidden from the scheduler.
 
 We additionally require consistency with negation: for each $J_j \in \mathcal{J}^*$,
 there exists a unique $\bar J_j \in \mathcal{J}^*$ with
-$\varphi_{\bar j} = \neg\varphi_j$, and $T(\bar j) \neq T(j)$.
-When $J_j$ is resolved, $\bar J_j$ is automatically resolved as well.
+$\varphi_{\bar j} = \neg\varphi_j$ and $T(\bar j) \neq T(j)$. Resolving $J_j$
+automatically resolves $\bar J_j$ as well: formally,
+$J_j \in \mathcal{C}^{\mathrm{job}}(s) \iff \bar J_j \in \mathcal{C}^{\mathrm{job}}(s)$.
+
+\begin{remark}[Target set convention for negation pairs]
+We adopt the convention that the target set $\mathcal{J}^{\mathrm{target}}$ is closed
+under negation-pair identification: if $J_j \in \mathcal{J}^{\mathrm{target}}$, then
+$\bar J_j \notin \mathcal{J}^{\mathrm{target}}$ (or equivalently, the target set
+contains exactly one representative from each negation pair). This prevents
+double-counting: resolving a single mathematical question counts as completing one
+target job, not two.
+\end{remark}
 
 \subsubsection{Transferable Progress with Redundant Assignment}
 
@@ -121,21 +139,33 @@ total work content $1$, progress from different machines is additive, and the
 operation completes once cumulative effective work reaches $1$.
 
 Formally, the per-machine ledger $Y(o, M_i)$ of the scheduling POMDP is replaced by
-a scalar cumulative effective work ledger
+a scalar \emph{latent effective work} variable
 \[
-Y : \mathcal{O}^* \to [0, \infty),
+W : \mathcal{O}^* \to [0, \infty),
 \]
-where $Y(o)$ records the total effective work accrued on operation $o$ up to and
+where $W(o)$ records the total effective work accrued on operation $o$ up to and
 including time $t$. Operation $o$ is complete at state $s$ if and only if
-$Y(o) \ge 1$.
+$W(o) \ge 1$.
 
 The one-step progress update for an operation $o$ under action $a$ is:
 \[
-Y'(o) := Y(o) + \sum_{i\,:\, a(M_i) = o}
-\rho_{io}\bigl(\mathcal{C}(s),\, \theta(\omega)\bigr),
+W'(o) := W(o) + \sum_{i\,:\, a(M_i) = o}
+\rho_{io}\bigl(\mathcal{C}^{\mathrm{job}}(s),\, \theta(\omega)\bigr),
 \]
 where the sum ranges over all machines simultaneously assigned to $o$. If no machine
-is assigned to $o$, the sum is zero and $Y(o)$ is unchanged.
+is assigned to $o$, the sum is zero and $W(o)$ is unchanged.
+
+The scheduler does not directly observe $W(o)$ for incomplete operations, since the
+realized rates $\rho_{io}$ depend on the hidden parameter $\theta(\omega)$. Instead,
+the scheduler observes a separate \emph{cumulative assigned machine-steps} counter
+\[
+N : \mathcal{O}^* \to \mathbb{N}_0,
+\]
+where $N(o)$ records the total number of machine-time-steps that have been allocated
+to operation $o$ up to time $t$, regardless of the effective work produced. The
+counter $N$ is fully determined by the scheduler's own action history and is therefore
+directly observable. The latent effective work $W(o)$ is inferred through the
+posterior belief over $\theta$.
 
 \begin{remark}[Redundancy as collaborative construction]
 In the centralized regime, redundant assignment models collaborative work on a shared
@@ -167,14 +197,15 @@ with state-dependent productivity maps:
 \rho_{io} : 2^{\mathcal{J}^*} \times \Theta \to [0, \infty),
 \]
 where $\rho_{io}(C, \vartheta)$ is the effective work rate of machine $M_i$ on
-operation $o$ when the completed job set is $C$ and the latent environment is
-$\vartheta$. The one-step progress update for operation $o$ under action $a$ becomes:
+operation $o$ when the completed job set is $C \subseteq \mathcal{J}^*$ and the latent
+environment is $\vartheta \in \Theta$. The one-step progress update for operation $o$
+under action $a$ becomes:
 \[
-Y'(o) := Y(o) + \sum_{i\,:\, a(M_i) = o}
-\rho_{io}\bigl(\mathcal{C}(s),\; \theta(\omega)\bigr),
+W'(o) := W(o) + \sum_{i\,:\, a(M_i) = o}
+\rho_{io}\bigl(\mathcal{C}^{\mathrm{job}}(s),\; \theta(\omega)\bigr),
 \]
-and completion is $o \in \mathcal{C}^{\mathrm{op}}(s) \iff Y(o) \ge 1$.
-
+and completion is
+$o \in \mathcal{C}^{\mathrm{op}}(s) \iff W(o) \ge 1$.
 
 The truth-gating property is encoded via the productivity maps: if $T(j) = +$, then
 $\rho_{i,o_j^-}(C, \vartheta) = 0$ for all $M_i$, all $C$, and all $\vartheta$ with
@@ -227,9 +258,10 @@ $\omega$ and are unknown to the scheduler in advance.
 
 When a conjecture succeeds, the new job $J_k$ (together with $\bar J_k$) is added to
 a conjectured set $D \subseteq \mathcal{J}^*$, which is maintained as a new component
-of the state. The visible job set at state $s = (\omega, t, B, Y, D)$ is then:
+of the state. The visible job set at state $s = (\omega, t, B, W, D)$ is then:
 \[
-\mathcal{J}_t(s) := R\bigl(\mathcal{C}(s),\, \theta(\omega)\bigr) \cup D.
+\mathcal{J}_t(s) := R\bigl(\mathcal{C}^{\mathrm{job}}(s),\,
+\theta(\omega)\bigr) \cup D.
 \]
 
 \begin{remark}[Conjecturing as active task creation]
@@ -255,21 +287,23 @@ I = (\mathcal{J}^*,\, \mathcal{M},\, \alpha \mid \beta \mid \gamma,\,
 with the following specializations and modifications:
 
 \begin{enumerate}
-    \item \textbf{OR-open shop.} $\alpha_1 = O$ with $|O_j| = 2$ for all
-    $J_j \in \mathcal{J}^*$, OR-completion semantics
-    (Definition~\ref{def:oropenshop}), and a latent truth assignment
-    $T : \mathcal{J}^* \to \{+,-\}$ encoded in $\theta(\omega)$ such that the
-    intractable operation of each job has $\rho \equiv 0$.
+    \item \textbf{Binary OR-jobs.} Every job $J_j \in \mathcal{J}^*$ is a binary
+    OR-job (Definition~\ref{def:binaryorjob}) with operations
+    $O_j = \{o_j^+, o_j^-\}$ and OR-completion. A latent truth assignment
+    $T : \mathcal{J}^* \to \{+,-\}$ is encoded in $\theta(\omega)$ such that the
+    intractable operation of each job has $\rho \equiv 0$. Both operations may be
+    processed on any machine.
 
     \item \textbf{Redundant transferable progress.} The single-processing
     constraint is relaxed (multiple machines may work on the same operation
     simultaneously). Progress is transferable and additive: cumulative effective
-    work is tracked per operation via a scalar ledger $Y(o) \in [0,\infty)$, and
-    the operation completes when $Y(o) \ge 1$.
+    work is tracked per operation via a scalar latent ledger
+    $W(o) \in [0,\infty)$, and the operation completes when $W(o) \ge 1$.
 
     \item \textbf{State-dependent productivity.} Processing rates
-    $\rho_{io}(\mathcal{C}(s), \theta(\omega))$ depend on the completed job set,
-    replacing the fixed rates $\rho_{io}(\omega) = 1/p_{io}(\omega)$.
+    $\rho_{io}(\mathcal{C}^{\mathrm{job}}(s), \theta(\omega))$ depend on the
+    completed job set, replacing the fixed rates
+    $\rho_{io}(\omega) = 1/p_{io}(\omega)$.
 
     \item \textbf{Endogenous revelation.} Exogenous revelation times $\mathcal{V}$
     are replaced by a monotone revelation operator
@@ -283,7 +317,8 @@ with the following specializations and modifications:
 \end{enumerate}
 
 The instance is additionally equipped with a finite target job set
-$\mathcal{J}^{\mathrm{target}} \subseteq \mathcal{J}^*$, a latent parameter space
+$\mathcal{J}^{\mathrm{target}} \subseteq \mathcal{J}^*$ (containing exactly one
+representative from each negation pair), a latent parameter space
 $(\Theta, \mathcal{T})$ with $\theta : \Omega \to \Theta$, and an observation
 convention $\mathcal{Z}$.
 \end{definition}
@@ -299,77 +334,110 @@ defined by modifying the scheduling POMDP (Definition~\ref{def:schedpomdp}) as
 follows.
 \end{definition}
 
-\paragraph{State.} A state is a tuple $s = (\omega, t, B, Y, D)$, where
-$\omega \in \Omega$ is the latent scenario, $t \in \mathbb{N}_0$ is the current time,
-$D \subseteq \mathcal{J}^*$ is the conjectured set, and:
+\paragraph{State.} A state is a tuple $s = (\omega, t, B, W, D)$, where:
 \begin{itemize}
+    \item $\omega \in \Omega$ is the latent scenario, drawn once at $t = 0$ and
+    preserved by the transition kernel.
+    \item $t \in \mathbb{N}_0$ is the current discrete time.
     \item $B : \mathcal{M} \to \mathcal{O}^* \cup
     \{\mathrm{Conj}(J_j) : J_j \in \mathcal{J}^*\} \cup \{\varnothing\}$
     is the current assignment map.
-    \item $Y : \mathcal{O}^* \to [0, \infty)$ is the cumulative effective work
-    ledger, where $Y(o)$ records the total effective work accrued on operation $o$
+    \item $W : \mathcal{O}^* \to [0, \infty)$ is the \emph{latent effective work
+    ledger}, where $W(o)$ records the total effective work accrued on operation $o$
     up to and including time $t$.
+    \item $D \subseteq \mathcal{J}^*$ is the conjectured set.
 \end{itemize}
 
-Operation $o \in O_j$ is complete at state $s$ iff $Y(o) \ge 1$. We write
-$\mathcal{C}^{\mathrm{op}}(s) := \{o \in \mathcal{O}^* : Y(o) \ge 1\}$.
-Job $J_j$ is resolved iff
-$\mathcal{C}^{\mathrm{op}}(s) \cap O_j \neq \varnothing$.
-
-
+We define:
+\[
+\mathcal{C}^{\mathrm{op}}(s) := \{o \in \mathcal{O}^* : W(o) \ge 1\},
+\qquad
+\mathcal{C}^{\mathrm{job}}(s) := \{J_j \in \mathcal{J}^* :
+O_j \cap \mathcal{C}^{\mathrm{op}}(s) \neq \varnothing\}.
+\]
 The visible job set is
-$\mathcal{J}_t(s) := R(\mathcal{C}(s), \theta(\omega)) \cup D$.
+$\mathcal{J}_t(s) := R(\mathcal{C}^{\mathrm{job}}(s), \theta(\omega)) \cup D$.
 
-Feasibility conditions \textbf{(F1)--(F2)} and \textbf{(F4)--(F8)} from the
-scheduling POMDP are inherited, with the following modifications:
+Feasibility conditions from the scheduling POMDP are inherited with the following
+modifications:
 \begin{itemize}
-    \item \textbf{(F1)} uses $\mathcal{J}_t(s)$ in place of
-    $\mathcal{J}_t(\omega)$.
-    \item \textbf{(F3)} (single processing) is dropped: multiple machines may be
-    assigned to the same operation.
-    \item \textbf{(F2)} (machine routing) is governed by the OR-open shop
+    \item \textbf{(F1)} (revelation) uses $\mathcal{J}_t(s)$ in place of
+    $\mathcal{J}_t(\omega)$: if $J_j \notin \mathcal{J}_t(s)$, then $W(o) = 0$ for
+    all $o \in O_j$, and $B(M_i) \neq o$ for all $M_i$.
+    \item \textbf{(F2)} (machine routing) is replaced by the binary OR-job
     convention: both operations of each job may be processed on any machine, in any
     order.
+    \item \textbf{(F3)} (single processing) is dropped: multiple machines may be
+    assigned to the same operation.
     \item Feasibility additionally requires: $D$ is closed under negation
-    ($J_j \in D \iff \bar J_j \in D$); completed jobs and their operations are not
-    reassigned; and conjecture assignments target only visible jobs.
+    ($J_j \in D \iff \bar J_j \in D$); if
+    $J_j \in \mathcal{C}^{\mathrm{job}}(s)$, then $B(M_i) \notin O_j \cup
+    \{\mathrm{Conj}(J_j)\}$ for all $M_i$; and conjecture assignments target only
+    visible jobs.
 \end{itemize}
 
-\paragraph{Observation.} The observation
+\paragraph{Observation.} The observation is
 \[
-o = \bigl(\mathcal{J}_t,\; B,\; Y|_{\mathcal{O}_t},\;
+o = \bigl(\mathcal{J}_t,\; B,\; N|_{\mathcal{O}_t},\;
 \mathcal{C}_t^{\mathrm{obs}},\;
 \Lambda^{\mathrm{prior}},\; \Lambda_t^{\mathrm{rev}},\;
-\Lambda_t^{\mathrm{comp}},\; \Lambda_t^{\mathrm{conj}}\bigr)
+\Lambda_t^{\mathrm{comp}},\; \Lambda_t^{\mathrm{conj}}\bigr),
 \]
-extends the scheduling POMDP observation with one additional component:
+where the components are as follows.
+
+\medskip
+\noindent\textbf{$N|_{\mathcal{O}_t}$: Visible cumulative assigned machine-steps.}
+For each visible operation $o \in \mathcal{O}_t$,
+\[
+N(o) := \sum_{t'=0}^{t} \bigl|\{M_i : a_{t'}(M_i) = o\}\bigr| \;\in\; \mathbb{N}_0
+\]
+records the total number of machine-time-steps that have been allocated to $o$ up to
+time $t$. This quantity is fully determined by the scheduler's own action history and
+is therefore directly observable. It is \emph{not} the latent effective work $W(o)$:
+the relationship between $N(o)$ and $W(o)$ depends on the hidden rates
+$\rho_{io}(\mathcal{C}^{\mathrm{job}}(s_{t'}), \theta(\omega))$ at each past step.
+
+\medskip
+\noindent\textbf{$\mathcal{C}_t^{\mathrm{obs}}$: Observed completion sets.}
+\[
+\mathcal{C}_t^{\mathrm{obs,op}} := \{o \in \mathcal{O}_t :
+\text{completion of } o \text{ has been revealed by time } t\},
+\]
+\[
+\mathcal{C}_t^{\mathrm{obs,job}} := \{J_j :
+O_j \cap \mathcal{C}_t^{\mathrm{obs,op}} \neq \varnothing\}.
+\]
+As in the scheduling POMDP, completion is detected at the end of the time step in
+which $W(o)$ first reaches $1$. Admissibility and policies are stated in terms of
+$\mathcal{C}_t^{\mathrm{obs,op}}$ and $\mathcal{C}_t^{\mathrm{obs,job}}$.
 
 \medskip
 \noindent\textbf{$\Lambda_t^{\mathrm{conj}}$: Cumulative conjecture record.}
 For each past conjecture action, whether it succeeded ($J_k$) or failed ($\bot$).
 
 \medskip
-\noindent Note that $Y(o)$ for an incomplete operation is a latent quantity: its
-value depends on the realized rates
-$\rho_{io}(\mathcal{C}(s_{t'}), \theta(\omega))$ at each past time step, which
-involve the hidden parameter $\theta(\omega)$. The scheduler does not directly
-observe $Y(o)$. Instead, the scheduler knows its own action history (and hence which
-machines were assigned where at each step), observes completions (when $Y(o)$
-crosses $1$), and maintains a posterior belief over $\theta$ from which it can
-estimate $Y(o)$. In particular, if many machine-steps have been allocated to $o_j^+$
-without completion, this is Bayesian evidence that $\varphi_j$ is false (since
-$\rho_{i,o_j^+} = 0$ when $T(j) = -$).
+\noindent\textbf{$\Lambda^{\mathrm{prior}}$, $\Lambda_t^{\mathrm{rev}}$,
+$\Lambda_t^{\mathrm{comp}}$} are defined as in the scheduling POMDP, with the
+precedence sub-DAG replaced by whatever dependency information the observation
+convention $\mathcal{Z}$ specifies.
 
-Accordingly, $Y|_{\mathcal{O}_t}$ in the observation tuple is understood as the
-scheduler's \emph{action-derived} allocation record (how many machine-steps were
-assigned to each visible operation), not the latent effective work values themselves.
-The actual progress $Y(o)$ is inferred through the posterior $\Pi_t$.
+\begin{remark}[Latent effective work vs.\ observable allocation]
+The scheduler observes assignments ($B$), cumulative allocated machine-steps
+($N|_{\mathcal{O}_t}$), completions ($\mathcal{C}_t^{\mathrm{obs}}$), revelation
+metadata, completion metadata, and conjecture outcomes. The latent effective work
+$W(o)$ for incomplete operations remains hidden: it depends on the realized rates
+$\rho_{io}$, which involve the unobserved $\theta(\omega)$. The scheduler infers
+$W(o)$ through the posterior $\Pi_t = \mathrm{Law}(\theta(\omega) \mid h_t)$.
 
-The remaining observation
-components ($\Lambda^{\mathrm{prior}}$, $\Lambda_t^{\mathrm{rev}}$,
-$\mathcal{C}_t^{\mathrm{obs}}$, $\Lambda_t^{\mathrm{comp}}$) are defined as in the
-scheduling POMDP, with the precedence sub-DAG replaced by whatever dependency
-information the observation convention $\mathcal{Z}$ specifies.
+In particular, if many machine-steps have been allocated to $o_j^+$ (i.e., $N(o_j^+)$
+is large) without completion, this is Bayesian evidence that $\varphi_j$ is false:
+since $\rho_{i,o_j^+} = 0$ when $T(j) = -$, large $N(o_j^+)$ with no completion
+shifts the posterior toward $T(j) = -$. This inference mechanism is how the planner
+learns about the hidden truth structure through interaction.
+\end{remark}
+
+The observation space $\mathsf{O}_I$ is the collection of all such tuples arising
+from feasible states.
 
 \paragraph{Actions.} An action is a map
 \[
@@ -381,23 +449,25 @@ $\mathcal{U}_I : \mathsf{O}_I \rightrightarrows \mathsf{A}_I$ requires:
 \begin{itemize}
     \item[\textbf{(A1)}] If $a(M_i) = o$ for $o \in O_j$: job $J_j$ is visible
     ($J_j \in \mathcal{J}_t$), not resolved
-    ($J_j \notin \mathcal{C}_t^{\mathrm{obs,jobs}}$), and $o$ is not complete
-    ($o \notin \mathcal{C}_t^{\mathrm{obs}}$).
+    ($J_j \notin \mathcal{C}_t^{\mathrm{obs,job}}$), and $o$ is not complete
+    ($o \notin \mathcal{C}_t^{\mathrm{obs,op}}$).
 
     \item[\textbf{(A2)}] If $a(M_i) = \mathrm{Conj}(J_j)$: job $J_j$ is visible
     ($J_j \in \mathcal{J}_t$).
 \end{itemize}
 Multiple machines may be assigned to the same operation or to conjecture anchored at
-the same job.
+the same job. Every quantity referenced in \textbf{(A1)--(A2)} is visible in the
+observation.
 
 \paragraph{Transition.} The transition is $T_I(\cdot \mid s, a) :=
 \delta_{\mathrm{Step}_I(s, a)}$, where
-$\mathrm{Step}_I((\omega, t, B, Y, D), a) = (\omega, t+1, a, Y', D')$ with:
+$\mathrm{Step}_I((\omega, t, B, W, D), a) = (\omega, t+1, a, W', D')$ with:
 
+\medskip
 \noindent\textbf{Progress update.} For each operation $o \in \mathcal{O}^*$:
 \[
-Y'(o) := Y(o) + \sum_{i\,:\, a(M_i) = o}
-\rho_{io}\bigl(\mathcal{C}(s),\; \theta(\omega)\bigr).
+W'(o) := W(o) + \sum_{i\,:\, a(M_i) = o}
+\rho_{io}\bigl(\mathcal{C}^{\mathrm{job}}(s),\; \theta(\omega)\bigr).
 \]
 
 \medskip
@@ -411,13 +481,16 @@ $D' := D \cup \{J_k, \bar J_k\}$. Otherwise $D$ is unchanged.
 The initial state is
 $s_0 = (\omega, 0, \varnothing, \mathbf{0}, \varnothing)$ with
 $\omega \sim \mathbb{P}$. The terminal set is
-$\mathsf{S}_I^{\mathrm{term}} := \{s : \mathcal{J}^{\mathrm{target}} \subseteq
-\mathcal{C}(s)\}$. The cost function and policy definitions are identical to those of
+\[
+\mathsf{S}_I^{\mathrm{term}} := \{s \in \mathsf{S}_I :
+\mathcal{J}^{\mathrm{target}} \subseteq \mathcal{C}^{\mathrm{job}}(s)\}.
+\]
+The cost function and policy definitions are identical to those of
 the scheduling POMDP (Definitions~\ref{def:randpolicy}--\ref{def:policyvalue}).
 
 \begin{remark}[Conditional determinism]
 All stochasticity is concentrated in $\omega \sim \mathbb{P}$. Conditional on
-$\omega$, the process $(t, B_t, Y_t, D_t)_{t \ge 0}$ is a deterministic dynamical
+$\omega$, the process $(t, B_t, W_t, D_t)_{t \ge 0}$ is a deterministic dynamical
 system, as in the scheduling POMDP. Truth values, processing rates, revelation
 structure, and conjecture outcomes are all encoded in $\omega$.
 \end{remark}
@@ -430,17 +503,22 @@ $|O_j| = 1$ with AND-completion and deterministic truth ($T(j) = +$ for all $j$)
 single-processing restored (at most one machine per operation);
 $\rho_{io}(C, \vartheta) = 1/p_{io}(\omega)$ independent of $C$;
 and the per-machine ledger $Y(o, M_i) \in \mathbb{N}_0$ of the scheduling POMDP
-replacing the scalar effective-work ledger $Y(o) \in [0, \infty)$.
+replacing the scalar latent-work ledger $W(o) \in [0, \infty)$.
 \end{remark}
-
-
-\subsection{Examples}
-
 
 \subsection{Approximation Theory}
 
+[todo: use bounds from all over POMDP and scheduling theory to get bounds on the fully general ITAP (and a collection of special cases), and identify which features are responsible for which sources of hardness]
+
 \subsection{Complexity Theory}
+[todo: similarly, use complexity results from both generalizations (i.e. POMDP P-space etc) and special cases to get complexity characterization of the ITAP. Prove these results and reductions rigorously.]
+
 
 \subsection{Limitations}
+
+[todo: this ITAP model assumes agents all have visible capabilities and can freely transfer information. However, if we get rid of this assumption, the previous approximation theory becomes much mroe difficult via the new elicitation issue. Review some basic results on elicitation and mechanism design, and prove a version of nisan-ronen for ITAP, showing that there's some concrete inapproximability result for the centralized ITAP with private information.]
+
+
+[todo: talk about how this motivates decentralized control, remark that formulation of ITAP as a dec-POMDP is possible, but we do not do it as it sucks (recall prior convo). Also study complexity if its any different now. End with basically having motivated that this should be studied game theoretically.]
 
 

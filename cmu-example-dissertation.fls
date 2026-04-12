@@ -315,11 +315,6 @@ INPUT ./chapter/03-TaskAllocation.tex
 INPUT ./chapter/03-TaskAllocation.tex
 INPUT ./chapter/03-TaskAllocation.tex
 INPUT chapter/03-TaskAllocation.tex
-INPUT ./chapter/04-DecentralizedTaskAllocation.tex
-INPUT ./chapter/04-DecentralizedTaskAllocation.tex
-INPUT ./chapter/04-DecentralizedTaskAllocation.tex
-INPUT ./chapter/04-DecentralizedTaskAllocation.tex
-INPUT chapter/04-DecentralizedTaskAllocation.tex
 INPUT ./chapter/05-VAMP.tex
 INPUT ./chapter/05-VAMP.tex
 INPUT ./chapter/05-VAMP.tex
