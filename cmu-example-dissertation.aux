@@ -13,8 +13,8 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Figures}}{viii}{Doc-Start}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Tables}}{ix}{Doc-Start}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Figures}}{vi}{Doc-Start}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Tables}}{vii}{Doc-Start}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {1\hspace  {1em}}\nobreakspace  {}\textbf  {Introduction}}{1}{section*.1}\protected@file@percent }
 \newlabel{chap:intro}{{1}{1}{}{section*.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}\protected@file@percent }
@@ -22,151 +22,138 @@
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:flt-dependency-graph}{{\relax Figure\nobreakspace  {\relax 1}.1}{2}{Schematic dependency graph for the Lean formalization effort around Fermat's Last Theorem. The intent is to visualize a theorem not as an isolated statement, but as the endpoint of a large directed dependency structure spanning multiple mathematical domains. Such a graph highlights why theorem proving, formal verification, and related activities may be viewed as allocation problems over interdependent tasks}{figure.caption.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Core Contributions}{3}{subsection.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2\hspace  {1em}}\nobreakspace  {}\textbf  {Scheduling Theory and Task Allocation}}{5}{section*.3}\protected@file@percent }
-\newlabel{chap:schedulingtheory}{{2}{5}{Core Contributions}{section*.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Offline Deterministic Scheduling}{5}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Offline Stochastic Scheduling}{8}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Stochastic Online Scheduling}{10}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}States, Actions, and Policies}{11}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}Partially Observable Markov Decision Processes}{12}{subsubsection.2.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.2}Scheduling as a POMDP}{13}{subsubsection.2.4.2}\protected@file@percent }
-\newlabel{def:schedpomdp}{{2.9}{14}{Scheduling POMDP}{definition.2.9}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.1}Preliminary: Processing requirements and progress rates.}{14}{paragraph.2.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.2}State space $\mathsf  {S}_I$.}{15}{paragraph.2.4.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.3}Observation space $\mathsf  {O}_I$ and observation kernel $Z_I$.}{17}{paragraph.2.4.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.4}Action space $\mathsf  {A}_I$ and admissible actions.}{18}{paragraph.2.4.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.5}Transition kernel $T_I$.}{19}{paragraph.2.4.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.6}Initial state distribution $T_I^0$.}{20}{paragraph.2.4.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.7}Cost function $c_I$ and objective.}{20}{paragraph.2.4.2.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.2.8}Restriction to special cases.}{20}{paragraph.2.4.2.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.3}Solutions and Policies}{21}{subsubsection.2.4.3}\protected@file@percent }
-\newlabel{def:obshist}{{2.10}{21}{Observation history}{definition.2.10}{}}
-\newlabel{def:randpolicy}{{2.11}{21}{Randomized nonanticipative policy}{definition.2.11}{}}
-\newlabel{rmk:belief}{{2.4.3}{22}{Belief-state sufficient statistic}{definition.2.11}{}}
-\newlabel{def:detpolicy}{{2.12}{23}{Deterministic nonanticipative policy}{definition.2.12}{}}
-\newlabel{def:policyvalue}{{2.13}{23}{Policy value and the scheduling optimization problem}{definition.2.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Examples}{23}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1}Offline deterministic: \(P\mid \mathrm  {prec}\mid C_{\max }\)}{23}{subsubsection.2.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.2}Offline stochastic: \(P\mid \mathrm  {prec}\mid \mathbb  E[C_{\max }]\), and the weighted-completion extension}{24}{subsubsection.2.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.3}Stochastic online: classical SOS for \(P\mid r_j\mid \mathbb  E[\DOTSB \sum@ \slimits@ _j w_j C_j]\)}{25}{subsubsection.2.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3\hspace  {1em}}\nobreakspace  {}\textbf  {The Interdependent Task Allocation Problem}}{27}{section*.4}\protected@file@percent }
-\newlabel{chap:itap}{{3}{27}{Stochastic online: classical SOS for \(P\mid r_j\mid \mathbb E[\sum _j w_j C_j]\)}{section*.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Motivation}{27}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Formal Definition}{28}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Binary OR-Job Structure}{28}{subsubsection.3.2.1}\protected@file@percent }
-\newlabel{def:binaryorjob}{{3.14}{29}{Binary OR-job}{definition.3.14}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Transferable Progress with Redundant Assignment}{29}{subsubsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}State-Dependent Processing Times}{31}{subsubsection.3.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.4}Endogenous Revelation and Active Conjecturing}{31}{subsubsection.3.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.4.1}Passive revelation.}{31}{paragraph.3.2.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.4.2}Active revelation (conjecturing).}{32}{paragraph.3.2.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.5}Centralized ITAP: Full Definition}{32}{subsubsection.3.2.5}\protected@file@percent }
-\newlabel{def:citap}{{3.15}{32}{Centralized ITAP instance}{definition.3.15}{}}
-\newlabel{def:citappomdp}{{3.16}{33}{Centralized ITAP POMDP}{definition.3.16}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.5.1}State.}{33}{paragraph.3.2.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.5.2}Observation.}{34}{paragraph.3.2.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.5.3}Actions.}{35}{paragraph.3.2.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.5.4}Transition.}{36}{paragraph.3.2.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.2.5.5}Initial state, cost, and policies.}{36}{paragraph.3.2.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Approximation Theory}{36}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Complexity Theory}{37}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Limitations}{37}{subsection.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4\hspace  {1em}}\nobreakspace  {}\textbf  {VAMP --- Formal Definition and Properties}}{38}{section*.5}\protected@file@percent }
-\newlabel{chap:vamp}{{4}{38}{Limitations}{section*.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Partially Observable Stochastic Games}{38}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Definition}{39}{subsubsection.4.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Policies, Utilities, and Equilibria}{40}{subsubsection.4.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}VAMP Preliminaries}{41}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Syntax}{41}{subsubsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Semantics}{41}{subsubsection.4.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Libraries}{41}{subsubsection.4.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.3.1}Library Invariants and Properties}{42}{paragraph.4.2.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.3.2}Axioms and Fully Resolved Sequents}{43}{paragraph.4.2.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.3.3}Private and Shared Libraries}{43}{paragraph.4.2.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.4}Market State}{43}{subsubsection.4.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.5}Action Primitives}{44}{subsubsection.4.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.1}Discrete kernels.}{44}{paragraph.4.2.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.2}Proof Kernel}{44}{paragraph.4.2.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.3}Conjecture Kernel}{45}{paragraph.4.2.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.4}Dependency Closure for Publication}{45}{paragraph.4.2.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.5}Query Model}{46}{paragraph.4.2.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.2.5.6}Market Mechanism}{48}{paragraph.4.2.5.6}\protected@file@percent }
-\newlabel{sec:vamp-market}{{4.2.5.6}{48}{Market Mechanism}{paragraph.4.2.5.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Verifiable Allocation Market POSG}{49}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}World State Space $\mathcal  {W}$}{49}{subsubsection.4.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Observations $\mathcal  {O}^\alpha $ and Observation Kernels $\mathcal  {Z}^\alpha $}{50}{subsubsection.4.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Action Space $\mathcal  {A}^\alpha $ and Admissibility $\mathrm  {Adm}^\alpha $}{50}{subsubsection.4.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}Transition Kernel $\mathcal  {T}$}{52}{subsubsection.4.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.1}Background: Deterministic Pre-Update}{52}{paragraph.4.3.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.2}Background - Stochastic Job Completion}{53}{paragraph.4.3.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.3}Background - Deterministic Post-Update}{54}{paragraph.4.3.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.4}Stage I: Non-market transition $\mathcal  {T}_{\mathrm  {nm}}$}{55}{paragraph.4.3.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.5}Stage II: Market transition via $\mathscr  {M}$}{55}{paragraph.4.3.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.4.6}Full transition kernel}{55}{paragraph.4.3.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.5}Reward, Discount Factor, and Initial Distribution}{56}{subsubsection.4.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.6}Consistency and well-definedness}{56}{subsubsection.4.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Equilibria and Tractibility}{56}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Comparison to Centralized Mechanisms}{57}{subsection.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5\hspace  {1em}}\nobreakspace  {}\textbf  {Multiagent Reinforcement Learning for VAMPs}}{58}{section*.6}\protected@file@percent }
-\newlabel{chap:marl}{{5}{58}{Comparison to Centralized Mechanisms}{section*.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6\hspace  {1em}}\nobreakspace  {}\textbf  {Implementation}}{59}{section*.7}\protected@file@percent }
-\newlabel{chap:implementation}{{6}{59}{Comparison to Centralized Mechanisms}{section*.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Assumptions}{59}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.1}Finite Formula Universe.}{59}{paragraph.6.1.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.2}Finite Agent Universe.}{59}{paragraph.6.1.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.3}Truth and Difficulty Initialization.}{59}{paragraph.6.1.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.4}Static dependency structure and metadata.}{60}{paragraph.6.1.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.5}Utility Graph.}{60}{paragraph.6.1.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.0.6}Sequent Specification.}{60}{paragraph.6.1.0.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Proof Kernel ($\mathcal  {K}_{\text  {proof}}$).}{62}{subsection.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.1}Bernoulli proof outcomes.}{62}{paragraph.6.2.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.2}Truth + Dependency Gate.}{62}{paragraph.6.2.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.3}Budget Monotonicity and Diminishing Returns.}{63}{paragraph.6.2.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.4}Difficulty Modulation.}{63}{paragraph.6.2.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.5}Utility Modulation.}{63}{paragraph.6.2.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.0.6}Heterogeneous Agent Capability Modulation.}{64}{paragraph.6.2.0.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Definition}{64}{subsubsection.6.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Conjecture Kernel ($\mathcal  {K}_{\text  {conj}}$).}{64}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.1}Bernoulli success with conditional proposal.}{65}{paragraph.6.3.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.2}Budget monotonicity and diminishing returns.}{65}{paragraph.6.3.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.3}Heterogeneous agent conjecturing capability.}{65}{paragraph.6.3.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.4}Utility-guided relevance.}{65}{paragraph.6.3.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.5}Local opportunity modulation.}{66}{paragraph.6.3.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.6}Budget-improved proposal quality.}{66}{paragraph.6.3.0.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.0.7}Proposal distribution over all formulas, restricted to ghosts by renormalization.}{67}{paragraph.6.3.0.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Definition}{67}{subsubsection.6.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Query Model.}{67}{subsection.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.1}Feature buckets.}{68}{paragraph.6.4.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.2}Discrete-time survival model.}{69}{paragraph.6.4.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.3}Query readout.}{69}{paragraph.6.4.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.4}Query model state.}{69}{paragraph.6.4.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.5}MAP-smoothed hazard estimates.}{70}{paragraph.6.4.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.6}Observed data and censoring.}{70}{paragraph.6.4.0.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.4.0.7}Update rule.}{71}{paragraph.6.4.0.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Market Mechanisms}{71}{subsection.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.0.1}Common portfolio structure.}{71}{paragraph.6.5.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.0.2}Worst-case collateralization.}{72}{paragraph.6.5.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.0.3}Cash conservation.}{72}{paragraph.6.5.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.0.4}Public settlement events.}{72}{paragraph.6.5.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.0.5}Resolution events.}{72}{paragraph.6.5.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Mechanism: Collateralized Bilateral Contract Market}{73}{subsubsection.6.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.1}Long and short claims.}{73}{paragraph.6.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.2}Unit notional and quantities.}{74}{paragraph.6.5.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.3}Asset creation.}{74}{paragraph.6.5.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.4}Public offers.}{74}{paragraph.6.5.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.5}Trades.}{74}{paragraph.6.5.1.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.6}Collateral and admissibility.}{74}{paragraph.6.5.1.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.1.7}Settlement.}{75}{paragraph.6.5.1.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {Experiments}}{76}{section*.8}\protected@file@percent }
-\newlabel{chap:experiments}{{7}{76}{Settlement}{section*.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8\hspace  {1em}}\nobreakspace  {}\textbf  {Application to Neural Theorem Proving}}{77}{section*.9}\protected@file@percent }
-\newlabel{chap:application}{{8}{77}{Settlement}{section*.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{78}{section*.10}\protected@file@percent }
-\newlabel{chap:conclusion}{{9}{78}{Settlement}{section*.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2\hspace  {1em}}\nobreakspace  {}\textbf  {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}\protected@file@percent }
+\newlabel{chap:centralized}{{2}{5}{Core Contributions}{section*.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Background}{5}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}Syntax}{5}{subsubsection.2.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}Semantics}{6}{subsubsection.2.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3}Libraries}{6}{subsubsection.2.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.4}Library Invariants and Properties}{7}{subsubsection.2.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.5}Axioms and Fully Resolved Sequents}{8}{subsubsection.2.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.6}Private and Shared Libraries}{8}{subsubsection.2.1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The Centralized MATP Problem}{8}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Background: POMDP}{8}{subsubsection.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Background: Action Primitives}{10}{subsubsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.1}Discrete kernels.}{10}{paragraph.2.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.2}Proof Kernel.}{10}{paragraph.2.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.3}Conjecture Kernel.}{11}{paragraph.2.2.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.4}Dependency Closure for Publication.}{11}{paragraph.2.2.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.5}Query Model.}{11}{paragraph.2.2.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Definition}{12}{subsubsection.2.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.1}State Space $\mathsf  {S}$.}{12}{paragraph.2.2.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.2}Action Space $\mathsf  {A}$ and Admissibility.}{13}{paragraph.2.2.3.2}\protected@file@percent }
+\newlabel{rem:centralized-admissibility}{{2.2.3.2}{13}{Centralization and admissibility}{paragraph.2.2.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.3}Observation Space $\mathsf  {O}$ and Observation Kernel $Z$.}{13}{paragraph.2.2.3.3}\protected@file@percent }
+\newlabel{rem:perfect-public-info}{{2.2.3.3}{14}{Perfect public information}{paragraph.2.2.3.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.4}Transition Kernel $T$.}{14}{paragraph.2.2.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{Step 1: Deterministic Pre-Update.}{14}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{Step 2: Stochastic Job Completion.}{15}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{Step 3: Deterministic Post-Update.}{15}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.5}Full transition kernel.}{15}{paragraph.2.2.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.6}Cost Function.}{16}{paragraph.2.2.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.7}Initial distribution $T^0$.}{16}{paragraph.2.2.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Example}{16}{subsubsection.2.2.4}\protected@file@percent }
+\newlabel{sec:matp-example}{{2.2.4}{16}{Example}{subsubsection.2.2.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.4.1}Setup.}{16}{paragraph.2.2.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.4.2}Optimal plan.}{17}{paragraph.2.2.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.4.3}Discussion.}{17}{paragraph.2.2.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}MATP and Scheduling Theory}{17}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:scheduling}{{2.3}{17}{MATP and Scheduling Theory}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Non-Conjecturing PPI MATP}{18}{subsubsection.2.3.1}\protected@file@percent }
+\newlabel{sec:nc-ppi}{{2.3.1}{18}{Non-Conjecturing PPI MATP}{subsubsection.2.3.1}{}}
+\newlabel{def:nc-ppi-matp}{{2.4}{18}{Non-Conjecturing PPI MATP}{definition.2.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.1.1}The latent task set.}{18}{paragraph.2.3.1.1}\protected@file@percent }
+\newlabel{def:latent-tasks}{{2.5}{18}{Dependency closure and latent task set}{definition.2.5}{}}
+\newlabel{rem:no-operational-prec}{{2.3.1.1}{19}{No operational precedence}{Item.19}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.1.2}Information structure and revelation.}{19}{paragraph.2.3.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}Scheduling Interpretation}{19}{subsubsection.2.3.2}\protected@file@percent }
+\newlabel{sec:sched-interp}{{2.3.2}{19}{Scheduling Interpretation}{subsubsection.2.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.2.1}Correspondence.}{19}{paragraph.2.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.2.2}Stochastic processing times.}{20}{paragraph.2.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.2.3}Key departures from classical scheduling.}{20}{paragraph.2.3.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.3.2.4}Revelation DAG.}{21}{paragraph.2.3.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Complexity and Approximability}{21}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:complexity}{{2.4}{21}{Complexity and Approximability}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}Complexity Results}{21}{subsubsection.2.4.1}\protected@file@percent }
+\newlabel{sec:complexity-classes}{{2.4.1}{21}{Complexity Results}{subsubsection.2.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.1.1}Embedding of classical scheduling.}{21}{paragraph.2.4.1.1}\protected@file@percent }
+\newlabel{prop:embeddings}{{2.1}{21}{Scheduling embeddings}{theorem.2.1}{}}
+\newlabel{thm:np-hard}{{2.2}{22}{NP-hardness of MATP}{theorem.2.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.1.2}State space and MDP complexity.}{23}{paragraph.2.4.1.2}\protected@file@percent }
+\newlabel{prop:state-space}{{2.3}{23}{State space exponentiality}{theorem.2.3}{}}
+\newlabel{cor:exact-complexity}{{2.3.1}{23}{Exact solution complexity}{corollary.2.3.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.2}Lower Bounds}{23}{subsubsection.2.4.2}\protected@file@percent }
+\newlabel{sec:lower-bounds}{{2.4.2}{23}{Lower Bounds}{subsubsection.2.4.2}{}}
+\newlabel{def:work-depth}{{2.6}{23}{Work and serial depth}{definition.2.6}{}}
+\newlabel{thm:lower-bounds}{{2.4}{24}{Work and serial depth lower bounds}{theorem.2.4}{}}
+\newlabel{rem:serial-depth-tight}{{2.4.2}{24}{Tightness of the serial depth bound}{theorem.2.4}{}}
+\newlabel{rem:speculation}{{2.4.2}{24}{Speculation and the serial depth bound}{theorem.2.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.3}Approximation Algorithms}{25}{subsubsection.2.4.3}\protected@file@percent }
+\newlabel{sec:approx}{{2.4.3}{25}{Approximation Algorithms}{subsubsection.2.4.3}{}}
+\newlabel{def:reactive-ls}{{2.7}{25}{Reactive list scheduling}{definition.2.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.3.1}Identical agents, single-assignment.}{25}{paragraph.2.4.3.1}\protected@file@percent }
+\newlabel{thm:rls-approx}{{2.5}{26}{RLS approximation for identical agents}{theorem.2.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.3.2}Unrelated agents, single-assignment.}{27}{paragraph.2.4.3.2}\protected@file@percent }
+\newlabel{prop:unrelated-no-dep}{{2.6}{28}{Unrelated agents, no dependencies}{theorem.2.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.3.3}OR-redundant reactive list scheduling.}{28}{paragraph.2.4.3.3}\protected@file@percent }
+\newlabel{prop:or-benefit}{{2.7}{28}{Benefit of OR-redundancy}{theorem.2.7}{}}
+\newlabel{rem:or-vs-standard}{{2.4.3.3}{28}{OR-redundancy vs.\ task parallelism}{Item.30}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.4}Summary}{29}{subsubsection.2.4.4}\protected@file@percent }
+\newlabel{sec:complexity-summary}{{2.4.4}{29}{Summary}{subsubsection.2.4.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 2}.1}{\ignorespaces Complexity and approximation landscape for Non-Conjecturing PPI MATP. ``Latent $\delta ^*$'' indicates the general case with unique but unknown dependencies. ``LPT'' is Longest Processing Time first; ``RLS'' is Reactive List Scheduling (Thm.\nobreakspace  {}\ref {thm:rls-approx}); ``LST'' is Lenstra--Shmoys--Tardos LP rounding; ``str.'' abbreviates ``strongly.'' All approximation ratios are with respect to the expected makespan objective.}}{29}{table.caption.7}\protected@file@percent }
+\newlabel{tab:complexity}{{\relax Table\nobreakspace  {\relax 2}.1}{29}{Complexity and approximation landscape for Non-Conjecturing PPI MATP. ``Latent $\delta ^*$'' indicates the general case with unique but unknown dependencies. ``LPT'' is Longest Processing Time first; ``RLS'' is Reactive List Scheduling (Thm.~\protect \ref {thm:rls-approx}); ``LST'' is Lenstra--Shmoys--Tardos LP rounding; ``str.'' abbreviates ``strongly.'' All approximation ratios are with respect to the expected makespan objective}{table.caption.7}{}}
+\newlabel{rem:limitations}{{2.4.4}{29}{Limitations and forward pointers}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.5}Limits of Centralization}{30}{subsubsection.2.4.5}\protected@file@percent }
+\newlabel{sec:limits-centralization}{{2.4.5}{30}{Limits of Centralization}{subsubsection.2.4.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3\hspace  {1em}}\nobreakspace  {}\textbf  {Decentralized Multi-Agent Theorem Proving}}{31}{section*.8}\protected@file@percent }
+\newlabel{sec:decentralized}{{3}{31}{Limits of Centralization}{section*.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Background: Multi-Agent Decision Making}{31}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:posg-background}{{3.1}{31}{Background: Multi-Agent Decision Making}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Complexity of decentralized control.}{32}{subsubsection.3.1.1}\protected@file@percent }
+\newlabel{prop:dec-complexity}{{3.8}{32}{Complexity of Dec-POMDP and POSG}{theorem.3.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The Decentralized MATP Game}{32}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:dec-matp}{{3.2}{32}{The Decentralized MATP Game}{subsection.3.2}{}}
+\newlabel{def:dec-matp}{{3.12}{33}{Decentralized MATP POSG}{definition.3.12}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Cooperative baseline: Dec-POMDP.}{33}{subsubsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Individual rewards and the externality problem.}{34}{subsubsection.3.2.2}\protected@file@percent }
+\newlabel{def:credit-reward}{{3.13}{34}{Credit-based reward}{definition.3.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}The Publication Externality}{34}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:externality}{{3.3}{34}{The Publication Externality}{subsection.3.3}{}}
+\newlabel{def:pub-externality}{{3.14}{34}{Publication externality}{definition.3.14}{}}
+\newlabel{thm:externality}{{3.9}{35}{Existence of publication externalities}{theorem.3.9}{}}
+\newlabel{cor:free-riding}{{3.9.1}{35}{Free riding and underinvestment}{corollary.3.9.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Market-Mediated MATP}{36}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:market-matp}{{3.4}{36}{Market-Mediated MATP}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Collateralized bilateral contract market.}{36}{subsubsection.3.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Market-augmented reward.}{36}{subsubsection.3.4.2}\protected@file@percent }
+\newlabel{def:vamp-game}{{3.15}{37}{Market-Mediated MATP (VAMP)}{definition.3.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Internalization of Externalities}{37}{subsection.3.5}\protected@file@percent }
+\newlabel{sec:internalization}{{3.5}{37}{Internalization of Externalities}{subsection.3.5}{}}
+\newlabel{thm:internalization}{{3.10}{37}{Market internalization of publication externalities}{theorem.3.10}{}}
+\newlabel{rem:collateral}{{3.5}{38}{Collateralization and manipulation}{Item.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Equilibrium Analysis}{38}{subsection.3.6}\protected@file@percent }
+\newlabel{sec:equilibria}{{3.6}{38}{Equilibrium Analysis}{subsection.3.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Existence of equilibria.}{39}{subsubsection.3.6.1}\protected@file@percent }
+\newlabel{prop:ne-existence}{{3.11}{39}{Existence of Nash equilibria}{theorem.3.11}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}Price of Anarchy.}{39}{subsubsection.3.6.2}\protected@file@percent }
+\newlabel{prop:poa-lower}{{3.12}{39}{PoA lower bound}{theorem.3.12}{}}
+\newlabel{prop:poa-market}{{3.13}{39}{PoA with market}{theorem.3.13}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}Computational complexity of equilibria.}{40}{subsubsection.3.6.3}\protected@file@percent }
+\newlabel{prop:vamp-complexity}{{3.14}{40}{Complexity of VAMP equilibria}{theorem.3.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Intractibility Consequences}{40}{subsection.3.7}\protected@file@percent }
+\newlabel{sec:game-summary}{{3.7}{40}{Intractibility Consequences}{subsection.3.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4\hspace  {1em}}\nobreakspace  {}\textbf  {Multiagent Reinforcement Learning for VAMPs}}{41}{section*.9}\protected@file@percent }
+\newlabel{chap:marl}{{4}{41}{Intractibility Consequences}{section*.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5\hspace  {1em}}\nobreakspace  {}\textbf  {Experiments}}{42}{section*.10}\protected@file@percent }
+\newlabel{chap:experiments}{{5}{42}{Intractibility Consequences}{section*.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6\hspace  {1em}}\nobreakspace  {}\textbf  {Application to Neural Theorem Proving}}{43}{section*.11}\protected@file@percent }
+\newlabel{chap:application}{{6}{43}{Intractibility Consequences}{section*.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{44}{section*.12}\protected@file@percent }
+\newlabel{chap:conclusion}{{7}{44}{Intractibility Consequences}{section*.12}{}}
 \bibdata{supporting-files/thesis}
 \global\l@chapter@indent 76.3742pt\global\l@appendix@indent 76.3742pt
 \global\newcount\cmu@redefined@appendix@saved\global\cmu@redefined@appendix@saved=0 
 \global\newcount\cmu@appendicies\global\cmu@appendicies=0 
-\@writefile{toc}{\contentsline {section}{{\raggedright  \bfseries  Bibliography\cmu@ln@output }}{79}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{{\raggedright  \bfseries  Bibliography\cmu@ln@output }}{45}{section*.13}\protected@file@percent }
 \bibstyle{unsrtnat}
-\gdef \@abspage@last{89}
+\gdef \@abspage@last{53}

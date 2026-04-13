@@ -6,9 +6,7 @@ This problem of interdependent task allocation is closely related to classical s
 
 More fundamentally, one may consider the problem of scheduling along three orthogonal axes: deterministic vs. stochastic environment, offline vs. online environment, and deterministic vs. stochastic policy. We review the relevant scheduling theory along these axes, noting that deterministic environments are a special case of the more general stochastic environment, and that offline environments are a special case of the more general online environment, and deterministic policies are a special case of the more general stochastic policies.
 
-
 \subsection{Offline Deterministic Scheduling}
-
 Classical scheduling theory provides a mathematical foundation for understanding how to optimally allocate jobs to machines under various constraints. Its importance lies in offering formal models and algorithms for resource allocation problems that arise ubiquitously in manufacturing, computing, project management, and logistics. By developing a taxonomy of machine environments, job characteristics, and objectives, scheduling theory enables the robust analysis and study of such resource allocation tasks.
 
 More rigorously, given $n$ jobs $\{J_j\}_{j=1}^n$ and $m$ machines $\{M_i\}_{i=1}^m$, we may characterize offline deterministic scheduling problems by Graham, Lawler, Lenstra, and Rinnooy-Kan's three-field notation $\alpha \mid  \beta \mid  \gamma$, consisting of a machine environment $\alpha$, a job environment $\beta$, and an objective $\gamma$.
@@ -849,104 +847,6 @@ where \(\Delta\) bounds the squared coefficient of variation. For NBUE processin
 This example also gives a clean online lower-bound. Because deterministic processing times are contained as a special case, classical deterministic online lower bounds transfer immediately to SOS. Megow, Uetz, and Vredeveld recall that in the deterministic single-machine online-time model, a \(2\)-competitive algorithm exists and this lower bound is tight; for identical parallel machines, they cite a lower bound of \(1.309\) for deterministic online algorithms, a best-known deterministic upper bound of \(2.62\), and a randomized upper bound of \(2\). They also prove lower bounds internal to their SOS framework: any fixed-assignment policy has asymptotic lower bound about \(1.24\), and their MinIncrease policy has lower bound \(3/2\) for general distributions. 
 
 
+\subsection{Theorem Proving as a Scheduling Problem}
 
-
-% \subsection{Extensions and Generalizations}
-
-% The classical SOS model above assumes that jobs arrive exogenously over time, that each revealed job comes with fully visible distributional metadata at realization time, that precedence information is fixed and revealed in a simple manner, and that each job is completed only once all of its operations are completed. Towards the development of the centralized ITAP setting in future sections, we extend this online stochastic formalism such that latent primitives may be only partially observed, may depend on the currently revealed history, and may permit richer completion and resource-allocation semantics.
-
-% \begin{definition}[Belief-augmented generalized stochastic online scheduling instance]
-% A belief-augmented generalized stochastic online scheduling instance consists of:
-
-% \begin{enumerate}
-%     \item a baseline stochastic online scheduling instance
-%     \[
-%     I_0=(\mathcal J^\ast,\mathcal M,\alpha\mid\beta\mid\gamma,(\Omega,\mathcal F,\mathbb P),\mathcal V),
-%     \]
-%     as defined above;
-
-%     \item a measurable latent parameter space \((\Theta,\mathcal T)\) and a latent random element
-%     \[
-%     \theta:\Omega\to\Theta,
-%     \]
-%     where \(\theta\) encodes the hidden primitive data of the environment, such as latent processing laws, latent precedence information, latent tractability of operations, or other scheduler-relevant unknowns;
-
-%     \item for each revealed history \(h\) and each revealed operation \(o\), a measurable processing-law kernel
-%     \[
-%     \kappa^{\mathrm{proc}}_o(\,\cdot\,\mid h,\theta)
-%     \in \mathcal P((0,\infty]),
-%     \]
-%     representing the conditional law of the processing requirement of \(o\) given the current revealed history and latent parameter \(\theta\);
-
-%     \item a latent precedence structure, represented for example by a latent DAG
-%     \[
-%     G^\theta=(\mathcal J^\ast,E^\theta),
-%     \]
-%     together with a revealed-precedence process
-%     \[
-%     G_t=(\mathcal J_t,E_t),
-%     \qquad E_t\subseteq E^\theta\cap(\mathcal J_t\times\mathcal J_t),
-%     \]
-%     specifying which precedence relations have become visible by time \(t\);
-
-%     \item for each job \(J_j\), a completion family
-%     \[
-%     \mathcal W_j\subseteq 2^{\mathcal O_j},
-%     \]
-%     where \(\mathcal O_j\) is the operation set of \(J_j\), and the job is declared complete once the set of completed operations contains some \(W\in\mathcal W_j\);
-
-%     \item a redundancy/progress rule specifying, for each revealed history \(h\), latent parameter \(\theta\), operation \(o\), and subset of machines \(S\subseteq\mathcal M\), the rate or law by which cumulative processing accrues when the machines in \(S\) are simultaneously assigned to \(o\).
-% \end{enumerate}
-% \end{definition}
-
-% \begin{definition}[Belief state]
-% Fix a belief-augmented generalized stochastic online scheduling instance and let \(H_t\) denote the revealed history up to time \(t\). The corresponding belief state at time \(t\) is the posterior law
-% \[
-% \Pi_t := \operatorname{Law}(\theta\mid H_t).
-% \]
-% The belief-augmented state is then
-% \[
-% \widehat X_t := (X_t,\Pi_t),
-% \]
-% where \(X_t\) is the revealed state from the baseline SOS formalism.
-% \end{definition}
-
-% \begin{remark}[State-dependent processing laws]
-% The generalized formalism permits the processing law of a revealed operation to depend on the currently completed set. This captures situations in which completing some jobs changes the effective difficulty of future jobs, either by unlocking information, enabling reuse of intermediate results, or modifying the latent environment.
-% \end{remark}
-
-% \begin{remark}[Stochastic and progressively revealed precedence]
-% The generalized formalism permits the latent precedence relation itself to be random and only progressively revealed. A particularly relevant convention is that precedence information involving a job is revealed only upon completion of that job, so that the revealed-precedence process \(G_t\) grows at completion times.
-% \end{remark}
-
-% \begin{remark}[Noisy priors and partial distributional information]
-% In the generalized model, the scheduler need not observe the full processing-time law or other primitive distributions at job revelation. Instead, revelation may provide only partial information, and the scheduler must act on the posterior belief \(\Pi_t\). Classical SOS is recovered as the special case in which the full ex ante processing-time distribution of each revealed job is visible upon revelation.
-% \end{remark}
-
-% \begin{remark}[Redundant scheduling]
-% The generalized formalism permits redundant scheduling, in which multiple machines may simultaneously process the same revealed operation. The effect of such assignments is encoded by the redundancy/progress rule. The classical nonredundant model is recovered by imposing that at most one machine may be assigned to any operation at a given time.
-% \end{remark}
-
-% \begin{remark}[Generalized completion semantics]
-% The completion family \(\mathcal W_j\subseteq 2^{\mathcal O_j}\) permits completion semantics more general than the usual shop models. The classical AND-case is recovered by taking
-% \[
-% \mathcal W_j=\{\mathcal O_j\},
-% \]
-% so that all operations of \(J_j\) must be completed. An OR-shop is obtained by taking
-% \[
-% \mathcal W_j=\bigl\{\{o\}:o\in\mathcal O_j\bigr\},
-% \]
-% so that completing any one operation suffices to complete the job.
-
-% Note additionally that the generalized processing-law kernels may assign infinite processing time to some operations, thereby modeling intractable alternatives. In the OR-shop setting, one may consider such intractible operations, assuming each job \(J_j\) has at least one operation in \(\mathcal O_j\) is almost surely tractable, and study allocation under uncertainty about which operations are tractable.
-% \end{remark}
-
-% Taken together, the above extensions yield an online stochastic scheduling formalism in which:
-% \begin{itemize}
-%     \item the effective difficulty of a task may depend on the currently completed set;
-%     \item the dependency structure itself may be latent and progressively revealed;
-%     \item the scheduler may act under partial distributional information and update beliefs over time;
-%     \item multiple machines may collaborate redundantly on a single task;
-%     \item and a job may admit multiple alternative completion routes.
-% \end{itemize}
-% This is precisely the level of generality needed for the centralized ITAP model.
+Consider

@@ -40,6 +40,7 @@
     pdfsubject={Demonstration of metadata inclusion},
     pdfkeywords={LaTeX, accessibility, PDF metadata}
 ]{hyperref}
+\usepackage{booktabs}
       % For referencing though out the document. Can change, look at user manual how to change
 \usepackage{pdflscape}          % For inserting landscape-mode objects 
 \usepackage{amsmath}            % For matrices
@@ -100,6 +101,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
 
 
 \theoremstyle{definition}
@@ -168,14 +170,16 @@
 % You can directly add you chapter text into this document. But to keep organized you
 % are advised to separate you chapters into their own files, as this example shows
 \input{chapter/01-Introduction}
-\input{chapter/02-SchedulingTheory.tex}
-\input{chapter/03-TaskAllocation}
+\input{chapter/02-Centralized.tex}
+% \input{chapter/02-SchedulingTheory.tex}
+\input{chapter/03-POSG.tex}
+% \input{chapter/04-POSG.tex}
 % \input{chapter/04-CentralizedTaskAllocation}
 % \input{chapter/04-DecentralizedTaskAllocation}
-\input{chapter/05-VAMP}
+% \input{chapter/05-VAMP}
 % \input{chapter/07-Equilibria}
 \input{chapter/06-MARL}
-\input{chapter/07-Implementation}
+% \input{chapter/07-Implementation}
 \input{chapter/08-Experiments}
 \input{chapter/09-Application}
 \input{chapter/10-Conclusion}

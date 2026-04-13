@@ -1,0 +1,71 @@
+\chapter{Application to Neural Theorem Proving}\label{chap:application}
+\textbf{TODO PASTE FROM OVERLEAF WRITEUP}
+
+% This chapter connects the abstract VAMP framework to the concrete application of LLM-based theorem proving in Lean.
+
+% \subsection{Motivation: Theorem Proving as Task Allocation}
+% Argue that formal theorem proving is a natural instance of the HTAP:
+% - **Tasks** = proof obligations (sequents) in Lean.
+% - **Dependencies** = lemma dependencies (a theorem's proof may depend on auxiliary lemmas).
+% - **Agents** = heterogeneous neural provers (different LLMs, different search strategies, different training data).
+% - **Decomposition** = conjecturing intermediate lemmas that simplify the proof of a target theorem.
+% - **Verification** = the Lean type checker provides a formal verification oracle, enabling verifiable settlement of claims.
+
+% \subsection{Architecture: VAMP as a Strategy Module}
+
+% \subsubsection{Interface Between VAMP and LLM Provers}
+% Describe how the VAMP strategy module sits on top of LLM-based provers:
+% - The VAMP agent does not generate proofs itself; it **allocates proving effort** by selecting which proof obligations to attempt, how much compute budget to allocate, and when to publish intermediate results.
+% - The underlying LLM prover (e.g., ReProver, or a fine-tuned model) is the "proof kernel" that actually generates tactics and searches for proofs.
+% - The VAMP's learned policy replaces (or augments) the search strategy typically hardcoded in single-agent provers.
+
+% \subsubsection{Proof Kernel Instantiation}
+% Map the abstract proof kernel $K^\alpha_{\text{proof}}$ to the LLM prover's search process:
+% - Input: a Lean goal state (sequent), a compute budget (number of tactics/search steps).
+% - Output: success/failure + proof term (dependency information extracted from the Lean environment).
+% - Agent heterogeneity: different LLMs (varying size, training data, fine-tuning) serve as different agents with different kernels.
+
+% \subsubsection{Conjecture Kernel Instantiation}
+% Map the conjecture kernel to LLM-based lemma proposal:
+% - Given a target theorem, the LLM proposes candidate intermediate lemmas.
+% - The proposal is evaluated for novelty (ghost check: not already in the library) and relevance (utility score).
+
+% \subsubsection{Library Mapping}
+% Map the abstract library to the Lean environment:
+% - Concrete formulas = declared theorem/lemma statements.
+% - Resolved sequents = proved theorems with verified proof terms.
+% - Dependency map = extracted from Lean's term elaboration.
+% - Public library = a shared Lean environment accessible to all agents.
+
+% \subsection{Experimental Setup}
+
+% \subsubsection{Benchmarks}
+% Describe the evaluation benchmarks: miniF2F (Zheng et al. 2022), selected mathlib4 theorem collections, custom collections of interdependent proof obligations designed to stress multi-agent coordination.
+
+% \subsubsection{Baselines}
+% - **Monolithic provers**: single-agent LLM provers (ReProver, or comparable) with standard search strategies (best-first, beam search, MCTS).
+% - **Naive parallelism**: multiple copies of the same prover working independently (no coordination, no market).
+% - **Centralized allocation**: a scripted allocator that assigns proof obligations to agents based on estimated difficulty.
+% - **VAMP with scripted agents**: the market mechanism with heuristic agents (from Section 9.4) rather than learned agents.
+
+% \subsubsection{Metrics}
+% - **Proof rate**: fraction of target theorems successfully proved within a fixed compute budget.
+% - **Compute efficiency**: proofs per unit of total compute.
+% - **Lemma reuse**: fraction of proved intermediate lemmas that are used in subsequent proofs (measures the value of multi-agent decomposition).
+
+% \subsection{Results}
+
+% \subsubsection{Proof Rate Comparison}
+% Compare VAMP-allocated multi-agent proving against all baselines. Show improved proof rates, particularly on problems that benefit from intermediate lemma discovery and decomposition.
+
+% \subsubsection{Compute Efficiency Analysis}
+% Show that VAMP allocation achieves higher proofs-per-compute than naive parallelism (which wastes effort on duplication) and single-agent provers (which cannot exploit agent heterogeneity).
+
+% \subsubsection{Qualitative Analysis: Emergent Decomposition}
+% Show examples where the VAMP system discovers useful intermediate lemmas that no single agent was specifically designed to prove, enabling proofs of target theorems that are beyond the reach of monolithic provers.
+
+% \subsubsection{Market Mechanism Comparison in the Lean Setting}
+% Which market mechanism works best for theorem proving allocation? Discuss whether the answer differs from the synthetic experiments (Chapter 10) and hypothesize why.
+
+% \subsection{Discussion}
+% Discuss the gap between the synthetic VAMP experiments and the real Lean application. What transfers well? What doesn't? What additional engineering and research is needed for production-quality multi-agent theorem proving?

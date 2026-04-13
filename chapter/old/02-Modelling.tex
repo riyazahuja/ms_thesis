@@ -1,0 +1,76 @@
+\chapter{Modelling Multiagent Mathematics}\label{chap:modelling}
+
+\newcommand{\proves}{\vdash}
+
+
+With the motivation of modelling real-world mathematical development in mind, we first introduce a formalism of the core structure of mathematical tasks that will be used throughout this thesis. Inspired by proof-theoretic and type-theoretic semantics, we represent mathematical statements as formulas within a formal language, and the process of proving these statements as the resolution of proof obligations (sequents) that are defined by these formulas. We then introduce a library structure that models the evolving state of mathematical knowledge across multiple agents, each with private information.
+
+
+\subsection{Syntax}
+
+We consider the \textit{formula} $\phi$ as the core syntactic primitive of (formal) mathematics. Namely, we represent mathematical theorem statements syntactically as a formula (i.e. object of type \texttt{Prop}) within some formal language $\Sigma$, such as Lean, Rocq, etc. We define $\mathcal{F}$ as the collection of all such formulas, and equip it with an involution $\lnot : \mathcal{F}\rightarrow \mathcal{F}$; namely, $\lnot(\lnot\varphi)=\varphi$ for all $\varphi\in\mathcal{F}$. Note that we will refer to formulas as ``nodes'' interchangably due to a natural graphical structure that will be discussed later.
+
+\subsection{Semantics}
+
+We now aim to represent the semantic meaning of a theorem statement within a particular context concisely. Towards this, we consider the \textit{sequent}, given as an element of $\mathcal{S} := \mathcal{P}_{fin}(\mathcal{F}) \times \mathcal{F} $ and stylized as $[\Gamma \proves \phi]$ (read: ``Gamma \textit{proves} phi''). Namely, such a sequent represents a \textit{proof obligation}, i.e. the notion of proving a theorem statement $\phi$ (the \textit{consequent}) within the \textit{antecedent} context $\Gamma$. Such a proof obligation may be \textit{resolved}, meaning proven.
+
+\subsection{Libraries}
+
+We assume the existence of a universal clock $t \in \mathbb N$ and set of agents $\mathcal N$, and use it to define a library $\mathcal{L}_\bullet = \{\mathcal{L}_t\}_{t \in \mathbb{N}}$ as a collection of discrete library states that evolves over time. At every discrete timestep $t \in \mathbb{N}$, each library state is given as a tuple 
+\[\mathcal{L}_t := (\mathcal{C}_t,\mathcal{RS}_t, \delta_t, \Theta_t) \in \mathscr{L}\]
+where we partition $\mathcal{F} = \mathcal{C}_t \cup \mathcal{G}_t, \mathcal{C}_t \cap \mathcal{G}_t = \varnothing$ into \textit{concrete} and \textit{ghost} nodes. Intuitively, concrete nodes represent theorem statements that have been stated or conjectured, and ghost nodes represent all hypothetical, possible theorem statements that are yet to be conjectured or stated. $\mathcal{C}_t$ naturally induces a semantic analogue: let $\mathcal{CS}_t := \mathcal{P}_{fin}(\mathcal{C}_t) \times \mathcal{C}_t$ be the set of all \textit{concrete sequents}, which contains a subset $\mathcal{RS}_t \subseteq \mathcal{CS}_t$ of \textit{resolved sequents}, which represent the concrete nodes that have been proven (within a particular antecedent context, of course). 
+
+
+Mathematically, a proof of a particular theorem in some context often explicitly depends on other lemmas within this context. In an effort to model this phenomenon, define $\delta_t : \mathcal{RS}_t \to \mathcal{P}_{fin}(\mathcal{F})$ as the dependency mapping.
+Note that in mathematics, there may exist many proofs of the same theorem with different dependencies for each, and one may find new proofs of the same theorem that are also valid. Thus, in the most general formulation, we only require that resolved sequents must remain resolved ($\mathcal{RS}_{t} \subseteq \mathcal{RS}_{t+1}$), though the underlying ``proof'' (moreso, the set of dependencies of this ``proof'') can change.
+
+And lastly, we define $\Theta_t : \mathcal{RS}_t\to\mathbb N^+ \times \mathcal N$ to record the (discrete) solve-time associated to each resolved sequent, and the agent responsible for the resolution. 
+
+
+So, in other words, the library state $\mathcal{L}_t$ represents the collection of all stated theorem statements, the collection of proof witnesses within particular contexts for a subset of these statements, and the dependencies and ancillary metadata of these witnesses.
+
+\subsubsection{Library Invariants and Properties}
+
+Naturally, we impose a monotonicity invariant for libraries: one may not ``unconjecture'' or ``unprove'' a theorem. Formally, given a library $\mathcal{L}_\bullet = \{\mathcal{L}_t\}_{t \in \mathbb{N}}=\{(\mathcal{C}_t,\mathcal{RS}_t,\delta_t,\Theta_t)\}_{t \in \mathbb{N}}$, we require that for all $t \in \mathbb{N}$:
+\[\mathcal{C}_{t} \subseteq \mathcal{C}_{t+1} \quad \text{and} \quad \mathcal{RS}_{t} \subseteq \mathcal{RS}_{t+1}\]
+
+Additionally, we require that if one conjectures a theorem, they must also have automatically conjectured its converse; in other words:
+\[\phi \in \mathcal{C}_t \iff \neg\phi \in \mathcal{C}_t\]
+
+Similarly, one may not prove both a theorem and its converse true: 
+\[[\Gamma \proves \phi] \in \mathcal{RS}_t \implies [\Gamma \proves \neg \phi] \notin \mathcal{RS}_t\]
+
+Semantically, we note reflexivity holds: $\phi \in \Gamma \implies [\Gamma \proves \phi] \in \mathcal{RS}_t$. And for the sake of consistency, we require that for any $[\Gamma \proves \phi] \in \mathcal{CS}_t$, $\psi \in \Gamma \implies \neg\psi \notin \Gamma$ (although we do not impose any full propositional semantics or richer logical theory behind these abstract formulas, preferring to leave them fully symbolic objects with various resolution and concreteness states, allowing inconsistent antecedents in our witnesses limits the scalability of our approach to deployment as a strategy module for multiagent theorem proving in a fully-defined formal language and type theory). 
+
+Note that this last condition implicitly redefines
+\[\mathcal{CS}_t := \mathcal{P}_{fin}(\mathcal{C}_t)/\sim \times \mathcal{C}_t \] where $\phi\sim\neg\phi$ is the equivalence relation generated by the negation operation. So, due to this consistency condition, we note that $\mathcal{RS}_t$ is upwards-closed, in that if $[\Gamma \proves \phi] \in \mathcal{RS}_t$, then for all $\Gamma' \in \mathcal{P}_{fin}(\mathcal{C}_t)$, $\Gamma \subseteq \Gamma' \implies [\Gamma'\proves\phi]\in \mathcal{RS}_t$.
+
+Additionally, considering the dependency mapping, we note that intuitively $\delta_t$ must satisfy the property that $\delta_t([\Gamma \proves \phi]) \subseteq \Gamma$. Moreover, one may use $\delta_t$ to induce a directed graph $D(\delta_t) := (\mathcal{CS}_t,\mathcal{E}_t)$, where 
+\[\mathcal{E}_t = \Big\{([\Gamma\proves \phi], [\Gamma' \proves \psi]) : \phi \in \delta_t([\Gamma' \proves \psi]), \Gamma\subseteq \Gamma'\Big\}\]
+We require that this induced directed graph $D(\delta_t)$ of $\delta_t$ must be acyclic.
+
+\subsection{Axioms and Fully Resolved Sequents}
+
+As an aside, we additionally note that although $[\Gamma \proves \phi] \in \mathcal{RS}_t$ may be marked resolved, that does not mean that $\phi$ has a ``error''-free proof within the current library state as its proof may depend on some still-unresolved lemmas. More concretely, we may define $\mathcal{FRS}_t \subseteq \mathcal{RS}_t$ as the collection of \textit{fully resolved sequents}, which is defined inductively such that \textit{axioms} $[\proves \phi] \in \mathcal{FRS}_t$ and $[\Gamma \proves \phi] \in \mathcal{FRS}_t$ if and only if for all $\phi' \in \delta_t([\Gamma \proves \phi])$, there exists $\Gamma'\subseteq \Gamma$ such that $[\Gamma' \proves \phi'] \in \mathcal{FRS}_t$.
+
+
+\subsection{Private and Shared Libraries}
+In the multiagent setting, each agent $\alpha\in\mathcal{N}$ maintains a \textit{private library} $\mathcal{L}_\bullet^\alpha = \{\mathcal{L}^\alpha_t\}_{t\in\mathbb{N}}$ with
+\[
+\mathcal{L}^\alpha_t := (\mathcal{C}^\alpha_t,\mathcal{RS}^\alpha_t,\delta^\alpha_t,\Theta_t^\alpha),
+\]
+and the environment maintains a \textit{shared (public) library} $\mathcal{L}_\bullet^0 = \{\mathcal{L}^0_t\}_{t\in\mathbb{N}}$ with
+\[
+\mathcal{L}^0_t := (\mathcal{C}^0_t,\mathcal{RS}^0_t,\delta^0_t, \Theta_t^0).
+\]
+
+We additionally enforce the following inclusion invariant for all $t \in \mathbb{N}, \alpha \in \mathcal{N}$:
+\[
+\mathcal{L}^0_t \subseteq \mathcal{L}^\alpha_t
+\]
+meaning $\mathcal{C}^0_t\subseteq \mathcal{C}^\alpha_t$, $\mathcal{RS}^0_t\subseteq \mathcal{RS}^\alpha_t$, and for all $s\in \mathcal{RS}_t^0, \delta^0_t(s) = \delta^\alpha_t(s)$ and $\Theta^0_t(s)=\Theta^\alpha_t(s)$.
+
+
+
+
+\textbf{TODO PROVE THIS IS ACTUALLY A GOOD MODEL OF MATHEMATICS!!!}

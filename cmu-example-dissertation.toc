@@ -1,129 +1,77 @@
-\contentsline {chapter}{\textbf {List of Figures}}{viii}{Doc-Start}%
-\contentsline {chapter}{\textbf {List of Tables}}{ix}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Figures}}{vi}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Tables}}{vii}{Doc-Start}%
 \contentsline {section}{\numberline {1\hspace {1em}}\nobreakspace {}\textbf {Introduction}}{1}{section*.1}%
 \contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Core Contributions}{3}{subsection.1.2}%
-\contentsline {section}{\numberline {2\hspace {1em}}\nobreakspace {}\textbf {Scheduling Theory and Task Allocation}}{5}{section*.3}%
-\contentsline {subsection}{\numberline {2.1}Offline Deterministic Scheduling}{5}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Offline Stochastic Scheduling}{8}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Stochastic Online Scheduling}{10}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}States, Actions, and Policies}{11}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Partially Observable Markov Decision Processes}{12}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Scheduling as a POMDP}{13}{subsubsection.2.4.2}%
-\contentsline {paragraph}{\numberline {2.4.2.1}Preliminary: Processing requirements and progress rates.}{14}{paragraph.2.4.2.1}%
-\contentsline {paragraph}{\numberline {2.4.2.2}State space $\mathsf {S}_I$.}{15}{paragraph.2.4.2.2}%
-\contentsline {paragraph}{\numberline {2.4.2.3}Observation space $\mathsf {O}_I$ and observation kernel $Z_I$.}{17}{paragraph.2.4.2.3}%
-\contentsline {paragraph}{\numberline {2.4.2.4}Action space $\mathsf {A}_I$ and admissible actions.}{18}{paragraph.2.4.2.4}%
-\contentsline {paragraph}{\numberline {2.4.2.5}Transition kernel $T_I$.}{19}{paragraph.2.4.2.5}%
-\contentsline {paragraph}{\numberline {2.4.2.6}Initial state distribution $T_I^0$.}{20}{paragraph.2.4.2.6}%
-\contentsline {paragraph}{\numberline {2.4.2.7}Cost function $c_I$ and objective.}{20}{paragraph.2.4.2.7}%
-\contentsline {paragraph}{\numberline {2.4.2.8}Restriction to special cases.}{20}{paragraph.2.4.2.8}%
-\contentsline {subsubsection}{\numberline {2.4.3}Solutions and Policies}{21}{subsubsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.5}Examples}{23}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Offline deterministic: \(P\mid \mathrm {prec}\mid C_{\max }\)}{23}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Offline stochastic: \(P\mid \mathrm {prec}\mid \mathbb E[C_{\max }]\), and the weighted-completion extension}{24}{subsubsection.2.5.2}%
-\contentsline {subsubsection}{\numberline {2.5.3}Stochastic online: classical SOS for \(P\mid r_j\mid \mathbb E[\DOTSB \sum@ \slimits@ _j w_j C_j]\)}{25}{subsubsection.2.5.3}%
-\contentsline {section}{\numberline {3\hspace {1em}}\nobreakspace {}\textbf {The Interdependent Task Allocation Problem}}{27}{section*.4}%
-\contentsline {subsection}{\numberline {3.1}Motivation}{27}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Formal Definition}{28}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Binary OR-Job Structure}{28}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Transferable Progress with Redundant Assignment}{29}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}State-Dependent Processing Times}{31}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}Endogenous Revelation and Active Conjecturing}{31}{subsubsection.3.2.4}%
-\contentsline {paragraph}{\numberline {3.2.4.1}Passive revelation.}{31}{paragraph.3.2.4.1}%
-\contentsline {paragraph}{\numberline {3.2.4.2}Active revelation (conjecturing).}{32}{paragraph.3.2.4.2}%
-\contentsline {subsubsection}{\numberline {3.2.5}Centralized ITAP: Full Definition}{32}{subsubsection.3.2.5}%
-\contentsline {paragraph}{\numberline {3.2.5.1}State.}{33}{paragraph.3.2.5.1}%
-\contentsline {paragraph}{\numberline {3.2.5.2}Observation.}{34}{paragraph.3.2.5.2}%
-\contentsline {paragraph}{\numberline {3.2.5.3}Actions.}{35}{paragraph.3.2.5.3}%
-\contentsline {paragraph}{\numberline {3.2.5.4}Transition.}{36}{paragraph.3.2.5.4}%
-\contentsline {paragraph}{\numberline {3.2.5.5}Initial state, cost, and policies.}{36}{paragraph.3.2.5.5}%
-\contentsline {subsection}{\numberline {3.3}Approximation Theory}{36}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Complexity Theory}{37}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Limitations}{37}{subsection.3.5}%
-\contentsline {section}{\numberline {4\hspace {1em}}\nobreakspace {}\textbf {VAMP --- Formal Definition and Properties}}{38}{section*.5}%
-\contentsline {subsection}{\numberline {4.1}Partially Observable Stochastic Games}{38}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}Definition}{39}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}Policies, Utilities, and Equilibria}{40}{subsubsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.2}VAMP Preliminaries}{41}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}Syntax}{41}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}Semantics}{41}{subsubsection.4.2.2}%
-\contentsline {subsubsection}{\numberline {4.2.3}Libraries}{41}{subsubsection.4.2.3}%
-\contentsline {paragraph}{\numberline {4.2.3.1}Library Invariants and Properties}{42}{paragraph.4.2.3.1}%
-\contentsline {paragraph}{\numberline {4.2.3.2}Axioms and Fully Resolved Sequents}{43}{paragraph.4.2.3.2}%
-\contentsline {paragraph}{\numberline {4.2.3.3}Private and Shared Libraries}{43}{paragraph.4.2.3.3}%
-\contentsline {subsubsection}{\numberline {4.2.4}Market State}{43}{subsubsection.4.2.4}%
-\contentsline {subsubsection}{\numberline {4.2.5}Action Primitives}{44}{subsubsection.4.2.5}%
-\contentsline {paragraph}{\numberline {4.2.5.1}Discrete kernels.}{44}{paragraph.4.2.5.1}%
-\contentsline {paragraph}{\numberline {4.2.5.2}Proof Kernel}{44}{paragraph.4.2.5.2}%
-\contentsline {paragraph}{\numberline {4.2.5.3}Conjecture Kernel}{45}{paragraph.4.2.5.3}%
-\contentsline {paragraph}{\numberline {4.2.5.4}Dependency Closure for Publication}{45}{paragraph.4.2.5.4}%
-\contentsline {paragraph}{\numberline {4.2.5.5}Query Model}{46}{paragraph.4.2.5.5}%
-\contentsline {paragraph}{\numberline {4.2.5.6}Market Mechanism}{48}{paragraph.4.2.5.6}%
-\contentsline {subsection}{\numberline {4.3}Verifiable Allocation Market POSG}{49}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}World State Space $\mathcal {W}$}{49}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}Observations $\mathcal {O}^\alpha $ and Observation Kernels $\mathcal {Z}^\alpha $}{50}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Action Space $\mathcal {A}^\alpha $ and Admissibility $\mathrm {Adm}^\alpha $}{50}{subsubsection.4.3.3}%
-\contentsline {subsubsection}{\numberline {4.3.4}Transition Kernel $\mathcal {T}$}{52}{subsubsection.4.3.4}%
-\contentsline {paragraph}{\numberline {4.3.4.1}Background: Deterministic Pre-Update}{52}{paragraph.4.3.4.1}%
-\contentsline {paragraph}{\numberline {4.3.4.2}Background - Stochastic Job Completion}{53}{paragraph.4.3.4.2}%
-\contentsline {paragraph}{\numberline {4.3.4.3}Background - Deterministic Post-Update}{54}{paragraph.4.3.4.3}%
-\contentsline {paragraph}{\numberline {4.3.4.4}Stage I: Non-market transition $\mathcal {T}_{\mathrm {nm}}$}{55}{paragraph.4.3.4.4}%
-\contentsline {paragraph}{\numberline {4.3.4.5}Stage II: Market transition via $\mathscr {M}$}{55}{paragraph.4.3.4.5}%
-\contentsline {paragraph}{\numberline {4.3.4.6}Full transition kernel}{55}{paragraph.4.3.4.6}%
-\contentsline {subsubsection}{\numberline {4.3.5}Reward, Discount Factor, and Initial Distribution}{56}{subsubsection.4.3.5}%
-\contentsline {subsubsection}{\numberline {4.3.6}Consistency and well-definedness}{56}{subsubsection.4.3.6}%
-\contentsline {subsection}{\numberline {4.4}Equilibria and Tractibility}{56}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Comparison to Centralized Mechanisms}{57}{subsection.4.5}%
-\contentsline {section}{\numberline {5\hspace {1em}}\nobreakspace {}\textbf {Multiagent Reinforcement Learning for VAMPs}}{58}{section*.6}%
-\contentsline {section}{\numberline {6\hspace {1em}}\nobreakspace {}\textbf {Implementation}}{59}{section*.7}%
-\contentsline {subsection}{\numberline {6.1}Assumptions}{59}{subsection.6.1}%
-\contentsline {paragraph}{\numberline {6.1.0.1}Finite Formula Universe.}{59}{paragraph.6.1.0.1}%
-\contentsline {paragraph}{\numberline {6.1.0.2}Finite Agent Universe.}{59}{paragraph.6.1.0.2}%
-\contentsline {paragraph}{\numberline {6.1.0.3}Truth and Difficulty Initialization.}{59}{paragraph.6.1.0.3}%
-\contentsline {paragraph}{\numberline {6.1.0.4}Static dependency structure and metadata.}{60}{paragraph.6.1.0.4}%
-\contentsline {paragraph}{\numberline {6.1.0.5}Utility Graph.}{60}{paragraph.6.1.0.5}%
-\contentsline {paragraph}{\numberline {6.1.0.6}Sequent Specification.}{60}{paragraph.6.1.0.6}%
-\contentsline {subsection}{\numberline {6.2}Proof Kernel ($\mathcal {K}_{\text {proof}}$).}{62}{subsection.6.2}%
-\contentsline {paragraph}{\numberline {6.2.0.1}Bernoulli proof outcomes.}{62}{paragraph.6.2.0.1}%
-\contentsline {paragraph}{\numberline {6.2.0.2}Truth + Dependency Gate.}{62}{paragraph.6.2.0.2}%
-\contentsline {paragraph}{\numberline {6.2.0.3}Budget Monotonicity and Diminishing Returns.}{63}{paragraph.6.2.0.3}%
-\contentsline {paragraph}{\numberline {6.2.0.4}Difficulty Modulation.}{63}{paragraph.6.2.0.4}%
-\contentsline {paragraph}{\numberline {6.2.0.5}Utility Modulation.}{63}{paragraph.6.2.0.5}%
-\contentsline {paragraph}{\numberline {6.2.0.6}Heterogeneous Agent Capability Modulation.}{64}{paragraph.6.2.0.6}%
-\contentsline {subsubsection}{\numberline {6.2.1}Definition}{64}{subsubsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.3}Conjecture Kernel ($\mathcal {K}_{\text {conj}}$).}{64}{subsection.6.3}%
-\contentsline {paragraph}{\numberline {6.3.0.1}Bernoulli success with conditional proposal.}{65}{paragraph.6.3.0.1}%
-\contentsline {paragraph}{\numberline {6.3.0.2}Budget monotonicity and diminishing returns.}{65}{paragraph.6.3.0.2}%
-\contentsline {paragraph}{\numberline {6.3.0.3}Heterogeneous agent conjecturing capability.}{65}{paragraph.6.3.0.3}%
-\contentsline {paragraph}{\numberline {6.3.0.4}Utility-guided relevance.}{65}{paragraph.6.3.0.4}%
-\contentsline {paragraph}{\numberline {6.3.0.5}Local opportunity modulation.}{66}{paragraph.6.3.0.5}%
-\contentsline {paragraph}{\numberline {6.3.0.6}Budget-improved proposal quality.}{66}{paragraph.6.3.0.6}%
-\contentsline {paragraph}{\numberline {6.3.0.7}Proposal distribution over all formulas, restricted to ghosts by renormalization.}{67}{paragraph.6.3.0.7}%
-\contentsline {subsubsection}{\numberline {6.3.1}Definition}{67}{subsubsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.4}Query Model.}{67}{subsection.6.4}%
-\contentsline {paragraph}{\numberline {6.4.0.1}Feature buckets.}{68}{paragraph.6.4.0.1}%
-\contentsline {paragraph}{\numberline {6.4.0.2}Discrete-time survival model.}{69}{paragraph.6.4.0.2}%
-\contentsline {paragraph}{\numberline {6.4.0.3}Query readout.}{69}{paragraph.6.4.0.3}%
-\contentsline {paragraph}{\numberline {6.4.0.4}Query model state.}{69}{paragraph.6.4.0.4}%
-\contentsline {paragraph}{\numberline {6.4.0.5}MAP-smoothed hazard estimates.}{70}{paragraph.6.4.0.5}%
-\contentsline {paragraph}{\numberline {6.4.0.6}Observed data and censoring.}{70}{paragraph.6.4.0.6}%
-\contentsline {paragraph}{\numberline {6.4.0.7}Update rule.}{71}{paragraph.6.4.0.7}%
-\contentsline {subsection}{\numberline {6.5}Market Mechanisms}{71}{subsection.6.5}%
-\contentsline {paragraph}{\numberline {6.5.0.1}Common portfolio structure.}{71}{paragraph.6.5.0.1}%
-\contentsline {paragraph}{\numberline {6.5.0.2}Worst-case collateralization.}{72}{paragraph.6.5.0.2}%
-\contentsline {paragraph}{\numberline {6.5.0.3}Cash conservation.}{72}{paragraph.6.5.0.3}%
-\contentsline {paragraph}{\numberline {6.5.0.4}Public settlement events.}{72}{paragraph.6.5.0.4}%
-\contentsline {paragraph}{\numberline {6.5.0.5}Resolution events.}{72}{paragraph.6.5.0.5}%
-\contentsline {subsubsection}{\numberline {6.5.1}Mechanism: Collateralized Bilateral Contract Market}{73}{subsubsection.6.5.1}%
-\contentsline {paragraph}{\numberline {6.5.1.1}Long and short claims.}{73}{paragraph.6.5.1.1}%
-\contentsline {paragraph}{\numberline {6.5.1.2}Unit notional and quantities.}{74}{paragraph.6.5.1.2}%
-\contentsline {paragraph}{\numberline {6.5.1.3}Asset creation.}{74}{paragraph.6.5.1.3}%
-\contentsline {paragraph}{\numberline {6.5.1.4}Public offers.}{74}{paragraph.6.5.1.4}%
-\contentsline {paragraph}{\numberline {6.5.1.5}Trades.}{74}{paragraph.6.5.1.5}%
-\contentsline {paragraph}{\numberline {6.5.1.6}Collateral and admissibility.}{74}{paragraph.6.5.1.6}%
-\contentsline {paragraph}{\numberline {6.5.1.7}Settlement.}{75}{paragraph.6.5.1.7}%
-\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Experiments}}{76}{section*.8}%
-\contentsline {section}{\numberline {8\hspace {1em}}\nobreakspace {}\textbf {Application to Neural Theorem Proving}}{77}{section*.9}%
-\contentsline {section}{\numberline {9\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{78}{section*.10}%
-\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{79}{section*.11}%
+\contentsline {section}{\numberline {2\hspace {1em}}\nobreakspace {}\textbf {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}%
+\contentsline {subsection}{\numberline {2.1}Background}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Syntax}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Semantics}{6}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Libraries}{6}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Library Invariants and Properties}{7}{subsubsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.5}Axioms and Fully Resolved Sequents}{8}{subsubsection.2.1.5}%
+\contentsline {subsubsection}{\numberline {2.1.6}Private and Shared Libraries}{8}{subsubsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.2}The Centralized MATP Problem}{8}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Background: POMDP}{8}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Background: Action Primitives}{10}{subsubsection.2.2.2}%
+\contentsline {paragraph}{\numberline {2.2.2.1}Discrete kernels.}{10}{paragraph.2.2.2.1}%
+\contentsline {paragraph}{\numberline {2.2.2.2}Proof Kernel.}{10}{paragraph.2.2.2.2}%
+\contentsline {paragraph}{\numberline {2.2.2.3}Conjecture Kernel.}{11}{paragraph.2.2.2.3}%
+\contentsline {paragraph}{\numberline {2.2.2.4}Dependency Closure for Publication.}{11}{paragraph.2.2.2.4}%
+\contentsline {paragraph}{\numberline {2.2.2.5}Query Model.}{11}{paragraph.2.2.2.5}%
+\contentsline {subsubsection}{\numberline {2.2.3}Definition}{12}{subsubsection.2.2.3}%
+\contentsline {paragraph}{\numberline {2.2.3.1}State Space $\mathsf {S}$.}{12}{paragraph.2.2.3.1}%
+\contentsline {paragraph}{\numberline {2.2.3.2}Action Space $\mathsf {A}$ and Admissibility.}{13}{paragraph.2.2.3.2}%
+\contentsline {paragraph}{\numberline {2.2.3.3}Observation Space $\mathsf {O}$ and Observation Kernel $Z$.}{13}{paragraph.2.2.3.3}%
+\contentsline {paragraph}{\numberline {2.2.3.4}Transition Kernel $T$.}{14}{paragraph.2.2.3.4}%
+\contentsline {subparagraph}{Step 1: Deterministic Pre-Update.}{14}{section*.4}%
+\contentsline {subparagraph}{Step 2: Stochastic Job Completion.}{15}{section*.5}%
+\contentsline {subparagraph}{Step 3: Deterministic Post-Update.}{15}{section*.6}%
+\contentsline {paragraph}{\numberline {2.2.3.5}Full transition kernel.}{15}{paragraph.2.2.3.5}%
+\contentsline {paragraph}{\numberline {2.2.3.6}Cost Function.}{16}{paragraph.2.2.3.6}%
+\contentsline {paragraph}{\numberline {2.2.3.7}Initial distribution $T^0$.}{16}{paragraph.2.2.3.7}%
+\contentsline {subsubsection}{\numberline {2.2.4}Example}{16}{subsubsection.2.2.4}%
+\contentsline {paragraph}{\numberline {2.2.4.1}Setup.}{16}{paragraph.2.2.4.1}%
+\contentsline {paragraph}{\numberline {2.2.4.2}Optimal plan.}{17}{paragraph.2.2.4.2}%
+\contentsline {paragraph}{\numberline {2.2.4.3}Discussion.}{17}{paragraph.2.2.4.3}%
+\contentsline {subsection}{\numberline {2.3}MATP and Scheduling Theory}{17}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Non-Conjecturing PPI MATP}{18}{subsubsection.2.3.1}%
+\contentsline {paragraph}{\numberline {2.3.1.1}The latent task set.}{18}{paragraph.2.3.1.1}%
+\contentsline {paragraph}{\numberline {2.3.1.2}Information structure and revelation.}{19}{paragraph.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.2}Scheduling Interpretation}{19}{subsubsection.2.3.2}%
+\contentsline {paragraph}{\numberline {2.3.2.1}Correspondence.}{19}{paragraph.2.3.2.1}%
+\contentsline {paragraph}{\numberline {2.3.2.2}Stochastic processing times.}{20}{paragraph.2.3.2.2}%
+\contentsline {paragraph}{\numberline {2.3.2.3}Key departures from classical scheduling.}{20}{paragraph.2.3.2.3}%
+\contentsline {paragraph}{\numberline {2.3.2.4}Revelation DAG.}{21}{paragraph.2.3.2.4}%
+\contentsline {subsection}{\numberline {2.4}Complexity and Approximability}{21}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Complexity Results}{21}{subsubsection.2.4.1}%
+\contentsline {paragraph}{\numberline {2.4.1.1}Embedding of classical scheduling.}{21}{paragraph.2.4.1.1}%
+\contentsline {paragraph}{\numberline {2.4.1.2}State space and MDP complexity.}{23}{paragraph.2.4.1.2}%
+\contentsline {subsubsection}{\numberline {2.4.2}Lower Bounds}{23}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Approximation Algorithms}{25}{subsubsection.2.4.3}%
+\contentsline {paragraph}{\numberline {2.4.3.1}Identical agents, single-assignment.}{25}{paragraph.2.4.3.1}%
+\contentsline {paragraph}{\numberline {2.4.3.2}Unrelated agents, single-assignment.}{27}{paragraph.2.4.3.2}%
+\contentsline {paragraph}{\numberline {2.4.3.3}OR-redundant reactive list scheduling.}{28}{paragraph.2.4.3.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Summary}{29}{subsubsection.2.4.4}%
+\contentsline {subsubsection}{\numberline {2.4.5}Limits of Centralization}{30}{subsubsection.2.4.5}%
+\contentsline {section}{\numberline {3\hspace {1em}}\nobreakspace {}\textbf {Decentralized Multi-Agent Theorem Proving}}{31}{section*.8}%
+\contentsline {subsection}{\numberline {3.1}Background: Multi-Agent Decision Making}{31}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Complexity of decentralized control.}{32}{subsubsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.2}The Decentralized MATP Game}{32}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Cooperative baseline: Dec-POMDP.}{33}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Individual rewards and the externality problem.}{34}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}The Publication Externality}{34}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Market-Mediated MATP}{36}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Collateralized bilateral contract market.}{36}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Market-augmented reward.}{36}{subsubsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.5}Internalization of Externalities}{37}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Equilibrium Analysis}{38}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {3.6.1}Existence of equilibria.}{39}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {3.6.2}Price of Anarchy.}{39}{subsubsection.3.6.2}%
+\contentsline {subsubsection}{\numberline {3.6.3}Computational complexity of equilibria.}{40}{subsubsection.3.6.3}%
+\contentsline {subsection}{\numberline {3.7}Intractibility Consequences}{40}{subsection.3.7}%
+\contentsline {section}{\numberline {4\hspace {1em}}\nobreakspace {}\textbf {Multiagent Reinforcement Learning for VAMPs}}{41}{section*.9}%
+\contentsline {section}{\numberline {5\hspace {1em}}\nobreakspace {}\textbf {Experiments}}{42}{section*.10}%
+\contentsline {section}{\numberline {6\hspace {1em}}\nobreakspace {}\textbf {Application to Neural Theorem Proving}}{43}{section*.11}%
+\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{44}{section*.12}%
+\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{45}{section*.13}%
