@@ -1,296 +1,359 @@
 \chapter{Decentralized Multi-Agent Theorem Proving}\label{sec:decentralized}
 
-The centralized MATP formulation presumes a benevolent planner with the authority to assign tasks to all agents. In practice, each agent controls its own compute, maintains private proof state, and decides independently what to prove and whether to share results. We now reformulate the problem as a multi-player game, first showing that decentralization introduces externalities that lead to inefficient equilibria, and then introducing a market mechanism that internalizes these externalities and aligns individual incentives with the social objective.
+The centralized MATP formulation presumes a benevolent planner with the authority to assign tasks to all agents. In practice, each agent controls its own compute, maintains private proof state, and decides independently what to prove and whether to share results. We now reformulate the problem as a multi-player game, which we term the \emph{Multi-Agent Theorem Proving Game} (MATPG). We show that under a natural credit-based reward structure, decentralization introduces a publication externality that leads to arbitrarily inefficient equilibria relative to the centralized makespan benchmark. We then introduce a bilateral contract market that internalizes this externality, and analyze the resulting game's equilibrium properties, Price of Anarchy, and computational complexity.
+
+\begin{remark}[Scope]
+One might alternatively study a cooperative formulation in which all agents share a common reward (a Dec-POMDP). While this captures coordination difficulty under communication constraints, it assumes agents are willing to cooperate unconditionally---they share the social objective and have no private interests. This does not model how human mathematicians work, nor how we envision large-scale human--AI collaboration in the sciences should work (namely: such unconditional cooperation suggests a single-ownership model of large numbers of agents, rather than a decentralized one). Agents in practice have heterogeneous objectives, compete for credit, and make strategic decisions about what to share. We therefore focus exclusively on the non-cooperative (general-sum) formulation throughout this chapter, and delegate the cooperative case to future work.
+\end{remark}
 
 
-\subsection{Background: Multi-Agent Decision Making}\label{sec:posg-background}
+\subsection{Background}\label{sec:posg-background}
 
-We recall the standard frameworks for decentralized sequential decision-making under partial information.
+\subsubsection{Partially Observable Stochastic Games}
 
-\begin{definition}[Decentralized POMDP (Dec-POMDP)]
-A discrete-time Dec-POMDP is a tuple
-\[
-\mathcal{D} = \Big(\mathcal{N},\;\mathsf{S},\;\{\mathcal{A}^\alpha\}_{\alpha\in\mathcal{N}},\;\{\mathsf{O}^\alpha\}_{\alpha\in\mathcal{N}},\;T,\;T^0,\;\{Z^\alpha\}_{\alpha\in\mathcal{N}},\;r\Big),
-\]
-where $\mathcal{N}$ is a finite set of agents, $\mathsf{S}$ is the state space, $\mathcal{A}^\alpha$ and $\mathsf{O}^\alpha$ are the action and observation spaces for agent $\alpha$, $T$ and $T^0$ are the transition and initial-state kernels, $Z^\alpha(\cdot\mid s,a,s')$ is agent $\alpha$'s observation kernel, and $r:\mathsf{S}\times\mathcal{A}\to\mathbb{R}$ is a \emph{shared} reward function (where $\mathcal{A}:=\prod_\alpha \mathcal{A}^\alpha$). The defining feature is that all agents share the same reward $r$, making the problem \emph{cooperative}: agents wish to maximize the same objective but must do so using only their private observation histories.
-\end{definition}
+We recall the standard framework for non-cooperative sequential decision-making under partial information. 
 
 \begin{definition}[Partially Observable Stochastic Game (POSG)]
-A POSG generalizes the Dec-POMDP by replacing the shared reward with \emph{individual} reward functions $\{r^\alpha\}_{\alpha\in\mathcal{N}}$, where $r^\alpha:\mathsf{S}\times\mathcal{A}\to\mathbb{R}$. A Dec-POMDP is a POSG in which $r^\alpha = r^\beta$ for all $\alpha,\beta$. When the reward functions differ, agents have potentially conflicting objectives, and the appropriate solution concept shifts from cooperative optimality to game-theoretic equilibrium.
+An infinite-horizon discounted POSG is a tuple
+\[
+\mathcal{G} = \Big(\mathcal{N},\;\mathsf{S},\;\{\mathcal{A}^\alpha\}_{\alpha\in\mathcal{N}},\;\{\mathsf{O}^\alpha\}_{\alpha\in\mathcal{N}},\;T,\;T^0,\;\{Z^\alpha\}_{\alpha\in\mathcal{N}},\;\{r^\alpha\}_{\alpha\in\mathcal{N}},\;\gamma\Big),
+\]
+where $\mathcal{N}$ is a finite set of agents; $\mathsf{S}$ is the state space; $\mathcal{A}^\alpha$ and $\mathsf{O}^\alpha$ are the action and observation spaces for agent $\alpha$; $T(\cdot\mid s,a)\in\mathcal{P}(\mathsf{S})$ is the transition kernel on joint actions $a\in\mathcal{A}:=\prod_\alpha\mathcal{A}^\alpha$; $T^0\in\mathcal{P}(\mathsf{S})$ is the initial-state distribution; $Z^\alpha(\cdot\mid s,a,s')$ is agent $\alpha$'s observation kernel; $r^\alpha:\mathsf{S}\times\mathcal{A}\to\mathbb{R}$ is agent $\alpha$'s per-step reward; and $\gamma\in[0,1)$ is the common discount factor.
 \end{definition}
 
-Each agent $\alpha$ selects actions according to a policy $\pi^\alpha$ that maps its private action--observation history $h^\alpha_t := (o^\alpha_0,a^\alpha_0,\ldots,o^\alpha_t)$ to a distribution over $\mathcal{A}^\alpha$. A joint policy is $\pi = (\pi^\alpha)_{\alpha\in\mathcal{N}}$, and agent $\alpha$'s expected discounted return under $\pi$ is
+Each agent $\alpha$ selects actions via a policy $\pi^\alpha$ mapping its private action--observation history $h^\alpha_t := (o^\alpha_0,a^\alpha_0,\ldots,o^\alpha_t)$ to a distribution over $\mathcal{A}^\alpha$. A joint policy is $\pi = (\pi^\alpha)_{\alpha\in\mathcal{N}}$, and agent $\alpha$'s expected discounted return is
 \[
 R^\alpha(\pi) := \mathbb{E}^{\pi}\!\left[\sum_{t=0}^{\infty}\gamma^t\, r^\alpha(s_t,a_t)\right].
 \]
 
+\subsubsection{Equilibria and Efficiency}
+
 \begin{definition}[Nash equilibrium]
-A joint policy $\pi^*$ is a \emph{Nash equilibrium} (NE) of a POSG if no agent can improve its expected return by unilaterally deviating:
+A joint policy $\pi^*$ is a \emph{Nash equilibrium} (NE) if no agent can improve its return by unilateral deviation:
 \[
 R^\alpha(\pi^{*\alpha},\pi^{*,-\alpha}) \;\ge\; R^\alpha(\tilde\pi^\alpha,\pi^{*,-\alpha})
-\qquad\text{for all }\alpha\in\mathcal{N},\; \tilde\pi^\alpha\in\Pi^\alpha.
+\qquad\text{for all }\alpha\in\mathcal{N},\; \tilde\pi^\alpha\in\Pi^\alpha,
 \]
+where $\pi^{*,-\alpha}$ denotes the policies of all agents except $\alpha$.
 \end{definition}
 
-\begin{definition}[Social welfare and Price of Anarchy]
-The \emph{social welfare} of a joint policy $\pi$ is $\mathrm{SW}(\pi) := \sum_{\alpha\in\mathcal{N}} R^\alpha(\pi)$. The \emph{Price of Anarchy} (PoA) is
+To compare equilibrium outcomes of the MATPG against the centralized MATP benchmark, we need a notion of efficiency that relates individual rewards to the social objective (minimizing makespan of the target set $\Phi^*$).
+
+\begin{definition}[Social cost and Price of Anarchy]\label{def:poa}
+Fix a target set $\Phi^*$. The \emph{social cost} of a joint policy $\pi$ is the expected makespan:
 \[
-\mathrm{PoA} := \frac{\sup_\pi \mathrm{SW}(\pi)}{\inf_{\pi^*\in\mathrm{NE}} \mathrm{SW}(\pi^*)},
+\mathrm{SC}(\pi) := \mathbb{E}^\pi\!\big[\inf\{t\ge 0 : \Phi^*\subseteq\mathcal{FRS}^0_t\}\big].
 \]
-measuring the worst-case efficiency loss from strategic behavior relative to the social optimum.
-\end{definition}
-
-
-\subsubsection{Complexity of decentralized control.}
-
-\begin{proposition}[Complexity of Dec-POMDP and POSG]\label{prop:dec-complexity}
-\leavevmode
-\begin{enumerate}
-    \item Computing an optimal joint policy for a finite-horizon Dec-POMDP is NEXP-complete (Bernstein, Givan, and Zilberstein, 2002).
-    \item Computing a Nash equilibrium of a finite POSG is at least PPAD-hard (by reduction from Nash equilibrium computation in normal-form games).
-\end{enumerate}
-\end{proposition}
-
-Thus, even the cooperative problem (Dec-POMDP) is vastly harder than the centralized problem (POMDP, which is PSPACE-complete). Decentralization incurs a fundamental computational cost.
-
-
-\subsection{The Decentralized MATP Game}\label{sec:dec-matp}
-
-We now formulate the \emph{Decentralized MATP} as a POSG by distributing the centralized planner's authority to the individual agents.
-
-\begin{definition}[Decentralized MATP POSG]\label{def:dec-matp}
-Given the same primitives as the centralized MATP (agent set $\mathcal{N}$, formula space $\mathcal{F}$, proof and conjecture kernels, library structure), the \emph{Decentralized MATP} is the POSG
+The \emph{Price of Anarchy} (PoA) is
 \[
-\mathcal{G}_{\mathrm{MATP}} = \Big(\mathcal{N},\;\mathsf{S},\;\{\mathcal{A}^\alpha\}_{\alpha\in\mathcal{N}},\;\{\mathsf{O}^\alpha\}_{\alpha\in\mathcal{N}},\;T,\;T^0,\;\{Z^\alpha\}_{\alpha\in\mathcal{N}},\;\{r^\alpha\}_{\alpha\in\mathcal{N}},\;\gamma\Big)
+\mathrm{PoA} := \frac{\sup_{\pi^*\in\mathrm{NE}}\;\mathrm{SC}(\pi^*)}{\inf_{\pi}\;\mathrm{SC}(\pi)},
 \]
-where:
-\begin{itemize}
-    \item \textbf{State space $\mathsf{S}$} is identical to the centralized MATP (private libraries, public library, job descriptors, query models, cumulative effort).
-    
-    \item \textbf{Action spaces $\mathcal{A}^\alpha$} are identical to the per-agent action spaces of the centralized MATP: each agent independently selects $\mathrm{Prove}$, $\mathrm{Conj}$, $\mathrm{Pub}$, $\mathrm{Qry}$, or $\bot$.
-    
-    \item \textbf{Observations $\mathsf{O}^\alpha$} are agent-specific: agent $\alpha$ observes its own private library $\mathcal{L}^\alpha_t$, its own portfolio/balance, its own query responses $\Omega^\alpha_t$, and the public library $\mathcal{L}^0_t$. Crucially, agent $\alpha$ does \emph{not} observe other agents' private libraries, job statuses, or cumulative effort maps.
-    
-    \item \textbf{Transition kernel $T$} is identical to the centralized MATP (the physics of proving, conjecturing, and publishing are unchanged).
-    
-    \item \textbf{Individual rewards $r^\alpha$} encode each agent's private objective. We defer the precise specification of $r^\alpha$ to the discussion below, noting that the choice of reward structure is the central design variable.
-\end{itemize}
+i.e., the ratio of the worst-case equilibrium makespan to the optimal (centralized) makespan. A $\mathrm{PoA}$ of $1$ means all equilibria are socially optimal; $\mathrm{PoA} = \infty$ means equilibria can be arbitrarily worse than the centralized benchmark.
 \end{definition}
 
-The key structural change from the centralized MATP is that there is no planner: each agent $\alpha$ selects its own action $a^\alpha_t$ based on its own observation history $h^\alpha_t$. The joint action $a_t = (a^\alpha_t)_{\alpha\in\mathcal{N}}$ emerges from the independent, simultaneous choices of all agents.
-
-
-\subsubsection{Cooperative baseline: Dec-POMDP.}
-
-As a baseline, one may set $r^\alpha = r$ for all $\alpha$, recovering a Dec-POMDP in which all agents cooperatively maximize the centralized MATP objective (e.g., minimizing the time to fully resolve $\Phi^*$). In this case, communication occurs solely through publication: an agent that publishes a resolved sequent effectively ``communicates'' its result to all others via the shared library. The Dec-POMDP formulation captures the difficulty of coordination under communication constraints, but assumes agents are willing to cooperate---they share the social objective and have no private interests.
-
-\begin{remark}[Communication via publication]
-In the Dec-POMDP, the only communication channel between agents is the shared library $\mathcal{L}^0_t$. An agent's publication action $(\mathrm{Pub},(C,R))$ is the sole mechanism by which private information enters the public domain. This is a severely constrained communication model: agents cannot send arbitrary messages, and publication is ``all-or-nothing'' (either a result is in the shared library or it is not). The Dec-POMDP's NEXP-completeness (Proposition~\ref{prop:dec-complexity}) reflects, in part, the difficulty of coordinating under such constraints.
+\begin{remark}[Social cost vs.\ social welfare]
+We define PoA in terms of social \emph{cost} (makespan, to be minimized) rather than social \emph{welfare} (sum of rewards, to be maximized). This is natural because the centralized MATP optimizes makespan, and we wish to measure how much worse equilibria are relative to the centralized optimum. The ratio is $\ge 1$ by definition, with equality when all NE achieve the centralized optimum.
 \end{remark}
 
 
-\subsubsection{Individual rewards and the externality problem.}
+\subsection{The Multi-Agent Theorem Proving Game (MATPG)}\label{sec:matpg}
 
-In practice, agents are not purely cooperative. Each agent has its own research agenda, computational resources, and incentives. A more realistic model assigns each agent an individual reward that depends on the agent's own contributions and on the state of the shared library.
+We now define the MATPG by distributing the centralized planner's authority to the individual agents.
 
-Consider a natural class of \emph{credit-based} reward functions: agent $\alpha$'s reward is determined by the sequents that $\alpha$ has proven and that are credited to $\alpha$ in the metadata $\Theta^0_t$.
+\begin{definition}[MATPG]\label{def:matpg}
+Given the same primitives as the centralized MATP (agent set $\mathcal{N}$, formula space $\mathcal{F}$, proof and conjecture kernels, library structure, target set $\Phi^*$), the \emph{Multi-Agent Theorem Proving Game} is the POSG
+\[
+\mathcal{G}_{\mathrm{MATPG}} = \Big(\mathcal{N},\;\mathsf{S},\;\{\mathcal{A}^\alpha\}_{\alpha\in\mathcal{N}},\;\{\mathsf{O}^\alpha\}_{\alpha\in\mathcal{N}},\;T,\;T^0,\;\{Z^\alpha\}_{\alpha\in\mathcal{N}},\;\{r^\alpha\}_{\alpha\in\mathcal{N}},\;\gamma\Big)
+\]
+with components as follows.
+\begin{itemize}
+    \item \textbf{State space $\mathsf{S}$.} Identical to the centralized MATP: $s_t = (\{\mathcal{L}^\alpha_t\}_\alpha,\mathcal{L}^0_t,\{J^\alpha_t\}_\alpha,\{Q^\alpha_t\}_\alpha,\{\Omega^\alpha_t\}_\alpha,\{U^\alpha_t\}_\alpha)$.
+    
+    \item \textbf{Action spaces $\mathcal{A}^\alpha$.} Identical to the per-agent action spaces of the centralized MATP: each agent independently selects $\mathrm{Prove}$, $\mathrm{Conj}$, $\mathrm{Pub}$, $\mathrm{Qry}$, or $\bot$, subject to the same admissibility constraints.
+    
+    \item \textbf{Observations $\mathsf{O}^\alpha$.} Agent $\alpha$ observes
+    \[
+    o^\alpha_t := \big(\mathcal{L}^\alpha_t,\;\Omega^\alpha_t;\;\mathcal{L}^0_t\big).
+    \]
+    That is, $\alpha$ observes its own private library, its own query responses, and the public library. Agent $\alpha$ does \emph{not} observe other agents' private libraries, job statuses, or cumulative effort maps. The observation kernel is deterministic: $Z^\alpha(o^\alpha\mid s,a,s') = \mathbf{1}[o^\alpha = \mathrm{Obs}^\alpha(s')]$.
+    
+    \item \textbf{Transition kernel $T$.} Identical to the centralized MATP: the physics of proving, conjecturing, and publishing are unchanged.
+    
+    \item \textbf{Individual rewards $r^\alpha$.} Each agent has its own reward function. We discuss the canonical choice below.
+\end{itemize}
+\end{definition}
+
+The key structural change from the centralized MATP: there is no planner. Each agent $\alpha$ selects its own action $a^\alpha_t$ based solely on its own observation history $h^\alpha_t$. The joint action $a_t = (a^\alpha_t)_{\alpha\in\mathcal{N}}$ emerges from independent, simultaneous choices.
+
+
+\subsubsection{Credit-Based Rewards}\label{sec:credit-rewards}
+
+We consider a natural class of reward functions that model the academic incentive structure: agents are rewarded for sequents they prove and that are credited to them.
 
 \begin{definition}[Credit-based reward]\label{def:credit-reward}
-Fix a target valuation $v:\mathcal{S}\to\mathbb{R}_{\ge 0}$ assigning value to fully resolved sequents. Agent $\alpha$'s credit-based per-step reward is
+Fix a valuation $v:\mathcal{S}\to\mathbb{R}_{\ge 0}$ assigning value to sequents. Agent $\alpha$'s \emph{credit-based} per-step reward is
 \[
 r^\alpha_{\mathrm{credit}}(s_t,a_t) := \sum_{\substack{s\in\mathcal{FRS}^0_{t+1}\setminus\mathcal{FRS}^0_t}} v(s)\cdot\mathbf{1}[\Theta^0_{t+1}(s) = (\cdot,\alpha)],
 \]
-i.e., agent $\alpha$ is rewarded for each newly fully resolved sequent in the shared library that is credited to $\alpha$.
+i.e., agent $\alpha$ is rewarded for each newly fully resolved sequent in the shared library that is credited to $\alpha$ via the metadata $\Theta^0$.
 \end{definition}
 
-Under credit-based rewards, agents have incentive to prove valuable sequents and receive credit. However, this reward structure introduces a fundamental externality.
+Credit-based rewards model a setting where agents compete for attribution---analogous to priority in mathematical publishing, where the first to publish a result receives recognition. This is a general-sum game: agents' rewards are not aligned with the social objective (minimizing makespan of $\Phi^*$), as an agent may benefit from \emph{delaying} publication to prevent competitors from building on its results.
 
 
 \subsection{The Publication Externality}\label{sec:externality}
 
-We now show that the decentralized MATP with credit-based rewards exhibits a \emph{publication externality}: an agent's publication of a resolved sequent creates social value (by enabling other agents' proofs) but generates no direct reward for the publisher.
+We now show that the MATPG with credit-based rewards exhibits a fundamental market failure: a \emph{publication externality} in which sharing results creates social value but generates no direct reward for the sharer.
 
 \begin{definition}[Publication externality]\label{def:pub-externality}
 A \emph{publication externality} exists at state $s_t$ if there exists an agent $\alpha$ and a publication action $a^\alpha = (\mathrm{Pub},(C,R))$ such that:
 \begin{enumerate}
-    \item Publishing strictly increases some other agent $\beta$'s expected future reward:
+    \item Publishing strictly increases some other agent $\beta$'s expected future return:
     \[
-    \mathbb{E}[R^\beta_{\ge t+1} \mid s_t,\; a^\alpha = (\mathrm{Pub},(C,R))] > \mathbb{E}[R^\beta_{\ge t+1} \mid s_t,\; a^\alpha = \bot],
+    \mathbb{E}\!\big[R^\beta_{\ge t+1} \mid s_t,\; a^\alpha = (\mathrm{Pub},(C,R))\big] > \mathbb{E}\!\big[R^\beta_{\ge t+1} \mid s_t,\; a^\alpha = \bot\big].
     \]
-    where $R^\beta_{\ge t+1} := \sum_{\tau=t+1}^\infty \gamma^{\tau-t-1} r^\beta(s_\tau,a_\tau)$.
-    \item Publishing does not increase $\alpha$'s own expected future reward:
+    \item Publishing weakly decreases $\alpha$'s own expected future return:
     \[
-    \mathbb{E}[R^\alpha_{\ge t+1} \mid s_t,\; a^\alpha = (\mathrm{Pub},(C,R))] \le \mathbb{E}[R^\alpha_{\ge t+1} \mid s_t,\; a^\alpha = \bot].
+    \mathbb{E}\!\big[R^\alpha_{\ge t+1} \mid s_t,\; a^\alpha = (\mathrm{Pub},(C,R))\big] \le \mathbb{E}\!\big[R^\alpha_{\ge t+1} \mid s_t,\; a^\alpha = \bot\big].
     \]
 \end{enumerate}
 \end{definition}
 
 \begin{theorem}[Existence of publication externalities]\label{thm:externality}
-In any Decentralized MATP POSG with $|\mathcal{N}|\ge 2$, credit-based rewards, and non-trivial latent dependencies between agents' targets, publication externalities exist.
+In any MATPG with $|\mathcal{N}|\ge 2$ and credit-based rewards, if the latent dependency structure $\delta^*$ induces non-trivial cross-agent dependencies, then publication externalities exist.
 \end{theorem}
 
 \begin{proof}
-We construct a witnessing instance. Let $\mathcal{N} = \{\alpha,\beta\}$. Let the target sets be $\Phi^*_\alpha = \{s_\alpha\}$ and $\Phi^*_\beta = \{s_\beta\}$, with $v(s_\alpha) = v(s_\beta) = 1$ and $v(s) = 0$ otherwise. Suppose the latent dependency structure satisfies $\delta^*(s_\beta) = \{\phi_\alpha\}$, where $\phi_\alpha$ is the consequent of $s_\alpha$. Thus $s_\beta$ cannot be fully resolved until $s_\alpha$ is also resolved in the shared library.
+Let $\mathcal{N} = \{\alpha,\beta\}$. Suppose $\alpha$'s private target is $s'_\alpha$ with $\delta^*(s'_\alpha) = \varnothing$ and $v(s'_\alpha) = 1$, so that $\alpha$ earns reward by resolving and publishing $s'_\alpha$. In the course of working toward $s'_\alpha$, suppose $\alpha$ also privately resolves a sequent $s_\alpha$ with $v(s_\alpha) = 0$ (for $\alpha$). Meanwhile, $\beta$'s target $s_\beta$ satisfies $\delta^*(s_\beta) \ni \phi_\alpha$ (where $\phi_\alpha$ is the consequent of $s_\alpha$), so that $s_\beta$ cannot be fully resolved until $s_\alpha$ appears in $\mathcal{RS}^0$.
 
-At some time $t$, suppose $\alpha$ has privately resolved $s_\alpha$ (i.e., $s_\alpha\in\mathcal{RS}^\alpha_t$) but has not published it ($s_\alpha\notin\mathcal{RS}^0_t$). Agent $\alpha$'s own target $s_\alpha$ is already resolved in $\alpha$'s private library, so $\alpha$'s credit-based reward for $s_\alpha$ is earned only when $s_\alpha$ enters $\mathcal{FRS}^0_t$---which requires publication. Under credit-based rewards, $\alpha$ receives $v(s_\alpha) = 1$ upon publishing $s_\alpha$ (since $\delta^*(s_\alpha)=\varnothing$ makes it immediately fully resolved upon publication). So publishing actually does help $\alpha$ in this case.
+At time $t$, $\alpha$ has privately resolved both $s'_\alpha$ and $s_\alpha$, but has published neither. Then:
 
-To create a pure externality, modify the instance so that $\alpha$'s target is $s'_\alpha$ with $\delta^*(s'_\alpha) = \varnothing$ and $s'_\alpha \neq s_\alpha$, while $\alpha$ has also privately resolved $s_\alpha$ as a byproduct of working toward $s'_\alpha$. Now $\alpha$ receives credit for $s'_\alpha$ (its own target) but not for $s_\alpha$ (which is not in $\alpha$'s target set and has $v(s_\alpha) = 0$ from $\alpha$'s perspective). Publishing $s_\alpha$ costs $\alpha$ one timestep but provides $\alpha$ no reward (since $v(s_\alpha) = 0$ for $\alpha$). However, publishing $s_\alpha$ enables $\beta$ to fully resolve $s_\beta$ (since $s_\beta$'s dependency on $\phi_\alpha$ is satisfied). Thus:
-\begin{itemize}
-    \item $\alpha$'s reward from publishing $s_\alpha$: $0$ (no credit, cost of one timestep).
-    \item $\beta$'s reward from $\alpha$ publishing $s_\alpha$: $v(s_\beta) = 1$ (enables full resolution of $\beta$'s target).
-\end{itemize}
+\emph{Publishing $s_\alpha$:} Agent $\alpha$ spends one timestep on $(\mathrm{Pub},(\cdot,\{s_\alpha\}))$. This yields $\alpha$ no credit (since $v(s_\alpha) = 0$ for $\alpha$) and costs one timestep of proving effort. Thus $\alpha$'s expected future return weakly decreases.
+
+\emph{Effect on $\beta$:} Once $s_\alpha\in\mathcal{RS}^0$, agent $\beta$ can achieve full resolution of $s_\beta$ (assuming $\beta$ resolves $s_\beta$ itself). Thus $\beta$'s expected future return strictly increases.
+
 This satisfies Definition~\ref{def:pub-externality}.
 \end{proof}
 
-\begin{corollary}[Free riding and underinvestment]\label{cor:free-riding}
-Under credit-based rewards, the unique Nash equilibrium of the externality instance in Theorem~\ref{thm:externality} has $\alpha$ not publishing $s_\alpha$, leading to $\beta$ failing to fully resolve $s_\beta$. The social welfare at this NE is strictly lower than the social optimum (in which $\alpha$ publishes $s_\alpha$, enabling $\beta$ to resolve $s_\beta$).
-\end{corollary}
-
-The publication externality is the core market failure in decentralized theorem proving: agents who produce useful intermediate results have no incentive to share them. This leads to duplication of effort (multiple agents independently proving the same lemma), underinvestment in ``infrastructure'' lemmas (results useful to many but credited to none), and withholding of results (agents hoarding private proofs to maintain competitive advantage).
-
-\begin{remark}[Beyond credit-based rewards]
-The publication externality is not an artifact of the credit-based reward structure. Any individual reward function that fails to compensate agents for the social value of their publications will exhibit a similar externality. The fundamental issue is that publication creates positive externalities---benefits to other agents that are not captured by the publisher's reward. Eliminating this externality requires a mechanism that transfers value from beneficiaries to publishers: a market.
+\begin{remark}[Generality of the externality]
+The publication externality is not an artifact of credit-based rewards specifically. Any individual reward function that fails to compensate agents for the \emph{social value} of their publications will exhibit a similar externality. The core issue is structural: publication creates positive externalities---benefits to other agents not captured by the publisher's reward---and no reward function that depends only on $\alpha$'s own credited contributions can internalize the value that $\alpha$'s publications create for others.
 \end{remark}
 
 
-\subsection{Market-Mediated MATP}\label{sec:market-matp}
+\subsubsection{Inefficiency of equilibria.}
 
-We now introduce a market mechanism that internalizes the publication externality by enabling agents to trade state-contingent contracts whose settlement is triggered by publicly verifiable events (sequent resolution in the shared library).
+The publication externality has direct consequences for the efficiency of equilibria relative to the centralized makespan benchmark.
 
-\subsubsection{Collateralized bilateral contract market.}
+\begin{theorem}[Unbounded PoA without market]\label{thm:unbounded-poa}
+The Price of Anarchy of the MATPG with credit-based rewards is unbounded: for every $M > 0$, there exists an instance with $\mathrm{PoA} > M$.
+\end{theorem}
 
-We equip the Decentralized MATP POSG with a \emph{bilateral contract market} operating as follows.
+\begin{proof}
+Consider an instance with $n+1$ agents $\alpha_0,\alpha_1,\dots,\alpha_n$ and target set $\Phi^* = \{s_0\}$, where $s_0$ is the sole socially valuable sequent. The latent dependency structure is a chain: $\delta^*(s_0) = \{\phi_1\}$, $\delta^*(s_1) = \{\phi_2\}$, \ldots, $\delta^*(s_{n-1}) = \{\phi_n\}$, $\delta^*(s_n) = \varnothing$. Agent $\alpha_i$ has a private target $s'_i$ with $v(s'_i)=1$ (for agent $\alpha_i$), and in the course of pursuing $s'_i$, $\alpha_i$ privately resolves $s_i$ as a byproduct. Assign $v(s_i)=0$ for all agents other than the one whose target depends on it.
 
-A \emph{contract type} is a triple $\chi = (s, T, \ell) \in \mathcal{CS}_0 \times \mathbb{N} \times [0,1]$, representing a normalized unit-notional claim on the event that sequent $s$ becomes publicly resolved by deadline $T$, with maximum loss parameter $\ell$. Each contract type induces two complementary positions, the \emph{long} side $\chi^+$ and the \emph{short} side $\chi^-$, with terminal payoffs:
+Under credit-based rewards, no agent has incentive to publish $s_i$ (zero reward, positive cost). In the worst-case NE, no $s_i$ is published, and $s_0$ is never fully resolved. The social cost is $\mathrm{SC}(\pi^*_{\mathrm{NE}}) = \infty$ (or the horizon $H$ in a finite-horizon formulation).
+
+The centralized optimum, which can instruct all agents to publish their byproducts, achieves $\mathrm{SC}(\pi_{\mathrm{OPT}})$ proportional to the chain depth $n$ plus the resolution times. Thus $\mathrm{PoA} \ge H / \mathrm{SC}(\pi_{\mathrm{OPT}}) \to \infty$ as $H\to\infty$ (or directly $\mathrm{PoA} = \infty$ in the infinite-horizon case).
+
+Even in instances where $s_0$ is eventually resolved in some NE, one can construct a family of instances parameterized by $n$ in which the equilibrium delay grows linearly in $n$ while the centralized optimum remains bounded, yielding $\mathrm{PoA} \ge n$ for any desired $n$.
+\end{proof}
+
+
+\subsection{Market-Mediated MATPG}\label{sec:market-matp}
+
+The unbounded PoA of Theorem~\ref{thm:unbounded-poa} shows that credit-based rewards alone cannot align individual incentives with the social objective. We now introduce a market mechanism that internalizes the publication externality by enabling agents to trade state-contingent contracts whose settlement is triggered by publicly verifiable events. For completeness, we define a general market mechanism as follows:
+
+
+
+\begin{definition}[Market mechanism]\label{def:market-mechanism}
+A \emph{market mechanism} $\mathscr{M}$ is a modular plugin that governs which market actions are available, which are admissible at a given world state, and how the market state evolves. Formally, $\mathscr{M}$ is a tuple:
+\begin{align*}
+\mathscr{M} :=\Big(&\mathcal{N}, \mathfrak{M},\beta, \mathcal{W},\{\mathcal{A}^\alpha_{\mathrm{mkt}}\}_{\alpha\in\mathcal{N}},
+\{\mathrm{Adm}^\alpha_{\mathrm{mkt}}\}_{\alpha\in\mathcal{N}},\mathcal{T}_{\mathrm{mkt}}\Big)
+\end{align*}
+where $\mathcal{N}$ is the agent set; $\mathfrak{M} = (\mathfrak{P}^{|\mathcal{N}|}, \mathfrak{L})$ is the market state space, with $\mathfrak{P}$ the space of portfolios and $\mathfrak{L}$ the space of public market ledgers; $\beta:\mathfrak{P}\to\mathbb{R}$ is a canonical balance/valuation map; $\mathcal{W}$ is the world state space (of which $\mathfrak{M}$ is a component); $\mathcal{A}^\alpha_{\mathrm{mkt}}$ is the market action space for agent $\alpha$ (always containing a market no-op $\bot_{\mathrm{mkt}}$); $\mathrm{Adm}^\alpha_{\mathrm{mkt}}:\mathcal{W}\times\mathcal{A}^\alpha_{\mathrm{mkt}}\to\{0,1\}$ is the market admissibility predicate; and $\mathcal{T}_{\mathrm{mkt}}:(\mathcal{W}\times\mathcal{W}\times\mathcal{A}_{\mathrm{mkt}})\times\Sigma_{\mathcal{W}}\to[0,1]$ is a transition kernel such that given a non-market state change $w\to w'$ and joint market action $a_{\mathrm{mkt}}\in\prod_\alpha\mathcal{A}^\alpha_{\mathrm{mkt}}$, the next world state is drawn from $\mathcal{T}_{\mathrm{mkt}}(\cdot\mid w,w',a_{\mathrm{mkt}})$. Deterministic mechanisms are recovered as Dirac kernels.
+ 
+\end{definition}
+
+One may parameterize and study many different market-mediated games by switching out $\mathscr{M}$ while holding the non-market dynamics (proof/conjecture/publication) fixed. The bilateral contract market defined below is one such instantiation.
+
+
+\subsubsection{Collateralized Bilateral Contract Market}\label{sec:contract-market}
+
+We equip the MATPG with a \emph{bilateral contract market} defined as follows.
+
+\paragraph{Contract types.}
+A \emph{contract type} is a triple $\chi = (s, T, \ell) \in \mathcal{CS}_0 \times \mathbb{N} \times [0,1]$, representing a normalized unit-notional claim on the event $E_{s,T} := \mathbf{1}[s\in\mathcal{RS}^0_T]$ that sequent $s$ becomes publicly resolved by deadline $T$, with maximum loss parameter $\ell$. Each contract type induces two complementary positions with terminal payoffs:
 \[
-\Pi(\chi^+) = \begin{cases} 1-\ell & \text{if } s\in\mathcal{RS}^0_T, \\ -\ell & \text{otherwise,} \end{cases}
+\Pi(\chi^+) = \begin{cases} 1-\ell & \text{if } E_{s,T}=1, \\ -\ell & \text{if } E_{s,T}=0, \end{cases}
 \qquad
 \Pi(\chi^-) = -\Pi(\chi^+).
 \]
+The long side $\chi^+$ profits when the sequent is resolved; the short side $\chi^-$ profits otherwise.
 
-Contracts are traded via \emph{public offers} $o = (\chi, \sigma, q, p)$, where $\sigma\in\{+,-\}$ is the side offered, $q\in\mathbb{N}^+$ is quantity, and $p\in[0,1]$ is the per-unit price. When agent $\beta$ accepts quantity $q'\le q$ from an offer posted by $\alpha$, the position $q'\chi^\sigma$ transfers to $\beta$'s holdings and cash $q'p$ transfers from $\beta$ to $\alpha$.
+\paragraph{Trading.}
+Contracts are traded via \emph{public offers} $o = (\chi, \sigma, q, p)$, where $\sigma\in\{+,-\}$ is the side offered, $q\in\mathbb{N}^+$ is quantity, and $p\in[0,1]$ is the per-unit price. When agent $\beta$ accepts quantity $q'\le q$ from an offer posted by $\alpha$, the position $q'\chi^\sigma$ transfers to $\beta$'s holdings and cash $q'p$ transfers from $\beta$ to $\alpha$. New contracts are always issued as matched pairs $(q\chi^+, q\chi^-)$, ensuring zero net wealth creation.
 
-Contracts are always issued as matched pairs $(q\chi^+, q\chi^-)$, ensuring zero net creation of wealth. A \emph{collateral constraint} requires that every agent's portfolio satisfies $\underline{B}^\alpha \ge 0$ at all times, where $\underline{B}^\alpha := c^\alpha - \sum_{x\in H^\alpha\cup O^\alpha} \sup_\omega(-\Pi_\omega(x))_+$ is the minimum marked balance (cash minus worst-case liabilities). This ensures no agent can default.
-
-At each timestep $t$, all contracts with deadline $T = t$ are \emph{settled}: payoffs are applied to holdings based on the public library state $\mathcal{RS}^0_t$, and settled contracts are removed.
-
-
-\subsubsection{Market-augmented reward.}
-
-In the market-mediated MATP, each agent $\alpha$'s reward is the change in portfolio balance:
+\paragraph{Collateral.}
+For a portfolio $\mathcal{P}^\alpha = (c^\alpha, H^\alpha, O^\alpha)$ (cash, held positions, posted offers), define the \emph{minimum marked balance}:
 \[
-r^\alpha_{\mathrm{mkt}}(s_t,a_t) := B^\alpha_{t+1} - B^\alpha_t,
+\underline{B}^\alpha := c^\alpha - \sum_{x\in H^\alpha\cup O^\alpha} \sup_\omega\,(-\Pi_\omega(x))_+.
 \]
-where $B^\alpha_t = \beta(\mathcal{P}^\alpha_t)$ is the canonical balance of $\alpha$'s portfolio (cash plus mark-to-market value of positions). This reward naturally captures trading profits, proof costs, and contract settlement payoffs.
+A market action is admissible only if $\underline{B}^\alpha \ge 0$ after execution. This full-collateralization constraint ensures no agent can default: every position is backed by sufficient cash to cover the worst-case settlement.
+
+\paragraph{Settlement.}
+At each timestep $t$, all contract types $\chi = (s,T,\ell)$ with deadline $T = t$ are settled: payoffs $\Pi(\chi^\pm)$ are applied based on $E_{s,t} = \mathbf{1}[s\in\mathcal{RS}^0_t]$, and settled contracts are removed from all portfolios and the public ledger.
 
 
-\begin{definition}[Market-Mediated MATP (VAMP)]\label{def:vamp-game}
-The \emph{Verifiable Allocation Market POSG} (VAMP) is the POSG obtained by augmenting the Decentralized MATP with the bilateral contract market:
-\[
-\mathcal{G}_{\mathrm{VAMP}} = \Big(\mathcal{N},\;\mathcal{W},\;\{\mathcal{A}^\alpha\}_{\alpha\in\mathcal{N}},\;\{\mathsf{O}^\alpha\}_{\alpha\in\mathcal{N}},\;\mathcal{T},\;\{r^\alpha_{\mathrm{mkt}}\}_{\alpha\in\mathcal{N}},\;\gamma,\;b_0,\;\mathscr{M}\Big),
-\]
-where the world state $\mathcal{W}$ includes the market state $\mathcal{M}_t = (\{\mathcal{P}^\alpha_t\}_\alpha, \mathcal{ML}_t)$, agent actions include market actions (posting offers, accepting offers) alongside proof/conjecture/publication actions, and the transition kernel incorporates the two-stage construction (non-market transitions followed by market transitions) as specified by the market mechanism $\mathscr{M}$. The full formal definition is given in Chapter~\ref{chap:vamp}.
+\subsubsection{The Market-Mediated MATPG}\label{sec:market-matpg-def}
+
+\begin{definition}[Market-Mediated MATPG]\label{def:vamp-game}
+The \emph{Market-Mediate MATPG} (MMATPG) is the POSG obtained by augmenting the MATPG with a market mechanism $\mathscr{M}$ such as the bilateral contract market. Formally, $\mathcal{G}_{\mathrm{MMATPG}}$ extends $\mathcal{G}_{\mathrm{MATPG}}$ as follows:
+\begin{itemize}
+    \item \textbf{State space:} The world state $w_t\in\mathcal{W}$ extends the MATPG state with the market state $\mathcal{M}_t = (\{\mathcal{P}^\alpha_t\}_\alpha,\mathcal{ML}_t)$ comprising each agent's portfolio and the public order book (market ledger).
+    
+    \item \textbf{Action spaces:} Each $\mathcal{A}^\alpha$ is extended with market actions---posting offers, accepting offers, and issuing contract pairs---subject to the collateral constraint.
+    
+    \item \textbf{Observations:} Agent $\alpha$ additionally observes its own portfolio $\mathcal{P}^\alpha_t$, its balance $B^\alpha_t$, and the public ledger $\mathcal{ML}_t$.
+    
+    \item \textbf{Transition:} The transition kernel uses the two-stage construction: first, non-market transitions (proof/conjecture/publication) are applied, yielding an intermediate state; then market transitions (trades, settlement) are applied, yielding the next state. (The full formal definition is given in Chapter~\ref{chap:vamp}.)
+    
+    \item \textbf{Rewards:} Each agent's per-step reward is the change in portfolio balance:
+    \[
+    r^\alpha_{\mathrm{mkt}}(w_t,a_t) := B^\alpha_{t+1} - B^\alpha_t,
+    \]
+    which captures trading profits, proof effort costs, and contract settlement payoffs in a single quantity.
+\end{itemize}
 \end{definition}
+
+\begin{remark}[Why balance-change reward]
+The balance-change reward $r^\alpha_{\mathrm{mkt}} = B^\alpha_{t+1} - B^\alpha_t$ is the natural choice for a market-mediated game. It ensures that an agent's total discounted return $R^\alpha(\pi) = \mathbb{E}[\sum_t \gamma^t(B^\alpha_{t+1}-B^\alpha_t)]$ telescopes (up to discounting) to the difference between the terminal and initial balance, weighted by the discount factor. Every source of value---credit for proofs, contract profits, settlement payoffs---is mediated through the balance, providing a single coherent objective for each agent.
+\end{remark}
 
 
 \subsection{Internalization of Externalities}\label{sec:internalization}
 
-We now show that the bilateral contract market internalizes the publication externality identified in Theorem~\ref{thm:externality}.
+We now show that the bilateral contract market resolves the publication externality of Theorem~\ref{thm:externality}.
 
-\begin{theorem}[Market internalization of publication externalities]\label{thm:internalization}
-Consider the VAMP game $\mathcal{G}_{\mathrm{VAMP}}$ with the bilateral contract market. Suppose agent $\beta$ values the public resolution of sequent $s$ by time $T$ at $v_\beta > 0$ (in the sense that $\beta$'s expected future reward increases by $v_\beta$ if $s\in\mathcal{RS}^0_T$). Then:
+\begin{theorem}[Market internalization]\label{thm:internalization}
+Consider the market-mediated MATP game $\mathcal{G}_{\mathrm{MMATP}}$. Suppose agent $\beta$ values the public resolution of sequent $s$ by time $T$ at $v_\beta > 0$, and agent $\alpha$ can resolve $s$ at expected cost $c_\alpha > 0$. Then:
 \begin{enumerate}
-    \item \textbf{Demand expression.} Agent $\beta$ can express demand for the resolution of $s$ by purchasing long contracts $\chi^+ = (s,T,\ell)^+$ at a price $p < v_\beta$. This is individually rational for $\beta$ whenever the market price is below $\beta$'s valuation.
+    \item \textbf{Demand expression.} $\beta$ can express demand for $s$'s resolution by purchasing long contracts $\chi^+ = (s,T,\ell)^+$ at any per-unit price $p$ satisfying $p < v_\beta$. This is individually rational: $\beta$'s expected payoff from holding $\chi^+$ exceeds the purchase cost whenever $\beta$ believes $s$ will be resolved with sufficient probability.
     
-    \item \textbf{Proof incentive.} If agent $\alpha$ can resolve $s$ at expected cost $c_\alpha$, then $\alpha$ can profitably buy long contracts at any price $p < 1 - \ell - c_\alpha$, then prove and publish $s$, collecting the settlement payoff $1-\ell$ per contract. The publication externality is internalized: $\alpha$'s reward from proving and publishing now includes the contract profit $(1-\ell) - p - c_\alpha > 0$.
+    \item \textbf{Proof incentive.} $\alpha$ can profitably acquire long contracts on $s$ at any price $p < 1-\ell - c_\alpha$, then resolve and publish $s$, collecting the settlement payoff $1-\ell$ per contract. The publication externality is internalized: $\alpha$'s reward now includes the contract profit $(1-\ell) - p - c_\alpha > 0$, which is positive precisely because the market transfers value from the beneficiary ($\beta$) to the provider ($\alpha$).
     
-    \item \textbf{Value transfer.} In any trade, the contract price $p$ transfers value from the buyer (who benefits from resolution) to the seller of the complementary side. At equilibrium, the long price $p^*$ satisfies
-    \[
-    c_{\min} \;\le\; 1 - \ell - p^* \;\le\; v_{\max},
-    \]
-    where $c_{\min} = \min_\alpha c_\alpha$ is the cheapest prover's cost and $v_{\max} = \max_\beta v_\beta$ is the highest valuation. Trades occur whenever there are gains from trade ($c_{\min} < v_{\max}$), and the market price reflects the marginal cost of proof provision.
+    \item \textbf{Settlement and publication linkage.} The settlement trigger is $s\in\mathcal{RS}^0_T$ (public resolution), which requires publication. Thus the market simultaneously incentivizes both proving \emph{and} publishing: an agent who proves $s$ privately but does not publish cannot collect the settlement payoff.
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}[Proof sketch]
-(1) Agent $\beta$ buys $\chi^+$ at price $p$. If $s$ is resolved by $T$, $\beta$ receives $1-\ell$ from settlement. $\beta$'s expected profit from the contract is $\Pr(s\in\mathcal{RS}^0_T)(1-\ell) - \ell\cdot\Pr(s\notin\mathcal{RS}^0_T) - p$. If $\beta$'s valuation $v_\beta$ exceeds $p$, $\beta$ has positive expected surplus from purchasing.
+\begin{proof}
+(1) Agent $\beta$ purchases $q$ units of $\chi^+$ at price $p$ per unit. If $s\in\mathcal{RS}^0_T$, $\beta$ receives $q(1-\ell)$ from settlement and has paid $qp$, for a net payoff of $q(1-\ell-p)$. If $s\notin\mathcal{RS}^0_T$, $\beta$ loses $q\ell$ from settlement plus the purchase price $qp$, but this total loss $q(\ell + p)$ is bounded by the collateral constraint. As long as $p < v_\beta$ and $\beta$'s subjective probability of resolution exceeds $(\ell+p)/(1-p+\ell) = (\ell+p)$, the expected surplus is positive.
 
-(2) Agent $\alpha$ buys $\chi^+$ at price $p$, then proves $s$ at cost $c_\alpha$ and publishes. Settlement yields $1-\ell$ per contract. $\alpha$'s net payoff is $(1-\ell) - p - c_\alpha$. This is positive whenever $p < 1-\ell-c_\alpha$. Crucially, $\alpha$ now has a direct financial incentive to both prove \emph{and} publish $s$: the settlement payoff is triggered by public resolution ($s\in\mathcal{RS}^0_T$), which requires publication.
+(2) Agent $\alpha$ acquires $q$ units of $\chi^+$ (either by purchasing from the market at price $p$, or by issuing a matched pair $(\chi^+,\chi^-)$ and selling the short side $\chi^-$ at some price). $\alpha$ then resolves $s$ at cost $c_\alpha$ and publishes, triggering $E_{s,T}=1$. Settlement yields $q(1-\ell)$. Net payoff: $q(1-\ell) - qp - c_\alpha = q(1-\ell-p) - c_\alpha$. For any $q \ge c_\alpha / (1-\ell-p)$, this is nonnegative. In particular, for $p < 1-\ell-c_\alpha/q$, the trade-prove-publish strategy is profitable.
 
-(3) At equilibrium, the long price must make the marginal buyer indifferent ($p^* \approx v_{\mathrm{marginal}} - (1-\ell)$, adjusted for resolution probability) and the marginal prover indifferent ($p^* \approx (1-\ell) - c_{\mathrm{marginal}}$). Trades occur when these ranges overlap, i.e., when some prover's cost is below some buyer's valuation.
+(3) Settlement is evaluated against $\mathcal{RS}^0_T$, not $\mathcal{RS}^\alpha_T$. An agent who proves $s$ privately but does not publish has $s\in\mathcal{RS}^\alpha_T$ but $s\notin\mathcal{RS}^0_T$, and therefore does not trigger settlement. The market mechanism thus ties the financial payoff to the \emph{public} act of publication.
 \end{proof}
 
-\begin{remark}[Comparison to the externality instance]
-Revisiting the instance from Theorem~\ref{thm:externality}: without a market, $\alpha$ has no incentive to publish $s_\alpha$ (zero reward, positive cost). With the market, $\beta$ can buy long contracts on $s_\alpha$, creating a financial incentive for any agent (including $\alpha$) to prove and publish $s_\alpha$. The market price reflects $\beta$'s valuation, and the resulting trade transfers value from $\beta$ (beneficiary) to the prover (provider), eliminating the externality.
+\begin{remark}[Revisiting the externality instance]
+In the instance of Theorem~\ref{thm:externality}, $\alpha$ has no incentive to publish $s_\alpha$ under credit-based rewards. In the MMATPG, $\beta$ can purchase long contracts on $s_\alpha$, creating a posted demand. Any agent (including $\alpha$ or a third party) can then profitably prove, publish, and collect the settlement. The market price emerges endogenously from the interaction of $\beta$'s demand and the providers' costs, transferring value from the beneficiary to the prover and eliminating the externality.
 \end{remark}
 
-\begin{remark}[Collateralization and manipulation]\label{rem:collateral}
-The collateral constraint $\underline{B}^\alpha \ge 0$ ensures that agents cannot take on unbounded liabilities, preventing default risk. This is crucial for incentive alignment: without collateralization, agents could sell short contracts on sequents they intend to prevent from being resolved (a form of market manipulation). Full collateralization bounds the worst-case loss for every agent, ensuring that all positions are credibly backed. However, collateralization also constrains participation: agents with limited capital cannot take large positions, potentially limiting market liquidity. The tradeoff between manipulation-resistance and liquidity is a standard theme in market design.
+\begin{remark}[Collateral and manipulation resistance]\label{rem:collateral}
+The full-collateralization constraint $\underline{B}^\alpha \ge 0$ serves two roles. First, it eliminates default risk: every position is backed by cash sufficient for the worst-case outcome, so settlement is always feasible. Second, it constrains manipulation: an agent cannot sell unbounded quantities of short contracts on a sequent it intends to prevent from being resolved (a form of sabotage), because the collateral requirement scales linearly with position size. However, collateralization also constrains participation: agents with limited capital cannot express large demand or take large provider positions, potentially limiting liquidity.
 \end{remark}
 
 
 \subsection{Equilibrium Analysis}\label{sec:equilibria}
 
-We now analyze the game-theoretic properties of the VAMP game.
+We now study the equilibrium structure of the MMATPG, relating it to the centralized makespan benchmark.
 
-\subsubsection{Existence of equilibria.}
+\subsubsection{Existence}
 
 \begin{proposition}[Existence of Nash equilibria]\label{prop:ne-existence}
-If the VAMP game $\mathcal{G}_{\mathrm{VAMP}}$ has finite state, action, and observation spaces, compact strategy sets, and continuous payoff functions (in the policy topology), then a Nash equilibrium exists in mixed (behavioral) strategies.
+If the MMATP game has finite state, action, and observation spaces, then a Nash equilibrium exists in behavioral (mixed) strategies.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-By Glicksberg's theorem, every finite game with compact strategy sets and continuous payoffs has a Nash equilibrium in mixed strategies. The VAMP's finite-horizon truncation satisfies these conditions. For the infinite-horizon discounted game, existence follows from the standard fixed-point argument on the space of behavioral strategies, applying Kakutani's theorem to the best-response correspondence.
+In the finite-horizon truncation of the MMATPG, the game is a finite extensive-form game with imperfect information; Nash equilibria exist by Kuhn's theorem (or by Nash's theorem applied to the normal-form representation). For the infinite-horizon discounted game with bounded rewards, existence follows from the standard fixed-point argument: the best-response correspondence on the space of behavioral strategies is upper hemicontinuous with non-empty convex values, so Kakutani's theorem applies.
 \end{proof}
 
 \begin{remark}[Markov perfect equilibria]
-For computational and analytical tractability, one often restricts to \emph{Markov perfect equilibria} (MPE), in which each agent's policy depends on the current state only (not the full history). In the VAMP, a state-dependent policy $\pi^\alpha(s_t)$ conditions on agent $\alpha$'s current observation of the world state (private library, portfolio, public library). Under standard regularity conditions, MPE exist and are refinements of Nash equilibria.
+For tractability, one often restricts to \emph{Markov perfect equilibria} (MPE), where each agent's strategy depends only on its current observation rather than the full history. Under standard regularity conditions (finite state/action spaces, discounting), MPE exist and are refinements of NE. In the MMATPG, an MPE has each agent conditioning on $(\mathcal{L}^\alpha_t, \mathcal{P}^\alpha_t, \mathcal{L}^0_t, \mathcal{ML}_t)$---its current private library, portfolio, and the public state.
 \end{remark}
 
 
-\subsubsection{Price of Anarchy.}
+\subsubsection{Price of Anarchy with Market}\label{sec:poa-market}
 
-The Price of Anarchy measures the efficiency loss from strategic behavior relative to the social optimum. In our setting, the social optimum corresponds to the centralized MATP solution (a single planner maximizing social welfare), and the PoA compares the worst NE of the VAMP game against this benchmark.
+We now show that the market mechanism bounds the PoA, in contrast to the unbounded PoA of Theorem~\ref{thm:unbounded-poa}.
 
-\begin{proposition}[PoA lower bound]\label{prop:poa-lower}
-The Price of Anarchy of the Decentralized MATP POSG \emph{without} a market (credit-based rewards) is unbounded: for any $M > 0$, there exists an instance with $\mathrm{PoA} > M$.
-\end{proposition}
-
-\begin{proof}
-Consider the externality instance from Theorem~\ref{thm:externality} with $n$ agents, where each agent $\alpha_i$ privately resolves a sequent $s_i$ that is a dependency of the next agent $\alpha_{i+1}$'s target. Without a market, no agent has incentive to publish, so only agent $\alpha_1$'s target is achievable in the worst NE. The social optimum achieves all $n$ targets. Thus $\mathrm{PoA} \ge n$, which is unbounded as $n\to\infty$.
-\end{proof}
-
-\begin{proposition}[PoA with market]\label{prop:poa-market}
-In the VAMP game with the bilateral contract market and sufficient initial liquidity, the Price of Anarchy is bounded. Specifically, if all agents have sufficient capital to participate in the market (i.e., initial balances $c^\alpha_0 \ge \bar c$ for some threshold $\bar c$ depending on the instance), then at any Nash equilibrium, every sequent $s$ with social value exceeding the cheapest resolution cost is resolved. In particular, the PoA is at most a constant depending on the market parameters $(\ell, \gamma)$.
-\end{proposition}
+\begin{theorem}[Bounded PoA with market]\label{thm:bounded-poa}
+Consider a MMATPG instance in which:
+\begin{enumerate}
+    \item[(i)] All agents have initial capital $c^\alpha_0 \ge \bar{c}$ for a threshold $\bar{c}$ depending on the instance (sufficient liquidity).
+    \item[(ii)] For every sequent $s$ in the latent task set $\mathcal{T}^*$, at least one agent $\alpha$ can resolve $s$ with positive probability ($p^\alpha_\infty(s) > 0$).
+    \item[(iii)] The valuation of the target set satisfies $v(s) > 0$ for all $s\in\Phi^*$, and the gains from trade are positive: for each $s\in\mathcal{T}^*$, $\max_\beta v_\beta(s) > \min_\alpha c_\alpha(s)$.
+\end{enumerate}
+Then at any Nash equilibrium of the MMATPG, every sequent in $\mathcal{T}^*$ is resolved and published in finite expected time. Moreover, the Price of Anarchy satisfies:
+\[
+\mathrm{PoA} \;\le\; \frac{1}{1-\ell}\cdot\left(2-\frac{1}{m}\right),
+\]
+where $m = |\mathcal{N}|$ and $\ell$ is the maximum loss parameter. In particular, as $\ell\to 0$, the PoA approaches the RLS approximation ratio from the centralized case.
+\end{theorem}
 
 \begin{proof}[Proof sketch]
-At any NE, if a sequent $s$ has positive social surplus (some agent values its resolution above the cheapest prover's cost), then a profitable deviation exists for some agent: buy long, prove, publish, collect settlement. This deviation is unilateral and profitable, contradicting NE if $s$ remains unresolved. The bound on PoA follows from bounding the fraction of social value that is captured by market frictions (transaction costs implicit in the bid-ask spread, the loss parameter $\ell$, and discounting).
+\emph{Step 1: All tasks are resolved at NE.} Suppose for contradiction that some $s\in\mathcal{T}^*$ remains unresolved at NE. By assumption (iii), there exists an agent $\beta$ with $v_\beta(s) > c_\alpha(s)$ for some prover $\alpha$. Consider the following unilateral deviation for any agent $\gamma$ (possibly $\gamma = \alpha$): 
+\begin{itemize}
+    \item Issue a matched pair $(\chi^+,\chi^-)$ for $\chi = (s,T,\ell)$ with large $T$.
+    \item Sell $\chi^-$ to $\beta$ at price $p^- > 0$ (individually rational for $\beta$, who expects $s$ to remain unresolved and thus profits from the short position).
+    \item Resolve and publish $s$, triggering $E_{s,T}=1$.
+    \item Collect settlement payoff $1-\ell$ on $\chi^+$.
+\end{itemize}
+This deviation is profitable for $\gamma$ whenever $1-\ell + p^- > c_\gamma(s)$, which holds under sufficient liquidity. Contradiction with NE.
+
+\emph{Step 2: Makespan bound.} Since all tasks are resolved at NE, the equilibrium makespan is determined by the agents' scheduling decisions. The market's price signals coordinate agents toward tasks with positive surplus, and the balance-change reward incentivizes agents to resolve tasks promptly (earlier resolution means earlier settlement payoff, with less discounting). In the worst case, agents behave like a reactive list scheduler: each agent works on the highest-value available task. By the same analysis as Theorem~\ref{thm:rls-approx}, the resulting makespan satisfies:
+\[
+\mathrm{SC}(\pi^*_{\mathrm{NE}}) \;\le\; \frac{1}{1-\ell}\!\left(\frac{W}{m} + \left(1-\frac{1}{m}\right)D\right) \;\le\; \frac{1}{1-\ell}\!\left(2-\frac{1}{m}\right)\mathrm{OPT},
+\]
+where the factor $1/(1-\ell)$ accounts for the market friction: agents require a positive profit margin to cover the loss parameter $\ell$, which can delay resolution by a factor of $1/(1-\ell)$ relative to the frictionless case. As $\ell\to 0$, this factor vanishes and the PoA approaches the centralized RLS bound.
+\end{proof}
+
+\begin{remark}[Liquidity and the PoA bound]
+The sufficient-liquidity assumption (condition (i)) is essential. Without adequate capital, agents cannot take positions large enough to cover proof costs, and some beneficial trades may not occur. In the capital-constrained regime, the PoA can degrade, though it remains finite as long as at least one agent has sufficient capital to participate in the market for each task.
+\end{remark}
+
+\begin{remark}[Role of the loss parameter $\ell$]
+The parameter $\ell$ controls the risk-reward tradeoff of long contracts: the maximum downside of a long position is $\ell$, and the maximum upside is $1-\ell$. At $\ell = 0$, long positions are riskless (no downside), and the market reduces to a pure bounty system where beneficiaries post rewards for resolution. At $\ell = 1/2$, the contract is a fair bet. As $\ell$ increases, long positions become riskier and the profit margin available to provers decreases, reducing the incentive to resolve difficult sequents. The optimal choice of $\ell$ trades off incentive strength against market efficiency.
+\end{remark}
+
+
+\subsection{Complexity}\label{sec:game-complexity}
+
+We now classify the computational complexity of the MATPG and MMATPG.
+
+\begin{theorem}[Complexity classification]\label{thm:game-complexity}
+\leavevmode
+\begin{enumerate}
+    \item \textbf{MATPG (credit-based rewards).} Computing a Nash equilibrium of the finite-horizon MATPG is PPAD-hard. This holds even for two agents with deterministic proof kernels and trivial dependencies ($\delta^*\equiv\varnothing$), since the credit-based reward structure induces a general-sum game and NE computation in general-sum games is PPAD-complete.
+    
+    \item \textbf{MMATPG.} Computing a Nash equilibrium of the finite-horizon MMATPG is PPAD-hard, by the same reduction. The market mechanism introduces additional continuous strategy dimensions (prices, quantities), which do not reduce the hardness.
+    
+    \item \textbf{State space.} The MMATPG world state $\mathcal{W}$ augments the MATPG state with portfolios $\{\mathcal{P}^\alpha_t\}_\alpha$ and the order book $\mathcal{ML}_t$. If there are $K$ possible contract types, the portfolio space for each agent has dimension $\Theta(K)$ and the order book has dimension $\Theta(|\mathcal{N}|\cdot K)$. Since $K$ can be exponential in the number of sequents and the time horizon (each $(s,T,\ell)$ triple is a distinct contract type), the MMATPG state space is exponentially larger than the MATPG state space.
+ 
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+(1) Reduce from the problem of computing a Nash equilibrium in a two-player general-sum game, which is PPAD-complete (Chen, Deng, and Teng, 2009; Daskalakis, Goldberg, and Papadimitriou, 2009). Given a bimatrix game $(A,B)\in\mathbb{R}^{n\times n}\times\mathbb{R}^{n\times n}$, construct a MATPG instance with two agents whose proof actions correspond to mixed strategies and whose credit-based rewards encode the bimatrix payoffs. The construction uses sequents $\{s_{ij}\}_{i,j}$ with $v_\alpha(s_{ij}) = A_{ij}$ and $v_\beta(s_{ij}) = B_{ij}$, and deterministic proof kernels that resolve $s_{ij}$ in one step. The NE of the MATPG then correspond to the NE of the bimatrix game.
+
+(2) The MMATPG inherits PPAD-hardness from the MATPG, since the MATPG is a special case of the MMATPG (with no market activity).
+
+(3) The state-space blowup follows from the contract-type enumeration: each sequent $s$, deadline $T\in\{0,\ldots,H\}$, and loss parameter $\ell$ from a discretized grid $\{0,1/L,\ldots,1\}$ yields a distinct contract type, giving $|\mathcal{CS}_0|\cdot H\cdot L$ types.
+
 \end{proof}
 
 
-\subsubsection{Computational complexity of equilibria.}
+\subsection{Dealing with Intractibility}\label{sec:game-summary}
 
-\begin{proposition}[Complexity of VAMP equilibria]\label{prop:vamp-complexity}
-\leavevmode
-\begin{enumerate}
-    \item Computing an exact Nash equilibrium of the VAMP game is PPAD-hard (by reduction from bimatrix games, since the market introduces a general-sum structure even with two agents).
-    \item Computing an optimal Dec-POMDP solution (the cooperative benchmark) is NEXP-complete.
-    \item The VAMP's state space, augmented with market state (portfolios, order book), is exponentially larger than the centralized MATP state space. Exact equilibrium computation is therefore doubly intractable: both the game-theoretic and the state-space dimensions are hard.
-\end{enumerate}
-\end{proposition}
+We see that the market mechanism transforms the PoA from unbounded to bounded at the cost of an enlarged state space but no change in the worst-case complexity class for equilibrium computation. The remaining intractability (PPAD-hardness) is intrinsic to the non-cooperative setting and cannot be eliminated by mechanism design.
 
-
-\subsection{Intractibility Consequences}\label{sec:game-summary}
-
-% The analysis of this section establishes the following chain of results:
-
-% \begin{enumerate}
-%     \item The centralized MATP (POMDP/MDP) provides the social-optimum benchmark but assumes unrealistic centralized control.
-%     \item The decentralized MATP (Dec-POMDP/POSG) removes centralized control, introducing both coordination difficulty (NEXP-complete even cooperatively) and incentive misalignment (publication externalities under individual rewards).
-%     \item The publication externality leads to unbounded Price of Anarchy under credit-based rewards without a market.
-%     \item The bilateral contract market internalizes the publication externality by enabling agents to trade claims on sequent resolution, creating direct financial incentives for proving and publishing useful results.
-%     \item The VAMP game (Decentralized MATP + market) has bounded PoA under sufficient liquidity, but computing exact equilibria is PPAD-hard and the state space is exponentially large.
-% \end{enumerate}
-
-These intractability results motivate \emph{learning-based approaches} to approximating equilibria in the VAMP game. Rather than computing exact Nash equilibria (which is provably hard), one may deploy multi-agent reinforcement learning (MARL) algorithms that converge to approximate equilibria through self-play. The VAMP's verifiable settlement mechanism (public resolution of sequents triggers deterministic payoffs) provides a clean reward signal for learning, and the market's price signals serve as a coordination mechanism that reduces the effective dimensionality of the strategy space. We develop this approach in the following chapter, where we instantiate the VAMP framework with specific MARL algorithms (inner-loop MAPPO self-play, outer-loop population-based training approximating PSRO) applied to a synthetic theorem-proving market.
+This motivates learning-based approaches to approximating equilibria in the MMATPG. Rather than computing exact Nash equilibria (provably hard), one may deploy multi-agent reinforcement learning (MARL) algorithms that converge to approximate equilibria through self-play. The MMATPG's verifiable settlement mechanism provides a clean reward signal for learning, and the market's price signals serve as a coordination device that reduces the effective dimensionality of the strategy space. We develop this approach in the following chapter, instantiating the MMATPG with MARL algorithms applied to a synthetic theorem-proving market.

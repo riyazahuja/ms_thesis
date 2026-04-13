@@ -1,1 +1,315 @@
-\chapter{Multiagent Reinforcement Learning for VAMPs}\label{chap:marl}
+\chapter{Multiagent Reinforcement Learning}\label{chap:marl}
+
+The MMATPG, although more efficient in equilibrium than the naive MATPG, is computationally intractable to solve exactly: computing a Nash equilibrium is PPAD-hard (Theorem~\ref{thm:game-complexity}), and the state space grows exponentially in the number of contract types and market states. This chapter develops a learning-based approach to finding \emph{approximate} equilibria in the MMATPG, using multi-agent reinforcement learning (MARL).
+
+We proceed in three stages. First, we introduce the \emph{coarse correlated equilibrium} (CCE) as a tractable relaxation of Nash equilibrium, and show that no-regret learning dynamics converge to the CCE set. Second, we describe a MARL framework---combining a multi-agent decision transformer, MAPPO policy optimization, centralized training with decentralized execution (CTDE), and population-based training approximating PSRO---and prove that it converges to an approximate CCE of the meta-game over the learned policy population. Third, we extend the efficiency results of Chapter~\ref{sec:decentralized} to show that the CCE produced by this framework inherits the bounded Price of Anarchy guarantee of the MMATPG, and we give convergence rate bounds.
+
+
+\subsection{Weaker Equilibrium Concepts}\label{sec:weaker-eq}
+
+The PPAD-hardness of Nash equilibrium computation motivates the study of weaker solution concepts that are more amenable to learning-based approximation.
+
+
+\subsubsection{Coarse Correlated Equilibrium}
+
+\begin{definition}[Coarse Correlated Equilibrium (CCE)]
+Let $\mathcal{G}$ be a finite game with agent set $\mathcal{N}$, action spaces $\{\mathcal{A}^\alpha\}_\alpha$, and payoff functions $\{u^\alpha\}_\alpha$. A \emph{coarse correlated equilibrium} is a distribution $\mu\in\mathcal{P}(\mathcal{A})$ over joint action profiles such that no agent can improve its expected payoff by committing to a fixed action \emph{before} observing the correlation device's recommendation:
+\[
+\mathbb{E}_{a\sim\mu}\big[u^\alpha(a)\big] \;\ge\; \mathbb{E}_{a^{-\alpha}\sim\mu^{-\alpha}}\big[u^\alpha(\hat a^\alpha, a^{-\alpha})\big]
+\qquad\text{for all }\alpha\in\mathcal{N},\;\hat a^\alpha\in\mathcal{A}^\alpha,
+\]
+where $\mu^{-\alpha}$ denotes the marginal of $\mu$ on the actions of all agents except $\alpha$.
+\end{definition}
+
+\begin{remark}[CCE vs.\ NE vs.\ CE]
+Every Nash equilibrium is a (coarse) correlated equilibrium, and every correlated equilibrium is a CCE. Thus $\mathrm{NE}\subseteq\mathrm{CE}\subseteq\mathrm{CCE}$. The CCE set is the largest of the three, and is precisely the set of distributions reachable by no-regret learning dynamics. Importantly, while computing a NE is PPAD-hard, computing a CCE (or even optimizing a linear objective over the CCE set) can be done in polynomial time via linear programming in normal-form games.
+\end{remark}
+
+\begin{definition}[$\varepsilon$-approximate CCE]
+A distribution $\mu$ is an \emph{$\varepsilon$-CCE} if for all $\alpha\in\mathcal{N}$ and $\hat a^\alpha\in\mathcal{A}^\alpha$:
+\[
+\mathbb{E}_{a\sim\mu}\big[u^\alpha(a)\big] \;\ge\; \mathbb{E}_{a^{-\alpha}\sim\mu^{-\alpha}}\big[u^\alpha(\hat a^\alpha, a^{-\alpha})\big] - \varepsilon.
+\]
+\end{definition}
+
+
+\subsubsection{Extension to Sequential Games}
+
+In the MMATPG, agents play a sequential game over many timesteps, selecting policies (not single actions). The appropriate generalization defines CCE over the space of policies.
+
+\begin{definition}[Policy-space CCE for a POSG]\label{def:policy-cce}
+Consider a POSG $\mathcal{G}$ with policy spaces $\{\Pi^\alpha\}_\alpha$ and expected returns $\{R^\alpha(\pi)\}_\alpha$. A distribution $\mu\in\mathcal{P}(\Pi)$ over joint policies $\Pi := \prod_\alpha \Pi^\alpha$ is a \emph{policy-space CCE} if for all $\alpha$ and $\hat\pi^\alpha\in\Pi^\alpha$:
+\[
+\mathbb{E}_{\pi\sim\mu}\big[R^\alpha(\pi)\big] \;\ge\; \mathbb{E}_{\pi^{-\alpha}\sim\mu^{-\alpha}}\big[R^\alpha(\hat\pi^\alpha,\pi^{-\alpha})\big].
+\]
+An $\varepsilon$-CCE requires only that the inequality holds up to an additive $\varepsilon$.
+\end{definition}
+
+The policy-space CCE is the natural equilibrium concept for MARL in POSGs: it corresponds to a correlation device that recommends a joint policy before the game begins, and no agent benefits from committing to a different policy ex ante. Computing an exact policy-space CCE in a POSG is intractable in general (the policy space is infinite-dimensional), but it can be approximated by restricting to a finite population of policies, leading to the meta-game formulation developed below.
+
+
+\subsection{No-Regret Learning and CCE Convergence}\label{sec:no-regret}
+
+The fundamental theoretical connection between learning and equilibrium is the no-regret$\,\to\,$CCE theorem.
+
+
+\subsubsection{No-Regret Algorithms}
+
+\begin{definition}[External regret]
+In a repeated game, agent $\alpha$ plays a sequence of actions $a^\alpha_1,\ldots,a^\alpha_T$. The \emph{external regret} of this sequence against the best fixed action in hindsight is:
+\[
+\mathrm{Reg}^\alpha(T) := \max_{\hat a^\alpha\in\mathcal{A}^\alpha} \sum_{t=1}^T \big[u^\alpha(\hat a^\alpha, a^{-\alpha}_t) - u^\alpha(a^\alpha_t, a^{-\alpha}_t)\big].
+\]
+An algorithm is \emph{no-regret} (or \emph{Hannan-consistent}) if $\mathrm{Reg}^\alpha(T)/T \to 0$ as $T\to\infty$.
+\end{definition}
+
+\begin{theorem}[No-regret $\Rightarrow$ CCE; Hart--Mas-Colell 2000]\label{thm:no-regret-cce}
+If all agents use no-regret algorithms in a repeated finite game, the empirical distribution of play
+\[
+\bar\mu_T := \frac{1}{T}\sum_{t=1}^T \delta_{a_t}
+\]
+converges to the set of CCE. More precisely, $\bar\mu_T$ is a $(\max_\alpha \mathrm{Reg}^\alpha(T)/T)$-CCE.
+\end{theorem}
+
+\begin{remark}[Convergence rate]
+Standard no-regret algorithms (multiplicative weights, Exp3, regret matching) achieve $\mathrm{Reg}^\alpha(T) = O(\sqrt{T\log|\mathcal{A}^\alpha|})$. Thus $\bar\mu_T$ is an $O(\sqrt{\log|\mathcal{A}^\alpha|/T})$-CCE after $T$ rounds, giving polynomial convergence to the CCE set.
+\end{remark}
+
+
+\subsubsection{From Normal-Form to Extensive-Form via Meta-Games}
+
+Theorem~\ref{thm:no-regret-cce} applies to normal-form games (single-shot, simultaneous actions). The MMATPG is an extensive-form POSG with exponentially long histories. Directly applying no-regret learning over the policy space is infeasible.
+
+The \emph{Policy-Space Response Oracle} (PSRO) framework (Lanctot et al., 2017) bridges this gap by constructing a sequence of finite \emph{meta-games} that approximate the full game.
+
+\begin{definition}[PSRO meta-game]\label{def:psro}
+A PSRO process maintains, for each agent $\alpha$, a finite population of policies $\mathcal{P}^\alpha = \{\pi^\alpha_1,\ldots,\pi^\alpha_{K_\alpha}\}\subset\Pi^\alpha$. The \emph{meta-game} is the finite normal-form game $\mathcal{G}^{\mathrm{meta}}$ with:
+\begin{itemize}
+    \item Action spaces $\mathcal{A}^{\alpha,\mathrm{meta}} := \{1,\ldots,K_\alpha\}$ (indices into the population).
+    \item Payoffs $u^{\alpha,\mathrm{meta}}(i_1,\ldots,i_{|\mathcal{N}|}) := R^\alpha(\pi^1_{i_1},\ldots,\pi^{|\mathcal{N}|}_{i_{|\mathcal{N}|}})$, the expected return when each agent $\alpha$ plays the $i_\alpha$-th policy in its population.
+\end{itemize}
+\end{definition}
+
+The PSRO iteration proceeds:
+\begin{enumerate}
+    \item Compute a meta-strategy $\sigma^\alpha\in\mathcal{P}(\mathcal{A}^{\alpha,\mathrm{meta}})$ for each agent (e.g., by solving the meta-game for a NE or CCE).
+    \item For each agent $\alpha$, compute an approximate best response $\hat\pi^\alpha$ to the mixture $\sigma^{-\alpha}$ over the opponents' populations.
+    \item Add $\hat\pi^\alpha$ to $\mathcal{P}^\alpha$ and repeat.
+\end{enumerate}
+
+\begin{proposition}[PSRO meta-game convergence]\label{prop:psro-convergence}
+If the meta-strategy computation in step (1) uses a no-regret algorithm (treating each PSRO iteration as one round of a repeated meta-game), then after $T$ PSRO iterations, the empirical meta-strategy distribution is an $O(\sqrt{\log K / T})$-CCE of the meta-game $\mathcal{G}^{\mathrm{meta}}_T$, where $K = \max_\alpha K_\alpha$ is the population size.
+\end{proposition}
+
+\begin{proof}
+At each PSRO iteration $t$, the meta-game $\mathcal{G}^{\mathrm{meta}}_t$ is a finite normal-form game with at most $K = t$ strategies per player (one new policy added per iteration). The meta-strategy selection in step (1) is a play in this repeated game. By Theorem~\ref{thm:no-regret-cce}, if each agent uses a no-regret algorithm for meta-strategy selection, the empirical distribution of meta-strategies is a $(\mathrm{Reg}(T)/T)$-CCE of the meta-game. With multiplicative weights, $\mathrm{Reg}(T) = O(\sqrt{T\log K})$, giving the bound.
+\end{proof}
+
+The quality of the meta-game CCE as an approximation to the full-game CCE depends on the \emph{expressiveness} of the populations $\{\mathcal{P}^\alpha\}_\alpha$: if the populations contain good approximations to all relevant best responses, the meta-game CCE is a good approximation to the full-game CCE.
+
+\begin{definition}[Best-response approximation error]\label{def:br-error}
+The \emph{best-response approximation error} of the populations $\{\mathcal{P}^\alpha\}_\alpha$ at meta-strategy profile $\sigma$ is:
+\[
+\varepsilon_{\mathrm{BR}}(\sigma) := \max_{\alpha\in\mathcal{N}} \left[\sup_{\pi^\alpha\in\Pi^\alpha} R^\alpha(\pi^\alpha, \sigma^{-\alpha}) - \max_{\pi^\alpha\in\mathcal{P}^\alpha} R^\alpha(\pi^\alpha, \sigma^{-\alpha})\right],
+\]
+the maximum gap between the true best response and the best population response, over all agents.
+\end{definition}
+
+\begin{theorem}[Meta-game CCE $\Rightarrow$ full-game approximate CCE]\label{thm:meta-to-full}
+If $\mu^{\mathrm{meta}}$ is an $\varepsilon_{\mathrm{meta}}$-CCE of the meta-game $\mathcal{G}^{\mathrm{meta}}$, and the best-response approximation error is at most $\varepsilon_{\mathrm{BR}}$ at every meta-strategy profile in the support of $\mu^{\mathrm{meta}}$, then the induced distribution over joint policies $\mu := \mu^{\mathrm{meta}}\circ(\pi^1_{\cdot},\ldots,\pi^{|\mathcal{N}|}_{\cdot})$ is an $(\varepsilon_{\mathrm{meta}} + \varepsilon_{\mathrm{BR}})$-CCE of the full POSG.
+\end{theorem}
+
+\begin{proof}
+Fix agent $\alpha$ and any deviation policy $\hat\pi^\alpha\in\Pi^\alpha$. By the meta-game CCE condition:
+\[
+\mathbb{E}_{\mu^{\mathrm{meta}}}[R^\alpha(\pi)] \;\ge\; \max_{k\in\mathcal{A}^{\alpha,\mathrm{meta}}}\mathbb{E}_{\mu^{\mathrm{meta},-\alpha}}[R^\alpha(\pi^\alpha_k, \pi^{-\alpha})] - \varepsilon_{\mathrm{meta}}.
+\]
+The right-hand side is the best population response. By definition of $\varepsilon_{\mathrm{BR}}$:
+\[
+\max_{k} \mathbb{E}_{\mu^{\mathrm{meta},-\alpha}}[R^\alpha(\pi^\alpha_k, \pi^{-\alpha})] \;\ge\; \sup_{\hat\pi^\alpha\in\Pi^\alpha}\mathbb{E}_{\mu^{\mathrm{meta},-\alpha}}[R^\alpha(\hat\pi^\alpha, \pi^{-\alpha})] - \varepsilon_{\mathrm{BR}}.
+\]
+Combining: $\mathbb{E}_\mu[R^\alpha(\pi)] \ge \mathbb{E}_{\mu^{-\alpha}}[R^\alpha(\hat\pi^\alpha,\pi^{-\alpha})] - \varepsilon_{\mathrm{meta}} - \varepsilon_{\mathrm{BR}}$.
+\end{proof}
+
+
+\subsection{MARL Framework for the MMATPG}\label{sec:marl-framework}
+
+We now describe the MARL framework that instantiates the theoretical convergence pipeline of Section~\ref{sec:no-regret} for the MMATPG. The framework has four components: a policy architecture (multi-agent decision transformer), a policy optimization algorithm (MAPPO), a training paradigm (CTDE), and a population management scheme (approximate PSRO). We describe each at a level sufficient to state the convergence guarantees; implementation details are deferred to Appendix~\ref{app:implementation}.
+
+
+\subsubsection{Policy Architecture: Multi-Agent Decision Transformer}
+
+Each agent $\alpha$ is parameterized by a causal transformer $\pi^\alpha_\theta$ that maps observation-action histories to action distributions. The architecture processes a tokenized trajectory:
+
+\begin{itemize}
+    \item \textbf{Observation tokens.} At each timestep $t$, the observation $o^\alpha_t = (\mathcal{L}^\alpha_t, \Omega^\alpha_t, \mathcal{P}^\alpha_t, \mathcal{L}^0_t, \mathcal{ML}_t)$ is encoded into a variable-length sequence of tokens: library tokens (one per concrete sequent, with status features: resolved/unresolved, dependency count, query estimates), portfolio tokens (one per held/posted position, with contract parameters and payoff features), and market tokens (one per outstanding offer in $\mathcal{ML}_t$).
+    
+    \item \textbf{Action tokens.} Each action is tokenized as (action type, target entity, parameters), enabling a factored output distribution.
+    
+    \item \textbf{Causal attention.} The transformer processes the token sequence with causal masking, producing a context vector $h^\alpha_t$ that summarizes the observation-action history up to time $t$.
+\end{itemize}
+
+The policy output is factored into three heads driven by $h^\alpha_t$:
+\begin{enumerate}
+    \item \textbf{Action-type head:} categorical distribution over $\{\mathrm{Prove}, \mathrm{Conj}, \mathrm{Pub}, \mathrm{Qry}, \mathrm{Market}, \bot\}$.
+    \item \textbf{Target-selection head:} pointer-style attention over candidate entities (sequents, market offers) conditioned on the selected action type.
+    \item \textbf{Parameter head:} time budget, contract parameters $(\ell, T, q, p)$, etc., parameterized as discretized distributions.
+\end{enumerate}
+
+An \emph{admissibility mask} zeroes out inadmissible actions at each step, ensuring that $\pi^\alpha_\theta$ always produces admissible actions.
+
+
+\subsubsection{Policy Optimization: MAPPO}
+
+We use Multi-Agent Proximal Policy Optimization (MAPPO; Yu et al., 2022) for policy updates. Each agent $\alpha$ maintains an actor $\pi^\alpha_\theta$ and a critic $V^\alpha_\phi$.
+
+\paragraph{Centralized Training, Decentralized Execution (CTDE).}
+During training, the critic $V^\alpha_\phi$ receives privileged information: the full public state $(\mathcal{L}^0_t, \mathcal{ML}_t)$ plus aggregate statistics of all agents' library states (e.g., total resolved count, dependency-closure estimates). During execution, only the actor $\pi^\alpha_\theta$ is used, which conditions solely on $\alpha$'s own observation history. This asymmetry is standard in cooperative and competitive MARL: the critic guides learning via richer value estimates, but the policy itself respects the information constraints of the game.
+
+\paragraph{Update rule.}
+Given a batch of trajectories $\{(s_t, a_t, r_t, s_{t+1})\}$ collected under the current joint policy, each agent $\alpha$ computes GAE advantages $\hat A^\alpha_t$ using its critic and updates via the clipped PPO objective:
+\[
+\mathcal{L}^{\alpha}_{\mathrm{PPO}}(\theta) = \mathbb{E}_t\!\left[\min\!\Big(\rho^\alpha_t(\theta)\hat A^\alpha_t,\;\mathrm{clip}(\rho^\alpha_t(\theta), 1\pm\epsilon)\hat A^\alpha_t\Big)\right],
+\]
+where $\rho^\alpha_t(\theta) = \pi^\alpha_\theta(a^\alpha_t\mid h^\alpha_t)/\pi^\alpha_{\theta_{\mathrm{old}}}(a^\alpha_t\mid h^\alpha_t)$ is the importance ratio. The critic is updated by regression on the TD($\lambda$) target.
+
+
+\subsubsection{Population-Based Training (Approximate PSRO)}
+
+To approximate the PSRO dynamics of Section~\ref{sec:no-regret}, we maintain a population of policies for each agent:
+\[
+\mathcal{P}^\alpha = \{\pi^\alpha_1, \pi^\alpha_2, \ldots, \pi^\alpha_K\},
+\]
+initialized with scripted baselines (e.g., RLS-style heuristics from Chapter~\ref{chap:centralized}) and grown over training.
+
+At each training epoch:
+\begin{enumerate}
+    \item \textbf{Opponent sampling.} For each agent $\alpha$ being trained, sample opponent policies from a mixture: with probability $p_{\mathrm{self}}$, use the current policy (self-play); with probability $p_{\mathrm{pop}}$, sample uniformly from the population; with probability $p_{\mathrm{script}}$, use a scripted baseline. This mixture ensures exposure to diverse strategies.
+    
+    \item \textbf{Policy optimization.} Run MAPPO updates for agent $\alpha$ against the sampled opponents, producing an updated policy $\pi^\alpha_{\mathrm{new}}$.
+    
+    \item \textbf{Population update.} Periodically add checkpoints of the trained policy to the population: $\mathcal{P}^\alpha \leftarrow \mathcal{P}^\alpha \cup \{\pi^\alpha_{\mathrm{new}}\}$.
+    
+    \item \textbf{Meta-strategy computation.} Estimate the meta-game payoff matrix by evaluating all population policy combinations (or a sampled subset), and compute a CCE of the meta-game (via linear programming or regret matching).
+\end{enumerate}
+
+
+\subsubsection{Curriculum Learning}
+
+Training begins on small instances and progressively increases complexity along four axes:
+\begin{itemize}
+    \item \textbf{Task graph:} number of sequents, revelation DAG depth, branching factor.
+    \item \textbf{Agent count:} $m = 2 \to 4 \to 8 \to \ldots$
+    \item \textbf{Market complexity:} number of contract types, deadline range, loss parameter grid.
+    \item \textbf{Information asymmetry:} gradually introducing private libraries (moving away from PPI toward the full MMATPG).
+\end{itemize}
+
+Curriculum transitions are triggered by convergence criteria on the current difficulty level (e.g., average exploitability dropping below a threshold).
+
+
+\subsection{Convergence Guarantees}\label{sec:convergence}
+
+We now state the convergence guarantees of the MARL framework, connecting the training pipeline to the theoretical results of Section~\ref{sec:no-regret}.
+
+
+\subsubsection{Main Convergence Theorem}
+
+\begin{theorem}[Convergence to approximate CCE]\label{thm:marl-convergence}
+Consider the MARL framework of Section~\ref{sec:marl-framework} applied to a finite-horizon MMATPG instance with horizon $H$, $m$ agents, and bounded rewards $|r^\alpha| \le R_{\max}$. Suppose:
+\begin{enumerate}
+    \item[(A1)] \textbf{Approximate best response.} At each PSRO iteration $t$, the MAPPO update produces a policy $\hat\pi^\alpha_t$ that is an $\varepsilon_{\mathrm{BR}}$-approximate best response to the current opponent mixture: $R^\alpha(\hat\pi^\alpha_t, \sigma^{-\alpha}_t) \ge \sup_{\pi^\alpha} R^\alpha(\pi^\alpha, \sigma^{-\alpha}_t) - \varepsilon_{\mathrm{BR}}$.
+    
+    \item[(A2)] \textbf{No-regret meta-strategy.} The meta-strategy selection algorithm (step 4) achieves external regret $\mathrm{Reg}^\alpha(T) \le C\sqrt{T\log K}$ for all $\alpha$, where $K$ is the final population size and $C$ depends on $R_{\max}$ and $H$.
+\end{enumerate}
+Then after $T$ PSRO iterations, the empirical meta-strategy distribution $\bar\sigma_T$ induces a joint policy distribution that is an $\varepsilon(T)$-CCE of the full MMATPG, with:
+\[
+\varepsilon(T) \;\le\; \underbrace{C\sqrt{\frac{\log T}{T}}}_{\varepsilon_{\mathrm{meta}}(T)} \;+\; \underbrace{\varepsilon_{\mathrm{BR}}}_{\text{BR approx.\ error}}.
+\]
+In particular, as $T\to\infty$ with $\varepsilon_{\mathrm{BR}}\to 0$ (increasingly accurate best responses), the framework converges to an exact CCE of the MMATPG.
+\end{theorem}
+
+\begin{proof}
+The proof combines Proposition~\ref{prop:psro-convergence} and Theorem~\ref{thm:meta-to-full}.
+
+\emph{Step 1: Meta-game convergence.} By assumption (A2), the meta-strategy selection achieves regret $\mathrm{Reg}^\alpha(T) \le C\sqrt{T\log K}$ with $K \le T$ (at most one policy added per iteration). By Theorem~\ref{thm:no-regret-cce}, the empirical meta-strategy $\bar\sigma_T$ is an $\varepsilon_{\mathrm{meta}}(T)$-CCE of the meta-game, with $\varepsilon_{\mathrm{meta}}(T) = \mathrm{Reg}(T)/T = C\sqrt{\log T/T}$.
+
+\emph{Step 2: Meta-game to full game.} By assumption (A1), the best-response approximation error of the populations at every meta-strategy in the support of $\bar\sigma_T$ is at most $\varepsilon_{\mathrm{BR}}$. By Theorem~\ref{thm:meta-to-full}, the induced joint policy distribution is an $(\varepsilon_{\mathrm{meta}}(T) + \varepsilon_{\mathrm{BR}})$-CCE of the full MMATPG.
+\end{proof}
+
+\begin{remark}[On assumption (A1)]
+The $\varepsilon_{\mathrm{BR}}$ term captures the quality of the MAPPO best-response oracle. In practice, $\varepsilon_{\mathrm{BR}}$ depends on the expressiveness of the transformer policy class, the number of MAPPO update steps, and the quality of the GAE advantage estimates. It is not zero in finite compute, but decreases with more training. A precise characterization of $\varepsilon_{\mathrm{BR}}$ for PPO in the MMATPG setting is an open theoretical question; existing convergence results for single-agent PPO (e.g., Cai et al., 2020) provide partial guidance but do not directly apply to the multi-agent, partially observed setting.
+\end{remark}
+
+\begin{remark}[On assumption (A2)]
+Assumption (A2) is satisfied by standard no-regret algorithms. If meta-strategies are selected via multiplicative weights (Hedge), the regret bound is $\mathrm{Reg}^\alpha(T) = O(R_{\max}H\sqrt{T\log K})$, giving $\varepsilon_{\mathrm{meta}}(T) = O(R_{\max}H\sqrt{\log T/T})$. Regret matching achieves similar bounds.
+\end{remark}
+
+
+\subsubsection{Efficiency of Learned Equilibria}
+
+We now show that the approximate CCE produced by the MARL framework inherits the efficiency guarantees of the MMATPG.
+
+\begin{theorem}[PoA of CCE in the MMATPG]\label{thm:poa-cce}
+Consider the MMATPG under the same conditions as Theorem~\ref{thm:bounded-poa} (sufficient liquidity, positive gains from trade, resolvability). Then the Price of Anarchy extends to the CCE set: for any CCE $\mu$ of the MMATPG,
+\[
+\frac{\mathbb{E}_{\pi\sim\mu}[\mathrm{SC}(\pi)]}{\mathrm{OPT}} \;\le\; \frac{1}{1-\ell}\left(2 - \frac{1}{m}\right).
+\]
+Moreover, for any $\varepsilon$-CCE $\mu$:
+\[
+\frac{\mathbb{E}_{\pi\sim\mu}[\mathrm{SC}(\pi)]}{\mathrm{OPT}} \;\le\; \frac{1}{1-\ell}\left(2 - \frac{1}{m}\right) + \frac{\varepsilon\cdot H}{(1-\ell)\cdot\mathrm{OPT}},
+\]
+where $H$ is the horizon and the additive term accounts for the $\varepsilon$-slack in the CCE condition.
+\end{theorem}
+
+\begin{proof}
+\emph{Exact CCE case.} The proof of Theorem~\ref{thm:bounded-poa} proceeds by showing that if a sequent $s\in\mathcal{T}^*$ remains unresolved, some agent has a profitable \emph{unilateral deviation}: buy long, prove, publish, collect settlement. This deviation is profitable regardless of other agents' actions (because the settlement payoff depends only on the public library, which the deviating agent controls by publishing). The CCE condition requires that no agent benefits from committing to a fixed alternative strategy before observing the recommendation. Since the profitable deviation is unconditional (profitable against any opponent mixture), it violates the CCE condition. Thus, at any CCE, all tasks in $\mathcal{T}^*$ must be resolved, and the makespan bound from Theorem~\ref{thm:bounded-poa} applies.
+
+\emph{$\varepsilon$-CCE case.} The CCE condition holds only up to $\varepsilon$, so the profitable deviation may have surplus at most $\varepsilon$. This means sequents with resolution surplus below $\varepsilon$ may remain unresolved. The additional social cost from unresolved sequents is bounded by the number of such sequents times the horizon, giving the additive correction term.
+\end{proof}
+
+\begin{corollary}[Efficiency of the MARL framework]\label{cor:marl-efficiency}
+Under the conditions of Theorems~\ref{thm:marl-convergence} and~\ref{thm:poa-cce}, the joint policy distribution produced by the MARL framework after $T$ PSRO iterations achieves expected social cost:
+\[
+\mathbb{E}[\mathrm{SC}] \;\le\; \frac{1}{1-\ell}\left(2-\frac{1}{m}\right)\mathrm{OPT} \;+\; O\!\left(\frac{H}{\mathrm{OPT}}\cdot\left(\sqrt{\frac{\log T}{T}} + \varepsilon_{\mathrm{BR}}\right)\right)\cdot\mathrm{OPT}.
+\]
+As $T\to\infty$ and $\varepsilon_{\mathrm{BR}}\to 0$, this approaches the exact-CCE bound of $\frac{1}{1-\ell}(2-\frac{1}{m})\cdot\mathrm{OPT}$.
+\end{corollary}
+
+
+\subsubsection{Comparison to the Centralized Benchmark}
+
+\begin{proposition}[MARL vs.\ centralized RLS]\label{prop:marl-vs-central}
+In the PPI setting with identical agents and $\ell = 0$ (zero market friction), the MARL framework's limiting social cost matches the centralized RLS bound:
+\[
+\lim_{\substack{T\to\infty\\\varepsilon_{\mathrm{BR}}\to 0}} \mathbb{E}[\mathrm{SC}^{\mathrm{MARL}}] \;\le\; \left(2-\frac{1}{m}\right)\mathrm{OPT} \;=\; \mathbb{E}[C_{\max}^{\mathrm{RLS}}].
+\]
+Thus the decentralized, market-mediated, learning-based approach achieves (in the limit) the same worst-case approximation ratio as the centralized greedy scheduler.
+\end{proposition}
+
+\begin{remark}[Interpretation]
+Proposition~\ref{prop:marl-vs-central} shows that the market mechanism, combined with no-regret learning, recovers the centralized scheduling guarantee despite the absence of a planner. The market's role is to align incentives (eliminating the publication externality), and the learning dynamics' role is to coordinate agents toward efficient schedules. Neither mechanism alone suffices: without the market, PoA is unbounded (Theorem~\ref{thm:unbounded-poa}); without learning, agents cannot find the efficient equilibrium among the (potentially many) CCE.
+\end{remark}
+
+\begin{remark}[Can MARL beat centralized RLS?]
+The $(2-1/m)$ bound is for worst-case instances under the RLS heuristic. On specific instances, the learned equilibrium may outperform RLS by adapting the priority function and OR-redundancy decisions to the instance structure. Indeed, the MARL framework can in principle learn to exploit correlations in processing time distributions, adapt speculation strategies to the revelation DAG structure, and dynamically adjust market positions based on observed prices---none of which the static RLS policy can do. Whether this translates to consistent empirical improvement is a question for the experimental evaluation.
+\end{remark}
+
+
+% \subsection{Summary}\label{sec:marl-summary}
+
+% \begin{center}
+% \renewcommand{\arraystretch}{1.3}
+% \begin{tabular}{lll}
+% \toprule
+% \textbf{Component} & \textbf{Role} & \textbf{Guarantee} \\
+% \midrule
+% Market mechanism & Incentive alignment & PoA $\le \frac{1}{1-\ell}(2-\frac{1}{m})$ \\[2pt]
+% No-regret meta-strategy & Equilibrium convergence & $\varepsilon_{\mathrm{meta}} = O(\sqrt{\log T/T})$-CCE \\[2pt]
+% MAPPO best response & Population diversity & $\varepsilon_{\mathrm{BR}}$-approx.\ BR \\[2pt]
+% Population (PSRO) & Strategy coverage & Meta $\to$ full game transfer \\[2pt]
+% Curriculum & Training stability & Progressive difficulty \\
+% \bottomrule
+% \end{tabular}
+% \end{center}
+
+% The MARL framework provides a principled path from the intractable exact-equilibrium problem (PPAD-hard) to a tractable approximate-equilibrium problem (no-regret learning), with formal guarantees connecting the learned policy distribution to the efficiency of the market-mediated game. The key theoretical contribution is the chain: no-regret learning $\to$ meta-game CCE $\to$ full-game approximate CCE $\to$ bounded PoA $\to$ comparison to centralized benchmark. Each link is backed by a formal guarantee (Theorems~\ref{thm:no-regret-cce},~\ref{thm:meta-to-full},~\ref{thm:marl-convergence},~\ref{thm:poa-cce}), and the overall framework is constructive: it specifies an algorithm (MAPPO + population-based training) whose output provably approximates an efficient equilibrium.

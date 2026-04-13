@@ -19,31 +19,50 @@ In 1637, Pierre de Fermat famously conjectured that for $n>2$, there are no posi
 
 Wiles' proof of Fermat's Last Theorem did not arise from a direct attack on the original equation. Instead, it emerged from deep developments and decades of study of domains seemingly - at first glance - far removed from the scope of the original conjecture. Throughout the 20th century, the theory of elliptic curves and modular forms was developed extensively, not only for the purposes of resolving FLT, but rather for a more fundamental understanding of the connections between arithmetic and geometric objects (elliptic curves over $\mathbb{Q}$) with complex analysis. Indeed, even Wiles' own proof of FLT was but a corrolary of his proof of the deeper Taniyama-Shimura conjecture, which was developed as a central question of the unification of large branches of mathematics. And yet, without these foundational contributions to the theory -- motivated not by the resolution of a particular conjecture but rather in search of a deeper understanding of the mathematical landscape -- the proof of FLT would not have been conceivable, as the language to discuss it would not exist.
 
-\textbf{TODO POLISH}
+This pattern is the rule rather than the exception. Major mathematical breakthroughs almost never arise from isolated effort on a single problem. They emerge from the collaborative, cumulative construction of a shared intellectual infrastructure: definitions, lemmas, techniques, and conceptual frameworks developed by communities of researchers over years or decades.
 
-[Now discuss how this pattern is common in mathematics, and how it is the fundamental collaborative, community efforts that lead to these large breakthroughs. Looking at the dependency graph for the Lean formalization of FLT, we see that the proof of a single target theorem may require the coordinated development of many supporting results across multiple domains that did not exist at the time of conjecture [fig 1]. And to a certain extent, this pattern of corpus creation directly leading to major breakthroughs is common even beyond mathematics, as these corpora provide the infrastructure and language that shape the way we think about problems and their solutions. [Like the meme about god being a shepherd, pilot, author, or computer scientist]]
+This observation extends beyond pure mathematics. In any domain where progress depends on the accumulation of verified, interdependent results (e.g., software verification, scientific modeling, engineering design) the fundamental challenge is the same: how to allocate the efforts of many heterogeneous agents across a large pool of interdependent tasks, where completing one task may reveal or enable others, and where the ultimate goal is to resolve a designated set of targets as efficiently as possible.
 
-[Now, with the acceration of computational tooling and the rise of machine learning, we are seeing the rapid emergence of new tools for trustworthy automation and scaled collaboration in mathematics, and the integration of these tools through agentic AI systems. These systems are increasingly being used to tackle large, interdependent bodies of mathematical work by high profile scientists, and are being deployed at scale for the formalization of research-level mathematics. However, these systems are still in their infancy, viewing mathematical development as a search problem rather than an allocation problem.]
+The rapid maturation of formal verification systems (Lean, Rocq, Isabelle) and the emergence of large language models capable of generating formal proofs have made this challenge both more tractable and more urgent. Agentic AI systems are increasingly deployed to tackle large formalization efforts, and early results demonstrate that LLM-based provers can resolve nontrivial proof obligations at scale. However, existing systems overwhelmingly treat theorem proving as a search problem: each proof obligation is attacked independently, and coordination between agents (when multiple agents are used at all) is ad hoc. This leaves substantial efficiency gains on the table, particularly on projects with deep dependency structure, where the order in which results are established matters as much as whether any individual result can be proven.
 
-[Towards the advancement of such digitized mathemtical ecosystems, we interpret the problem of mathematical development as an instance of a more general problem of allocating heterogeneous, distributed agents over a large pool of interdependent tasks: proving, conjecturing, collaborating, or even competing. Namely, this thesis states and studies this interdependent task allocation problem, both in centralized and decentralized regimes, and develops a game-theoretic framework for the latter in which coordination is mediated by a market mechanism. We study equilibria in this game, and develop learning-based methods for approximating weak equilibria behavior in large instances. We implement and evaluate these methods on synthetic environments, and we instantiate the framework in neural theorem proving within Lean, studying its performance on research-level theorem proving tasks against agentic LLM baselines.]
+This thesis reframes multi-agent theorem proving as an allocation problem over interdependent tasks, and develops the formal, game-theoretic, and algorithmic infrastructure to study it.
+
+\subsection{Thesis Overview}
+
+We begin by formalizing the problem of allocating heterogeneous agents across interdependent proof obligations, first in a centralized setting (a single planner directs all agents) and then in a decentralized setting (agents act independently with private information and individual incentives). We show that decentralization introduces a fundamental market failure and that market mechanisms can internalize this externality, yielding bounded-efficiency equilibria. We develop a multi-agent reinforcement learning framework for approximating these equilibria, and test the entire pipeline on a real Lean~4 codebase.
+
+\paragraph{Chapter 2: Centralized Multi-Agent Theorem Proving.}
+We introduce a formalism for mathematical tasks based on sequents, libraries, and dependency structures, and define the Centralized Multi-Agent Theorem Proving (MATP) problem as a POMDP. We show a reduction of this POMDP to a MDP, establish NP-hardness, and provide an algorithm that achieves a $(2-1/m)$-approximation to the optimal makespan with $m$ agents.
+
+\paragraph{Chapter 3: Decentralized Multi-Agent Theorem Proving.}
+We reformulate the problem as a non-cooperative POSG (the Multi-Agent Theorem Proving Game) in which each agent independently selects actions based on private observations and individual rewards. Under a canonical reward structure, we identify externalities and prove additional inefficiencies in this system. We resolve this by introducing a market mechanism: the Market-Mediated MATPG (MMATPG), and prove it has bounded price of anarchy.
+
+\paragraph{Chapter 4: Multi-Agent Reinforcement Learning.}
+Motivated by the hardness of exact equilibrium computation, we introduce the coarse correlated equilibrium (CCE) as a tractable relaxation and show that no-regret learning dynamics converge to the CCE set. We develop a transformer-based MARL framework and prove it converges to an $\epsilon$-CCE of the full MMATPG.
+
+\paragraph{Chapter 5: Experiments.}
+We describe a synthetic implementation of the MMATPG, and present five experiments validating the theoretical claims: the RLS approximation ratio and lower-bound tightness, the publication externality and its market resolution, MARL convergence to approximate CCE with bounded PoA, ablation of framework components, and scaling behavior across instance sizes.
+
+\paragraph{Chapter 6: Application to Neural Theorem Proving.}
+We instantiate the MMATPG over real Lean~4 codebases and evaluate on the Prime Number Theorem formalization from the MiniCTX benchmark, comparing agentic theorem provers, MMATPG-scaffolded LLM agents, and LLM agents augmented with the MARL-trained strategy module.
 
 
-\subsection{Core Contributions}
+\subsection{Contributions}
 
-The main contributions of this thesis are as follows.
+The main contributions of this thesis are:
 
 \begin{enumerate}
-    \item We formalize the \emph{Interdependent Task Allocation Problem} (ITAP), a framework for allocating heterogeneous agents over tasks linked by logical or operational dependencies, with support for recursive task generation.
-
-    \item We distinguish two coordination regimes for ITAP, centralized and decentralized, and identify the structural assumptions that separate them.
-
-    \item In the centralized regime, we relate ITAP to scheduling and assignment problems with dependency constraints, and derive complexity-theoretic and approximation-theoretic consequences from this connection.
-
-    \item In the decentralized regime, we introduce the \emph{Verifiable Allocation Market POSG} (VAMP), a partially observable stochastic game in which agents coordinate through market-mediated incentives over subtasks and intermediate results.
-
-    \item We show that equilibrium computation in VAMPs is intractable in general, which motivates the search for approximate solution methods rather than exact ones.
-
-    \item We develop a multiagent reinforcement learning framework for approximating useful low-regret behavior in VAMPs, combining sequence-based policies, centralized training with decentralized execution, and population-based training.
-
-    \item We evaluate the resulting methods on synthetic task-allocation environments under several market mechanisms, and we instantiate the framework in neural theorem proving within Lean.
+    \item \textbf{Formalism.} We introduce a sequent-and-library formalism for multi-agent theorem proving and define the centralized MATP as a POMDP, establishing PPI as a without-loss-of-generality relaxation.
+    
+    \item \textbf{Centralized complexity and algorithms.} We prove NP-hardness of the centralized makespan problem, establish work and serial-depth lower bounds, and give a $(2-1/m)$-approximate Reactive List Scheduling algorithm.
+    
+    \item \textbf{Game-theoretic formulation.} We define the MATPG (non-cooperative POSG), identify the publication externality, and prove that credit-based rewards yield unbounded Price of Anarchy.
+    
+    \item \textbf{Market mechanism.} We introduce the MMATPG (market-mediated MATPG) with collateralized bilateral contracts, prove that the market internalizes the publication externality, and establish a bounded PoA of $\frac{2-1/m}{1-\ell}$.
+    
+    \item \textbf{Learning framework.} We develop a MARL pipeline (decision transformer + MAPPO + PSRO) with convergence guarantees to approximate CCE, and show that the PoA bound extends to the learned equilibrium.
+    
+    \item \textbf{Synthetic evaluation.} We empirically validate these theoretical claims on synthetic instances and develop a training pipeline for the MMATPG problem.
+    
+    \item \textbf{Real-world instantiation.} We implement and test this market-mediated multi-agent theorem proving over real Lean~4 projects, against state-of-the-art agentic LLM provers.
 \end{enumerate}

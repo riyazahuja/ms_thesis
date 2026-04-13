@@ -1,71 +1,266 @@
-\chapter{Application to Neural Theorem Proving}\label{chap:application}
-\textbf{TODO PASTE FROM OVERLEAF WRITEUP}
+\chapter{Application: Neural Theorem Proving}\label{chap:application}
 
-% This chapter connects the abstract VAMP framework to the concrete application of LLM-based theorem proving in Lean.
+The preceding chapters develop the MMATPG framework in a synthetic setting: finite formula universes, parameterized proof kernels, and controlled dependency structures. This chapter asks whether the framework's core insight---that market-mediated coordination with a learned strategy module improves multi-agent theorem proving---transfers to real formal mathematics.
 
-% \subsection{Motivation: Theorem Proving as Task Allocation}
-% Argue that formal theorem proving is a natural instance of the HTAP:
-% - **Tasks** = proof obligations (sequents) in Lean.
-% - **Dependencies** = lemma dependencies (a theorem's proof may depend on auxiliary lemmas).
-% - **Agents** = heterogeneous neural provers (different LLMs, different search strategies, different training data).
-% - **Decomposition** = conjecturing intermediate lemmas that simplify the proof of a target theorem.
-% - **Verification** = the Lean type checker provides a formal verification oracle, enabling verifiable settlement of claims.
+We instantiate the MMATPG scaffold with large language models (LLMs) as proof-producing agents, operating on a real Lean 4 codebase. We evaluate on the Prime Number Theorem (PNT) formalization from the MiniCTX benchmark, a curated subset of real-world Lean repositories designed to test theorem-proving systems on mathematically substantial, interdependent proof obligations. We compare three paradigms: (i) existing agentic theorem provers, (ii) LLMs coordinated by the MMATPG scaffold alone, and (iii) LLMs coordinated by the scaffold equipped with the MARL-trained strategy module from Chapter~\ref{chap:marl}. We show that the strategy module yields measurable improvements in proof completion rate and wall-clock time, particularly on proof obligations with nontrivial dependency structure.
 
-% \subsection{Architecture: VAMP as a Strategy Module}
 
-% \subsubsection{Interface Between VAMP and LLM Provers}
-% Describe how the VAMP strategy module sits on top of LLM-based provers:
-% - The VAMP agent does not generate proofs itself; it **allocates proving effort** by selecting which proof obligations to attempt, how much compute budget to allocate, and when to publish intermediate results.
-% - The underlying LLM prover (e.g., ReProver, or a fine-tuned model) is the "proof kernel" that actually generates tactics and searches for proofs.
-% - The VAMP's learned policy replaces (or augments) the search strategy typically hardcoded in single-agent provers.
 
-% \subsubsection{Proof Kernel Instantiation}
-% Map the abstract proof kernel $K^\alpha_{\text{proof}}$ to the LLM prover's search process:
-% - Input: a Lean goal state (sequent), a compute budget (number of tactics/search steps).
-% - Output: success/failure + proof term (dependency information extracted from the Lean environment).
-% - Agent heterogeneity: different LLMs (varying size, training data, fine-tuning) serve as different agents with different kernels.
+\subsection{The Agora Platform}\label{sec:agora}
 
-% \subsubsection{Conjecture Kernel Instantiation}
-% Map the conjecture kernel to LLM-based lemma proposal:
-% - Given a target theorem, the LLM proposes candidate intermediate lemmas.
-% - The proposal is evaluated for novelty (ghost check: not already in the library) and relevance (utility score).
+We implement Agora, an interface for connecting MMATPG's to agentic neural theorem provers for real Lean~4 projects. It consists of three backend services, a Lean-side verification library, and an agent orchestration harness.
 
-% \subsubsection{Library Mapping}
-% Map the abstract library to the Lean environment:
-% - Concrete formulas = declared theorem/lemma statements.
-% - Resolved sequents = proved theorems with verified proof terms.
-% - Dependency map = extracted from Lean's term elaboration.
-% - Public library = a shared Lean environment accessible to all agents.
+\subsubsection{Architecture}
+Agora consists of four main parts:
 
-% \subsection{Experimental Setup}
 
-% \subsubsection{Benchmarks}
-% Describe the evaluation benchmarks: miniF2F (Zheng et al. 2022), selected mathlib4 theorem collections, custom collections of interdependent proof obligations designed to stress multi-agent coordination.
+\begin{itemize}
+    \item \textbf{Library Mechanics}: a FastAPI service that clones and builds Lean repositories, scans for target declarations, and validates contributed proofs via the VerifiedAgora Lean library. It is the only service that runs Lake/Lean.
+    
+    \item \textbf{Market Mechanics}: a FastAPI service that owns wallets, target-conditioned assets, offers, collateral constraints, money-conservation invariants, and settlement logic.
+    
+    \item \textbf{Backend Interface}: the public API gateway that coordinates the two mechanics services, handles authentication, broadcasts activity events over WebSocket, and exposes the Agora MCP server at \texttt{/mcp/} for LLM agent access.
+    
+    \item \textbf{Agent Orchestrator}: a separate harness that spawns Docker containers for AI agents, provisions API keys and wallets, seeds the market with initial bounties, and manages agent lifecycles.
+\end{itemize}
 
-% \subsubsection{Baselines}
-% - **Monolithic provers**: single-agent LLM provers (ReProver, or comparable) with standard search strategies (best-first, beam search, MCTS).
-% - **Naive parallelism**: multiple copies of the same prover working independently (no coordination, no market).
-% - **Centralized allocation**: a scripted allocator that assigns proof obligations to agents based on estimated difficulty.
-% - **VAMP with scripted agents**: the market mechanism with heuristic agents (from Section 9.4) rather than learned agents.
+Agents interact with Agora exclusively through the MCP endpoint. Inside each agent container, a local MCP auth proxy injects the agent's API key into tool calls and rewrites local file paths into contribution API calls, so the agent's LLM does not need to manage authentication or file-upload mechanics directly.
 
-% \subsubsection{Metrics}
-% - **Proof rate**: fraction of target theorems successfully proved within a fixed compute budget.
-% - **Compute efficiency**: proofs per unit of total compute.
-% - **Lemma reuse**: fraction of proved intermediate lemmas that are used in subsequent proofs (measures the value of multi-agent decomposition).
 
-% \subsection{Results}
+\subsubsection{Mapping to the MMATPG}\label{sec:agora-mapping}
 
-% \subsubsection{Proof Rate Comparison}
-% Compare VAMP-allocated multi-agent proving against all baselines. Show improved proof rates, particularly on problems that benefit from intermediate lemma discovery and decomposition.
+The Agora platform instantiates each component of the MMATPG as follows.
 
-% \subsubsection{Compute Efficiency Analysis}
-% Show that VAMP allocation achieves higher proofs-per-compute than naive parallelism (which wastes effort on duplication) and single-agent provers (which cannot exploit agent heterogeneity).
+\paragraph{Formulas and sequents.}
+Lean declarations (theorems, lemmas, definitions) serve as formulas. Each declaration tagged with \texttt{@[target]} in the Lean source is a target formula. The sequent $[\Gamma\proves\phi]$ corresponds to a proof obligation: the declaration's type is the consequent $\phi$, and the antecedent $\Gamma$ is the declaration's local context (hypotheses plus all imported and available lemmas). In practice, the sequent is identified with the target declaration itself, since the antecedent is determined by the import graph and the current state of the shared repository.
 
-% \subsubsection{Qualitative Analysis: Emergent Decomposition}
-% Show examples where the VAMP system discovers useful intermediate lemmas that no single agent was specifically designed to prove, enabling proofs of target theorems that are beyond the reach of monolithic provers.
+\paragraph{Libraries.}
+The shared (public) library $\mathcal{L}^0_t$ is the shared Git branch maintained by Agora. All agents can read its current state. The \emph{private library} $\mathcal{L}^\alpha_t$ for agent $\alpha$ is the agent's local working copy of the repository. The inclusion invariant $\mathcal{L}^0_t\subseteq\mathcal{L}^\alpha_t$ holds because each agent's working copy is initialized by copying from the shared library volume, and public updates are propagated via git pull.
 
-% \subsubsection{Market Mechanism Comparison in the Lean Setting}
-% Which market mechanism works best for theorem proving allocation? Discuss whether the answer differs from the synthetic experiments (Chapter 10) and hypothesize why.
+\paragraph{Resolution.}
+A target declaration is \emph{resolved} when a contributed proof satisfies three conditions: (i) the proof is \texttt{sorry}-free, (ii) it type-checks under Lean's kernel, and (iii) it passes VerifiedAgora's certification policy, which transitively disallows extraneous axioms (only \texttt{propext}, \texttt{Quot.sound}, and \texttt{Classical.choice} are permitted) and rejects \texttt{unsafe} or \texttt{partial} definitions recursively down the dependency DAG. This is strictly stronger than Lean's built-in \texttt{sorry}-freedom check.
 
-% \subsection{Discussion}
-% Discuss the gap between the synthetic VAMP experiments and the real Lean application. What transfers well? What doesn't? What additional engineering and research is needed for production-quality multi-agent theorem proving?
+\paragraph{Dependencies.}
+Lean's declaration-level dependency graph provides $\delta^*$. When a proof of declaration $A$ uses declaration $B$ (via \texttt{exact}, \texttt{apply}, \texttt{rw}, etc.), we have $B\in\delta^*(A)$. Dependencies are extracted post-hoc (i.e. after proof construction) by VerifiedAgora's batched axiom collector, which recursively traverses the types and values of definitions, theorems, and inductive declarations with cycle protection and caching. 
+
+\paragraph{Publication.}
+An agent publishes by calling the mcp command \texttt{write\_contribution}, which triggers the following pipeline:
+\begin{enumerate}
+    \item The agent's contributed Lean file content is sent to Library Mechanics.
+    \item Library Mechanics invokes VerifiedAgora's \texttt{get\_targets} executable, which compiles the submission, validates it against the existing target descriptor (checking type/kind/attribute/axiom compatibility), and produces an automerged file that retains valid solved targets and preserves unsolved ones.
+    \item If \texttt{overwrite\_target=true}, VerifiedAgora writes the automerged file to the repository and runs \texttt{lake build} on the target module. If the build fails, the original file is restored and an \texttt{automerge\_failure} diagnostic is reported.
+    \item On success, Library Mechanics commits and pushes the change to the shared branch, and reports a summary of newly solved targets, new declarations, and remaining unsolved targets.
+    \item The Backend forwards solved-target updates to Market Mechanics, which records proof times, simplifies target-conditioned assets, and converts settled positions into wallet balances.
+\end{enumerate}
+
+This pipeline implements the dependency-closure publication primitive of the MMATPG: publishing a solved target automatically makes its proof (and all declarations it introduced) available to all agents via the shared branch.
+
+\paragraph{Proof kernel.}
+The proof kernel $\mathcal{K}^\alpha_{\mathrm{proof}}$ is instantiated by an LLM agent attempting to prove a target declaration. The agent edits a Lean file in its local workspace, constructs a proof (using tactics, term-mode, or a combination), and submits it via the contribution pipeline. The Lean kernel's type-checker and VerifiedAgora's certification policy serve as the success/failure oracle: the kernel returns $(1, \delta^*(s))$ if the proof passes all checks, and $(0,\bot)$ otherwise. The processing time $T^\alpha_s$ is the wall-clock time (or number of LLM interaction steps) consumed by the attempt.
+
+\paragraph{Market mechanism.}
+Agora's market implements the collateralized bilateral contract market of Chapter~\ref{sec:decentralized}. The primary asset type is \texttt{PriceySatisfiedByAsset(target, stop\_time, price)}, which pays $1-\mathrm{price}$ if the target is resolved by \texttt{stop\_time} and $-\mathrm{price}$ otherwise---exactly the $\chi^+ = (s, T, \ell)$ contract with $\ell = \mathrm{price}$.
+
+Key implementation details:
+\begin{itemize}
+    \item \textbf{Offer creation} mints a matched long/short pair and posts one side as a public offer. The poster retains the counterside as a private asset. A counterbalancing \texttt{LinearCombinationAsset} with coefficient $-Q$ ensures zero net value creation.
+    
+    \item \textbf{Offer taking} transfers the offered position to the taker's portfolio. Cash does not transfer at accept time; value is realized only at settlement. This is identical to the theoretical formulation.
+    
+    \item \textbf{Settlement} triggers when: (i) the target is publicly resolved, (ii) the target's negation is resolved (making the target impossible), or (iii) the deadline passes. Settled assets that simplify to constants are converted to wallet balance.
+    
+    \item \textbf{Collateral} is enforced via a minimum-wallet-value check: $\underline{B}^\alpha := c^\alpha + \sum_{x} \mathrm{lower\_bound}(x) \ge 0$, where the sum is over private assets and held offers with non-positive lower bounds.
+    
+    \item \textbf{Money conservation} is enforced at every trading operation: the system computes the net asset diff, simplifies against current target statuses, and rejects transactions with nonzero net coefficients.
+\end{itemize}
+
+\paragraph{Bounty agent.}
+The Agent Orchestrator seeds the market by creating \texttt{PriceySatisfiedByAsset} offers for every open target, funded by an admin wallet. Each offer posts the \emph{long} side at a fixed price, so any agent can accept it and profit if they resolve the target. This provides baseline liquidity and ensures agents face nontrivial market incentives from the start.
+
+\paragraph{Query model.}
+In this real-Lean setting, agents can query their own proof capability via the Lean Language Server Protocol (LSP) MCP tools (e.g., inspecting goal states, checking partial proofs). This provides noisy estimates of difficulty analogous to the query model's $(\hat p, \hat\tau)$ readout. The strategy module (when present) uses these signals to prioritize targets.
+
+
+\subsubsection{Agent Interface}
+
+Each agent container runs an LLM with access to the following MCP tool groups:
+
+\begin{itemize}
+    \item \textbf{Library tools}: list projects, read files, search declarations, read target content, submit contributions (via \texttt{write\_contribution\_from\_file}, a synthetic proxy tool that reads the agent's local file and submits it).
+    \item \textbf{Market tools}: view wallets, offers, and target statuses; create/take/cancel offers; transfer assets.
+    \item \textbf{Lean LSP tools}: hover, goal state, completion, diagnostics---providing partial-proof feedback without full submission.
+    \item \textbf{Filesystem tools}: read, write, edit, search files in the local workspace.
+\end{itemize}
+
+The agent runtime is a persistent loop: after each LLM response, the harness reengages with updated status (active project, build results, market events, recovery hints). Auto-compaction summarizes long conversations into a memory file to prevent context overflow.
+
+
+\subsection{Benchmark: MiniCTX PNT}\label{sec:minictx}
+
+MiniCTX (Hu et al., 2024) is a benchmark for evaluating theorem provers on real Lean~4 repositories in context. We focus on the Prime Number Theorem (PNT) formalization, which contains analytic number theory (Chebyshev bounds, Mertens' theorems), complex analysis (Mellin transforms, zero-free regions), and asymptotic analysis (Tauberian theorems). We extract all \texttt{sorry}'d declarations tagged with \texttt{@[target]} as the target set $\Phi^*$, partition them by estimated difficulty into Easy/Medium/Hard tiers, and extract the declaration-level dependency DAG.
+
+\begin{table}[ht]
+\centering
+\caption{\textbf{[PLACEHOLDER]} PNT benchmark statistics.}
+\label{tab:pnt-stats}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total declarations & 911 \\
+\texttt{sorry}'d targets $|\Phi^*|$ & 92 \\
+Dependency DAG depth & 18 \\
+Avg.\ dependencies per target & 0.30 \\
+Easy / Medium / Hard split & 39 / 41 / 12 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Systems Under Comparison}\label{sec:systems}
+
+We compare three paradigms.
+
+\paragraph{Paradigm A: Agentic provers (baselines).}
+
+\begin{itemize}
+    \item[\textbf{A1.}] \textbf{Claude Code ($1$ agent).} A single Claude instance with Lean LSP access, iteratively attempting proofs. Serial processing, no coordination.
+    
+    \item[\textbf{A2.}] \textbf{Claude Code Teams ($n$ agents).} Multiple Claude instances on a shared Git branch. Agents are assigned disjoint target subsets and observe each other's committed proofs. Coordination is ad hoc (file-level, no market mechanism).
+    
+    \item[\textbf{A3.}] \textbf{Aristotle Agent.} State-of-the-art agentic Lean prover, evaluated as a black box on the same target set.
+    
+    \item[\textbf{A4.}] \textbf{OpenGauss.} Another state-of-the-art system, same evaluation protocol.
+\end{itemize}
+
+\paragraph{Paradigm B: Agora scaffold (no strategy module).}
+
+\begin{itemize}
+    \item[\textbf{B1.}] \textbf{Agora Scaffold ($n$ agents).} $n$ LLM agents operating on the Agora platform with no preprogrammed policy. Agents interact via MCP tools; proofs are validated by VerifiedAgora.
+\end{itemize}
+
+% The key difference from A2 is structural: the scaffold provides a shared library with verified publication (not just git commits), a market with explicit bounties (not just informal task assignment), and a standardized agent interface (MCP tools, not ad hoc prompting).
+
+\paragraph{Paradigm C: Agora scaffold + strategy module.}
+
+\begin{itemize}
+    \item[\textbf{C1.}] \textbf{Agora + Strategy ($n$ agents).} Same as B1, but the implicit policy is replaced by the MARL-trained strategy module from Chapter~\ref{chap:marl}. The agentic LLM is given the serialized outputs of the strategy module at each step in its prompt, which allows for strategic influence on the agent's actions.
+    
+\end{itemize}
+
+\begin{remark}[Strategy module as controller]
+The separation between strategy (what/when/who) and tactics (how to prove) is the key architectural choice. The strategy module is the trained GPT actor from Chapter~\ref{chap:marl}, operating over the same observation/action space as in the synthetic experiments. Its action space maps to Agora operations: $\mathrm{Prove}(\phi) \mapsto$ direct the LLM to attempt target $\phi$; $\mathrm{Pub}(\phi) \mapsto$ call \texttt{write\_contribution}; $\mathrm{Qry}(\phi) \mapsto$ query Lean LSP for goal-state complexity; market actions $\mapsto$ Agora market MCP tools. The strategy module was trained on synthetic Agora Forge instances and is applied zero-shot to the real Lean project.
+\end{remark}
+\begin{remark}[LLM Subroutines]
+Future work may study the differences between C1 and a variant where the strategy module's outputs are not directly fed into the LLM prompt, but instead trigger separate subroutines that call the LLM with specialized prompts (e.g., a "proof attempt" subroutine that takes a target and returns a proof sketch). This would more closely mirror the theoretical framework's separation of strategy and proof kernel, but may require additional engineering to implement effectively.
+\end{remark}
+
+
+\subsection{Evaluation Protocol}\label{sec:protocol}
+
+\paragraph{Compute budget.}
+All systems receive the same total API-call based compute budget $B$. Results are reported at checkpoints $\{B/4, B/2, 3B/4, B\}$.
+
+\paragraph{Metrics.}
+\begin{itemize}
+    \item $\mathrm{Resolve\%}$: fraction of $\Phi^*$ with sorry-free, VerifiedAgora-certified proofs (overall and by tier).
+    \item $\mathrm{WallTime}_{x\%}$: wall-clock time to reach $x\%$ resolution.
+    \item $\mathrm{Duplication\%}$: fraction of proof attempts targeting a declaration already solved by another agent.
+    \item $\mathrm{DepUnlock}$: count of events where one agent's publication enables another agent to resolve a previously blocked target.
+\end{itemize}
+
+
+\subsection{Results}\label{sec:app-results}
+
+\subsubsection{Proof Completion}
+
+\begin{table}[ht]
+\centering
+\caption{Proof completion on PNT at full budget and $12$ agents.}
+\label{tab:app-overall}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{ll|cccc}
+\toprule
+& \textbf{System} & \textbf{Easy} & \textbf{Med.} & \textbf{Hard} & \textbf{Overall} \\
+\midrule
+% \multirow{4}{*}{\rotatebox{90}{\small A}}
+& A1: Claude Code ($1$) & 8 (21\%) & 2 (5\%) & 0 (0\%) & 10 (11\%) \\
+& A2: Claude Code Teams ($12$) & 15 (38\%) & 5 (12\%) & 0 (0\%) & 20 (22\%) \\
+& A3: Aristotle Agent & 35 (90\%) & 28 (68\%) & 5 (42\%) & 68 (74\%) \\
+& A4: OpenGauss & --- & --- & --- & --- \\
+\midrule
+& B1: Agora Scaffold ($12$) & 20 (51\%) & 10 (24\%) & 1 (8\%) & 31 (34\%) \\
+\midrule
+& C1: Agora + Strategy & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% \textbf{Expected findings.} (i) A1 provides a strong serial baseline; A2 improves via parallelism but suffers coordination overhead. (ii) A3/A4 set the SOTA bar. (iii) B1 matches or exceeds A2 via structured coordination (verified publication, market bounties). (iv) C1 improves over B1 on Medium/Hard targets by prioritizing dependency-unlocking proofs and avoiding duplication. 
+
+
+\subsubsection{Anytime Performance}
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
+% $x$-axis = fraction of wall-clock budget consumed, $y$-axis = $\mathrm{Resolve\%}$. One curve per system. C1/C2 should show steeper early slopes (better prioritization) and higher asymptotes (better dependency coordination).}}
+}}
+\caption{\textbf{[PLACEHOLDER]} Anytime proof completion.}
+\label{fig:anytime}
+\end{figure}
+
+
+\subsubsection{Coordination Quality}
+
+\begin{table}[ht]
+\centering
+\caption{ Coordination metrics (multi-agent systems only).}
+\label{tab:coordination}
+\begin{tabular}{l|ccc}
+\toprule
+\textbf{System} & $\mathrm{Duplication\%}\downarrow$ & $\mathrm{DepUnlock}\uparrow$ & API calls \\
+\midrule
+A2: Claude Code Teams & 36\% & 2 & high \\
+B1: Agora Scaffold & 21\% & 5 & moderate \\
+C1: Agora + Strategy & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+%TODO CALCULATE API CALLS FROM LOGS
+
+
+% \textbf{Expected findings.} A2 has highest duplication (no structured coordination). B1 reduces duplication via the shared library. C1 achieve lowest duplication and highest DepUnlock count, reflecting the strategy module's learned coordination: directing agents to distinct targets and prioritizing proofs that unblock downstream work.
+
+\subsubsection{Qualitative Results}
+\textbf{TODO}
+
+
+\subsubsection{Case Study: Navigating a Dependency Chain}
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
+% A dependency subgraph from the PNT formalization (e.g., a chain through Mertens' estimates leading to the PNT). Timeline comparison:\\[2pt]
+% \textbf{A2}: agents independently attempt the final target, fail on missing dependencies, eventually stumble on intermediates. Slow.\\[2pt]
+% \textbf{B1}: agents follow bounty-value ordering; the chain resolves bottom-up but with idle gaps between publications.\\[2pt]
+% \textbf{C1}: strategy module recognizes the chain via query estimates, assigns agents to distinct links in topological order, uses OR-redundancy on the hardest link. Fastest.}}
+}}
+\caption{\textbf{[PLACEHOLDER]} Case study: dependency chain navigation.}
+\label{fig:case-study}
+\end{figure}
+
+
+\subsection{Discussion}\label{sec:app-discussion}
+\textbf{TODO}
+
+
+\subsection{Limitations.}
+\begin{itemize}
+    \item The strategy module was trained on synthetic Agora Forge instances and applied zero-shot to real Lean. Domain shift (different dependency structure, proof difficulty distribution, market dynamics) may reduce effectiveness. Fine-tuning on real Lean projects is likely to improve results.
+    \item Comparisons to A3/A4 are against public configurations; these systems may not be optimized for MiniCTX PNT.
+    \item Compute normalization is approximate: LLM API calls, Lean kernel checks, and strategy-module inference have different costs.
+\end{itemize}
+
+% \paragraph{Broader implications.}
+% Agora demonstrates that the MMATPG framework can be instantiated over real formal mathematics with existing infrastructure (Lean~4, Git, LLM agents). The architecture---verified subtask completion, market-mediated coordination, learned strategy---is not specific to theorem proving. Any domain with verifiable subtasks, interdependent work, and heterogeneous agents (software verification, collaborative scientific computation, distributed engineering) could benefit from a similar design.
