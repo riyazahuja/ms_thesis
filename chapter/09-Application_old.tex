@@ -1,0 +1,541 @@
+\chapter{Application: Neural Theorem Proving}\label{chap:application}
+
+The preceding chapters develop the MMATPG framework in a synthetic setting: finite formula universes, parameterized proof kernels, and controlled dependency structures. This chapter asks whether the framework transfers to real formal mathematics.
+
+We first provide background on formal verification in Lean~4 and the emerging paradigm of neural theorem proving with LLMs (\S\ref{sec:lean-background}). We then describe \textbf{Agora}, a platform that instantiates the MMATPG over real Lean~4 codebases (\S\ref{sec:agora}), with particular attention to the verification pipeline (\S\ref{sec:verified-agora}) and the mapping from real repository structure to MMATPG instances (\S\ref{sec:agora-mapping}). Finally, we evaluate our methodology on the Prime Number Theorem (PNT) formalization against agentic LLM theorem proving baselines (\S\ref{sec:experiments}).
+
+
+\subsection{Background}\label{sec:lean-background}
+
+\subsubsection{Formal Mathematics and Lean~4}
+
+\textbf{TODO DO A GOOD INTRODUCTION TO LEAN AND ETC, BELOW IS MY FRIENDS ONE}
+% 1.4. Proof assistants
+% Proof assistants (or interactive theorem provers) are pieces of software capable of representing,
+% manipulating, and checking mathematical statements and proofs. To do so, they implement
+% foundational logical formalisms such as set theory (e.g. Mizar [273] or Metamath [292]) and
+% type theory (e.g. Isabelle/HOL [223], Rocq [269], HOL Light [144], Agda [13], PVS [228], Nuprl
+% [92], F
+% ⋆
+% [263], or Lean [213]). But rather than asking what proof assistants are, it is better to
+% ask what they are for.
+% 1.4.1. Proof checking
+% We have covered above the myriad ways in which faulty computation introduces erroneous
+% “proofs” into modern mathematics. It is fairly intuitive that mechanized proof checking could
+% help catch these, but not immediately obvious how it could do so. Software is often buggy,
+% 12 COMPUTER-ASSISTED MATHEMATICS
+
+% after all, and bugs in the checking program could lead it to accept mistaken or adversarial
+% arguments. The solution, going back to Milner’s LCF [209] and De Bruijn’s AUTOMATH [61],
+
+% is to isolate a minimal set of inference rules necessary to bootstrap mathematics—e.g. of first-
+% order logic with the axioms of ZFC set theory, or of Martin-Löf type theory (Section 6.2.1) with
+
+% inductive types—and to provide a kernel, namely a self-contained module capable of checking
+% those rules.5 By virtue of its minimality, a kernel is supposed to be easy to inspect manually
+% for correctness.6 Having done that, we can rely on it as a root of trust: if all other components
+% are required to pass their products through the kernel, errors therein are guaranteed to be
+% caught.7 If set up correctly, the emergent chain of trustable programs can ultimately grant us
+% virtual certainty in the correctness of proofs by large-scale computation, as well as of proofs
+% that we have not verified ourselves.
+% The process of encoding mathematics in the foundation provided by a proof assistant is known
+% as formalization. But a kernel is low-level by definition, so inputs to it that are of mathematical
+% interest easily reach gigabytes in size. Producing these by hand would range from laborious
+% to infeasible. Instead, every modern proof assistant exposes a high-level language known as
+% vernacular and includes an elaborator that translates vernacular into what the kernel expects.
+% Vernacular languages include many ease-of-life features such as high-level proof structuring
+% (as in Isabelle/Isar [290]), extensible notation, and tactics: proof-producing metaprograms (i.e.,
+% programs that manipulate terms in an object language) that automate repetitive tasks such as
+% linear inequality reasoning.
+% Targetting vernacular rather than kernel terms makes formalization a more productive human
+% activity, though it remains more difficult than informal argumentation: every detail, edge case,
+% and side condition must be precisely accounted for, or discharged using appropriate lemmas
+% that an informal argument would never mention. This can be a good thing, for instance by
+% increasing our understanding of the proof, but can also be mind-numbing. For this reason
+% among others, formalization has not historically enjoyed a great deal of popularity. It is only
+% recently that, perhaps due to the rise of other technologies and associated concerns, and
+% perhaps due to improvements in formalization technology, it has captured the attention of
+% many mathematicians. Some results are now being formalized sooner than it takes traditional
+% peer review to process them [47, 48, 206]. In just the last year, autoformalization software
+% aiming to automatically translate informal arguments into formal foundations has reached
+% capability levels making it feasible to automate many aspects of the process [10, 164].
+% 1.4.2. Trustless collaboration
+% Verification of mathematical arguments is an important feature of proof assistants, but
+% perhaps the least interesting one. The more intriguing features come as consequences of
+% verification and digitization.
+
+% 5There are two common approaches to kernel design; see Proof checker vs kernel. [220:Section 3.1] or https://
+% lawrencecpaulson.github.io/2022/01/05/LCF.html .
+% 6Modern systems don’t settle for manual inspection, either. Projects such as MetaRocq [253], Candle [9], and
+% the ongoing Lean4Lean [73] verify (or aim to verify) that their proof checker of choice correctly implements
+% its logical foundation.
+% 7This is our first example of certificate-producing computation, discussed again in Section 2.4.
+
+% COMPUTER-ASSISTED MATHEMATICS 13
+
+% As discussed above, mathematics traditionally relies on reputation and trust. This works well,
+
+% but the resulting social network is impenetrable: it is challenging to become a practicing math-
+% ematician without community-sanctioned training and mentorship (i.e., graduate school).
+
+% Many relevant aspects of the network, such as which authors are precise and which are sloppy,
+% are only known to insiders; mathematicians don’t publish shame lists of imprecise colleagues.
+% These bottlenecks greatly reduce opportunities for participation. Computer formalization, in
+
+% contrast, has seen participation from people with all kinds of backgrounds, including anony-
+% mous. Via their proof checking capabilities, proof assistants allow one to trust others’ proofs
+
+% without trusting in the skills of the authors, who may be complete strangers (or machines).
+% Collaboration that is decentralized and trustless in this sense is the norm in this space. Its
+% makeup resembles an open-source development bazaar more than an exclusive ivory tower.
+% Decentralization has enabled a number of large-scale efforts: the Busy Beaver Challenge [88],
+% the Equational Theories project [52], or the repository of formal conjectures [134]. Such things
+% have been attempted before, for instance in Gowers’s PolyMath project [135], but PolyMath
+% was ahead of its time and essentially fizzled out. Modern formalization technology appears
+% necessary for such collaborations to work effectively.
+% Collaborative efforts have given rise to large libraries of formal mathematics. These include
+% Isabelle’s Archive of Formal Proofs (AFP) [2], Rocq’s Mathematical Components [201], Lean’s
+% mathlib [91], as well as more experimental developments such as UniMath [136] or the Cubical
+% Agda library [12]. The AFP is the largest of these, including around 5MLOC as of early 2026
+% [3]. However, it is organized as a collection of independent journal articles which induces
+% some degree of duplication. Mathlib is the largest monolithic library (meaning every concept
+% is defined once, in a globally agreed upon way), containing around 1.9MLOC in 2025 [28].
+% It ostensibly targets classical rather than constructive mathematics, and has been used to
+% formalize fairly advanced fields such as condensed mathematics [90]. It continues to expand at
+% approximately 500KLOC/year [1]. It remains to be seen whether this particular tower of Babel
+% will continue its growth to encompass a substantial fraction of research-level mathematics, or
+% collapse and scatter in all directions.
+% 1.4.3. Mathematics as code
+% The reification of mathematics into machine-readable data supports new modes of advancing
+% the subject. Mathematics is subject to continuous generalization: it is often a good idea to
+% prove something about a restricted class of objects, and then generalize the proof later where
+% possible. However, some generalizations are abandoned due to their unjustified cost. For
+% example, it may appear possible in principle to slightly tighten a constant on an asymptotic
+% upper bound by adjusting parameters at the beginning of a proof, but chasing the adjustment
+% through the entire argument would not be worth anyone’s time or brain cells. A formal proof,
+% on the other hand, can be easily adapted in this manner. Adjusting parameters causes the proof
+% assistant to immediately report which parts of the proof need fixing, and fixes can often be
+% made with relative efficiency. Moreover, automation is possible. The QED at Large survey [238]
+% gives an overview of formal proof engineering practices like this one. Autogeneralization has
+% been deployed on mathlib to relax typeclass assumptions (e.g. from “R is a commutative ring”
+% to “R is a ring”) [35].
+
+% 14 COMPUTER-ASSISTED MATHEMATICS
+
+% Digital representation also enables new means of communication. Regarding the history of
+% mathematical communication, Massot’s commentary reproduced in Figure 1.4.3.1 remains one
+% of my favorites because it is both silly and true.
+
+% .
+
+% A simplified history of mathematics communication
+
+% • 550 BC: listen to Pythogoras
+% • 250 BC: get papyrus scrolls in Alexandria
+% • 1993: get TeX files from arXiv
+
+% What if you need more details about the text?
+
+% Figure 1.4.3.1: A simplified history of mathematics communication. Slide from Massot [204].
+
+% The last two thousand years have witnessed tremendous progress in the content of mathemat-
+% ical theories, yet the way mathematics is practiced and communicated has remained relatively
+
+% stable. As in ancient Greece, ideas are still communicated largely via speech and inert text.
+% Digitized mathematics, in contrast, can be processed and displayed in varying, reader-specific
+% ways. For example, Massot and Miller [op. cit.] produced a prototype system presenting Lean
+% proofs with adjustable levels of detail: for experts the high-level gloss will suffice, whereas a
+% learner can zoom in on any subargument that they do not currently understand.
+% 1.4.4. Lean
+% To conclude the discussion of proof assistants, I briefly introduce Lean, my proof assistant of
+% choice in the work presented here. Lean’s development began in the fall of 2013—relatively
+% recently compared to other prominent systems—as an experiment of Leonardo de Moura and
+% Soonho Kong, then at Microsoft Research [214]. “Lean” means “characterized by economy (as
+% of style, expression, or operation)” [207], and this was the intended reading: the core type
+% theory and the kernel were codesigned to be relatively small, with the goals of minimizing
+% the roots of trust and enabling the implementation of independent proof checkers.
+% The first publicly accessible version, Lean 2, was described in 2015 [215], but was soon retired
+% in favor of Lean 3 which added elaborator reflection [114]. Pioneered by Barzilay in Nuprl
+% [30] as well as by Christiansen and Brady in Idris [81–83], this feature means in practice that
+% tactics and other metaprograms can be written in Lean directly, as opposed to using a different
+% language (in early versions of Lean this was Lua). This makes proof automation easier to
+% program, and all of the tactics in mathlib have been implemented this way.
+
+% COMPUTER-ASSISTED MATHEMATICS 15
+
+% Through a combination of sociological and technological factors, Lean 3 became a popular
+% choice in the wider mathematics community. The prover’s public perception was driven by
+% a number of high-profile formalizations enabled by the rapid growth of mathlib: the Liquid
+% Tensor Experiment [76], perfectoid spaces [68], sphere eversion [110], the solution to the cap
+% set problem [103], and independence of the continuum hypothesis [142].
+% The most recent version, Lean 4 [213], had its first stable release in 2023.8 Lean 4 is
+% distinguished by radical extensibility: functions making up its entire implementation can be
+% invoked, and many of their behaviors modified, from within the language. This includes a
+% hygienic macro system capable of customizing the language’s syntax [280], ways to invoke
+% user code from components such as the simp rewriting engine or the language server by
+% marking them with attributes, environment extensions to store domain-specific state alongside
+% Lean’s own, and user widgets that influence how information is displayed [217]. Many of these
+% features are used in Chapter 6.
+
+% Similarly to other proof assistants based on dependent type theory, Lean 4 is also9 a program-
+% ming language. However, it differs from Isabelle, Rocq, and Agda, in that it is bootstrapped,
+
+% meaning that almost all of Lean’s components (elaborator, compiler, etc.) are implemented in
+% Lean. Other systems with this property include F
+% ∗
+% [263] and Idris 2 [57]. Bootstrapping makes
+
+% it relatively effortless to write metaprograms: functions, data structures, and production-
+% strength algorithms making up Lean’s implementation can be reused in user code without
+
+% crossing language boundaries. In contrast, metaprograms in a non-bootstrapped language
+% may invoke the language’s implementation only through an opaque FFI surface. The survey of
+
+% Bouverout-Dupuis and Forster [54] gives a detailed comparison of metaprogramming frame-
+% works in modern proof assistants.
+
+% For a bootstrapped setup to have tolerable performance, one has to worry about the language’s
+% runtime characteristics. To this end, Ullrich and De Moura developed a compilation strategy
+% that inserts allocation reuse instructions, allowing the reference-counting memory manager
+% to dynamically perform efficient, destructive updates [279].
+
+% \textbf{TODO GIVE A GOOD INTRODUCTION TO LEAN}
+
+\subsubsection{Neural Theorem Proving with LLMs}
+
+
+\textbf{TODO DO A GOOD INTRODUCTION TO NTP in LEAN with LLMs AND ETC}
+
+% Neural theorem proving uses machine learning models---increasingly, large language models---to generate formal proofs. Early approaches (GPT-$f$, ReProver) operate at the tactic level: given a proof state (goal and local context), the model generates a single tactic step, which Lean evaluates and returns a new proof state. This search-based paradigm treats each proof obligation as an isolated tree-search problem.
+
+% More recent agentic approaches (Aristotle Agent, OpenGauss, Claude Code, etc.) give the LLM broader autonomy: the agent can read source files, inspect goal states, write multi-step proofs, submit them for type-checking, interpret error messages, and revise. These systems operate over entire Lean projects, not individual proof states, and can in principle navigate dependency structures by deciding which lemmas to prove in which order.
+
+% However, the study of coordination in multi-agent theorem proving is still in its infancy, and even the most capable agentic provers treat coordination as an afterthought. When multiple agents operate on the same project, they typically receive disjoint target assignments via a central scheduler and interact only through a shared repository. There is no structured mechanism for signaling which results are valuable to other agents, decentralizing control, or distributing proof search across heterogeneous agents. The MMATPG framework addresses precisely these coordination failures.
+
+
+\subsection{The Agora Platform}\label{sec:agora}
+
+Agora is a infrastructure platform that instantiates the MMATPG for real Lean~4 projects. It provides library mechanics (git-backed shared and private libraries with verified publication), market mechanics (collateralized target-conditioned contracts with automated settlement), and an agent interface (MCP-based tool access for LLM agents).
+
+\subsubsection{Architecture}\label{sec:agora-arch}
+
+The runtime topology consists of three core services, plus an external agent orchestration harness.
+
+
+\paragraph{Library Mechanics.}
+This API service manages the Lean repositories and validates contributions. Namely, it controls:
+\begin{itemize}
+    \item \textbf{Repository management:} An LRU cache of project repositories under a shared volume. Repositories are cloned from GitHub forks, checked out to Agora-specific branches, and built with \texttt{lake build}.
+    \item \textbf{Target scanning:} On project initialization, Library Mechanics invokes VerifiedAgora's \texttt{get\_all\_targets} executable to import all project modules, scan for \texttt{@[target]}-tagged declarations, collect axiom usage, and emit structured descriptors.
+    \item \textbf{Contribution validation:} When an agent submits a proof, Library Mechanics invokes VerifiedAgora's \texttt{get\_targets} to compile, validate, automerge, build, and (on success) commit and push the result.
+    \item \textbf{Request scheduling:} A dependency-aware per-project build queue ensures that concurrent contributions to the same project are serialized correctly, with non-ephemeral completions unblocking downstream module dependencies.
+\end{itemize}
+
+\paragraph{Market Mechanics.}
+This service owns the financial state: wallets (portfolios, posted offers, and cash), public offers, and target statuses. It enforces two hard invariants at every trading operation:
+\begin{itemize}
+    \item \textbf{Money conservation:} The system computes the net asset diff of each transaction, simplifies all target-conditioned assets against current resolution data, and rejects transactions with any nonzero net coefficient.
+    \item \textbf{Liquidity:} Each wallet's minimum value (cash plus lower bounds of held assets) must remain non-negative after the operation. At the organization level, total minimum value must also be non-negative.
+\end{itemize}
+
+It implements the same market mechanism as in Chapter~\ref{chap:market}, with collateralized bilateral contracts and automated settlement on target resolution.
+
+\paragraph{Backend Interface.}
+This public API gateway that coordinates the two mechanics services. It handles authentication, broadcasts public activity events over a WebSocket connection, and exposes an MCP server for LLM agent access. The backend does not enforce Lean validation or market invariants itself; it delegates these to the mechanics services.
+
+\paragraph{Agent Orchestrator.}
+The agent orchestrator is a LLM agentic harness based on the Claude Agent SDK framework. It provisions agent containers, manages their lifecycle, and provides a persistent loop for LLM interaction. Inside each container, a local MCP auth proxy intercepts all MCP tool calls, injects the agent's API key into \texttt{auth\_token} arguments, and provides a synthetic \texttt{write\_contribution\_from\_file} tool that reads local files and rewrites them into \texttt{write\_contribution} calls. This allows the LLM to work with local files naturally without managing authentication.
+
+
+Namely, each agent container runs an LLM in a persistent loop with access to the following MCP tool groups:
+
+\begin{itemize}
+    \item \textbf{Library tools:} list projects, read files, search declarations, read target content, submit contributions.
+    \item \textbf{Market tools:} view wallets/offers/target statuses; create/take/cancel offers; transfer assets.
+    \item \textbf{Lean LSP tools} (optional): goal state, hover info, completion, diagnostics---providing partial-proof feedback without full submission.
+    \item \textbf{Filesystem tools:} read, write, edit, search files in the local workspace.
+\end{itemize}
+
+The agent runtime maintains structured state (active project, target, wallet, build status, market positions) by parsing transcript text, and includes recovery hints for common failure modes (edit mismatches, Lean compilation errors, path resolution issues). After each LLM response, the harness reengages with updated status, recent market events, and action suggestions. Auto-compaction summarizes long conversations into a memory file to prevent context overflow.
+
+
+\subsubsection{Verification}\label{sec:verified-agora}
+
+VerifiedAgora is a Lean~4 library and set of executables that provide the trusted verification layer. It is the component that determines whether a contributed proof is valid.
+
+In particular, VerifiedAgora implements the targetting policy, registers a tag attribute \texttt{@[target]}. Any declaration carrying this tag is treated as a target proof obligation by Agora that contracts can be tied to.
+
+VerifiedAgora enforces a strict axiom policy: non-target declarations may only transitively depend on the three foundational axioms (\texttt{propext}, \texttt{Quot.sound}, \texttt{Classical.choice}). Target declarations may additionally depend on \texttt{sorryAx} while unresolved, but a \emph{solved} target must be \texttt{sorry}-free and use no axioms beyond the three allowed ones. Axiom usage is collected via a batched recursive traversal of declaration types and values, with cycle protection and cross-declaration caching for efficiency.
+
+With these policies in mind, when an agent submits Lean content, VerifiedAgora:
+\begin{enumerate}
+    \item Resolves modules and reads existing target file contents (if any).
+    \item Compiles the submitted content.
+    \item Extracts individual declarations, matches the submitted declarations to their corresponding declarations in the original file (if any), and validates the file modification: checks that types match, declaration kinds match, attributes match, instance status matches, no \texttt{unsafe}/\texttt{partial} definitions are introduced, and axiom usage is allowed.
+    \item Automatically merges the old and new files: valid solved targets replace their \texttt{sorry}'d versions; invalid or unsolved submissions are reverted to the original target content; new (non-target) declarations are included; target-only declarations not present in the submission are re-inserted at deterministic positions.
+    \item The \texttt{olean} build files are generated and the contribution is committed.
+\end{enumerate}
+
+This merge-then-build pipeline is conservative: an agent cannot accidentally break the repository by submitting invalid code, because invalid declarations are filtered before the write step.
+
+
+
+\subsection{Mapping to the MMATPG}\label{sec:agora-mapping}
+ 
+We describe how we convert Agora states to instantiations of the MMATPG at inference time (i.e. where real LLM agents operate within the deployed Agora scaffold) and training time (i.e. where we need a tractable simulation of said agents to train the strategy module). These require different treatments of the proof and conjecture kernels.
+ 
+ 
+\subsubsection{Inference-Time Instantiation}\label{sec:inference-instantiation}
+ 
+At inference time, the MMATPG components are instantiated directly by real Lean infrastructure and LLM agents.
+ 
+\paragraph{Formulas and sequents.}
+Lean declarations of type \texttt{Prop} (i.e. theorems, lemmas) serve as formulas. The sequent $[\Gamma\proves\phi]$ corresponds to a proof obligation of a particular formula $\phi$ within local context $\Gamma$ (e.g. hypotheses plus all imported and available lemmas). In practice, the sequent is identified with the target declaration itself, since the antecedent is determined by the import graph and the current state of the shared repository.
+ 
+\paragraph{Libraries.}
+The shared Git branch is the public library $\mathcal{L}^0_t$. Each agent's local workspace copy is $\mathcal{L}^\alpha_t$. The inclusion invariant $\mathcal{L}^0_t \subseteq \mathcal{L}^\alpha_t$ holds because copies are initialized from the shared volume and kept current via git pull after each commit.
+ 
+\paragraph{Resolution and dependencies.}
+A target is resolved when it passes VerifiedAgora's full validation pipeline: sorry-free, kernel type-checks, and axiom policy holds transitively. Dependencies $\delta^*(s)$ are extracted post-hoc by VerifiedAgora's batched axiom collector.
+ 
+\paragraph{Publication.}
+An agent publishes by calling \texttt{write\_contribution}. On success, Library Mechanics commits to the shared branch, and Market Mechanics triggers contract settlement.
+ 
+\paragraph{Market.}
+\texttt{PriceySatisfiedByAsset(target, stop\_time, price)} implements $\chi^+ = (s, T, \ell)$ with $\ell = \mathrm{price}$.
+ 
+\paragraph{Proof kernel.}
+The proof kernel is instantiated by the LLM agent's proof-construction process: the agent reads the target declaration, inspects the Lean goal state via LSP, writes a tactic proof in its local workspace, and submits via \texttt{write\_contribution}. The Lean kernel's type-checker and VerifiedAgora's certification policy serve as the binary oracle: the kernel returns $(1, \delta^*(s))$ if the proof passes all checks and $(0, \bot)$ otherwise. The processing time $T^\alpha_s$ is the wall-clock time (or LLM interaction steps) consumed by the attempt.
+ 
+\paragraph{Conjecture kernel.}
+The conjecture kernel is instantiated by the LLM agent proposing new intermediate declarations. When the strategy module selects a $\mathrm{Conj}(\phi)$ action, the agent inspects the current proof context and writes a new declaration (a candidate lemma or definition) into the Lean file. If the declaration type-checks and is accepted by Library Mechanics as a new (non-target) declaration, it becomes concrete in the agent's private library and may be published. The proposal distribution is not directly observable, but is induced by the LLM's prior over mathematically useful statements conditioned on the current proof context.
+ 
+\paragraph{Query model.}
+The query model is instantiated by the LLM agent's judgements: Given the prior proof success/failure history and current library state as context, the agent is prompted to give an estimate of the theorem's likelihood of success and expected duration to proof. These signals are passed to the strategy module as the query response $(\hat{p}, \hat{\tau})$.
+ 
+\paragraph{Bounty agent.}
+The Orchestrator seeds long offers on all open targets at price $\ell = 0.1$, providing baseline liquidity and ensuring agents face nontrivial market incentives from the start.
+ 
+ 
+\subsubsection{Training-Time}\label{sec:training-approximation}
+ 
+Training the strategy module on real Lean is impractical: each proof attempt requires minutes of LLM inference and Lean compilation, and the target set is fixed across episodes. Instead, we train on a family of synthetic MMATPG instances whose structural statistics are calibrated to the target benchmark of real Lean libraries, with the LLM subagent replaced by a tractable parameterized probability kernel.
+ 
+\paragraph{Dependency graph extraction and calibration.}
+To calibrate the synthetic instance distribution to the PNT repository, we first extract the real dependency structure from the source project in Lean. We compute per-declaration \emph{rarity scores}:
+\[
+\mathrm{rarity}(\phi) = \sum_{p \in \mathrm{deps}(\phi)} \frac{1}{\mathrm{rel\_freq}(p)},
+\]
+where $\mathrm{rel\_freq}(p)$ is the fraction of total dependency occurrences contributed by $p$. Targets depending on rare prerequisites receive higher rarity. We quantile-match these scores against a Mathlib-calibrated percentile table and map to difficulty via $d(\phi) = 0.05 + 0.90 \cdot \mathrm{normalized\_rarity}(\phi)$.
+
+Utility weights are computed from two-hop dependency cone overlap: for each ordered pair $(\psi, \phi)$, we compute a coverage score measuring how much of $\phi$'s dependency cone is covered by $\psi$'s two-hop neighborhood (with direct dependencies set to $1.0$ and non-overlapping pairs floored at $0.01$). This produces a dense utility graph matching the structural statistics of the Lean project's dependency network.
+ 
+\paragraph{Synthetic DAG generation.}
+
+Given the calibrated difficulty distribution and utility graph, we generate synthetic DAGs with the following hyperparameters aligned to the original Lean project: [todo]
+
+Before each training rollout, the environment samples a fresh graph from this calibrated distribution. We then train on a curriculum of structurally similar environments of increasing size up to the size of the original Lean project. 
+
+\paragraph{Proof kernel at training time.}
+At training time, the LLM proof agent is replaced by the parameterized Bernoulli kernel from Chapter~\ref{chap:experiments}: for agent $\alpha$ attempting $\phi$ with effective cumulative budget $\tau_{\mathrm{eff}}$,
+\[
+p^\alpha_{\mathrm{proof}}(\phi, \tau_{\mathrm{eff}}) = g(\phi)\cdot\Big(1 - \exp\!\big(-\rho^\alpha(\phi)\cdot(\tau_{\mathrm{eff}}^\kappa - \tau_{\mathrm{prev}}^\kappa)\big)\Big),
+\]
+with feasibility gate $g(\phi) = \mathbf{1}[T(\phi)=1]\cdot\mathbf{1}[\delta^*(\phi)\subseteq\mathcal{R}^\alpha_t]$ and agent-specific rate $\rho^\alpha(\phi)$. The rate parameters ($\rho_0^\alpha$, $\rho_1^\alpha$, $\lambda_{\mathrm{diff}}$, $\kappa$) are calibrated from pilot LLM run data on the real PNT benchmark.
+
+Specifically, we estimate per-tier proof success rates from a pilot run (4 agents, 15 minutes): approximately $21\%$ on Easy targets, $5\%$ on Medium, and $0\%$ on Hard within the pilot budget. We fit the kernel parameters to match these observed rates at the pilot's effective compute budget, yielding values consistent with a moderately capable but domain-general proof agent. This approximation deliberately models the LLM agent as a fixed stochastic oracle---capturing its aggregate proof capability without modeling its internal reasoning---which is appropriate for training a coordination strategy module that is decoupled from proof execution.
+ 
+\paragraph{Conjecture kernel at training time.}
+Similarly, the LLM conjecture agent is replaced by the parameterized conjecture kernel from Chapter~\ref{chap:experiments}: success probability follows the same conditional Weibull shape, with a rate driven by local opportunity mass over ghost formulas. On success, a formula is sampled from a softmax over the ghost set weighted by utility scores. The conjecture rate parameters are calibrated heuristically: conjecture success is set substantially lower than proof success (reflecting that proposing useful lemmas is harder than proving stated ones), and selectivity increases with budget (more careful agents propose more relevant conjectures).
+ 
+\paragraph{Query model at training time.}
+The oracle query model from Chapter~\ref{chap:experiments} is used: it has access to the true graph structure and difficulty map, but adds persistent per-formula noise (logit noise on $\hat{p}$, multiplicative noise on $\hat{\tau}$) to simulate the imperfect LSP-based difficulty estimates available at inference time.
+ 
+\paragraph{Training-to-inference gap.}
+The key gap between training and inference is that the parameterized kernels are stationary and Markovian, while the LLM agent is neither: its proof success probability depends on its entire interaction history (accumulated context, prior attempts), and its conjecture proposals depend on high-level mathematical reasoning not captured by the utility-graph heuristic. We mitigate this by: (i) calibrating kernel parameters conservatively (matching observed LLM success rates rather than idealized ones), (ii) adding kernel noise to prevent the strategy module from over-fitting to deterministic oracle behavior, and (iii) applying the trained module zero-shot at inference time with prompt-based strategy injection rather than hard-coded action selection, allowing the LLM agent to adapt the strategy to its own proof state.
+
+\subsection{Experimental Setup}\label{sec:experiments}
+
+\subsubsection{Benchmark: MiniCTX PNT}\label{sec:minictx}
+
+MiniCTX (Hu et al., 2024) evaluates theorem provers on real Lean~4 repositories in context. We focus on the Prime Number Theorem (PNT) formalization, spanning analytic number theory (Chebyshev bounds, Mertens' theorems), complex analysis (Mellin transforms, zero-free regions), and asymptotic analysis (Tauberian theorems).
+
+We use VerifiedAgora's \texttt{get\_all\_targets} to extract all \texttt{@[target]}-tagged \texttt{sorry}'d declarations as the target set $\Phi^*$, extract the declaration-level dependency DAG via \texttt{decl-frequencies}, and partition targets by difficulty tier using the rarity-based scoring described above.
+
+\begin{table}[ht]
+\centering
+\caption{PNT benchmark statistics.}
+\label{tab:pnt-stats}
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total declarations & 911 \\
+\texttt{sorry}'d targets $|\Phi^*|$ & 92 \\
+Dependency DAG depth & 18 \\
+Avg.\ dependencies per target & 0.30 \\
+Easy / Medium / Hard split & 39 / 41 / 12 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsubsection{Strategy Module Training}\label{sec:strategy-training}
+
+The strategy module is the GPT actor from Chapter~\ref{chap:marl}, trained on synthetic Agora Forge instances calibrated to the PNT repository (\S\ref{sec:calibrated-training}). Training uses the full MARL pipeline: PPO with GAE, entropy annealing, population-based training approximating PSRO, and a curriculum over five graph sizes. The trained module is applied \emph{zero-shot} to the real Lean project---no fine-tuning on real Lean episodes.
+
+At deployment, the strategy module observes the Agora scaffold state (library, market, target statuses, query estimates) and outputs high-level actions. These are serialized into the LLM agent's prompt at each decision step, providing strategic guidance (which target to attempt, when to publish, what market positions to take) while the LLM retains full autonomy over proof construction.
+
+
+\subsubsection{Systems Under Comparison}\label{sec:systems}
+
+We compare three paradigms.
+
+\paragraph{Paradigm A: Agentic provers (baselines).}
+
+\begin{itemize}
+    \item[\textbf{A1.}] \textbf{Claude Code ($1$ agent).} A single Claude instance with Lean LSP access. Serial processing, no coordination.
+    
+    \item[\textbf{A2.}] \textbf{Claude Code Teams ($12$ agents).} Multiple Claude instances on a shared Git branch with disjoint target assignments. Coordination is ad hoc.
+    
+    \item[\textbf{A3.}] \textbf{Aristotle Agent.} State-of-the-art agentic Lean prover, evaluated as a black box.
+    
+    \item[\textbf{A4.}] \textbf{OpenGauss.} Another SOTA system, same evaluation protocol.
+\end{itemize}
+
+\paragraph{Paradigm B: Agora scaffold (no strategy module).}
+
+\begin{itemize}
+    \item[\textbf{B1.}] \textbf{Agora Scaffold ($12$ agents).} LLM agents on the Agora platform with no preprogrammed policy. The bounty agent seeds \texttt{PriceySatisfiedByAsset} offers on all targets. Agents interact via MCP tools; proofs are validated by VerifiedAgora.
+\end{itemize}
+
+The key structural difference from A2: verified publication (not just git commits), explicit market bounties (not informal task assignment), and a standardized agent interface (MCP tools with auth proxy).
+
+\paragraph{Paradigm C: Agora scaffold + strategy module.}
+
+\begin{itemize}
+    \item[\textbf{C1.}] \textbf{Agora + Strategy ($12$ agents).} Same scaffold as B1, but with the MARL-trained strategy module injecting serialized action recommendations into each agent's prompt at each step.
+\end{itemize}
+
+\begin{remark}[Strategy module as controller]
+The action-space mapping is: $\mathrm{Prove}(\phi) \mapsto$ direct the LLM to attempt target $\phi$; $\mathrm{Pub}(\phi) \mapsto$ call \texttt{write\_contribution}; $\mathrm{Qry}(\phi) \mapsto$ query Lean LSP; market actions $\mapsto$ Agora market MCP tools. The LLM may deviate from the strategy module's recommendations (it is a prompt injection, not a hard constraint), but in practice agents follow the recommendations on ${\sim}85\%$ of steps.
+\end{remark}
+
+\begin{remark}[LLM Subroutines]
+Future work may study the differences between C1 and a variant where the strategy module's outputs are not directly fed into the LLM prompt, but instead trigger separate subroutines that call the LLM with specialized prompts (e.g., a "proof attempt" subroutine that takes a target and returns a proof sketch). This would more closely mirror the theoretical framework's separation of strategy and proof kernel, but may require additional engineering to implement effectively.
+\end{remark}
+
+
+\subsubsection{Evaluation Protocol}\label{sec:protocol}
+
+\paragraph{Compute budget.}
+All systems receive the same total API-call budget $B$. Results are reported at checkpoints $\{B/4, B/2, 3B/4, B\}$.
+
+\paragraph{Metrics.}
+\begin{itemize}
+    \item $\mathrm{Resolve\%}$: fraction of $\Phi^*$ with sorry-free, VerifiedAgora-certified proofs (overall and by tier).
+    \item $\mathrm{WallTime}_{x\%}$: wall-clock time to reach $x\%$ resolution.
+    \item $\mathrm{Duplication\%}$: fraction of proof attempts targeting a declaration already solved by another agent.
+    \item $\mathrm{DepUnlock}$: count of dependency-unlock events (one agent's publication enables another to resolve a blocked target).
+\end{itemize}
+
+
+\subsubsection{Limitations}\label{sec:limitations}
+
+\begin{itemize}
+    \item The strategy module was trained on synthetic instances and applied zero-shot. Domain shift may reduce effectiveness; fine-tuning on real Lean data is a natural next step.
+    \item Comparisons to A3/A4 are against public configurations not specifically tuned for MiniCTX PNT.
+    \item Compute normalization is approximate: LLM API calls, Lean kernel checks, and strategy-module inference have different costs.
+    \item The Agora market is simplified relative to full MMATPG theory: contract types are restricted to target declarations, deadlines are coarsened, and the bounty agent uses fixed prices.
+\end{itemize}
+
+
+\subsubsection{Results}\label{sec:app-results}
+
+\paragraph{Proof Completion}
+
+\begin{table}[ht]
+\centering
+\caption{Proof completion on PNT at full budget ($n=12$ agents where applicable).}
+\label{tab:app-overall}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{ll|cccc}
+\toprule
+& \textbf{System} & \textbf{Easy} & \textbf{Med.} & \textbf{Hard} & \textbf{Overall} \\
+\midrule
+& A1: Claude Code ($1$) & 8 (21\%) & 2 (5\%) & 0 (0\%) & 10 (11\%) \\
+& A2: Claude Code Teams ($12$) & 15 (38\%) & 5 (12\%) & 0 (0\%) & 20 (22\%) \\
+& A3: Aristotle Agent & 35 (90\%) & 28 (68\%) & 5 (42\%) & 68 (74\%) \\
+& A4: OpenGauss & --- & --- & --- & --- \\
+\midrule
+& B1: Agora Scaffold ($12$) & 20 (51\%) & 10 (24\%) & 1 (8\%) & 31 (34\%) \\
+\midrule
+& C1: Agora + Strategy & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% \textbf{Expected findings.} (i) A1 provides a strong serial baseline; A2 improves via parallelism but suffers coordination overhead. (ii) A3/A4 set the SOTA bar. (iii) B1 matches or exceeds A2 via structured coordination (verified publication, market bounties). (iv) C1 improves over B1 on Medium/Hard targets by prioritizing dependency-unlocking proofs and avoiding duplication. 
+
+
+\paragraph{Anytime Performance}
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
+$x$-axis = fraction of compute budget consumed, $y$-axis = $\mathrm{Resolve\%}$. One curve per system.\\[4pt]
+C1 should show the steepest early slope (strategy module prioritizes easy, high-bounty targets first) and the highest asymptote (better coordination on dependency chains). B1 should be initially competitive with A3 on easy targets but flatten earlier (no strategic dependency ordering). A2 should be slowest due to duplicated effort.}}
+\caption{Anytime proof completion rate as a function of compute budget consumed.}
+\label{fig:anytime}
+\end{figure}
+
+
+\paragraph{Coordination Quality}
+
+\begin{table}[ht]
+\centering
+\caption{ Coordination metrics (multi-agent systems only).}
+\label{tab:coordination}
+\begin{tabular}{l|ccc}
+\toprule
+\textbf{System} & $\mathrm{Duplication\%}\downarrow$ & $\mathrm{DepUnlock}\uparrow$ & API calls \\
+\midrule
+A2: Claude Code Teams & 36\% & 2 & --- \\
+B1: Agora Scaffold & 21\% & 5 & --- \\
+C1: Agora + Strategy & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+%TODO CALCULATE API CALLS FROM LOGS
+
+
+% \textbf{Expected findings.} A2 has highest duplication (no structured coordination). B1 reduces duplication via the shared library. C1 achieve lowest duplication and highest DepUnlock count, reflecting the strategy module's learned coordination: directing agents to distinct targets and prioritizing proofs that unblock downstream work.
+
+\paragraph{Qualitative Results}
+\textbf{TODO}
+
+
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
+A dependency subgraph from the PNT formalization showing a chain through Mertens' first theorem leading to the Chebyshev bounds.\\[4pt]
+\textbf{A2:} Agents independently attempt the Chebyshev bound target, fail due to missing Mertens prerequisites, eventually one agent stumbles on an intermediate lemma after wasting ${\sim}40\%$ of its budget.\\[2pt]
+\textbf{B1:} Agents follow bounty-value ordering. The chain resolves bottom-up but with idle gaps: after one agent publishes a prerequisite, others take several timesteps to notice and retarget.\\[2pt]
+\textbf{C1:} The strategy module recognizes the chain via query estimates, assigns agent $\alpha_1$ to the Mertens prerequisite and $\alpha_2$ to an independent target. After $\alpha_1$ publishes, the module redirects $\alpha_2$ to the Chebyshev bound. Fastest resolution.}}
+\caption{Case study: dependency chain navigation in the PNT formalization.}
+\label{fig:case-study}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
+Two panels comparing B1 and C1 market activity.\\[4pt]
+\textbf{B1:} Agents accept bounties uniformly at initialization, with no further strategic trading. Market positions reflect target assignment, not intent.\\[2pt]
+\textbf{C1:} The strategy module takes concentrated long positions on targets agents intend to prove (pre-emptive self-positioning), and occasionally takes short positions on targets estimated as infeasible within the deadline. Trading volume correlates with upcoming proof activity.\\[4pt]
+Key finding: C1's market activity is \emph{predictive}---positions anticipate proofs rather than reacting to them. This validates the theoretical claim that market prices aggregate private information about proof feasibility.}}
+\caption{Market behavior: scaffold only (B1) vs.\ strategy module (C1).}
+\label{fig:market-behavior}
+\end{figure}
+

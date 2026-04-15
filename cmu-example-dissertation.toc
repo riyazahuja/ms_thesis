@@ -1,144 +1,147 @@
 \contentsline {chapter}{\textbf {List of Figures}}{viii}{Doc-Start}%
-\contentsline {chapter}{\textbf {List of Tables}}{ix}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Tables}}{x}{Doc-Start}%
 \contentsline {section}{\numberline {1\hspace {1em}}\nobreakspace {}\textbf {Introduction}}{1}{section*.1}%
 \contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Thesis Overview}{3}{subsection.1.2}%
 \contentsline {paragraph}{\numberline {1.2.0.1}Chapter 2: Centralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.1}%
-\contentsline {paragraph}{\numberline {1.2.0.2}Chapter 3: Decentralized Multi-Agent Theorem Proving.}{4}{paragraph.1.2.0.2}%
-\contentsline {paragraph}{\numberline {1.2.0.3}Chapter 4: Multi-Agent Reinforcement Learning.}{4}{paragraph.1.2.0.3}%
-\contentsline {paragraph}{\numberline {1.2.0.4}Chapter 5: Experiments.}{4}{paragraph.1.2.0.4}%
+\contentsline {paragraph}{\numberline {1.2.0.2}Chapter 3: Decentralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.2}%
+\contentsline {paragraph}{\numberline {1.2.0.3}Chapter 4: Multi-Agent Reinforcement Learning.}{3}{paragraph.1.2.0.3}%
+\contentsline {paragraph}{\numberline {1.2.0.4}Chapter 5: Experiments.}{3}{paragraph.1.2.0.4}%
 \contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{4}{paragraph.1.2.0.5}%
 \contentsline {subsection}{\numberline {1.3}Contributions}{4}{subsection.1.3}%
-\contentsline {section}{\numberline {2\hspace {1em}}\nobreakspace {}\textbf {Centralized Multi-Agent Theorem Proving}}{6}{section*.3}%
-\contentsline {subsection}{\numberline {2.1}Background}{6}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}Syntax}{6}{subsubsection.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.1.2}Semantics}{7}{subsubsection.2.1.2}%
-\contentsline {subsubsection}{\numberline {2.1.3}Libraries}{7}{subsubsection.2.1.3}%
-\contentsline {subsubsection}{\numberline {2.1.4}Library Invariants and Properties}{8}{subsubsection.2.1.4}%
-\contentsline {subsubsection}{\numberline {2.1.5}Axioms and Fully Resolved Sequents}{9}{subsubsection.2.1.5}%
-\contentsline {subsubsection}{\numberline {2.1.6}Private and Shared Libraries}{9}{subsubsection.2.1.6}%
-\contentsline {subsection}{\numberline {2.2}The Centralized MATP Problem}{9}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Background: POMDP}{9}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Background: Action Primitives}{11}{subsubsection.2.2.2}%
-\contentsline {paragraph}{\numberline {2.2.2.1}Discrete kernels.}{11}{paragraph.2.2.2.1}%
-\contentsline {paragraph}{\numberline {2.2.2.2}Proof Kernel.}{11}{paragraph.2.2.2.2}%
-\contentsline {paragraph}{\numberline {2.2.2.3}Conjecture Kernel.}{12}{paragraph.2.2.2.3}%
-\contentsline {paragraph}{\numberline {2.2.2.4}Dependency Closure for Publication.}{12}{paragraph.2.2.2.4}%
-\contentsline {paragraph}{\numberline {2.2.2.5}Query Model.}{12}{paragraph.2.2.2.5}%
-\contentsline {subsubsection}{\numberline {2.2.3}Definition}{13}{subsubsection.2.2.3}%
-\contentsline {paragraph}{\numberline {2.2.3.1}State Space $\mathsf {S}$.}{13}{paragraph.2.2.3.1}%
-\contentsline {paragraph}{\numberline {2.2.3.2}Action Space $\mathsf {A}$ and Admissibility.}{14}{paragraph.2.2.3.2}%
-\contentsline {paragraph}{\numberline {2.2.3.3}Observation Space $\mathsf {O}$ and Observation Kernel $Z$.}{14}{paragraph.2.2.3.3}%
-\contentsline {paragraph}{\numberline {2.2.3.4}Transition Kernel $T$.}{15}{paragraph.2.2.3.4}%
-\contentsline {subparagraph}{Step 1: Deterministic Pre-Update.}{15}{section*.4}%
-\contentsline {subparagraph}{Step 2: Stochastic Job Completion.}{16}{section*.5}%
-\contentsline {subparagraph}{Step 3: Deterministic Post-Update.}{16}{section*.6}%
-\contentsline {paragraph}{\numberline {2.2.3.5}Full transition kernel.}{16}{paragraph.2.2.3.5}%
-\contentsline {paragraph}{\numberline {2.2.3.6}Cost Function.}{17}{paragraph.2.2.3.6}%
-\contentsline {paragraph}{\numberline {2.2.3.7}Initial distribution $T^0$.}{17}{paragraph.2.2.3.7}%
-\contentsline {subsubsection}{\numberline {2.2.4}Example}{17}{subsubsection.2.2.4}%
-\contentsline {paragraph}{\numberline {2.2.4.1}Setup.}{17}{paragraph.2.2.4.1}%
-\contentsline {paragraph}{\numberline {2.2.4.2}Dependencies are latent.}{18}{paragraph.2.2.4.2}%
-\contentsline {subsection}{\numberline {2.3}Optimality of Immediate Publication}{18}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Complexity of the Centralized MATP}{19}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}The Non-Conjecturing PPI MATP}{20}{subsubsection.2.4.1}%
-\contentsline {paragraph}{\numberline {2.4.1.1}Latent task set and revelation DAG.}{20}{paragraph.2.4.1.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Lower Bounds}{20}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Hardness}{21}{subsubsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.5}An Algorithm for the Non-Conjecturing PPI MATP}{22}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Reactive List Scheduling (RLS)}{22}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Approximation Guarantee}{23}{subsubsection.2.5.2}%
-\contentsline {subsubsection}{\numberline {2.5.3}Redundancy on Revelation Chains}{24}{subsubsection.2.5.3}%
-\contentsline {subsection}{\numberline {2.6}Limits of Centralization}{25}{subsection.2.6}%
-\contentsline {section}{\numberline {3\hspace {1em}}\nobreakspace {}\textbf {Decentralized Multi-Agent Theorem Proving}}{26}{section*.7}%
-\contentsline {subsection}{\numberline {3.1}Background}{26}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Partially Observable Stochastic Games}{26}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Equilibria and Efficiency}{27}{subsubsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.2}The Multi-Agent Theorem Proving Game (MATPG)}{28}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Credit-Based Rewards}{29}{subsubsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.3}The Publication Externality}{29}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Inefficiency of equilibria.}{30}{subsubsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.4}Market-Mediated MATPG}{31}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Collateralized Bilateral Contract Market}{31}{subsubsection.3.4.1}%
-\contentsline {paragraph}{\numberline {3.4.1.1}Contract types.}{32}{paragraph.3.4.1.1}%
-\contentsline {paragraph}{\numberline {3.4.1.2}Trading.}{32}{paragraph.3.4.1.2}%
-\contentsline {paragraph}{\numberline {3.4.1.3}Collateral.}{32}{paragraph.3.4.1.3}%
-\contentsline {paragraph}{\numberline {3.4.1.4}Settlement.}{32}{paragraph.3.4.1.4}%
-\contentsline {subsubsection}{\numberline {3.4.2}The Market-Mediated MATPG}{32}{subsubsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.5}Internalization of Externalities}{33}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}Equilibrium Analysis}{35}{subsection.3.6}%
-\contentsline {subsubsection}{\numberline {3.6.1}Existence}{35}{subsubsection.3.6.1}%
-\contentsline {subsubsection}{\numberline {3.6.2}Price of Anarchy with Market}{35}{subsubsection.3.6.2}%
-\contentsline {subsection}{\numberline {3.7}Complexity}{37}{subsection.3.7}%
-\contentsline {subsection}{\numberline {3.8}Dealing with Intractibility}{38}{subsection.3.8}%
-\contentsline {section}{\numberline {4\hspace {1em}}\nobreakspace {}\textbf {Multiagent Reinforcement Learning}}{39}{section*.8}%
-\contentsline {subsection}{\numberline {4.1}Weaker Equilibrium Concepts}{39}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}Coarse Correlated Equilibrium}{39}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}Extension to Sequential Games}{40}{subsubsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.2}No-Regret Learning and CCE Convergence}{40}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}No-Regret Algorithms}{41}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}From Normal-Form to Extensive-Form via Meta-Games}{41}{subsubsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.3}MARL Framework for the MMATPG}{43}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}Policy Architecture: Multi-Agent Decision Transformer}{43}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}Policy Optimization: MAPPO}{44}{subsubsection.4.3.2}%
-\contentsline {paragraph}{\numberline {4.3.2.1}Centralized Training, Decentralized Execution (CTDE).}{44}{paragraph.4.3.2.1}%
-\contentsline {paragraph}{\numberline {4.3.2.2}Update rule.}{44}{paragraph.4.3.2.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Population-Based Training (Approximate PSRO)}{44}{subsubsection.4.3.3}%
-\contentsline {subsubsection}{\numberline {4.3.4}Curriculum Learning}{45}{subsubsection.4.3.4}%
-\contentsline {subsection}{\numberline {4.4}Convergence Guarantees}{45}{subsection.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.1}Main Convergence Theorem}{45}{subsubsection.4.4.1}%
-\contentsline {subsubsection}{\numberline {4.4.2}Efficiency of Learned Equilibria}{46}{subsubsection.4.4.2}%
-\contentsline {subsubsection}{\numberline {4.4.3}Comparison to the Centralized Benchmark}{47}{subsubsection.4.4.3}%
-\contentsline {section}{\numberline {5\hspace {1em}}\nobreakspace {}\textbf {Experiments}}{49}{section*.9}%
-\contentsline {subsection}{\numberline {5.1}Implementation Details}{49}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Formula Universe and Latent Graph}{49}{subsubsection.5.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.2}Sequent Compression}{50}{subsubsection.5.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.3}Proof Kernel}{50}{subsubsection.5.1.3}%
-\contentsline {subsubsection}{\numberline {5.1.4}Conjecture Kernel}{50}{subsubsection.5.1.4}%
-\contentsline {subsubsection}{\numberline {5.1.5}Query Model}{51}{subsubsection.5.1.5}%
-\contentsline {subsubsection}{\numberline {5.1.6}Market}{51}{subsubsection.5.1.6}%
-\contentsline {subsubsection}{\numberline {5.1.7}Instance Generation}{51}{subsubsection.5.1.7}%
-\contentsline {subsubsection}{\numberline {5.1.8}Policy Architecture}{52}{subsubsection.5.1.8}%
-\contentsline {subsubsection}{\numberline {5.1.9}Reward}{52}{subsubsection.5.1.9}%
-\contentsline {subsubsection}{\numberline {5.1.10}Training}{52}{subsubsection.5.1.10}%
-\contentsline {subsection}{\numberline {5.2}Experimental Setup}{53}{subsection.5.2}%
-\contentsline {paragraph}{\numberline {5.2.0.1}Instance parameters.}{53}{paragraph.5.2.0.1}%
-\contentsline {paragraph}{\numberline {5.2.0.2}Baselines.}{53}{paragraph.5.2.0.2}%
-\contentsline {paragraph}{\numberline {5.2.0.3}Metrics.}{53}{paragraph.5.2.0.3}%
-\contentsline {subsection}{\numberline {5.3}Centralized Scheduling}{54}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Externality and Market Internalization}{54}{subsection.5.4}%
-\contentsline {subsection}{\numberline {5.5}MARL Convergence and Equilibrium Quality}{55}{subsection.5.5}%
-\contentsline {subsection}{\numberline {5.6}Ablations}{55}{subsection.5.6}%
-\contentsline {subsection}{\numberline {5.7}Scaling}{55}{subsection.5.7}%
-\contentsline {section}{\numberline {6\hspace {1em}}\nobreakspace {}\textbf {Application: Neural Theorem Proving}}{58}{section*.17}%
-\contentsline {subsection}{\numberline {6.1}The Agora Platform}{58}{subsection.6.1}%
-\contentsline {subsubsection}{\numberline {6.1.1}Architecture}{58}{subsubsection.6.1.1}%
-\contentsline {subsubsection}{\numberline {6.1.2}Mapping to the MMATPG}{59}{subsubsection.6.1.2}%
-\contentsline {paragraph}{\numberline {6.1.2.1}Formulas and sequents.}{59}{paragraph.6.1.2.1}%
-\contentsline {paragraph}{\numberline {6.1.2.2}Libraries.}{59}{paragraph.6.1.2.2}%
-\contentsline {paragraph}{\numberline {6.1.2.3}Resolution.}{59}{paragraph.6.1.2.3}%
-\contentsline {paragraph}{\numberline {6.1.2.4}Dependencies.}{60}{paragraph.6.1.2.4}%
-\contentsline {paragraph}{\numberline {6.1.2.5}Publication.}{60}{paragraph.6.1.2.5}%
-\contentsline {paragraph}{\numberline {6.1.2.6}Proof kernel.}{61}{paragraph.6.1.2.6}%
-\contentsline {paragraph}{\numberline {6.1.2.7}Market mechanism.}{61}{paragraph.6.1.2.7}%
-\contentsline {paragraph}{\numberline {6.1.2.8}Bounty agent.}{61}{paragraph.6.1.2.8}%
-\contentsline {paragraph}{\numberline {6.1.2.9}Query model.}{62}{paragraph.6.1.2.9}%
-\contentsline {subsubsection}{\numberline {6.1.3}Agent Interface}{62}{subsubsection.6.1.3}%
-\contentsline {subsection}{\numberline {6.2}Benchmark: MiniCTX PNT}{62}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Systems Under Comparison}{63}{subsection.6.3}%
-\contentsline {paragraph}{\numberline {6.3.0.1}Paradigm A: Agentic provers (baselines).}{63}{paragraph.6.3.0.1}%
-\contentsline {paragraph}{\numberline {6.3.0.2}Paradigm B: Agora scaffold (no strategy module).}{63}{paragraph.6.3.0.2}%
-\contentsline {paragraph}{\numberline {6.3.0.3}Paradigm C: Agora scaffold + strategy module.}{63}{paragraph.6.3.0.3}%
-\contentsline {subsection}{\numberline {6.4}Evaluation Protocol}{64}{subsection.6.4}%
-\contentsline {paragraph}{\numberline {6.4.0.1}Compute budget.}{64}{paragraph.6.4.0.1}%
-\contentsline {paragraph}{\numberline {6.4.0.2}Metrics.}{64}{paragraph.6.4.0.2}%
-\contentsline {subsection}{\numberline {6.5}Results}{65}{subsection.6.5}%
-\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{65}{subsubsection.6.5.1}%
-\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{65}{subsubsection.6.5.2}%
-\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{65}{subsubsection.6.5.3}%
-\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results}{65}{subsubsection.6.5.4}%
-\contentsline {subsubsection}{\numberline {6.5.5}Case Study: Navigating a Dependency Chain}{66}{subsubsection.6.5.5}%
-\contentsline {subsection}{\numberline {6.6}Discussion}{66}{subsection.6.6}%
-\contentsline {subsection}{\numberline {6.7}Limitations.}{66}{subsection.6.7}%
-\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{67}{section*.23}%
-\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{68}{section*.24}%
+\contentsline {section}{\numberline {2\hspace {1em}}\nobreakspace {}\textbf {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}%
+\contentsline {subsection}{\numberline {2.1}Background}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Syntax}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Semantics}{6}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Libraries}{6}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Library Invariants and Properties}{7}{subsubsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.5}Axioms and Fully Resolved Sequents}{8}{subsubsection.2.1.5}%
+\contentsline {subsubsection}{\numberline {2.1.6}Private and Shared Libraries}{8}{subsubsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.2}The Centralized MATP Problem}{8}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Background: POMDP}{8}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Background: Action Primitives}{10}{subsubsection.2.2.2}%
+\contentsline {paragraph}{\numberline {2.2.2.1}Discrete kernels.}{10}{paragraph.2.2.2.1}%
+\contentsline {paragraph}{\numberline {2.2.2.2}Proof Kernel.}{10}{paragraph.2.2.2.2}%
+\contentsline {paragraph}{\numberline {2.2.2.3}Conjecture Kernel.}{11}{paragraph.2.2.2.3}%
+\contentsline {paragraph}{\numberline {2.2.2.4}Dependency Closure for Publication.}{11}{paragraph.2.2.2.4}%
+\contentsline {paragraph}{\numberline {2.2.2.5}Query Model.}{11}{paragraph.2.2.2.5}%
+\contentsline {subsubsection}{\numberline {2.2.3}Definition}{12}{subsubsection.2.2.3}%
+\contentsline {paragraph}{\numberline {2.2.3.1}State Space $\mathsf {S}$.}{12}{paragraph.2.2.3.1}%
+\contentsline {paragraph}{\numberline {2.2.3.2}Action Space $\mathsf {A}$ and Admissibility.}{13}{paragraph.2.2.3.2}%
+\contentsline {paragraph}{\numberline {2.2.3.3}Observation Space $\mathsf {O}$ and Observation Kernel $Z$.}{13}{paragraph.2.2.3.3}%
+\contentsline {paragraph}{\numberline {2.2.3.4}Transition Kernel $T$.}{14}{paragraph.2.2.3.4}%
+\contentsline {subparagraph}{Step 1: Deterministic Pre-Update.}{14}{section*.4}%
+\contentsline {subparagraph}{Step 2: Stochastic Job Completion.}{15}{section*.5}%
+\contentsline {subparagraph}{Step 3: Deterministic Post-Update.}{15}{section*.6}%
+\contentsline {paragraph}{\numberline {2.2.3.5}Full transition kernel.}{15}{paragraph.2.2.3.5}%
+\contentsline {paragraph}{\numberline {2.2.3.6}Cost Function.}{16}{paragraph.2.2.3.6}%
+\contentsline {paragraph}{\numberline {2.2.3.7}Initial distribution $T^0$.}{16}{paragraph.2.2.3.7}%
+\contentsline {subsubsection}{\numberline {2.2.4}Example}{16}{subsubsection.2.2.4}%
+\contentsline {paragraph}{\numberline {2.2.4.1}Setup.}{16}{paragraph.2.2.4.1}%
+\contentsline {paragraph}{\numberline {2.2.4.2}Dependencies are latent.}{17}{paragraph.2.2.4.2}%
+\contentsline {subsection}{\numberline {2.3}Optimality of Immediate Publication}{17}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Complexity of the Centralized MATP}{18}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}The Non-Conjecturing PPI MATP}{19}{subsubsection.2.4.1}%
+\contentsline {paragraph}{\numberline {2.4.1.1}Latent task set and revelation DAG.}{19}{paragraph.2.4.1.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Lower Bounds}{19}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Hardness}{20}{subsubsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.5}An Algorithm for the Non-Conjecturing PPI MATP}{21}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Reactive List Scheduling (RLS)}{21}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Approximation Guarantee}{22}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3}Redundancy on Revelation Chains}{23}{subsubsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.6}Limits of Centralization}{24}{subsection.2.6}%
+\contentsline {section}{\numberline {3\hspace {1em}}\nobreakspace {}\textbf {Decentralized Multi-Agent Theorem Proving}}{25}{section*.7}%
+\contentsline {subsection}{\numberline {3.1}Background}{25}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Partially Observable Stochastic Games}{25}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Equilibria and Efficiency}{26}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}The Multi-Agent Theorem Proving Game (MATPG)}{27}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Credit-Based Rewards}{28}{subsubsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.3}The Publication Externality}{28}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Inefficiency of equilibria.}{29}{subsubsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.4}Market-Mediated MATPG}{30}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Collateralized Bilateral Contract Market}{30}{subsubsection.3.4.1}%
+\contentsline {paragraph}{\numberline {3.4.1.1}Contract types.}{31}{paragraph.3.4.1.1}%
+\contentsline {paragraph}{\numberline {3.4.1.2}Trading.}{31}{paragraph.3.4.1.2}%
+\contentsline {paragraph}{\numberline {3.4.1.3}Collateral.}{31}{paragraph.3.4.1.3}%
+\contentsline {paragraph}{\numberline {3.4.1.4}Settlement.}{31}{paragraph.3.4.1.4}%
+\contentsline {subsubsection}{\numberline {3.4.2}The Market-Mediated MATPG}{31}{subsubsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.5}Internalization of Externalities}{32}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Equilibrium Analysis}{34}{subsection.3.6}%
+\contentsline {subsubsection}{\numberline {3.6.1}Existence}{34}{subsubsection.3.6.1}%
+\contentsline {subsubsection}{\numberline {3.6.2}Price of Anarchy with Market}{34}{subsubsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.7}Complexity}{36}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}Dealing with Intractibility}{37}{subsection.3.8}%
+\contentsline {section}{\numberline {4\hspace {1em}}\nobreakspace {}\textbf {Multiagent Reinforcement Learning}}{38}{section*.8}%
+\contentsline {subsection}{\numberline {4.1}Weaker Equilibrium Concepts}{38}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Coarse Correlated Equilibrium}{38}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Extension to Sequential Games}{39}{subsubsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.2}No-Regret Learning and CCE Convergence}{39}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}No-Regret Algorithms}{40}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}From Normal-Form to Extensive-Form via Meta-Games}{40}{subsubsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.3}MARL Framework for the MMATPG}{42}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Policy Architecture: Multi-Agent Decision Transformer}{42}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Policy Optimization: MAPPO}{43}{subsubsection.4.3.2}%
+\contentsline {paragraph}{\numberline {4.3.2.1}Centralized Training, Decentralized Execution (CTDE).}{43}{paragraph.4.3.2.1}%
+\contentsline {paragraph}{\numberline {4.3.2.2}Update rule.}{43}{paragraph.4.3.2.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Population-Based Training (Approximate PSRO)}{43}{subsubsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.4}Curriculum Learning}{44}{subsubsection.4.3.4}%
+\contentsline {subsection}{\numberline {4.4}Convergence Guarantees}{44}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Main Convergence Theorem}{44}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Efficiency of Learned Equilibria}{45}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}Comparison to the Centralized Benchmark}{46}{subsubsection.4.4.3}%
+\contentsline {section}{\numberline {5\hspace {1em}}\nobreakspace {}\textbf {Experiments}}{48}{section*.9}%
+\contentsline {subsection}{\numberline {5.1}Implementation Details}{48}{subsection.5.1}%
+\contentsline {paragraph}{\numberline {5.1.0.1}Formula Universe and Latent Graph}{48}{paragraph.5.1.0.1}%
+\contentsline {paragraph}{\numberline {5.1.0.2}Sequent Compression}{49}{paragraph.5.1.0.2}%
+\contentsline {paragraph}{\numberline {5.1.0.3}Proof Kernel}{49}{paragraph.5.1.0.3}%
+\contentsline {paragraph}{\numberline {5.1.0.4}Other Kernels, Market, and Training}{49}{paragraph.5.1.0.4}%
+\contentsline {subsection}{\numberline {5.2}Experimental Setup}{50}{subsection.5.2}%
+\contentsline {paragraph}{\numberline {5.2.0.1}Instance parameters.}{50}{paragraph.5.2.0.1}%
+\contentsline {paragraph}{\numberline {5.2.0.2}Baselines.}{50}{paragraph.5.2.0.2}%
+\contentsline {paragraph}{\numberline {5.2.0.3}Metrics.}{50}{paragraph.5.2.0.3}%
+\contentsline {subsection}{\numberline {5.3}Centralized Scheduling}{50}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Externality and Market Internalization}{51}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}MARL Convergence and Equilibrium Quality}{51}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Ablations}{54}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Scaling}{54}{subsection.5.7}%
+\contentsline {subsubsection}{\numberline {5.7.1}Scaling with Task Graph Size}{54}{subsubsection.5.7.1}%
+\contentsline {subsubsection}{\numberline {5.7.2}Scaling with Agent Count}{55}{subsubsection.5.7.2}%
+\contentsline {section}{\numberline {6\hspace {1em}}\nobreakspace {}\textbf {Application: Neural Theorem Proving}}{58}{section*.22}%
+\contentsline {subsection}{\numberline {6.1}Background}{58}{subsection.6.1}%
+\contentsline {subsubsection}{\numberline {6.1.1}Formal Mathematics and Lean\nobreakspace {}4}{58}{subsubsection.6.1.1}%
+\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{58}{subsubsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.2}The Agora Platform}{59}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{59}{subsubsection.6.2.1}%
+\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{59}{paragraph.6.2.1.1}%
+\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{60}{paragraph.6.2.1.2}%
+\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{60}{paragraph.6.2.1.3}%
+\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{60}{paragraph.6.2.1.4}%
+\contentsline {subsubsection}{\numberline {6.2.2}Verification}{60}{subsubsection.6.2.2}%
+\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{61}{paragraph.6.2.2.1}%
+\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{61}{paragraph.6.2.2.2}%
+\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{61}{paragraph.6.2.2.3}%
+\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{61}{subsubsection.6.2.3}%
+\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{61}{paragraph.6.2.3.1}%
+\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{62}{paragraph.6.2.3.2}%
+\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{63}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{63}{subsubsection.6.3.1}%
+\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{63}{paragraph.6.3.1.1}%
+\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{64}{paragraph.6.3.1.2}%
+\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{64}{subsubsection.6.3.2}%
+\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{64}{paragraph.6.3.2.1}%
+\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{65}{subsubsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.4}Experimental Setup}{66}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{66}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{66}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{66}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{67}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{68}{subsubsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.5}Results}{69}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{69}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{69}{subsubsection.6.5.2}%
+\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{69}{subsubsection.6.5.3}%
+\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results}{69}{subsubsection.6.5.4}%
+\contentsline {paragraph}{\numberline {6.5.4.1}Case Study: Dependency Chain Navigation}{69}{paragraph.6.5.4.1}%
+\contentsline {paragraph}{\numberline {6.5.4.2}Market Behavior}{69}{paragraph.6.5.4.2}%
+\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{71}{section*.31}%
+\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{72}{section*.32}%
