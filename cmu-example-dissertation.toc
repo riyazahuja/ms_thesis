@@ -2,12 +2,12 @@
 \contentsline {chapter}{\textbf {List of Tables}}{x}{Doc-Start}%
 \contentsline {section}{\numberline {1\hspace {1em}}\nobreakspace {}\textbf {Introduction}}{1}{section*.1}%
 \contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Thesis Overview}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.2}Thesis Overview}{2}{subsection.1.2}%
 \contentsline {paragraph}{\numberline {1.2.0.1}Chapter 2: Centralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.1}%
 \contentsline {paragraph}{\numberline {1.2.0.2}Chapter 3: Decentralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.2}%
 \contentsline {paragraph}{\numberline {1.2.0.3}Chapter 4: Multi-Agent Reinforcement Learning.}{3}{paragraph.1.2.0.3}%
 \contentsline {paragraph}{\numberline {1.2.0.4}Chapter 5: Experiments.}{3}{paragraph.1.2.0.4}%
-\contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{4}{paragraph.1.2.0.5}%
+\contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{3}{paragraph.1.2.0.5}%
 \contentsline {subsection}{\numberline {1.3}Contributions}{4}{subsection.1.3}%
 \contentsline {section}{\numberline {2\hspace {1em}}\nobreakspace {}\textbf {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}%
 \contentsline {subsection}{\numberline {2.1}Background}{5}{subsection.2.1}%
@@ -109,39 +109,51 @@
 \contentsline {section}{\numberline {6\hspace {1em}}\nobreakspace {}\textbf {Application: Neural Theorem Proving}}{58}{section*.22}%
 \contentsline {subsection}{\numberline {6.1}Background}{58}{subsection.6.1}%
 \contentsline {subsubsection}{\numberline {6.1.1}Formal Mathematics and Lean\nobreakspace {}4}{58}{subsubsection.6.1.1}%
-\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{58}{subsubsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.2}The Agora Platform}{59}{subsection.6.2}%
-\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{59}{subsubsection.6.2.1}%
-\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{59}{paragraph.6.2.1.1}%
-\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{60}{paragraph.6.2.1.2}%
-\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{60}{paragraph.6.2.1.3}%
-\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{60}{paragraph.6.2.1.4}%
-\contentsline {subsubsection}{\numberline {6.2.2}Verification}{60}{subsubsection.6.2.2}%
-\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{61}{paragraph.6.2.2.1}%
-\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{61}{paragraph.6.2.2.2}%
-\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{61}{paragraph.6.2.2.3}%
-\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{61}{subsubsection.6.2.3}%
-\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{61}{paragraph.6.2.3.1}%
-\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{62}{paragraph.6.2.3.2}%
-\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{63}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{63}{subsubsection.6.3.1}%
-\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{63}{paragraph.6.3.1.1}%
-\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{64}{paragraph.6.3.1.2}%
-\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{64}{subsubsection.6.3.2}%
-\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{64}{paragraph.6.3.2.1}%
-\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{65}{subsubsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.4}Experimental Setup}{66}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{66}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{66}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{66}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{67}{subsubsection.6.4.4}%
-\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{68}{subsubsection.6.4.5}%
-\contentsline {subsection}{\numberline {6.5}Results}{69}{subsection.6.5}%
-\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{69}{subsubsection.6.5.1}%
-\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{69}{subsubsection.6.5.2}%
-\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{69}{subsubsection.6.5.3}%
-\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results}{69}{subsubsection.6.5.4}%
-\contentsline {paragraph}{\numberline {6.5.4.1}Case Study: Dependency Chain Navigation}{69}{paragraph.6.5.4.1}%
-\contentsline {paragraph}{\numberline {6.5.4.2}Market Behavior}{69}{paragraph.6.5.4.2}%
-\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{71}{section*.31}%
-\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{72}{section*.32}%
+\contentsline {paragraph}{\numberline {6.1.1.1}Proof assistants and the kernel trust model.}{58}{paragraph.6.1.1.1}%
+\contentsline {paragraph}{\numberline {6.1.1.2}Lean\nobreakspace {}4 and Mathlib.}{59}{paragraph.6.1.1.2}%
+\contentsline {paragraph}{\numberline {6.1.1.3}The coordination structure of formalization.}{59}{paragraph.6.1.1.3}%
+\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{60}{subsubsection.6.1.2}%
+\contentsline {paragraph}{\numberline {6.1.2.1}Tactic-level proof search.}{60}{paragraph.6.1.2.1}%
+\contentsline {paragraph}{\numberline {6.1.2.2}Agentic LLM provers.}{60}{paragraph.6.1.2.2}%
+\contentsline {paragraph}{\numberline {6.1.2.3}The coordination gap.}{60}{paragraph.6.1.2.3}%
+\contentsline {paragraph}{\numberline {6.1.2.4}Formal mathematics as an allocation problem.}{61}{paragraph.6.1.2.4}%
+\contentsline {subsection}{\numberline {6.2}The Agora Platform}{61}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{61}{subsubsection.6.2.1}%
+\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{61}{paragraph.6.2.1.1}%
+\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{63}{paragraph.6.2.1.2}%
+\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{63}{paragraph.6.2.1.3}%
+\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{63}{paragraph.6.2.1.4}%
+\contentsline {subsubsection}{\numberline {6.2.2}Verification}{63}{subsubsection.6.2.2}%
+\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{63}{paragraph.6.2.2.1}%
+\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{64}{paragraph.6.2.2.2}%
+\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{64}{paragraph.6.2.2.3}%
+\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{64}{subsubsection.6.2.3}%
+\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{64}{paragraph.6.2.3.1}%
+\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{65}{paragraph.6.2.3.2}%
+\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{66}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{66}{subsubsection.6.3.1}%
+\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{66}{paragraph.6.3.1.1}%
+\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{67}{paragraph.6.3.1.2}%
+\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{67}{subsubsection.6.3.2}%
+\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{67}{paragraph.6.3.2.1}%
+\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{69}{subsubsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.4}Experimental Setup}{69}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{69}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{69}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{71}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{72}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{72}{subsubsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.5}Results}{73}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{73}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{74}{subsubsection.6.5.2}%
+\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{74}{subsubsection.6.5.3}%
+\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results: A Case Study in Distributed Proof Development}{74}{subsubsection.6.5.4}%
+\contentsline {paragraph}{\numberline {6.5.4.1}Bottom of the chain: conjectured helper lemmas.}{76}{paragraph.6.5.4.1}%
+\contentsline {paragraph}{\numberline {6.5.4.2}The first target: \texttt {rect\_subset\_iff}.}{76}{paragraph.6.5.4.2}%
+\contentsline {paragraph}{\numberline {6.5.4.3}Parallel work on the other branch.}{77}{paragraph.6.5.4.3}%
+\contentsline {paragraph}{\numberline {6.5.4.4}Parallel conjecturing and the utility branch.}{77}{paragraph.6.5.4.4}%
+\contentsline {paragraph}{\numberline {6.5.4.5}Closing the square branch.}{78}{paragraph.6.5.4.5}%
+\contentsline {paragraph}{\numberline {6.5.4.6}Closing the target.}{79}{paragraph.6.5.4.6}%
+\contentsline {paragraph}{\numberline {6.5.4.7}Coordination summary.}{79}{paragraph.6.5.4.7}%
+\contentsline {section}{\numberline {7\hspace {1em}}\nobreakspace {}\textbf {Conclusion}}{81}{section*.31}%
+\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{82}{section*.32}%

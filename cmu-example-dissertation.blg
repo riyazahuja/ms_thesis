@@ -2,11 +2,16 @@ This is BibTeX, Version 0.99d (TeX Live 2023)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: cmu-example-dissertation.aux
 The style file: unsrtnat.bst
-I found no \citation commands---while reading file cmu-example-dissertation.aux
 Database file #1: supporting-files/thesis.bib
+Warning--I didn't find a database entry for "polu2020generative"
+Warning--I didn't find a database entry for "han2021proof"
+Warning--I didn't find a database entry for "yang2023leandojo"
+Warning--I didn't find a database entry for "zheng2021minif2f"
+Warning--I didn't find a database entry for "liu2023fimo"
+Warning--I didn't find a database entry for "hu2024minictx"
 You've used 0 entries,
             2481 wiz_defined-function locations,
-            551 strings with 4475 characters,
+            557 strings with 4561 characters,
 and the built_in function-call counts, 34 in all, are:
 = -- 0
 > -- 0
@@ -45,4 +50,4 @@ warning$ -- 0
 while$ -- 0
 width$ -- 0
 write$ -- 7
-(There was 1 error message)
+(There were 6 warnings)

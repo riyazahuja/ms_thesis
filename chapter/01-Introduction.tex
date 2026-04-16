@@ -5,19 +5,20 @@
 
 \subsection{Motivation}
 
-\textbf{TODO Replace with PNT}
-In 1637, Pierre de Fermat famously conjectured that for $n>2$, there are no positive integer solutions to the equation $x^n + y^n = z^n$. Despite Fermat's claim to have a proof of this statement, his textbook margins provided too little space for his supposed proof, and thus this conjecture remained unproven for 358 years. It was only in 1994 that Andrew Wiles, building on decades of work by many mathematicians across domains, finally proved Fermat's Last Theorem.
+In 1896, Jacques Hadamard and Charles Jean de la Vallée Poussin independently proved one of the central results of nineteenth-century mathematics: the number of primes less than $n$ grows asymptotically as $n/\ln n$. The Prime Number Theorem had been conjectured by Gauss and Legendre nearly a century earlier from numerical evidence, but its proof required mathematical tools entirely foreign at the time. Indeed, it took Riemann's study of the deep connection between the distribution of primes and the zeros of the zeta function --- combined with subsequent advances in contour integration, the theory of entire functions, and analytic continuation --- that ultimately made the proof possible. The PNT was not proved by a direct combinatorial or number theoretic attack on the primes, rather, it took centuries of collaborative development of shared infrastructure and techniques across disparate domains of mathematics before the pieces could be put together.
 
-Wiles' proof of Fermat's Last Theorem did not arise from a direct attack on the original equation. Instead, it emerged from deep developments and decades of study of domains seemingly - at first glance - far removed from the scope of the original conjecture. Throughout the 20th century, the theory of elliptic curves and modular forms was developed extensively, not only for the purposes of resolving FLT, but rather for a more fundamental understanding of the connections between arithmetic and geometric objects (elliptic curves over $\mathbb{Q}$) with complex analysis. Indeed, even Wiles' own proof of FLT was but a corrolary of his proof of the deeper Taniyama-Shimura conjecture, which was developed as a central question of the unification of large branches of mathematics. And yet, without these foundational contributions to the theory -- motivated not by the resolution of a particular conjecture but rather in search of a deeper understanding of the mathematical landscape -- the proof of FLT would not have been conceivable, as the language to discuss it would not exist.
 \begin{figure}
     \centering
     % \includegraphics[width=\textwidth]{figures/flt_dependency_graph_placeholder.pdf}
-   \includegraphics[scale=0.08]{PNT_dependency.png}
-    \caption{Schematic dependency graph for the Lean formalization effort around Fermat's Last Theorem.}
-    \label{fig:flt-dependency-graph}
+    \includegraphics[scale=0.08]{PNT_dependency.png}
+    \caption{Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance.}
+    \label{fig:pnt-dependency-graph}
 \end{figure}
 
+
 This pattern is the rule rather than the exception. Major mathematical breakthroughs almost never arise from isolated effort on a single problem. They emerge from the collaborative, cumulative construction of a shared intellectual infrastructure: definitions, lemmas, techniques, and conceptual frameworks developed by communities of researchers over years or decades.
+
+
 
 This observation extends beyond pure mathematics. In any domain where progress depends on the accumulation of verified, interdependent results (e.g., software verification, scientific modeling, engineering design) the fundamental challenge is the same: how to allocate the efforts of many heterogeneous agents across a large pool of interdependent tasks, where completing one task may reveal or enable others, and where the ultimate goal is to resolve a designated set of targets as efficiently as possible.
 

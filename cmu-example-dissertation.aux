@@ -18,15 +18,15 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1\hspace  {1em}}\nobreakspace  {}\textbf  {Introduction}}{1}{section*.1}\protected@file@percent }
 \newlabel{chap:intro}{{1}{1}{}{section*.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 1}.1}{\ignorespaces Schematic dependency graph for the Lean formalization effort around Fermat's Last Theorem.}}{2}{figure.caption.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 1}.1}{\ignorespaces Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance.}}{2}{figure.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:flt-dependency-graph}{{\relax Figure\nobreakspace  {\relax 1}.1}{2}{Schematic dependency graph for the Lean formalization effort around Fermat's Last Theorem}{figure.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Thesis Overview}{3}{subsection.1.2}\protected@file@percent }
+\newlabel{fig:pnt-dependency-graph}{{\relax Figure\nobreakspace  {\relax 1}.1}{2}{Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Thesis Overview}{2}{subsection.1.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.1}Chapter 2: Centralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.2}Chapter 3: Decentralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.3}Chapter 4: Multi-Agent Reinforcement Learning.}{3}{paragraph.1.2.0.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.4}Chapter 5: Experiments.}{3}{paragraph.1.2.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{4}{paragraph.1.2.0.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{3}{paragraph.1.2.0.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Contributions}{4}{subsection.1.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2\hspace  {1em}}\nobreakspace  {}\textbf  {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}\protected@file@percent }
 \newlabel{chap:centralized}{{2}{5}{Contributions}{section*.3}{}}
@@ -224,82 +224,117 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Background}{58}{subsection.6.1}\protected@file@percent }
 \newlabel{sec:lean-background}{{6.1}{58}{Background}{subsection.6.1}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Formal Mathematics and Lean\nobreakspace  {}4}{58}{subsubsection.6.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{58}{subsubsection.6.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}The Agora Platform}{59}{subsection.6.2}\protected@file@percent }
-\newlabel{sec:agora}{{6.2}{59}{The Agora Platform}{subsection.6.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{59}{subsubsection.6.2.1}\protected@file@percent }
-\newlabel{sec:agora-arch}{{6.2.1}{59}{Architecture}{subsubsection.6.2.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.1}{\ignorespaces Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}}{59}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:agora-arch}{{\relax Figure\nobreakspace  {\relax 6}.1}{59}{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market}{figure.caption.23}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{59}{paragraph.6.2.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{60}{paragraph.6.2.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{60}{paragraph.6.2.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{60}{paragraph.6.2.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Verification}{60}{subsubsection.6.2.2}\protected@file@percent }
-\newlabel{sec:verified-agora}{{6.2.2}{60}{Verification}{subsubsection.6.2.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{61}{paragraph.6.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{61}{paragraph.6.2.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{61}{paragraph.6.2.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{61}{subsubsection.6.2.3}\protected@file@percent }
-\newlabel{sec:inference-mapping}{{6.2.3}{61}{Inference-Time MMATPG Mapping}{subsubsection.6.2.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{61}{paragraph.6.2.3.1}\protected@file@percent }
-\newlabel{sec:time-discretization}{{6.2.3.1}{61}{Time Discretization}{paragraph.6.2.3.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{62}{paragraph.6.2.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{63}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:training}{{6.3}{63}{Synthetic Training Data Generation}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{63}{subsubsection.6.3.1}\protected@file@percent }
-\newlabel{sec:dep-extraction}{{6.3.1}{63}{Offline MMATPG Extraction}{subsubsection.6.3.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{63}{paragraph.6.3.1.1}\protected@file@percent }
-\newlabel{sec:util-extraction}{{6.3.1.1}{63}{Utility Graph Extraction}{paragraph.6.3.1.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{64}{paragraph.6.3.1.2}\protected@file@percent }
-\newlabel{sec:kernel-calibration}{{6.3.1.2}{64}{Kernel Calibration}{paragraph.6.3.1.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{64}{subsubsection.6.3.2}\protected@file@percent }
-\newlabel{sec:synthetic-dag}{{6.3.2}{64}{Synthetic DAG Generation}{subsubsection.6.3.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{64}{paragraph.6.3.2.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.2}{\ignorespaces Real PNT dependency graph (top left) and synthetic DAGs at three curriculum scales (top right, bottom row), all generated with PNT-calibrated parameters. Structural similarity across scales enables curriculum transfer.}}{65}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:graph-comparison}{{\relax Figure\nobreakspace  {\relax 6}.2}{65}{Real PNT dependency graph (top left) and synthetic DAGs at three curriculum scales (top right, bottom row), all generated with PNT-calibrated parameters. Structural similarity across scales enables curriculum transfer}{figure.caption.24}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{65}{subsubsection.6.3.3}\protected@file@percent }
-\newlabel{sec:gap}{{6.3.3}{65}{Training-to-Inference Gap}{subsubsection.6.3.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Experimental Setup}{66}{subsection.6.4}\protected@file@percent }
-\newlabel{sec:exp-setup}{{6.4}{66}{Experimental Setup}{subsection.6.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{66}{subsubsection.6.4.1}\protected@file@percent }
-\newlabel{sec:minictx}{{6.4.1}{66}{Benchmark: MiniCTX PNT}{subsubsection.6.4.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.1}{\ignorespaces PNT benchmark statistics and hyperparameters.}}{66}{table.caption.25}\protected@file@percent }
-\newlabel{tab:pnt-stats}{{\relax Table\nobreakspace  {\relax 6}.1}{66}{PNT benchmark statistics and hyperparameters}{table.caption.25}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{66}{subsubsection.6.4.2}\protected@file@percent }
-\newlabel{sec:strategy-training}{{6.4.2}{66}{Strategy Module Training}{subsubsection.6.4.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{66}{subsubsection.6.4.3}\protected@file@percent }
-\newlabel{sec:systems}{{6.4.3}{66}{Systems Under Comparison}{subsubsection.6.4.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{67}{subsubsection.6.4.4}\protected@file@percent }
-\newlabel{sec:protocol}{{6.4.4}{67}{Evaluation Protocol}{subsubsection.6.4.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{68}{subsubsection.6.4.5}\protected@file@percent }
-\newlabel{sec:limitations}{{6.4.5}{68}{Limitations}{subsubsection.6.4.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.2}{\ignorespaces Proof completion on PNT at full budget ($12$ agents where applicable).}}{69}{table.caption.26}\protected@file@percent }
-\newlabel{tab:app-overall}{{\relax Table\nobreakspace  {\relax 6}.2}{69}{Proof completion on PNT at full budget ($12$ agents where applicable)}{table.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.3}{\ignorespaces Anytime proof completion rate.}}{69}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:anytime}{{\relax Figure\nobreakspace  {\relax 6}.3}{69}{Anytime proof completion rate}{figure.caption.27}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Results}{69}{subsection.6.5}\protected@file@percent }
-\newlabel{sec:app-results}{{6.5}{69}{Results}{subsection.6.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{69}{subsubsection.6.5.1}\protected@file@percent }
-\newlabel{sec:proof-completion}{{6.5.1}{69}{Proof Completion}{subsubsection.6.5.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{69}{subsubsection.6.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{69}{subsubsection.6.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results}{69}{subsubsection.6.5.4}\protected@file@percent }
-\newlabel{sec:qualitative}{{6.5.4}{69}{Qualitative Results}{subsubsection.6.5.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.1}Case Study: Dependency Chain Navigation}{69}{paragraph.6.5.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.2}Market Behavior}{69}{paragraph.6.5.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.3}{\ignorespaces Coordination metrics (multi-agent systems only).}}{70}{table.caption.28}\protected@file@percent }
-\newlabel{tab:coordination}{{\relax Table\nobreakspace  {\relax 6}.3}{70}{Coordination metrics (multi-agent systems only)}{table.caption.28}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.4}{\ignorespaces Dependency chain navigation: uncoordinated (A2), scaffold (B1), strategy (C1).}}{70}{figure.caption.29}\protected@file@percent }
-\newlabel{fig:case-study}{{\relax Figure\nobreakspace  {\relax 6}.4}{70}{Dependency chain navigation: uncoordinated (A2), scaffold (B1), strategy (C1)}{figure.caption.29}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.5}{\ignorespaces Market behavior: scaffold only (B1) vs.\ strategy module (C1).}}{70}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:market-behavior}{{\relax Figure\nobreakspace  {\relax 6}.5}{70}{Market behavior: scaffold only (B1) vs.\ strategy module (C1)}{figure.caption.30}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{71}{section*.31}\protected@file@percent }
-\newlabel{chap:conclusion}{{7}{71}{Market Behavior}{section*.31}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.1}Proof assistants and the kernel trust model.}{58}{paragraph.6.1.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.2}Lean\nobreakspace  {}4 and Mathlib.}{59}{paragraph.6.1.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.3}The coordination structure of formalization.}{59}{paragraph.6.1.1.3}\protected@file@percent }
+\citation{polu2020generative}
+\citation{han2021proof}
+\citation{yang2023leandojo}
+\citation{zheng2021minif2f}
+\citation{liu2023fimo}
+\citation{hu2024minictx}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{60}{subsubsection.6.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.1}Tactic-level proof search.}{60}{paragraph.6.1.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.2}Agentic LLM provers.}{60}{paragraph.6.1.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.3}The coordination gap.}{60}{paragraph.6.1.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.4}Formal mathematics as an allocation problem.}{61}{paragraph.6.1.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}The Agora Platform}{61}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:agora}{{6.2}{61}{The Agora Platform}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{61}{subsubsection.6.2.1}\protected@file@percent }
+\newlabel{sec:agora-arch}{{6.2.1}{61}{Architecture}{subsubsection.6.2.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{61}{paragraph.6.2.1.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.1}{\ignorespaces Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}}{62}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:agora-arch}{{\relax Figure\nobreakspace  {\relax 6}.1}{62}{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market}{figure.caption.23}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{63}{paragraph.6.2.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{63}{paragraph.6.2.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{63}{paragraph.6.2.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Verification}{63}{subsubsection.6.2.2}\protected@file@percent }
+\newlabel{sec:verified-agora}{{6.2.2}{63}{Verification}{subsubsection.6.2.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{63}{paragraph.6.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{64}{paragraph.6.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{64}{paragraph.6.2.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{64}{subsubsection.6.2.3}\protected@file@percent }
+\newlabel{sec:inference-mapping}{{6.2.3}{64}{Inference-Time MMATPG Mapping}{subsubsection.6.2.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{64}{paragraph.6.2.3.1}\protected@file@percent }
+\newlabel{sec:time-discretization}{{6.2.3.1}{64}{Time Discretization}{paragraph.6.2.3.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{65}{paragraph.6.2.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{66}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:training}{{6.3}{66}{Synthetic Training Data Generation}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{66}{subsubsection.6.3.1}\protected@file@percent }
+\newlabel{sec:dep-extraction}{{6.3.1}{66}{Offline MMATPG Extraction}{subsubsection.6.3.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{66}{paragraph.6.3.1.1}\protected@file@percent }
+\newlabel{sec:util-extraction}{{6.3.1.1}{66}{Utility Graph Extraction}{paragraph.6.3.1.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{67}{paragraph.6.3.1.2}\protected@file@percent }
+\newlabel{sec:kernel-calibration}{{6.3.1.2}{67}{Kernel Calibration}{paragraph.6.3.1.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{67}{subsubsection.6.3.2}\protected@file@percent }
+\newlabel{sec:synthetic-dag}{{6.3.2}{67}{Synthetic DAG Generation}{subsubsection.6.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{67}{paragraph.6.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{69}{subsubsection.6.3.3}\protected@file@percent }
+\newlabel{sec:gap}{{6.3.3}{69}{Training-to-Inference Gap}{subsubsection.6.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Experimental Setup}{69}{subsection.6.4}\protected@file@percent }
+\newlabel{sec:exp-setup}{{6.4}{69}{Experimental Setup}{subsection.6.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{69}{subsubsection.6.4.1}\protected@file@percent }
+\newlabel{sec:minictx}{{6.4.1}{69}{Benchmark: MiniCTX PNT}{subsubsection.6.4.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{69}{subsubsection.6.4.2}\protected@file@percent }
+\newlabel{sec:strategy-training}{{6.4.2}{69}{Strategy Module Training}{subsubsection.6.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.2}{\ignorespaces Comparison between the extracted Prime Number Theorem utility graph and derived synthetic utility graphs sampled across decreasing game sizes.}}{70}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:graph-comparison}{{\relax Figure\nobreakspace  {\relax 6}.2}{70}{Comparison between the extracted Prime Number Theorem utility graph and derived synthetic utility graphs sampled across decreasing game sizes}{figure.caption.24}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {PNT}}}{70}{subfigure.2.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$n=1024$}}}{70}{subfigure.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {$n=512$}}}{70}{subfigure.2.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {$n=256$}}}{70}{subfigure.2.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces {$n=128$}}}{70}{subfigure.2.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.1}{\ignorespaces PNT benchmark statistics and hyperparameters.}}{71}{table.caption.25}\protected@file@percent }
+\newlabel{tab:pnt-stats}{{\relax Table\nobreakspace  {\relax 6}.1}{71}{PNT benchmark statistics and hyperparameters}{table.caption.25}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{71}{subsubsection.6.4.3}\protected@file@percent }
+\newlabel{sec:systems}{{6.4.3}{71}{Systems Under Comparison}{subsubsection.6.4.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{72}{subsubsection.6.4.4}\protected@file@percent }
+\newlabel{sec:protocol}{{6.4.4}{72}{Evaluation Protocol}{subsubsection.6.4.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{72}{subsubsection.6.4.5}\protected@file@percent }
+\newlabel{sec:limitations}{{6.4.5}{72}{Limitations}{subsubsection.6.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Results}{73}{subsection.6.5}\protected@file@percent }
+\newlabel{sec:app-results}{{6.5}{73}{Results}{subsection.6.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{73}{subsubsection.6.5.1}\protected@file@percent }
+\newlabel{sec:proof-completion}{{6.5.1}{73}{Proof Completion}{subsubsection.6.5.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.2}{\ignorespaces Proof completion on PNT at full budget ($12$ agents where applicable).}}{73}{table.caption.26}\protected@file@percent }
+\newlabel{tab:app-overall}{{\relax Table\nobreakspace  {\relax 6}.2}{73}{Proof completion on PNT at full budget ($12$ agents where applicable)}{table.caption.26}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{74}{subsubsection.6.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.3}{\ignorespaces Proof completion rate.}}{74}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:anytime}{{\relax Figure\nobreakspace  {\relax 6}.3}{74}{Proof completion rate}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{74}{subsubsection.6.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.3}{\ignorespaces Coordination metrics (multi-agent systems only).}}{74}{table.caption.28}\protected@file@percent }
+\newlabel{tab:coordination}{{\relax Table\nobreakspace  {\relax 6}.3}{74}{Coordination metrics (multi-agent systems only)}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results: A Case Study in Distributed Proof Development}{74}{subsubsection.6.5.4}\protected@file@percent }
+\newlabel{sec:qualitative}{{6.5.4}{74}{Qualitative Results: A Case Study in Distributed Proof Development}{subsubsection.6.5.4}{}}
+\newlabel{lst:target}{{\relax Listing\nobreakspace  {\relax 6}.1}{75}{Target lemma \texttt {SmallSquareInRectangle} (lines 826--835)}{lstlisting.6.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.1}{\ignorespaces Target lemma \texttt  {SmallSquareInRectangle} (lines 826--835).}}{75}{lstlisting.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.4}{\ignorespaces Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt  {SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt  {left\_mem\_rect}, \texttt  {right\_mem\_rect}, \texttt  {RectSubRect'}) were introduced as \emph  {conjectures} by agents during proof construction rather than being listed as targets a priori.}}{75}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:case-study-chain}{{\relax Figure\nobreakspace  {\relax 6}.4}{75}{Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt {SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt {left\_mem\_rect}, \texttt {right\_mem\_rect}, \texttt {RectSubRect'}) were introduced as \emph {conjectures} by agents during proof construction rather than being listed as targets a priori}{figure.caption.29}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.1}Bottom of the chain: conjectured helper lemmas.}{76}{paragraph.6.5.4.1}\protected@file@percent }
+\newlabel{lst:leaves}{{\relax Listing\nobreakspace  {\relax 6}.2}{76}{Conjectured leaf lemmas, introduced and resolved by $\alpha _2$ at epoch $t\!\approx \!42$ (lines 499--509)}{lstlisting.6.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.2}{\ignorespaces Conjectured leaf lemmas, introduced and resolved by $\alpha _2$ at epoch $t\!\approx \!42$ (lines 499--509).}}{76}{lstlisting.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.2}The first target: \texttt  {rect\_subset\_iff}.}{76}{paragraph.6.5.4.2}\protected@file@percent }
+\newlabel{lst:rectsubsetiff}{{\relax Listing\nobreakspace  {\relax 6}.3}{76}{\texttt {rect\_subset\_iff}, resolved by $\alpha _2$ (lines 511--520)}{lstlisting.6.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.3}{\ignorespaces \texttt  {rect\_subset\_iff}, resolved by $\alpha _2$ (lines 511--520).}}{76}{lstlisting.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.3}Parallel work on the other branch.}{77}{paragraph.6.5.4.3}\protected@file@percent }
+\newlabel{lst:nhdsbasis}{{\relax Listing\nobreakspace  {\relax 6}.4}{77}{\texttt {Complex.nhds\_hasBasis\_square}, resolved by $\alpha _3$ (lines 787--801). Longest and most technically demanding proof in the chain}{lstlisting.6.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.4}{\ignorespaces \texttt  {Complex.nhds\_hasBasis\_square}, resolved by $\alpha _3$ (lines 787--801). Longest and most technically demanding proof in the chain.}}{77}{lstlisting.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.4}Parallel conjecturing and the utility branch.}{77}{paragraph.6.5.4.4}\protected@file@percent }
+\newlabel{lst:rectsubrectp}{{\relax Listing\nobreakspace  {\relax 6}.5}{78}{\texttt {RectSubRect'}, conjectured and resolved by $\alpha _1$ (lines 546--558), immediately after $\alpha _2$'s \texttt {rect\_subset\_iff} publication}{lstlisting.6.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.5}{\ignorespaces \texttt  {RectSubRect'}, conjectured and resolved by $\alpha _1$ (lines 546--558), immediately after $\alpha _2$'s \texttt  {rect\_subset\_iff} publication.}}{78}{lstlisting.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.5}Closing the square branch.}{78}{paragraph.6.5.4.5}\protected@file@percent }
+\newlabel{lst:squaresquare}{{\relax Listing\nobreakspace  {\relax 6}.6}{78}{\texttt {square\_subset\_square}, resolved by $\alpha _1$ at $t\!\approx \!66$ (lines 819--824)}{lstlisting.6.6}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.6}{\ignorespaces \texttt  {square\_subset\_square}, resolved by $\alpha _1$ at $t\!\approx \!66$ (lines 819--824).}}{78}{lstlisting.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.6}Closing the target.}{79}{paragraph.6.5.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.7}Coordination summary.}{79}{paragraph.6.5.4.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.4}{\ignorespaces Timeline of the \texttt  {SmallSquareInRectangle} dependency chain, as resolved by three agents in the Agora + Strategy run.}}{79}{table.caption.30}\protected@file@percent }
+\newlabel{tab:case-study}{{\relax Table\nobreakspace  {\relax 6}.4}{79}{Timeline of the \texttt {SmallSquareInRectangle} dependency chain, as resolved by three agents in the Agora + Strategy run}{table.caption.30}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{81}{section*.31}\protected@file@percent }
+\newlabel{chap:conclusion}{{7}{81}{Coordination summary}{section*.31}{}}
 \bibdata{supporting-files/thesis}
 \global\l@chapter@indent 76.3742pt\global\l@appendix@indent 76.3742pt
 \global\newcount\cmu@redefined@appendix@saved\global\cmu@redefined@appendix@saved=0 
 \global\newcount\cmu@appendicies\global\cmu@appendicies=0 
-\@writefile{toc}{\contentsline {section}{{\raggedright  \bfseries  Bibliography\cmu@ln@output }}{72}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{{\raggedright  \bfseries  Bibliography\cmu@ln@output }}{82}{section*.32}\protected@file@percent }
 \bibstyle{unsrtnat}
-\gdef \@abspage@last{83}
+\gdef \@abspage@last{93}

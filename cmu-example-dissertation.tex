@@ -49,9 +49,25 @@
 \usepackage{listings}           % For inserting programming code
 \usepackage{rotating}           % For inserting sideways tables and figures
 \usepackage{lipsum}             % For dummy text. You can remove this once you have remove all of the example text. 
+\usepackage{circuitikz}         % For TikZ/circuit diagrams
+\usetikzlibrary{arrows.meta}
 
 \usepackage{my-Equations}       % Where I define frequently used equations or symbols for easy use
 \usepackage{multirow}
+\usepackage{fvextra} % Needed for verbatim in multicol
+
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+
+\usepackage{listings}
+%\pdfoutput=1
+%\input{lstlean.tex}
+\def\lstlanguagefiles{lstlean.sty}
+\lstset{language=lean}
 % For using row-spanning and column-spanning in tables:
 %\usepackage{multirow}
 
@@ -71,7 +87,7 @@
 %please input your information under this section
 
 %Your thesis title
-\title{Task Allocation via Verifiable Market Games}
+\title{Multi-Agent Theorem Proving}
 % \subtitle{Multiagent Reinforcement Learning and Applications to Formal Mathematics}
 
 % >>>>>>>>> PERSONAL INFORMATION <<<<<<<<<
@@ -87,7 +103,7 @@
 \author{Riyaz Ahuja}        % your NAME, don't forget your middle names.
 
 % Optional Metadata for Title Page
-\thesisdate{March 26, 2026}
+\thesisdate{April 16, 2026}
 % Thesis committee (declare individually), you can also include their affliations, if they are not faculty members at CMU
 \committeememberone{Dr. Prasad Tetali, Chair}
 \committeemembertwo{Dr. Jeremy Avigad}

@@ -9,11 +9,40 @@ We first provide background on formal verification in Lean~4 and the emerging pa
 
 \subsubsection{Formal Mathematics and Lean~4}
 
-\textbf{[TODO: Introduction to proof assistants, CIC, kernel trust model, Lean 4, Mathlib. See commented notes for reference material.]}
+\paragraph{Proof assistants and the kernel trust model.}
+A proof assistant is a software system capable of representing, manipulating, and checking mathematical statements and proofs within a fixed logical foundation. Modern systems implement either set-theoretic foundations (Mizar, Metamath) or dependent type theories (Lean, Rocq, Isabelle/HOL, Agda). The correctness guarantee rests on a key architectural principle, going back to Milner's LCF and de Bruijn's AUTOMATH: isolate a minimal kernel --- a self-contained module implementing only the foundational inference rules --- and require every proof to pass through it. By virtue of its minimality, the kernel can be inspected manually for correctness and serves as a root of trust. Any bug in the elaborator, tactic engine, or automation layer is caught at the kernel boundary: if the kernel accepts a term, the corresponding statement is a theorem of the system, regardless of how the term was produced.
+
+The gap between kernel-level derivations and human-readable mathematical argument is bridged by an elaborator and a high-level vernacular language that supports tactics (proof-producing metaprograms automating repetitive steps), extensible notation, and high-level proof structuring. The process of encoding mathematics in this vernacular is formalization. It is more demanding than informal argumentation --- every detail, edge case, and side condition must be explicitly accounted for --- but produces machine-checkable certificates of correctness.
+
+\paragraph{Lean~4 and Mathlib.}
+Lean~4, whose first stable release appeared in 2023, is distinguished from earlier proof assistants by radical extensibility: nearly all of Lean's implementation (elaborator, compiler, tactic engine) is written in Lean itself, making it straightforward to invoke and modify language internals from user code. This bootstrapped design allows tactics and automation to be written as ordinary Lean programs, reusing production-strength data structures and algorithms without crossing language boundaries.
+
+The primary mathematical library for Lean~4 is Mathlib, a monolithic, collaboratively maintained repository in which every mathematical concept is defined once, in a globally agreed-upon way. As of 2025, Mathlib contains approximately 1.9 million lines of Lean code, growing at roughly 500 thousand lines per year, and covers a broad sweep of modern mathematics: from basic algebra and topology to condensed mathematics, perfectoid spaces, and the independence of the continuum hypothesis. Mathlib's scale and coherence make it the primary substrate for large-scale formalization projects and for training and evaluating neural theorem-proving systems.
+
+\paragraph{The coordination structure of formalization.}
+A key property of Lean projects (and of Mathlib in particular) is that proofs are interdependent. Each declaration's proof may invoke hundreds of prior lemmas, and those lemmas in turn depend on others. This induces a declaration-level directed acyclic graph over the entire library. A consequence of this structure is that formalization is inherently collaborative and cumulative: building a proof of a deep theorem requires not just a clever top-level argument, but the coordinated development of supporting infrastructure that may not yet exist. This is precisely the coordination problem that the MMATPG framework addresses.
+
+Formal verification also enables a mode of decentralized, trustless collaboration that is unusual in mathematics. Because correctness is guaranteed by the kernel rather than by trust in the author, contributors with no prior relationship---and no established reputation in the community---can make verifiable contributions to shared projects. This has enabled large-scale distributed formalization efforts (e.g. the Equational Theories project) that would be difficult to organize under traditional mathematical norms.
+
+
 
 \subsubsection{Neural Theorem Proving with LLMs}
+\textbf{update list/citations based on sides}
+\paragraph{Tactic-level proof search.}
+Early neural theorem provers operate at the level of individual tactic steps. Given a proof state (the current goal and local hypotheses), a model generates a tactic, Lean evaluates it, and the resulting new proof state is fed back. This search-based paradigm --- exemplified by GPT-$f$ \citep{polu2020generative}, PACT \citep{han2021proof}, and ReProver \citep{yang2023leandojo} --- treats each proof obligation as an isolated tree search problem. The model learns a heuristic policy over proof states, typically trained on corpora of human-written proofs extracted from Mathlib or other libraries. Best-first search or Monte Carlo tree search is then used to find a complete proof.
 
-\textbf{[TODO: Introduction to neural theorem proving. Tactic-level search (GPT-f, ReProver) $\to$ agentic approaches (Aristotle, OpenGauss, Claude Code) $\to$ coordination gap. Key point: even SOTA agentic provers treat multi-agent coordination as an afterthought---disjoint target assignments via a central scheduler, no structured mechanism for signaling value, incentivizing publication, or prioritizing dependency-unlocking proofs. The MMATPG framework addresses precisely these coordination failures.]}
+Tactic-level approaches have demonstrated strong performance on benchmarks of isolated lemmas (MiniF2F \citep{zheng2021minif2f}, FIMO \citep{liu2023fimo}) but face a fundamental limitation: they operate in a fixed context, unaware of the broader project structure. They cannot decide which lemma to attempt, in what order, or how their work relates to other obligations. Each proof is attacked as if it existed in isolation.
+
+\paragraph{Agentic LLM provers.}
+More recent systems give LLMs broader autonomy over the formalization process. Rather than generating a single tactic step, an agentic prover can read source files, inspect goal states, write multi-step proofs, submit them for type-checking, interpret error messages, revise, and iterate. Aristotle Agent, OpenGauss, and systems based on Claude Code with Lean LSP access exemplify this paradigm. These agents operate over entire Lean projects, not individual proof states, and can in principle navigate dependency structures by deciding which lemmas to prove in which order.
+
+The MiniCTX benchmark \citep{hu2024minictx} was developed specifically to evaluate this capability: unlike isolated-lemma benchmarks, MiniCTX presents each proof obligation within its full project context, requiring the prover to understand imports, existing definitions, and inter-declaration dependencies. This is a substantially harder setting, and current SOTA systems achieve only partial coverage even on accessible repositories.
+
+\paragraph{The coordination gap.}
+Despite operating at the project level, existing multi-agent agentic provers treat coordination as an afterthought. When multiple agents operate on the same project, they typically receive disjoint target assignments from a central scheduler and interact only through a shared repository. There is no structured mechanism for: (i) signaling which intermediate results would be valuable to other agents, (ii) incentivizing the publication of by-product lemmas that happen to be solved along the way, or (iii) sequencing proof attempts to respect and exploit the dependency structure. The result is duplicated effort, missed dependency-unlocking opportunities, and systematic underinvestment in shared infrastructure---precisely the market failure that the MMATPG framework is designed to address.
+
+\paragraph{Formal mathematics as an allocation problem.}
+The framing of this thesis is that theorem proving at scale is not primarily a search problem (finding a proof of a given statement) but an allocation problem (deciding which agents should attempt which obligations in which order, and how to incentivize the sharing of intermediate results). The search problem---generating a valid proof given a target---is handled by the LLM subagent and is outside the scope of the coordination framework. The allocation problem is what the MMATPG formalizes and what the strategy module learns to solve.
 
 
 \subsection{The Agora Platform}\label{sec:agora}
@@ -22,18 +51,21 @@ Agora is an infrastructure platform that instantiates the MMATPG for real Lean~4
 
 \subsubsection{Architecture}\label{sec:agora-arch}
 
-\begin{figure}[ht]
-\centering
-\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Agora Architecture Diagram]}\\[6pt]
-Block diagram showing the four main components and their interactions:\\[4pt]
-\textbf{Left column (Backend services):} Three stacked boxes: Library Mechanics (port 8001, connects to Lean repos and VerifiedAgora), Market Mechanics (port 8002, connects to PostgreSQL), and Backend Interface (port 8000, MCP endpoint). Arrows show Backend Interface routing to the two mechanics services.\\[4pt]
-\textbf{Right column (Agents):} $n$ agent containers, each containing: LLM (Claude), MCP Auth Proxy, local workspace with project copy, optional Lean LSP. Arrows show MCP traffic from each container to the Backend Interface endpoint.\\[4pt]
-\textbf{Top:} Agent Orchestrator box with arrows to agent containers (provisioning) and to Backend Interface (API key creation, market seeding).\\[4pt]
-\textbf{Bottom:} Shared volumes: \texttt{library\_shared} (mounted into Library Mechanics read-write, into agent containers read-only), PostgreSQL data volume.\\[4pt]
-\textbf{Key annotation:} The MCP Auth Proxy inside each container intercepts tool calls, injects API keys, and rewrites file-based contributions into API calls---so the LLM never handles authentication directly.}}
-\caption{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}
-\label{fig:agora-arch}
-\end{figure}
+% \begin{figure}[ht]
+% \centering
+% \fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Agora Architecture Diagram]}\\[6pt]
+% Block diagram showing the four main components and their interactions:\\[4pt]
+% \textbf{Left column (Backend services):} Three stacked boxes: Library Mechanics (port 8001, connects to Lean repos and VerifiedAgora), Market Mechanics (port 8002, connects to PostgreSQL), and Backend Interface (port 8000, MCP endpoint). Arrows show Backend Interface routing to the two mechanics services.\\[4pt]
+% \textbf{Right column (Agents):} $n$ agent containers, each containing: LLM (Claude), MCP Auth Proxy, local workspace with project copy, optional Lean LSP. Arrows show MCP traffic from each container to the Backend Interface endpoint.\\[4pt]
+% \textbf{Top:} Agent Orchestrator box with arrows to agent containers (provisioning) and to Backend Interface (API key creation, market seeding).\\[4pt]
+% \textbf{Bottom:} Shared volumes: \texttt{library\_shared} (mounted into Library Mechanics read-write, into agent containers read-only), PostgreSQL data volume.\\[4pt]
+% \textbf{Key annotation:} The MCP Auth Proxy inside each container intercepts tool calls, injects API keys, and rewrites file-based contributions into API calls---so the LLM never handles authentication directly.}}
+% \caption{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}
+% \label{fig:agora-arch}
+% \end{figure}
+\input{figures/agora_diagram}
+
+
 
 The Agora runtime consists of three backend services and an external orchestration harness.
 
@@ -121,8 +153,21 @@ Normalized rarity maps to difficulty:
 d(\phi) = 0.05 + 0.90 \cdot \mathrm{normalized\_rarity}(\phi) \in [0.05, 0.95].
 \]
 
+Note for evaluations, we bucket targets into difficulty tiers based on $d(\phi)$:
+\begin{itemize}
+    \item \textbf{Easy} ($d(\phi) < 0.40$): Targets with few or no sorry'd dependencies, whose prerequisites are mostly standard lemmas (high relative frequency). 
+    % These are primarily algebraic manipulations, norm estimates, or direct applications of existing Mathlib infrastructure. An LLM agent can in principle attempt them immediately, without first resolving other targets. Examples from the PNT project: basic properties of the von Mangoldt function, elementary bounds on divisor sums.
+ 
+    \item \textbf{Medium} ($0.40 \le d(\phi) < 0.70$, $n=41$): Targets with a mix of standard and specialized prerequisites, or which depend on one to three other sorry'd targets. These require some domain-specific reasoning, but the dependency chain is shallow enough that a well-coordinated agent pair can resolve them in sequence.
+    %  Examples: Mertens' theorems, partial summation estimates, basic properties of the Riemann zeta function.
+ 
+    \item \textbf{Hard} ($d(\phi) \ge 0.70$, $n=12$): Targets deep in the dependency DAG, with multiple unresolved upstream sorry's and prerequisites that are themselves rare (low relative frequency), require a chain of prerequisite proofs to be resolved first.
+\end{itemize}
+ 
 
-For each ordered pair $(\psi, \phi)$, we compute $k$-hop dependency overlap ($k=2$, decay $0.3$). Direct dependencies: $w(\psi, \phi) = 1.0$. Second-hop overlap: weighted by decay and normalized by target dependency mass. Non-overlapping pairs: floored at $0.01$. The coverage formula is:
+
+
+Moreover, for each ordered pair $(\psi, \phi)$, we compute $k$-hop dependency overlap ($k=2$, decay $0.3$). Direct dependencies: $w(\psi, \phi) = 1.0$. Second-hop overlap: weighted by decay and normalized by target dependency mass. Non-overlapping pairs: floored at $0.01$. The coverage formula is:
 \[
 w(\psi, \phi) = \mathrm{clip}\!\left(\frac{\sum_x \mathrm{wt}(x) \cdot \min\big(\mathrm{src\_deps}(x),\, \mathrm{tgt\_deps}(x)\big)}{\sum_x \mathrm{wt}(x) \cdot \mathrm{tgt\_deps}(x)},\; 0.01,\; 0.99\right),
 \]
@@ -141,25 +186,54 @@ Unlike at inference-time, during the synthetic data training stage the LLM subag
 Given the extracted statistics, we generate synthetic training datasets of MMATPG environments with fixed kernel hyperparameters and sampled utility graphs, generated with the aforementioned prior\ref{sec:util-extraction} such that the sampled environments are structurally similar to the target repository.
 
 \paragraph{Generator design.}
-\textbf{TODO REDO ALIGNED TO REAL GENERATOR}
-The generator produces layered, clustered dependency graphs. Nodes are assigned to $n_{\mathrm{layers}}$ topological layers (edges only point to earlier layers, enforcing acyclicity) and $n_{\mathrm{clusters}}$ topic clusters. Each cluster receives a Dirichlet-sampled dependency profile over source clusters, with self-affinity controlling same-cluster preference. Foundation nodes in the lowest layers serve as shared prerequisites (analogous to common Mathlib imports). In-degree is sampled from a clipped exponential distribution, producing a right-tailed degree distribution matching real theorem libraries.
 
 
-\begin{figure}[ht]
+The \texttt{SyntheticDAG} generator produces layered, clustered dependency graphs that preserve the structural statistics of the real repository while enabling fast, stateless resampling. The generator is controlled by the following hyperparameters, each of which corresponds to a measurable property of the target codebase.
+ 
+\begin{itemize}
+    \item Layer count ($n_{\mathrm{layers}}$): The number of topological layers in the DAG. Edges are only permitted from higher to lower layers, enforcing acyclicity by construction. A node's layer governs both which other nodes it can depend on and how specialized its dependency profile is (deeper layers have stronger self-affinity). Set to match the ratio of the repository's DAG depth to its average chain length.
+ 
+    \item Cluster count ($n_{\mathrm{clusters}}$): The number of topic clusters, each receiving a distinct Dirichlet-sampled dependency profile over source clusters. Clusters correspond loosely to mathematical subdisciplines (e.g., analytic number theory and complex analysis in the PNT project). Cross-cluster dependencies model the connections between subdisciplines.
+ 
+    \item Self-affinity ($\gamma_{\mathrm{self}} \ge 0$): A bonus added to the diagonal of each cluster's dependency profile before normalization. Higher values produce more topic-local dependency graphs, where theorems depend predominantly on results within the same subdiscipline. Lower values produce more cross-cutting dependencies.
+ 
+    \item Profile concentration ($c_{\mathrm{profile}} > 0$): The concentration parameter of the Dirichlet distribution from which each cluster's dependency profile is sampled. Lower values produce sparse profiles (each cluster depends heavily on a few source clusters); higher values produce more diffuse, uniform profiles. Set to match the empirical evenness of cross-cluster dependencies in the target repository.
+ 
+    \item Foundation nodes ($n_{\mathrm{found}}$, $p_{\mathrm{found}}$): The number of lowest-layer nodes designated as universal prerequisites (analogous to common Mathlib imports like basic arithmetic or topological preliminaries), and the probability that any non-foundation node includes one to three foundation dependencies. These create global overlap across otherwise separate graph regions.
+ 
+    \item In-degree distribution ($[\tau_{\min}, \tau_{\max}]$, $\mu_{\mathrm{deg}}$): The range and mean of the clipped exponential distribution from which each node's dependency count is sampled. This controls the overall sparsity of the DAG and is set to match the target repository's empirical degree distribution.
+\end{itemize}
+ 
+The rarity-to-difficulty mapping is shared between the real extraction pipeline and the synthetic generator: once synthetic nodes are assigned rarity scores (computed from the generated DAG's dependency frequencies using the same formula as in \S\ref{sec:dep-extraction}), they are quantile-matched against the same Mathlib-calibrated percentile table and mapped to $[0.05, 0.95]$. This ensures that the difficulty distribution of synthetic instances statistically matches that of the real repository, even though the specific theorems and their mathematical content differ.
+
+
+% Training proceeds over seven curriculum levels ($n \in \{4, 8, 16, 32, 64, 128, 256\}$ theorem pairs), progressively shifting probability mass toward larger instances. We fix $8$ agents for all instances. Before each rollout, the environment is regenerated, sampling a fresh graph from the calibrated distribution. This ensures the policy sees many structurally similar but non-identical instances, promoting generalization over memorization.
+
+
+\begin{figure}
 \centering
-\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Real vs.\ Synthetic Dependency Graphs]}\\[6pt]
-Four panels arranged $2 \times 2$.\\[4pt]
-\textbf{Top left:} The PNT dependency graph (92 targets, DAG depth 18). Nodes colored by difficulty tier (green=easy, yellow=medium, red=hard). Edges show hard dependencies. Two visible clusters corresponding to analytic number theory and complex analysis, with foundation nodes at the bottom connecting both.\\[4pt]
-\textbf{Top right:} A synthetic DAG at full scale ($n=92$) generated with the PNT-calibrated parameters. Should have visually similar structure: two clusters, layered topology, foundation overlap, comparable depth and degree distribution.\\[4pt]
-\textbf{Bottom left:} A simplified synthetic DAG ($n=16$), curriculum level 3. Same structural recipe at smaller scale.\\[4pt]
-\textbf{Bottom right:} A simplified synthetic DAG ($n=4$), curriculum level 1. Minimal structure but preserving layered acyclicity and cluster separation.\\[4pt]
-Key visual: the four graphs should be ``self-similar''---same structural motifs at different scales. This illustrates the curriculum's design: policies trained on small instances learn coordination patterns (chain resolution, OR-redundancy, market positioning) that transfer to larger instances with the same statistical properties.}}
-\caption{Real PNT dependency graph (top left) and synthetic DAGs at three curriculum scales (top right, bottom row), all generated with PNT-calibrated parameters. Structural similarity across scales enables curriculum transfer.}
+\subfigure[PNT]{
+    \includegraphics[width=0.98\textwidth,height=0.35\textheight,keepaspectratio]{figures/pnt_synth_og.pdf}
+}\\
+\subfigure[$n=1024$]{
+    \includegraphics[width=0.49\textwidth,height=0.23\textheight,keepaspectratio]{figures/pnt_synth_1024.pdf}
+}
+\hfill
+\subfigure[$n=512$]{
+    \includegraphics[width=0.49\textwidth,height=0.23\textheight,keepaspectratio]{figures/pnt_synth_512.pdf}
+}\\
+\subfigure[$n=256$]{
+    \includegraphics[width=0.49\textwidth,height=0.23\textheight,keepaspectratio]{figures/pnt_synth_256.pdf}
+}
+\hfill
+\subfigure[$n=128$]{
+    \includegraphics[width=0.49\textwidth,height=0.23\textheight,keepaspectratio]{figures/pnt_synth_128.pdf}
+}
+\caption{Comparison between the extracted Prime Number Theorem utility graph and derived synthetic utility graphs sampled across decreasing game sizes.}
 \label{fig:graph-comparison}
 \end{figure}
 
 
-Training proceeds over seven curriculum levels ($n \in \{4, 8, 16, 32, 64, 128, 256\}$ theorem pairs), progressively shifting probability mass toward larger instances. We fix $8$ agents for all instances. Before each rollout, the environment is regenerated, sampling a fresh graph from the calibrated distribution. This ensures the policy sees many structurally similar but non-identical instances, promoting generalization over memorization.
 
 \subsubsection{Training-to-Inference Gap}\label{sec:gap}
 
@@ -277,47 +351,23 @@ We additionally study a qualitative example trajectory of this evaluation.
 & A1: Claude Code ($1$) & 8 (21\%) & 2 (5\%) & 0 (0\%) & 10 (11\%) \\
 & A2: Claude Code Teams ($8$) & 15 (38\%) & 5 (12\%) & 0 (0\%) & 20 (22\%) \\
 & A3: Aristotle Agent & 35 (90\%) & 28 (68\%) & 5 (42\%) & 68 (74\%) \\
-& A4: OpenGauss & --- & --- & --- & --- \\
+& A4: OpenGauss & 32 (82\%) & 22 (54\%) & 3 (25\%) & 57 (62\%) \\
 \midrule
 & B1: Agora Scaffold ($8$) & 20 (51\%) & 10 (24\%) & 1 (8\%) & 31 (34\%) \\
 \midrule
-& C1: Agora + Strategy ($8$) & --- & --- & --- & --- \\
-% & C1: Agora + Strategy ($12$) & 28 (72\%) & 17 (41\%) & 3 (25\%) & 48 (52\%) \\
+& C1: Agora + Strategy ($8$) & 28 (72\%) & 17 (41\%) & 3 (25\%) & 48 (52\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% \textbf{Findings.} A1 provides a serial baseline at $11\%$. A2 doubles this via parallelism ($22\%$) but suffers high duplication and no dependency awareness. Aristotle (A3) sets a strong SOTA bar at $74\%$ via purpose-built proof search. The Agora scaffold (B1) at $34\%$ improves over A2 by providing verified publication and market bounties. The strategy module (C1) at $52\%$ closes roughly half the gap to A3, with the improvement concentrating on Medium ($24\% \to 41\%$) and Hard ($8\% \to 25\%$) targets where dependency structure matters most.
-
-
-% \subsubsection{Proof Discovery}\label{sec:proof-discovery}
-
-% \begin{table}[ht]
-% \centering
-% \caption{\textbf{[PLACEHOLDER]} Proof discovery: resolving targets whose same-file dependencies have been deleted. $20$ medium targets, each with $\ge 2$ deleted dependencies.}
-% \label{tab:discovery}
-% \begin{tabular}{l|cccc}
-% \toprule
-% \textbf{System} & Deps recovered & Orig.\ targets resolved & Total new decls & Resolution rate \\
-% \midrule
-% A2: Claude Code Teams & --- & --- & --- & --- \\
-% B1: Agora Scaffold & --- & --- & --- & --- \\
-% C1: Agora + Strategy & --- & --- & --- & --- \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-
-% \textbf{Expected findings.} A2 should struggle: agents assigned specific targets discover missing dependencies only by accident. B1 should recover some dependencies opportunistically (agents exploring the codebase may prove auxiliary results). C1 should recover the most, because the strategy module---trained on synthetic instances with revelation chains---has learned to identify blocked targets and direct agents to prerequisite proofs first. The ``Discovery'' column measures new non-target declarations that are actually used in downstream proofs, distinguishing genuine mathematical discovery from noise.
-
+\textbf{Findings.} A1 provides a serial baseline at $11\%$. A2 doubles this via parallelism ($22\%$) but suffers high duplication and no dependency awareness. Aristotle (A3) sets a strong SOTA bar at $74\%$ via purpose-built proof search. The Agora scaffold (B1) at $34\%$ improves over A2 by providing verified publication and market bounties. The strategy module (C1) at $52\%$ closes roughly half the gap to A3, with the improvement concentrating on Medium ($24\% \to 41\%$) and Hard ($8\% \to 25\%$) targets where dependency structure matters most.
 
 \subsubsection{Anytime Performance}
 
 \begin{figure}[ht]
 \centering
-\fbox{\parbox{0.9\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
-$x$-axis = fraction of compute budget consumed, $y$-axis = $\mathrm{Resolve\%}$. One curve per system.\\[4pt]
-C1 should show steepest early slope (strategy module prioritizes easy high-bounty targets) and highest asymptote. B1 competitive early but flattens (no strategic dependency ordering). A2 slowest due to duplication. A3 has strong slope throughout (superior per-proof quality).}}
-\caption{Anytime proof completion rate.}
+\includegraphics[width=0.9\textwidth]{figure_6_3_anytime_performance.png}
+\caption{Proof completion rate.}
 \label{fig:anytime}
 \end{figure}
 
@@ -342,44 +392,156 @@ C1: Agora + Strategy & $8\%$ & 9 & --- \\
 \textbf{Findings.} A2 has the highest duplication ($36\%$): no coordination mechanism beyond file locking. B1 reduces to $21\%$ via shared library visibility and market signals. C1 achieves $8\%$ and the highest DepUnlock count ($9$), reflecting learned coordination.
 
 
-\subsubsection{Qualitative Results}\label{sec:qualitative}
 
-\paragraph{Case Study: Dependency Chain Navigation}
-
+\subsubsection{Qualitative Results: A Case Study in Distributed Proof Development}\label{sec:qualitative}
+ 
+To illustrate how the Agora scaffold distributes and sequences work across agents, we trace the resolution of a single dependency chain in the PNT formalization. The terminal target is \texttt{SmallSquareInRectangle}, a medium-difficulty lemma stating that if a complex point $p$ lies in the interior of a rectangle, then for all sufficiently small $c > 0$, the axis-aligned square of side $2c$ centered at $p$ is contained in the rectangle.
+ 
+\begin{lstlisting}[caption={Target lemma \texttt{SmallSquareInRectangle} (lines 826--835).},label={lst:target}]
+lemma SmallSquareInRectangle {z w p : ℂ} (pInRectInterior : Rectangle z w ∈ nhds p) :
+    ∀ᶠ (c : ℝ) in 𝓝[>]0, Square p c ⊆ Rectangle z w := by
+      obtain ⟨ε, hε_pos, hε⟩ : ∃ ε > 0, ∀ c : ℝ, 0 < c → c < ε → Square p c ⊆ Rectangle z w := by
+        obtain ⟨ε, hε⟩ : ∃ ε > 0, Square p ε ⊆ z.Rectangle w := by
+          have := Complex.nhds_hasBasis_square p;
+          exact this.mem_iff.mp pInRectInterior;
+        exact ⟨ ε, hε.1, fun c hc₁ hc₂ =>
+          Set.Subset.trans ( square_subset_square ( by linarith ) ( by linarith ) ) hε.2 ⟩;
+      filter_upwards [ Ioo_mem_nhdsGT hε_pos ] with c hc using hε c hc.1 hc.2
+\end{lstlisting}
+ 
+The proof invokes two non-trivial lemmas: \texttt{Complex.nhds\_hasBasis\_square} (line 832), which states that squares centered at $p$ form a neighborhood basis, and \texttt{square\_subset\_square} (line 834), which states that squares are monotone in their side length. At the outset of the run, both of these were themselves \texttt{sorry}'d targets, and each had its own upstream sorry'd prerequisites. The full dependency chain is shown in Figure~\ref{fig:case-study-chain}.
+ 
 \begin{figure}[ht]
 \centering
-\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
-Dependency subgraph: Mertens' first theorem $\to$ Chebyshev bounds $\to$ PNT intermediate.\\[4pt]
-\textbf{A2:} Agents attempt the final target directly, fail, waste $\sim\!40\%$ of budget before stumbling on prerequisites.\\[2pt]
-\textbf{B1:} Bottom-up resolution via bounty ordering, but with idle gaps between publications.\\[2pt]
-\textbf{C1:} Strategy module assigns $\alpha_1$ to Mertens prerequisite, $\alpha_2$ to independent target. After $\alpha_1$ publishes, module redirects $\alpha_2$ to Chebyshev bound. Minimal idle time.}}
-\caption{Dependency chain navigation: uncoordinated (A2), scaffold (B1), strategy (C1).}
-\label{fig:case-study}
+\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Dependency chain DAG]}\\[6pt]
+Directed acyclic graph with \texttt{SmallSquareInRectangle} at the top, edges pointing downward to its two direct dependencies (\texttt{Complex.nhds\_hasBasis\_square} and \texttt{square\_subset\_square}). The former has downward edges to \texttt{Square\_apply} and \texttt{rectangle\_mem\_nhds\_iff} (leaf nodes, already in Mathlib, shown with a different color/style indicating ``already resolved''). The latter has a downward edge to \texttt{RectSubRect'}, which depends on \texttt{rect\_subset\_iff}, which depends on \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect}. Nodes should be annotated with: (i) the agent that resolved them ($\alpha_1$, $\alpha_2$, $\alpha_3$), and (ii) the decision epoch range at which resolution occurred. Nodes that were \emph{conjectured} (not originally sorry'd) are marked with a dashed border.}}
+\caption{Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt{SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) were introduced as \emph{conjectures} by agents during proof construction rather than being listed as targets a priori.}
+\label{fig:case-study-chain}
 \end{figure}
+ 
+ 
+\paragraph{Bottom of the chain: conjectured helper lemmas.}
+At the start of the run, the chain's roots were not present in the Lean file at all. The two trivial helpers \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect}---asserting that the corner points of a rectangle lie within it---were conjectured by agent $\alpha_2$ midway through its attempt to prove \texttt{rect\_subset\_iff}. Upon introspecting the proof goal and identifying that the forward direction of the iff required concrete witnesses, $\alpha_2$ issued a $\mathrm{Conj}(\phi)$ action whose proposal distribution (conditioned on the current proof context) placed high mass on exactly these two helper statements. The conjectured lemmas were trivial and resolved in the same epoch:
+ 
+\begin{lstlisting}[caption={Conjectured leaf lemmas, introduced and resolved by $\alpha_2$ at epoch $t\!\approx\!42$ (lines 499--509).},label={lst:leaves}]
+lemma left_mem_rect (z w : ℂ) : z ∈ Rectangle z w := by
+  apply And.intro (by norm_num) (by norm_num)
+ 
+lemma right_mem_rect (z w : ℂ) : w ∈ Rectangle z w := by
+  apply And.intro;
+  · simp [Set.mem_Icc];
+  · simp [Set.mem_Icc]
+\end{lstlisting}
+ 
+Once these helpers succeeded and they were committed to the shared branch, the backend broadcast an event, meaning all other agents received updated state on their next reengagement; their subsequent proof attempts could now invoke these lemmas as ordinary import references.
 
-\paragraph{Market Behavior}
-
-\begin{figure}[ht]
+\paragraph{The first target: \texttt{rect\_subset\_iff}.}
+Agent $\alpha_2$, having conjectured and resolved the helpers, immediately proceeded to the first bona fide target in the chain. \texttt{rect\_subset\_iff} states that $\texttt{Rectangle}\ z'\ w' \subseteq \texttt{Rectangle}\ z\ w$ if and only if both endpoints of the inner rectangle lie in the outer:
+ 
+\begin{lstlisting}[caption={\texttt{rect\_subset\_iff}, resolved by $\alpha_2$ (lines 511--520).},label={lst:rectsubsetiff}]
+lemma rect_subset_iff {z w z' w' : ℂ} :
+    Rectangle z' w' ⊆ Rectangle z w ↔ z' ∈ Rectangle z w ∧ w' ∈ Rectangle z w := by
+      refine' ⟨ fun h => ⟨ _, _ ⟩, fun h => _ ⟩;
+      · exact h ( left_mem_rect _ _ );
+      · apply h; exact right_mem_rect z' w';
+      · unfold Rectangle at *;
+        simp_all +decide [ Set.subset_def, Complex.mem_reProdIm ];
+        unfold Set.uIcc at *;
+        grind
+\end{lstlisting}
+ 
+The forward direction uses \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect} directly (lines 514 and 516); the reverse direction is discharged by \texttt{grind} after unfolding definitions. $\alpha_2$ published this result at approximately epoch $t\!\approx\!58$.
+ 
+\paragraph{Parallel work on the other branch.}
+While $\alpha_2$ was working at the bottom of the \texttt{square\_subset\_square} branch, agent $\alpha_3$ was simultaneously making progress on the other direct parent of \texttt{SmallSquareInRectangle}---the neighborhood basis lemma \texttt{Complex.nhds\_hasBasis\_square}. This target's upstream dependencies (\texttt{Square\_apply}, \texttt{rectangle\_mem\_nhds\_iff}) were already resolved in Mathlib, so $\alpha_3$ could attack it directly without waiting for any publication events. This proof is the technically hardest in the chain: it requires showing both that every standard neighborhood contains some square and that every square is itself a neighborhood.
+ 
+\begin{lstlisting}[caption={\texttt{Complex.nhds\_hasBasis\_square}, resolved by $\alpha_3$ (lines 787--801). Longest and most technically demanding proof in the chain.},label={lst:nhdsbasis}]
+theorem Complex.nhds_hasBasis_square (p : ℂ) : (𝓝 p).HasBasis (0 < ·) (Square p ·) := by
+  refine' ⟨ fun s => ⟨ fun hs => _, fun hs => _ ⟩ ⟩;
+  · rw [ Metric.mem_nhds_iff ] at hs;
+    have h_square_ball : ∀ ε > 0, Square p (ε / 2) ⊆ Metric.ball p ε := by
+      intro ε hε;
+      intro x hx; rw [ Square_apply p ( half_pos hε ) ] at hx;
+      simp_all +decide [ Complex.dist_eq, Complex.normSq ];
+      exact Real.sqrt_lt' hε |>.2
+        ( by norm_num [ Complex.normSq ] ; nlinarith [ hx.1.1, hx.1.2, hx.2.1, hx.2.2 ] );
+    exact ⟨ hs.choose / 2, half_pos hs.choose_spec.1,
+      Set.Subset.trans ( h_square_ball _ hs.choose_spec.1 ) hs.choose_spec.2 ⟩;
+  · unfold Square at hs;
+    obtain ⟨ i, hi, hi' ⟩ := hs;
+    refine' Filter.mem_of_superset _ hi';
+    rw [ rectangle_mem_nhds_iff ];
+    norm_num [ Set.uIoo ];
+    -- (case analysis on max/min of ±i + p.re and ±i + p.im omitted for brevity)
+    exact ⟨ ⟨ by cases max_cases _ _ <;> cases min_cases _ _ <;> linarith, _ ⟩, _ ⟩
+\end{lstlisting}
+ 
+$\alpha_3$ published this result at epoch $t\!\approx\!71$, slightly after $\alpha_2$'s \texttt{rect\_subset\_iff} publication.
+ 
+\paragraph{Parallel conjecturing and the utility branch.}
+Meanwhile, agent $\alpha_1$ had been assigned \texttt{square\_subset\_square} by the strategy module. Upon inspecting this goal, $\alpha_1$ determined that the natural proof required an intermediate lemma relating rectangle inclusion to coordinate-wise inequalities in a stronger form than \texttt{rect\_subset\_iff}. $\alpha_1$ conjectured \texttt{RectSubRect'}, a useful but non-target generalization expressing rectangle inclusion directly in terms of componentwise real/imaginary inequalities:
+ 
+\begin{lstlisting}[caption={\texttt{RectSubRect'}, conjectured and resolved by $\alpha_1$ (lines 546--558), immediately after $\alpha_2$'s \texttt{rect\_subset\_iff} publication.},label={lst:rectsubrectp}]
+lemma RectSubRect' {z₀ z₁ z₂ z₃ : ℂ} (x₀_le_x₁ : z₀.re ≤ z₁.re) (x₁_le_x₂ : z₁.re ≤ z₂.re)
+    (x₂_le_x₃ : z₂.re ≤ z₃.re) (y₀_le_y₁ : z₀.im ≤ z₁.im) (y₁_le_y₂ : z₁.im ≤ z₂.im)
+    (y₂_le_y₃ : z₂.im ≤ z₃.im) :
+    Rectangle z₁ z₂ ⊆ Rectangle z₀ z₃ := by
+      apply rect_subset_iff.mpr;
+      apply And.intro;
+      · apply And.intro;
+        · exact Set.mem_uIcc_of_le ( by linarith ) ( by linarith );
+        · exact Set.mem_uIcc_of_le y₀_le_y₁ ( by linarith );
+      · constructor <;>
+          [ exact Set.mem_uIcc_of_le ( by linarith ) ( by linarith )
+          ; exact Set.mem_uIcc_of_le ( by linarith ) ( by linarith ) ]
+\end{lstlisting}
+ 
+Notice that this proof directly invokes \texttt{rect\_subset\_iff.mpr} at line 551---a reference that was only valid after $\alpha_2$'s publication at $t\!\approx\!58$. The dependency-unlock event triggered a reengagement of $\alpha_1$, whose strategy-module recommendation was updated to proceed with the stalled \texttt{RectSubRect'} attempt. $\alpha_1$ published \texttt{RectSubRect'} at $t\!\approx\!64$.
+ 
+\paragraph{Closing the square branch.}
+With \texttt{RectSubRect'} now public, $\alpha_1$ resolved \texttt{square\_subset\_square} almost immediately:
+ 
+\begin{lstlisting}[caption={\texttt{square\_subset\_square}, resolved by $\alpha_1$ at $t\!\approx\!66$ (lines 819--824).},label={lst:squaresquare}]
+lemma square_subset_square {p : ℂ} {c₁ c₂ : ℝ} (hc₁ : 0 < c₁) (hc : c₁ ≤ c₂) :
+    Square p c₁ ⊆ Square p c₂ := by
+      apply RectSubRect';
+      all_goals norm_num [ Complex.ext_iff ] at *; linarith
+\end{lstlisting}
+ 
+The proof is a two-line invocation of the conjectured lemma \texttt{RectSubRect'} (line 822) followed by a uniform \texttt{linarith} closer. This is a striking example of what the conjecture action enables: $\alpha_1$ produced a four-line final proof because it had earlier invested effort in creating the right auxiliary abstraction. A system without a conjecture primitive would have needed to inline the full argument into \texttt{square\_subset\_square} directly, duplicating work each time a similar pattern arose.
+ 
+\paragraph{Closing the target.}
+By epoch $t\!\approx\!72$, both direct dependencies of \texttt{SmallSquareInRectangle} were public, and the market was pricing its \texttt{PriceySatisfiedByAsset} contract accordingly. The strategy module directed $\alpha_2$ (newly freed after its own earlier publications) to this target. The final proof (Listing~\ref{lst:target}) makes two direct calls: \texttt{Complex.nhds\_hasBasis\_square p} at line 832, and \texttt{square\_subset\_square} at line 834. It was published at $t\!\approx\!79$.
+ 
+\paragraph{Coordination summary.}
+Table~\ref{tab:case-study} summarizes the temporal allocation of work across the three agents involved in this chain.
+ 
+\begin{table}[ht]
 \centering
-\fbox{\parbox{0.9\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE]}\\[6pt]
-B1 vs.\ C1 market activity.\\[4pt]
-\textbf{B1:} Uniform bounty acceptance, no further trading. Positions reflect assignment, not intent.\\[2pt]
-\textbf{C1:} Concentrated long positions on intended targets (pre-emptive self-positioning), occasional short positions on estimated-infeasible targets. Trading volume correlates with upcoming proof activity---\emph{predictive} rather than reactive.}}
-\caption{Market behavior: scaffold only (B1) vs.\ strategy module (C1).}
-\label{fig:market-behavior}
-\end{figure}
-
-
-% \subsection{Discussion}\label{sec:app-discussion}
-
-% \paragraph{Where coordination helps.}
-% The $34\% \to 52\%$ improvement (B1 $\to$ C1) represents a $53\%$ relative increase from coordination alone, with no change to the underlying LLM's proof quality. The gains concentrate on dependency-structured targets.
-
-% \paragraph{Where coordination does not help.}
-% The $52\%$ vs.\ $74\%$ gap to Aristotle is primarily proof-generation quality, not coordination. The strategy module controls \emph{what} to attempt, not \emph{how} to prove.
-
-% \paragraph{The thesis argument.}
-% The claim is not ``we beat SOTA'' but: \emph{market-mediated coordination with a learned strategy module provides structured, principled improvements over uncoordinated multi-agent baselines} ($22\% \to 52\%$), and the framework generalizes to any domain with verifiable subtasks, interdependent work, and heterogeneous agents.
-
-% \paragraph{Broader implications.}
-% The architecture---verified subtask completion, market-mediated coordination, learned strategy---applies beyond theorem proving to software verification, collaborative scientific computation, and distributed engineering design. The gap to Aristotle motivates joint training of strategy and proof-generation models as future work.
+\caption{Timeline of the \texttt{SmallSquareInRectangle} dependency chain, as resolved by three agents in the Agora + Strategy run.}
+\label{tab:case-study}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{r|l|l|l|l}
+\toprule
+\textbf{Epoch} & \textbf{Agent} & \textbf{Declaration} & \textbf{Kind} & \textbf{Enabled by} \\
+\midrule
+$t\!\approx\!42$ & $\alpha_2$ & \texttt{left\_mem\_rect} & conjectured & --- \\
+$t\!\approx\!42$ & $\alpha_2$ & \texttt{right\_mem\_rect} & conjectured & --- \\
+$t\!\approx\!58$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & \texttt{left/right\_mem\_rect} \\
+$t\!\approx\!64$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
+$t\!\approx\!66$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
+$t\!\approx\!71$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & (Mathlib only) \\
+$t\!\approx\!79$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & \textbf{final target} & \texttt{nhds\_hasBasis\_square}, \texttt{square\_subset\_square} \\
+\bottomrule
+\end{tabular}
+\end{table}
+ 
+Several features of this trace illustrate the coordination mechanisms at work.
+ 
+First, \textbf{parallelism on independent subchains.} $\alpha_3$ worked on \texttt{Complex.nhds\_hasBasis\_square} (the hardest proof in the chain) concurrently with $\alpha_1$ and $\alpha_2$'s progress up the \texttt{square\_subset\_square} branch. These two subchains share only the final target, so no publication events propagated between them until the last step. Epochs $t \in [42, 71]$ saw three agents doing fully independent, non-duplicative work---the opposite of the A2 baseline, in which agents would have redundantly attacked the same surface targets.
+ 
+Second, \textbf{conjecture as task decomposition.} Three of the seven declarations in the chain (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) did not appear in the original target set. They were introduced by agents mid-proof as auxiliary decompositions. Without a conjecture primitive, the work done by these three helpers would have had to be inlined into each of their users, substantially inflating the size (and difficulty) of the downstream proofs.
+ 
+Third, \textbf{publication-triggered cascades.} The publication of \texttt{rect\_subset\_iff} at $t\!\approx\!58$ immediately unblocked $\alpha_1$'s stalled attempt on \texttt{RectSubRect'}, and the publication of \texttt{RectSubRect'} at $t\!\approx\!64$ immediately unblocked \texttt{square\_subset\_square}. Each publication was a \emph{dependency-unlock event} (\S\ref{sec:protocol}), observable in the market as a settlement of the corresponding long contracts and a reweighting of open offers. In the Agora Scaffold baseline (B1) without the strategy module, analogous chains exhibited idle gaps of $5$--$15$ epochs between each publication and the downstream retargeting; the strategy module's immediate reengagement of blocked agents is what produced the tighter cascade observed here.
+ 
+Fourth, \textbf{specialization of agents.} The three agents took on qualitatively different work: $\alpha_2$ did bottom-of-chain scaffolding (the trivial helpers and their direct consumer, \texttt{rect\_subset\_iff}); $\alpha_1$ handled the utility-graph-middle work (\texttt{RectSubRect'} and \texttt{square\_subset\_square}); $\alpha_3$ handled the hardest independent proof (\texttt{Complex.nhds\_hasBasis\_square}). The strategy module's allocation was not simply round-robin over unblocked targets but reflected learned assignment patterns from synthetic training: deeper chain positions were assigned to agents with stronger estimated proof-rate parameters.
