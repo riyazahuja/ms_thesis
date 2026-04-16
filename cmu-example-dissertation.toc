@@ -148,10 +148,10 @@
 \contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{74}{subsubsection.6.5.2}%
 \contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{74}{subsubsection.6.5.3}%
 \contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results: A Case Study in Distributed Proof Development}{74}{subsubsection.6.5.4}%
-\contentsline {paragraph}{\numberline {6.5.4.1}Bottom of the chain: conjectured helper lemmas.}{76}{paragraph.6.5.4.1}%
+\contentsline {paragraph}{\numberline {6.5.4.1}Bottom of the chain: conjectured helper lemmas.}{75}{paragraph.6.5.4.1}%
 \contentsline {paragraph}{\numberline {6.5.4.2}The first target: \texttt {rect\_subset\_iff}.}{76}{paragraph.6.5.4.2}%
 \contentsline {paragraph}{\numberline {6.5.4.3}Parallel work on the other branch.}{77}{paragraph.6.5.4.3}%
-\contentsline {paragraph}{\numberline {6.5.4.4}Parallel conjecturing and the utility branch.}{77}{paragraph.6.5.4.4}%
+\contentsline {paragraph}{\numberline {6.5.4.4}Parallel conjecturing and the utility branch.}{78}{paragraph.6.5.4.4}%
 \contentsline {paragraph}{\numberline {6.5.4.5}Closing the square branch.}{78}{paragraph.6.5.4.5}%
 \contentsline {paragraph}{\numberline {6.5.4.6}Closing the target.}{79}{paragraph.6.5.4.6}%
 \contentsline {paragraph}{\numberline {6.5.4.7}Coordination summary.}{79}{paragraph.6.5.4.7}%

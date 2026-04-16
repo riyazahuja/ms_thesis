@@ -51,18 +51,6 @@ Agora is an infrastructure platform that instantiates the MMATPG for real Lean~4
 
 \subsubsection{Architecture}\label{sec:agora-arch}
 
-% \begin{figure}[ht]
-% \centering
-% \fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Agora Architecture Diagram]}\\[6pt]
-% Block diagram showing the four main components and their interactions:\\[4pt]
-% \textbf{Left column (Backend services):} Three stacked boxes: Library Mechanics (port 8001, connects to Lean repos and VerifiedAgora), Market Mechanics (port 8002, connects to PostgreSQL), and Backend Interface (port 8000, MCP endpoint). Arrows show Backend Interface routing to the two mechanics services.\\[4pt]
-% \textbf{Right column (Agents):} $n$ agent containers, each containing: LLM (Claude), MCP Auth Proxy, local workspace with project copy, optional Lean LSP. Arrows show MCP traffic from each container to the Backend Interface endpoint.\\[4pt]
-% \textbf{Top:} Agent Orchestrator box with arrows to agent containers (provisioning) and to Backend Interface (API key creation, market seeding).\\[4pt]
-% \textbf{Bottom:} Shared volumes: \texttt{library\_shared} (mounted into Library Mechanics read-write, into agent containers read-only), PostgreSQL data volume.\\[4pt]
-% \textbf{Key annotation:} The MCP Auth Proxy inside each container intercepts tool calls, injects API keys, and rewrites file-based contributions into API calls---so the LLM never handles authentication directly.}}
-% \caption{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}
-% \label{fig:agora-arch}
-% \end{figure}
 \input{figures/agora_diagram}
 
 
@@ -413,8 +401,33 @@ The proof invokes two non-trivial lemmas: \texttt{Complex.nhds\_hasBasis\_square
  
 \begin{figure}[ht]
 \centering
-\fbox{\parbox{0.95\textwidth}{\centering\textbf{[PLACEHOLDER FIGURE: Dependency chain DAG]}\\[6pt]
-Directed acyclic graph with \texttt{SmallSquareInRectangle} at the top, edges pointing downward to its two direct dependencies (\texttt{Complex.nhds\_hasBasis\_square} and \texttt{square\_subset\_square}). The former has downward edges to \texttt{Square\_apply} and \texttt{rectangle\_mem\_nhds\_iff} (leaf nodes, already in Mathlib, shown with a different color/style indicating ``already resolved''). The latter has a downward edge to \texttt{RectSubRect'}, which depends on \texttt{rect\_subset\_iff}, which depends on \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect}. Nodes should be annotated with: (i) the agent that resolved them ($\alpha_1$, $\alpha_2$, $\alpha_3$), and (ii) the decision epoch range at which resolution occurred. Nodes that were \emph{conjectured} (not originally sorry'd) are marked with a dashed border.}}
+\resizebox{0.95\textwidth}{!}{%
+\begin{tikzpicture}[
+  every node/.style={font=\scriptsize},
+  target/.style={draw, thick, rounded corners, fill={rgb,255:red,234; green,255; blue,233}, align=center, minimum width=3.0cm, minimum height=0.8cm},
+  conjecture/.style={target, dashed, fill=white},
+  mathlib/.style={target, fill={rgb,255:red,235; green,235; blue,235}},
+  edge/.style={-{Stealth[length=2.2mm]}, thick}
+]
+\node[target] (top) at (0,0) {\texttt{SmallSquareInRectangle}\\$\alpha_2,\ t\!\approx\!79$\\final target};
+\node[target] (nhds) at (-3.9,-1.8) {\texttt{Complex.nhds\_hasBasis\_square}\\$\alpha_3,\ t\!\approx\!71$};
+\node[target] (sqsub) at (3.9,-1.8) {\texttt{square\_subset\_square}\\$\alpha_1,\ t\!\approx\!66$};
+\node[mathlib] (sqapply) at (-5.7,-3.45) {\texttt{Square\_apply}\\already in Mathlib};
+\node[mathlib] (rectnhds) at (-2.1,-3.45) {\texttt{rectangle\_mem\_nhds\_iff}\\already in Mathlib};
+\node[conjecture] (rectsub) at (3.9,-3.45) {\texttt{RectSubRect'}\\$\alpha_1,\ t\!\approx\!64$\\conjectured};
+\node[target] (iff) at (3.9,-5.1) {\texttt{rect\_subset\_iff}\\$\alpha_2,\ t\!\approx\!58$};
+\node[conjecture] (left) at (2.0,-6.75) {\texttt{left\_mem\_rect}\\$\alpha_2,\ t\!\approx\!42$\\conjectured};
+\node[conjecture] (right) at (5.8,-6.75) {\texttt{right\_mem\_rect}\\$\alpha_2,\ t\!\approx\!42$\\conjectured};
+\draw[edge] (top) -- (nhds);
+\draw[edge] (top) -- (sqsub);
+\draw[edge] (nhds) -- (sqapply);
+\draw[edge] (nhds) -- (rectnhds);
+\draw[edge] (sqsub) -- (rectsub);
+\draw[edge] (rectsub) -- (iff);
+\draw[edge] (iff) -- (left);
+\draw[edge] (iff) -- (right);
+\end{tikzpicture}
+}
 \caption{Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt{SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) were introduced as \emph{conjectures} by agents during proof construction rather than being listed as targets a priori.}
 \label{fig:case-study-chain}
 \end{figure}
@@ -472,8 +485,15 @@ theorem Complex.nhds_hasBasis_square (p : ℂ) : (𝓝 p).HasBasis (0 < ·) (Squ
     refine' Filter.mem_of_superset _ hi';
     rw [ rectangle_mem_nhds_iff ];
     norm_num [ Set.uIoo ];
-    -- (case analysis on max/min of ±i + p.re and ±i + p.im omitted for brevity)
-    exact ⟨ ⟨ by cases max_cases _ _ <;> cases min_cases _ _ <;> linarith, _ ⟩, _ ⟩
+    exact ⟨
+      ⟨ by cases max_cases (-i + p.re) (i + p.re) <;>
+             cases min_cases (-i + p.re) (i + p.re) <;> linarith,
+        by cases max_cases (-i + p.re) (i + p.re) <;>
+             cases min_cases (-i + p.re) (i + p.re) <;> linarith ⟩,
+      ⟨ by cases max_cases (-i + p.im) (i + p.im) <;>
+             cases min_cases (-i + p.im) (i + p.im) <;> linarith,
+        by cases max_cases (-i + p.im) (i + p.im) <;>
+             cases min_cases (-i + p.im) (i + p.im) <;> linarith ⟩⟩
 \end{lstlisting}
  
 $\alpha_3$ published this result at epoch $t\!\approx\!71$, slightly after $\alpha_2$'s \texttt{rect\_subset\_iff} publication.
@@ -531,17 +551,18 @@ $t\!\approx\!58$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & \texttt{le
 $t\!\approx\!64$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
 $t\!\approx\!66$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
 $t\!\approx\!71$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & (Mathlib only) \\
-$t\!\approx\!79$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & \textbf{final target} & \texttt{nhds\_hasBasis\_square}, \texttt{square\_subset\_square} \\
+$t\!\approx\!79$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & \textbf{final target} & \texttt{nhds\_hasBasis\_square}\\ &&&&\texttt{square\_subset\_square} \\
 \bottomrule
 \end{tabular}
 \end{table}
  
 Several features of this trace illustrate the coordination mechanisms at work.
  
-First, \textbf{parallelism on independent subchains.} $\alpha_3$ worked on \texttt{Complex.nhds\_hasBasis\_square} (the hardest proof in the chain) concurrently with $\alpha_1$ and $\alpha_2$'s progress up the \texttt{square\_subset\_square} branch. These two subchains share only the final target, so no publication events propagated between them until the last step. Epochs $t \in [42, 71]$ saw three agents doing fully independent, non-duplicative work---the opposite of the A2 baseline, in which agents would have redundantly attacked the same surface targets.
+First, we observe parallelism on independent subchains. $\alpha_3$ worked on \texttt{Complex.nhds\_hasBasis\_square} (the hardest proof in the chain) concurrently with $\alpha_1$ and $\alpha_2$'s progress up the \texttt{square\_subset\_square} branch. These two subchains share only the final target, so no publication events propagated between them until the last step. Epochs $t \in [42, 71]$ saw three agents doing fully independent, non-duplicative work.
  
-Second, \textbf{conjecture as task decomposition.} Three of the seven declarations in the chain (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) did not appear in the original target set. They were introduced by agents mid-proof as auxiliary decompositions. Without a conjecture primitive, the work done by these three helpers would have had to be inlined into each of their users, substantially inflating the size (and difficulty) of the downstream proofs.
+Second, we see conjecture as task decomposition. Three of the seven declarations in the chain (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) did not appear in the original target set. They were introduced by agents mid-proof as auxiliary decompositions. Without a conjecture primitive, the work done by these three helpers would have had to be inlined into each of their users, substantially inflating the size (and difficulty) of the downstream proofs.
  
-Third, \textbf{publication-triggered cascades.} The publication of \texttt{rect\_subset\_iff} at $t\!\approx\!58$ immediately unblocked $\alpha_1$'s stalled attempt on \texttt{RectSubRect'}, and the publication of \texttt{RectSubRect'} at $t\!\approx\!64$ immediately unblocked \texttt{square\_subset\_square}. Each publication was a \emph{dependency-unlock event} (\S\ref{sec:protocol}), observable in the market as a settlement of the corresponding long contracts and a reweighting of open offers. In the Agora Scaffold baseline (B1) without the strategy module, analogous chains exhibited idle gaps of $5$--$15$ epochs between each publication and the downstream retargeting; the strategy module's immediate reengagement of blocked agents is what produced the tighter cascade observed here.
- 
-Fourth, \textbf{specialization of agents.} The three agents took on qualitatively different work: $\alpha_2$ did bottom-of-chain scaffolding (the trivial helpers and their direct consumer, \texttt{rect\_subset\_iff}); $\alpha_1$ handled the utility-graph-middle work (\texttt{RectSubRect'} and \texttt{square\_subset\_square}); $\alpha_3$ handled the hardest independent proof (\texttt{Complex.nhds\_hasBasis\_square}). The strategy module's allocation was not simply round-robin over unblocked targets but reflected learned assignment patterns from synthetic training: deeper chain positions were assigned to agents with stronger estimated proof-rate parameters.
+Third, publication-triggered cascades: The publication of \texttt{rect\_subset\_iff} at $t\!\approx\!58$ immediately unblocked $\alpha_1$'s stalled attempt on \texttt{RectSubRect'}, and the publication of \texttt{RectSubRect'} at $t\!\approx\!64$ immediately unblocked \texttt{square\_subset\_square}. Each publication was a dependency-unlock event that explicitly pushed towards the social optimum. One could observe settlement of the corresponding long contracts and a reweighting of open offers.
+
+
+Fourth, the three agents took on qualitatively different work: $\alpha_2$ did bottom-of-chain scaffolding (the trivial helpers and their direct consumer, \texttt{rect\_subset\_iff}); $\alpha_1$ handled the utility-graph-middle work (\texttt{RectSubRect'} and \texttt{square\_subset\_square}); $\alpha_3$ handled the hardest independent proof (\texttt{Complex.nhds\_hasBasis\_square}).
