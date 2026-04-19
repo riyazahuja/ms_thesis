@@ -1,0 +1,111 @@
+\chapter{ImProver Experiments}\label{chap:improver-exp}
+
+\setlength{\parindent}{1em}
+
+We test ImProver on rewriting real-world undergraduate theorems, competition problems, and research-level mathematics, comparing against the base GPT-4o and GPT-4o-mini models. We examine the optimization capabilities of ImProver for the length and declarative metrics, studying the effectiveness in maintaining proof correctness while making proofs more concise or more declarative in structure.
+
+\subsection{Experimental Setup}
+
+Our experimentation is split into three stages. We first perform ablation testing on the ImProver parameters (\S\ref{ssec:improver_overview}) to find the optimal configuration with respect to correctness and metric improvement. We then evaluate this optimal parameter combination on datasets of varying complexity. Lastly, we benchmark ImProver on neural theorem proving (NTP) tasks to empirically confirm that proof optimization generalizes NTP.
+
+We evaluate on subsets of Mathematics in Lean (MIL, 72 theorems), Compfiles (26 theorems), and Mathlib (43 theorems), as described in Section~\ref{sec:datasets}. Ablations are performed on a subset of MIL.
+
+Our base generator is GPT-4o~\cite{openai2024gpt4technicalreport} (\texttt{gpt-4o-2024-08-06}). Since no prior methods exist for automated proof optimization, we use a prompted GPT-4o without the ImProver scaffold as our baseline. Both baseline and ImProver receive a prompt containing metric instructions, the theorem statement, context, and original proof; ImProver additionally augments this prompt with CoS, output formatting, retrieval, and sampling as described in Chapter~\ref{chap:improver}.
+
+We use the evaluation framework defined in Section~\ref{sec:eval_methodology}: mean improvement score $\overline{S}_\mu(\mathcal{D})$ (primary), compilation accuracy $\mathcal{A}(\mathcal{D})$, and improved accuracy $\mathcal{A}^+_\mu(\mathcal{D})$. The mean improvement score is our primary selection criterion, as it jointly rewards correctness and meaningful metric gains and cannot be inflated by returning the original proof.
+
+\subsection{Ablation Studies}
+\label{sssec:ablations}
+
+We perform ablation studies on a subset of MIL with the length metric fixed, using a factorial testing design that evaluates groups of parameters sequentially, holding the best configuration from each group fixed before varying the next. 
+
+\subsubsection{Setup.} We define six testing groups:
+\begin{itemize}
+    
+\item \textit{GPT-4o-mini vs.\ GPT-4o.} This group varies the base model, with \texttt{string} output and no other features.
+
+\item \textit{Output format and CoS.} We evaluate all output format types (\texttt{string}, \texttt{string list}, \texttt{string tree}) crossed with CoS enabled/disabled, with GPT-4o fixed.
+
+\item \textit{Example retrieval.} We vary the number of retrieved examples ($k = 0, 3, 5, 7, 10$) with the best output format and CoS configuration held fixed.
+
+\item \textit{Sampling method.} We evaluate best-of-$n$ and refinement for fixed $n=5$, along with variants of refinement (forwarding all vs.\ most recent previous iterations, keeping the best vs.\ most recent output), with model, format, CoS, and examples held fixed.
+
+\item \textit{$n$ and model.} We evaluate $n = 3, 5, 7, 10, 15$ for GPT-4o and GPT-4o-mini, and $n=20$ for GPT-4o-mini, with all other parameters held at their optimal values.
+
+\item \textit{Compound methods and RAG.} We evaluate compound sampling (\texttt{refinement(best\_of\_$m'$, $m$)} and \texttt{best\_of\_$m'$(refinement($m$))}, with $mm'$ equal to the optimal $n$ from the previous group) with and without document retrieval.
+\end{itemize}
+
+For each group, we select the parameter combination maximizing the improvement score. This criterion rewards both generation accuracy and metric improvement magnitude, and avoids the pitfalls of accuracy alone (which can be gamed by returning the input) or nonempty improvement alone (which ignores incorrect generations).
+
+\subsubsection{Results.} As shown in \autoref{tab:abl}, the optimal configuration is GPT-4o with \texttt{string list} output, CoS enabled, 10 retrieved examples, 5-step refinement with best-of-3 per iteration, and document retrieval. Changing any one of these parameters leads to a reduction in the improvement score.
+
+\input{figures/assets/ablation}
+
+\input{figures/assets/read_ablation}
+
+\paragraph{Declarativity and CoS ablation.} We additionally examine the isolated effect of CoS on declarativity optimization, since we hypothesize that CoS has a particularly high impact on declarative-style rewrites: the proof states embedded by CoS directly reveal the local hypotheses and goals, which are what declarative \texttt{have} tactics name explicitly. Table~\ref{tab:read-abl} confirms this: enabling CoS nearly doubles the improvement score and significantly improves both nonempty improvement and improved accuracy, indicating that the symbolic state information is critical to generating genuinely declarative structure.
+
+\paragraph{Syntax guidance ablation.} We examine the effect of syntax guidance (error message forwarding) on performance. Without syntax guidance, the ability to improve the metric score is approximately unchanged, but improved accuracy drops by $13\%$. This confirms that syntax guidance improves the model's ability to generate correct outputs --- as expected --- but the large performance gap over GPT-4o is not solely due to error correction; CoS, example retrieval, and retrieval are the primary drivers.
+
+\subsection{Main Results}
+
+\input{figures/assets/table-main}
+
+\input{figures/assets/main-details}
+
+\textbf{ImProver optimizes proofs across all settings.} From Tables~\ref{tab:main-mil}, \ref{tab:main-compfiles}, and~\ref{tab:main-lib}, ImProver consistently outperforms the GPT-4o baseline on all datasets for all three metrics. Table~\ref{tab:main-avg} shows that ImProver outperforms GPT-4o by $566\%$ on the length improvement score, $423\%$ on declarativity, and $778\%$ on the mixed metric, aggregated across all datasets.
+
+\textbf{Length optimization.} For the length metric, ImProver guarantees a correct output (accuracy is 100\%, as ImProver falls back to the original proof if no valid shorter proof is found). In $35.44\%$ of cases, it generates a strictly shorter proof, with an average reduction of $55.29\%$ in proof length. The baseline GPT-4o achieves far lower both accuracy and nonempty improvement, indicating that without the scaffold, the model frequently fails to produce correct rewrites at all.
+
+\textbf{Declarativity optimization.} Declarativity optimization shows a similar pattern: ImProver outperforms GPT-4o by $423\%$ in improvement score. Both models show lower accuracy and improved accuracy for declarativity than length, indicating that generating correct declarative rewrites is harder than length reduction. We attribute this to the fact that declarative rewrites require the model to reorganize proof structure rather than simply eliminating steps, which demands a deeper understanding of the proof's logical flow. CoS is particularly important here, as shown in the ablation.
+
+\textbf{Mixed optimization.} For the mixed metric (combining length and declarativity), ImProver outperforms GPT-4o by $778\%$. The improvements and accuracy trends mirror those from the individual metrics, demonstrating that ImProver scales its optimization capabilities to arbitrarily-defined composite metrics without requiring metric-specific engineering beyond the prompt and examples.
+
+\textbf{Difficulty varies by dataset.} The improvement score decreases with dataset difficulty: undergraduate MIL theorems show the highest expected improvement, Compfiles less, and Mathlib theorems the least. This trend holds for both GPT-4o and ImProver. However, ImProver's nonempty improvement stays relatively consistent across difficulty levels, whereas GPT-4o's drops sharply. This suggests that ImProver's bottleneck is the base model's ability to generate a correct rewrite at all --- once a valid output is found, the scaffold maintains the quality of optimization regardless of difficulty.
+
+\subsection{Neural Theorem Proving Evaluation}
+
+\begin{table}[th]
+\caption{Proof generation results. Each cell shows percent accuracy.}
+\label{tab:comp}
+\centering
+\small
+\begin{tabular}{l|ccc|c}
+\toprule
+& MIL-C04 Pass@15 & MIL-C08 Pass@15 & MIL Pass@15 & MiniF2F-test Pass@8\\
+\midrule
+GPT-4o     & 18.18\% & 25.00\% & 21.73\% & 9.02\%\\
+ImProver   & \textbf{45.45\%} & \textbf{33.33\%} & \textbf{39.13\%} & 16.39\%\\
+Lean Expert Iteration & --- & --- & --- & \textbf{34.5\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We evaluate ImProver's NTP performance using the completion metric on subsets of MIL with empty input proofs. Table~\ref{tab:comp} shows that ImProver substantially outperforms GPT-4o across all subsets: $45.45\%$ vs.\ $18.18\%$ on MIL-C04, $33.33\%$ vs.\ $25\%$ on MIL-C08, and $39.13\%$ vs.\ $21.73\%$ overall. On MiniF2F, ImProver achieves $16.39\%$ compared to GPT-4o's $9.02\%$.
+
+Specialized NTP models such as Lean Expert Iteration \cite{DBLP:journals/corr/abs-2202-01344} outperform ImProver on MiniF2F ($34.5\%$ vs.\ $16.39\%$), but these systems are specifically trained on large corpora of Lean code and designed exclusively for theorem proving rather than proof optimization. The purpose of this experiment is to confirm empirically that proof optimization as formulated in Chapter~\ref{chap:framework} is a strict generalization of NTP, and that the ImProver scaffold achieves meaningful performance on this harder task without any NTP-specific training.
+
+
+
+\subsection{Qualitative Examples}
+\label{sec:qual_ex}
+
+[todo: make sure to ref the figure in chapter 4, and move one example from each metric from the appendix to here.]
+
+
+
+\subsection{Limitations}
+\label{sec:imp1_limitations}
+
+ImProver establishes that agentic scaffolding enables meaningful proof optimization, but several limitations restrict its practical scope.
+
+\textbf{Cost.} Each theorem requires numerous API calls with document retrieval, making library-scale deployment expensive. At current API pricing, running ImProver over all of Mathlib would be prohibitively costly.
+
+\textbf{Closed-source dependence.} ImProver's performance is tightly coupled to GPT-4o, a closed-source, proprietary model. This limits reproducibility, prohibits local deployment, and means that the system's behavior is subject to model deprecation.
+
+\textbf{Small evaluation datasets.} We evaluate only on $72 + 26 + 43$ theorems on relatively toy datasets, providing statistically limited signal. Namely, it is not evident that such datasets are representative of standard research repositories in formal mathematics, lacking many of the inter-file dependencies and novel datastructures/API as true mathematics research has.
+
+\textbf{Weak metrics.} The declarativity metric is a coarse proxy for the true goal of generating more structured proofs, but is vulnurable to gaming by superficial rewrites that increase the number of \texttt{have} statements without meaningfully improving readability. Moreover, our evaluated set of metrics is sparse; although length and declarativity are reasonable proxies for proof efficiency and structure, we do not define any metrics that lend themselves to a notion of maintainability.
+
+
+These limitations motivate the development of ImProver~2, described in the following chapters, which replaces the expensive agentic approach with a specialized small model trained to perform proof optimization directly.

@@ -1,0 +1,154 @@
+\chapter{ImProver 2}\label{chap:improver2}
+
+\setlength{\parindent}{1em}
+
+We present ImProver 2, a training pipeline for proof optimization towards a specific metric. Its core purpose is to bootstrap the capabilities of small language models (\textit{SLM}s) through repeated applications of training, generation, and evaluation/filtering of generated data for use in further iterations. To do so, it utilizes three core components: a reinforcement learning-based training stage (described in \ref{sec:irpo}), a replay buffer to balance old and newly generated data (\ref{sec:training_replay}), and multiple sources of neurosymbolic augmentation to boost generation capabilities (\ref{sec:generation}). Each are described in detail below. 
+
+
+\subsection{Overview}
+\label{sec:improver_spec}
+
+Given an un-modified base language model $G_0$, at the $t$-th iteration ImProver 2's core loop aims to train the model $G_{t+1}$ from $G_t$ as follows (also depicted in Figure \ref{fig:flow_pipeline}):
+\begin{enumerate}
+    \item For some budget hyperparameter $n \in \mathbb{N}$, generate $n$ candidate proofs per problem in the training set using the current model $G_{t}$ (\ref{sec:generation}), providing the model with neurosymbolic augmentation (\ref{sec:ns_aug}) and a description of the metric to assist in generation. These new potential proofs form a new dataset (denoted $\mathcal{D}^{(t)}_{\mathrm{nr}}$). 
+
+    \item The previous iteration's dataset, $\mathcal{D}^{(t-1)}_{\mathrm{re}}$ (our \textit{replay buffer}), is interleaved with $\mathcal{D}^{(t)}_{\mathrm{nr}}$ to get $\mathcal{D}^{(t)}_{\mathrm{re}}$ (see \ref{sec:training_replay}). 
+
+    \item The model $G_t$ is trained to obtain $G_{t+1}$ (\ref{sec:irpo}). Our reinforcement learning policy of choice, known as Iterative Reasoning Preference Optimization or IRPO \cite{IRPO}, relies on preference pairs of desirable/undesirable proofs, so $\mathcal{D}^{(t)}_{\mathrm{re}}$ is filtered to remove low-quality solutions and pairs are created to form $\mathcal{D}^{(t)}_{\mathrm{IRPO}}$ (again described in \ref{sec:training_replay}). 
+
+    \item $G_{t+1}$ is evaluated with $n$ samples on the test set, again similarly to \ref{sec:generation}. The improvement in metric score of the new proofs over the originals is calculated. 
+\end{enumerate}
+
+The loop is repeated until convergence of the average improvement score, or exhaustion of the compute budget. 
+
+% JA: "P = {(c, x, y_0}} makes it look like P is a singleton. I think you mean to say something like: "Given a fixed problems set $\mathcal{P} \subseteq \mathcal{C} \times \mathcal{X} \times \mathcal{Y}$ where, for each $(c, x, y_0)$ in $P$, $x$ is a proof of $y_0$ in $c$" (or maybe $y_0$ is only a candidate proof, i.e. a purported proof, not necessarily validated by Lean's kernel?
+% (Tate) I think you're right to point out this notation as confusing, I've re-done it to use a more intuitive description at the cost of some of the formalism. 
+
+
+
+% Given a set of problems $\mathcal{P}$, a base language model $G_{0}$, and an optimization metric $\mu$, we aim to iteratively train models $G_i$ in order to maximize the mean improvement score of generated optimizations of input proofs taken from $\mathcal{P}$.
+
+
+% More explicitly, given a fixed problems set $\mathcal{P} = \{(c,x,y_0)\} \subseteq \mathcal{C} \times \mathcal{X} \times \mathcal{Y}$ with $y_0 \in \mathcal{F}(c,x)$, we define a train/test partition of $\mathcal{P}_{\mathrm{train}} \cup \mathcal{P}_{\mathrm{test}} = \mathcal{P}$. Then starting with a base model $G_0$, at iteration $t$ we train a model $G_{t+1}$ from $G_t$ as follows:
+% \begin{enumerate}
+
+% % JA: In the next item, I replaced an em-dash "--" with a comma. A few times, you have used the em-dash where a comma is more appropriate.
+
+% \item Generate $n$ candidate proofs per train problem $T \in \mathcal{P}_{\mathrm{train}}$ with the current model $G_{t}(\cdot\mid \Psi,\mu)$ (note the neurosymbolic augmentation via $\Psi$), forming the (no-replay) dataset: $\mathcal{D}^{(t)}_{\mathrm{nr}}$.
+% \item Then, we collect the previous iteration's dataset $\mathcal{D}_{\text{re}}^{(t-1)}$ and use it to form a replay buffer, which we integrate into $\mathcal{D}_\text{nr}^{(t)}$ to get $\mathcal{D}_{\text{re}}^{(t)}$. We also postprocess this new dataset with several filtering steps to remove low-quality solutions, thereby forming the filtered dataset $\mathcal{D}^{(t)}_{\mathrm{fil}}$. We use this to construct preference pairs for our IRPO training: $\mathcal{D}^{(t)}_{\mathrm{IRPO}}$.
+% \item With $G_{t}$ as the base model, train on $\mathcal{D}^{(t)}_{\mathrm{IRPO}}$ with IRPO to get $G_{t+1}$.
+% \item Evaluate $G_{t+1}$ on $\mathcal{P}_{\mathrm{test}}$ with $n$ samples to get $\mathcal{D}^{(t+1)}_{\mathrm{test}}$.%=\{(c_T,x_T,y_{T,0},\{(y_{T,i},\widehat{s}_{T,i})\}_{i=1}^{n})\}_{T \in \mathcal{P}_{\mathrm{test}}}\]
+% Then compute the mean improvement score $\overline{S_\mu}(\mathcal{D}^{(t+1)}_{\mathrm{test}})$. 
+
+
+% % and record the mean improvement score of $G_{t+1}$ (and optionally $G_{t}^{(\mathrm{wSFT})}$ as well) on $\mathcal{P}_{\mathrm{test}}$ via best-of-$n$ (§\ref{sec:generator}).
+% \end{enumerate}
+% This loop is repeated until convergence of $\overline{S_\mu}(\mathcal{D}^{(t+1)}_{\mathrm{test}})$ or exhaustion of compute budget. An end-to-end depiction of this loop is given in Figure \ref{fig:flow_pipeline}.
+% % Optionally, we either continue from $\theta_t$ or restart from the original base and re-train to $\theta_{t+1}$; both choices perform similarly on early iterations, with the latter scaling better (ablation in §\ref{experiments}).
+
+
+\input{figures/flowchart.tex}
+\subsection{Neurosymbolic Augmentation}
+\label{sec:generation}
+
+A central feature of the ImProver 2 \ pipeline is its ability to generate its own training data for future iterations. This is performed by running inference on the current model $G^{(t)}$, providing it with the theorem statement and the original proof, and requesting an improved version; this is repeated $n$ times per theorem. Additionally, the model's generation capabilities are augmented with information from the proof environment as described in the following sections.
+
+% \subsubsection{Neurosymbolic Augmentation}
+
+\label{sec:ns_aug}
+Namly, theseformal proof environments provide substantial opportunities to obtain relevant information about a proof. We prompt our language model not only with serialized information on the original theorem statement $x$, proof $y_0$, and metric $\mu$, but also with additional neurosymbolic context that exposes structure and dependencies at both a formal and informal level. This augmentation comes from three sources: a context slice to find relevant lemmas or definitions, goal-state traces to highlight the exact effect of each tactic on the progress of the proof, and auto-informalization to provide a higher-level natural language description of the proof in question. Each of these sources is described in detail below. 
+
+
+% Explicitly, this augmentation -- as modelled by the map $\Psi$ -- extracts and serializes three additional channels of information from the raw input triplet $I=(c,x,y_0)$:
+% \[
+% \Psi:\ I\ \mapsto\ \Big(I,\underbrace{\Psi_{\text{ctx}}(I)}_{\text{context slice}},\ \underbrace{\Psi_{\text{cos}}(I)}_{\text{goal-state traces}},\ \underbrace{\Psi_{\text{inf}}(I)}_{\text{auto-informalization}}\Big).
+% \]
+% The generator (LLM) sees only the serialization of $(\Psi,\mu)$, so its conditional distribution effectively factors through these channels. Now, we describe each channel in turn.
+
+\subsubsection{Context}
+\label{sec:context_extraction}
+When working with proofs in high-dependency environments, it is likely that a given proof $y_0$ relies on many lemmas, definitions, and other formal objects defined in the context $c$. We aim to extract and serialize a minimal set of these objects to better inform our generation process.
+
+More specifically, the signatures of all definitions and theorems that are directly referenced by name in the theorem statement $x$ or the original proof $y_0$ are collected. Each of these is provided to the model, along with any associated documentation comments (which generally contain summaries or explanations of the associated declaration). Further details are provided in \cite{ImProver2}. 
+
+\subsubsection{Chain-of-States (CoS)}
+Chain-of-states prompting \cite{ImProver} provides a language model with the explicit state and remaining goals of a proof following the application of each tactic/step, providing richer information about the proof's structure than is normally available. We utilize Lean's \texttt{InfoTree} structures to obtain and serialize these states, and interleave them into the original proof as comments. This process is described formally in \cite{ImProver2}.
+
+\subsubsection{Auto-informalization}
+Utilizing natural language to guide the generation of formal proofs has been shown to significantly increase the capabilities of LLM-based systems on formal mathematical tasks \cite{DraftSketchProve}. We therefore expose natural-language sketches of each target proof to the model, providing a fuzzy layer of abstraction that captures the ``meaning'' of formal items while being robust to syntactic variation and surface-level noise. 
+
+More concretely, we prompt a language model using the proof's chain-of-states information as described above to translate a Lean proof into natural language by explaining the effect of each tactic on the proof state and providing this to the proof optimizer model. We emphasize that this informalization is a secondary channel for the generator and serves simply as an additional representation of the target theorem; outputs are still prompted to be generated formally, and correctness is still judged formally.
+
+
+\subsection{Training}
+\label{sec:training}
+
+% JA: I changed "firstly" to "first".
+
+We build upon the Iterative Reasoning Preference Optimization algorithm \cite{IRPO} to improve proof optimization capabilities during each round of training. However, our architecture differs from the original implementation in several ways. First, we use the improvement in score (i.e. $\mu(s, x, y_{1}) > \mu(s, x, y_{2})$) in addition to binary correctness to rank candidates and form preference pairs, creating a denser reward signal. We furthermore maintain a replay buffer that mixes newly-generated solutions with old data to enable stable improvement over many training rounds. 
+Finally, unlike the original IRPO construction, where training is done on both the reasoning trace as well as the final output, we mask the reasoning trace during training and train solely on the final output.
+
+\subsubsection{Datasets and Replay Buffer}
+\label{sec:training_replay}
+Indiscriminate consumption of self-generated training data has been shown to harm performance in language models, collapsing the tails of their distribution \cite{modelCollapse}. To avoid this issue and enable self-improvement, we introduce a novel replay buffer design that filters new samples, combines them with existing training data, and sort them based on the degree of their improvement for use during training. 
+
+Specifically, following the generation of samples $\mathcal{D}_\text{nr}^{(t)}$ at iteration $t$ (see \ref{sec:generation}), we utilize this and the previous iteration's dataset $\mathcal{D}_\text{re}^{(t-1)}$ to obtain the new dataset $\mathcal{D}_\text{re}^{(t)}$ via the following steps:
+\begin{enumerate}
+    \item Filter $\mathcal{D}_\text{nr}^{(t)}$ for ``replay-eligible" examples (those that contain improved, compiling solutions from previous iterations).
+    \item For each proof in the filtered set, find its counterpart in $\mathcal{D}_\text{re}^{(t-1)}$, and combine the sets of proof candidates from each one, creating our new dataset $\mathcal{D}_\text{re}^{(t)}$.
+    \item Filter $\mathcal{D}_\text{re}^{(t)}$ by removing problems that had a high overall improvement rate (i.e. those that represent trivial tasks for the model).
+    
+    \item For each theorem $T$ in $\mathcal{D}_\text{re}^{(t)}$, partition its set of proofs into a ``winners" or ``losers" category (denoted $W_T^{(t)}$ and $L_T^{(t)})$, with ``winners" being those which compile and have a sufficiently high improvement score, and ``losers" containing all other proofs. We call this filtered and partitioned dataset $\mathcal{D}_\text{fil}^{(t)}$.
+\end{enumerate}
+This process is described in more detail in \cite{ImProver2}. 
+
+
+\paragraph{IRPO Dataset}
+As IRPO is a preference-based training method, $\mathcal{D}_{\text{fil}}^{(t)}$ is partitioned into a set of preference pairs. By mixing and matching many potential proofs of a single theorem, we glean a higher quantity of data points per theorem than would be available through group-based RL policies such as GRPO \cite{GRPO}, compensating for the limited amount of publicly available high-quality Lean training data. Additionally, by creating pairs of compiling/non-compiling examples as well as better/worse metric score, we balance the two parallel goals of learning to write correct Lean syntax and actually making improvements to proofs; this balance is dictated by the hyperparameters $W$ and $L$ in Algorithm \ref{alg:pref_pair_creation}. 
+
+
+\begin{algorithm}[tb]
+  \caption{Preference Pair Creation}
+  \label{alg:pref_pair_creation}
+  \begin{algorithmic}
+    \STATE {\bfseries Input:} filtered dataset $\mathcal{D}_{\text{fil}}^{(t)}$, hyperparameters $W \in \mathbb{N}$ and $L \in \mathbb{N}$
+    \STATE Initialize $\mathcal{D}_{\text{IRPO}}^{(t)} = [ \ ]$
+    \FOR{$T$ {in} $\mathcal{D}_{\text{fil}}^{(t)}$}
+        \STATE De-duplicate $W_T^{(t)}$ by total improvement score
+        \STATE De-duplicate $L_T^{(t)}$ by string equality
+        \STATE Discard or duplicate elements uniformly at random until $|W_T^{(t)}|=W$ and $|L_T^{(t)}|=L$
+        \FOR{$w_1$ in $W_T^{(t)}$}
+            \FOR{$w_2$ in $W_T^{(t)}$}
+                \IF{$\mu(c, x, w_1) > \mu(c, x, w_2)$}
+                    \STATE $\mathcal{D}_{\text{IRPO}}^{(t)} := (w_1, w_2) \texttt{::} \mathcal{D}_{\text{IRPO}}^{(t)}$
+                \ENDIF
+            \ENDFOR
+        \ENDFOR
+
+        \FOR{$w$ in $W_T^{(t)}$}
+            \FOR{$l$ in $L_T^{(t)}$}
+                \STATE $\mathcal{D}_{\text{IRPO}}^{(t)} := (w, l) \texttt{::} \mathcal{D}_{\text{IRPO}}^{(t)}$
+            \ENDFOR
+        \ENDFOR
+    \ENDFOR
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
+\subsubsection{IRPO (Iterative Reasoning Preference Optimization)}
+\label{sec:irpo}
+
+
+With this dataset $\mathcal{D}_{\text{IRPO}}^{(t)}$, we calculate the IRPO loss on each item $T$ as the (weighted) sum of the DPO loss of the preference pair and the negative log-likelihood (NLL) loss over the winner:
+\begin{align*}
+\mathcal{L}_{\text{IRPO}}(T) =& \mathcal{L}_{\text{DPO}}(y_{T,\ell},y_{T,w} \mid \Psi(c_T,x_T,y_{T,0}),\mu) \\&+ \alpha\mathcal{L}_{\text{NLL}}(y_{T,\ell},y_{T,w} \mid \Psi(c_T,x_T,y_{T,0}),\mu)
+\end{align*}
+
+In the above, we represent the relevant neurosymbolic augmentation with the function $\Psi$. After training with respect to this objective for one epoch, we obtain $G_{t+1}$. 

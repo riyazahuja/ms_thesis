@@ -1,0 +1,351 @@
+\appendix{Qualitative Results (ImProver2)}
+\label{app:qual_improver2}
+
+
+
+\subsection{Dependency Optimization}
+
+% Mathlib.Order.Atoms
+% SetLike.isCoatom_iff
+% 5.0
+% 2.0
+% -3.0
+{
+
+\setlength{\columnsep}{0.2cm}
+\begin{paracol}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ T ∧ ∀ H g, K ≤ H → g ∉ K → g ∈ H → H = T := by
+  simp_rw [IsCoatom, lt_iff_le_not_le, SetLike.not_le_iff_exists,
+    and_comm (a := _ ≤ _), and_imp, exists_imp, ← and_imp, and_comm]
+\end{lstlisting}
+}
+\switchcolumn
+{
+\textbf{\ImProver \ (dependency-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ T ∧ ∀ H g, K ≤ H → g ∉ K → g ∈ H → H = T := by
+  constructor <;> intro h
+  <;> simp_all [IsCoatom, lt_iff_le_not_le, SetLike.not_le_iff_exists]
+  <;> tauto
+\end{lstlisting}
+}
+
+\end{paracol}
+\captionof{figure}{\ImProver \ optimizes a proof for dependencies, reducing explicit dependencies by 3. }
+\label{fig:ex1-comp-len}
+}
+% \end{figure}
+
+
+
+
+
+% ConNF.External.Basic
+% ConNF.mem_cross_iff
+% 2.0
+% 0.0
+% -2.0
+
+{
+    \setlength{\columnsep}{0.2cm}
+    
+    \begin{paracol}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  intro a
+  rw [cross, mem_inter_iff, vCross_spec]
+  constructor
+  · rintro ⟨h₁, b, c, rfl, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj] at h₁
+    obtain ⟨b', c', ⟨rfl, rfl⟩, h₁⟩ := h₁
+    exact ⟨b, c, rfl, h₁, h₂⟩
+  · rintro ⟨b, c, rfl, h₁, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj]
+    exact ⟨⟨c, b, ⟨rfl, rfl⟩, h₁⟩, ⟨b, c, ⟨rfl, rfl⟩, h₂⟩⟩
+\end{lstlisting}
+\switchcolumn
+\textbf{\ImProver \ (dependency-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  intro a
+  -- Use the definition of cross and simplify the membership conditions directly
+  constructor <;> intro h
+  -- First direction: Assume membership in cross, construct the pair
+  <;> simp [cross] at h ⊢
+  -- Second direction: Decompose the pair existence claim and verify conditions
+  <;> aesop
+  -- Handle remaining simple cases with basic reasoning
+\end{lstlisting}
+}
+\end{paracol}
+\captionof{figure}{\ImProver \ optimizes a proof for dependencies, reducing explicit dependencies by 2. }
+\label{fig:ex1-comp-len}
+% \end{figure}
+}
+
+
+
+\subsection{Length Optimization}
+% HepLean.PerturbationTheory.FieldOpFreeAlgebra.SuperCommute
+% FieldSpecification.FieldOpFreeAlgebra.summerCommute_jacobi_ofCrAnListF
+% 43.0
+% 24.0
+% -19.0
+{
+    \setlength{\columnsep}{0.2cm}
+    
+    \begin{paracol}{2}
+
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,breaklines=true,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {•}{{$\bullet$}}1 {FF}{{$\bm{\mathcal{F}}$}}1 {SS}{{$\bm{\mathcal{S}}$}}1 {ₛ}{{$_s$}}1 {·}{{$\cdot$}}1]
+lemma summerCommute_jacobi_ofCrAnListF (Phis1 Phis2 Phis3 : List FF.CrAnFieldOp) :
+    [ofCrAnListF Phis1, [ofCrAnListF Phis2, ofCrAnListF Phis3]ₛca]ₛca =
+    SS (FF |>ₛ Phis1, FF |>ₛ Phis3) •
+    (- SS(FF |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofCrAnListF Phis1, ofCrAnListF Phis2]ₛca]ₛca -
+    SS(FF |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAnListF Phis3, ofCrAnListF Phis1]ₛca]ₛca) := by
+  repeat rw [superCommuteF_ofCrAnListF_ofCrAnListF]
+  simp only [instCommGroup, map_sub, map_smul, neg_smul]
+  repeat rw [superCommuteF_ofCrAnListF_ofCrAnListF]
+  simp only [instCommGroup.eq_1, ofList_append_eq_mul, List.append_assoc]
+  by_cases h1 : (FF |>ₛ Phis1) = bosonic <;>
+    by_cases h2 : (FF |>ₛ Phis2) = bosonic <;>
+    by_cases h3 : (FF |>ₛ Phis3) = bosonic
+  · simp only [h1, h2, h3, mul_self, bosonic_exchangeSign, one_smul, exchangeSign_bosonic, neg_sub]
+    abel
+  · simp only [h1, h2, bosonic_exchangeSign, one_smul, mul_bosonic, mul_self, map_one,
+    exchangeSign_bosonic, neg_sub]
+    abel
+  · simp only [h1, h3, mul_bosonic, bosonic_exchangeSign, one_smul, exchangeSign_bosonic, neg_sub,
+    mul_self, map_one]
+    abel
+  · simp only [neq_bosonic_iff_eq_fermionic] at h1 h2 h3
+    simp only [h1, h2, h3, mul_self, bosonic_exchangeSign, one_smul,
+      fermionic_exchangeSign_fermionic, neg_smul, neg_sub, bosonic_mul_fermionic, sub_neg_eq_add,
+      mul_bosonic, smul_add, exchangeSign_bosonic]
+    abel
+  · simp only [neq_bosonic_iff_eq_fermionic] at h1 h2 h3
+    simp only [h1, h2, h3, mul_self, map_one, one_smul, exchangeSign_bosonic, mul_bosonic,
+      bosonic_exchangeSign, bosonic_mul_fermionic, neg_sub]
+    abel
+  · simp only [neq_bosonic_iff_eq_fermionic] at h1 h2 h3
+    simp only [h1, h2, h3, bosonic_mul_fermionic, fermionic_exchangeSign_fermionic, neg_smul,
+      one_smul, sub_neg_eq_add, bosonic_exchangeSign, mul_bosonic, smul_add, exchangeSign_bosonic,
+      neg_sub, mul_self]
+    abel
+  · simp only [neq_bosonic_iff_eq_fermionic] at h1 h2 h3
+    simp only [h1, h2, h3, mul_bosonic, fermionic_exchangeSign_fermionic, neg_smul, one_smul,
+      sub_neg_eq_add, exchangeSign_bosonic, bosonic_mul_fermionic, smul_add, mul_self,
+      bosonic_exchangeSign, neg_sub]
+    abel
+  · simp only [neq_bosonic_iff_eq_fermionic] at h1 h2 h3
+    simp only [h1, h2, h3, mul_self, map_one, one_smul, fermionic_exchangeSign_fermionic, neg_smul,
+      neg_sub]
+    abel
+\end{lstlisting}
+\switchcolumn
+\textbf{\ImProver \ (length-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {•}{{$\bullet$}}1 {FF}{{$\bm{\mathcal{F}}$}}1 {SS}{{$\bm{\mathcal{S}}$}}1 {ₛ}{{$_s$}}1]
+lemma summerCommute_jacobi_ofCrAnListF (Phis1 Phis2 Phis3 : List FF.CrAnFieldOp) :
+    [ofCrAnListF Phis1, [ofCrAnListF Phis2, ofCrAnListF Phis3]ₛca]ₛca =
+    SS(FF |>ₛ Phis1, FF |>ₛ Phis3) •
+    (- SS(FF |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofCrAnListF Phis1, ofCrAnListF Phis2]ₛca]ₛca -
+    SS(FF |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAnListF Phis3, ofCrAnListF Phis1]ₛca]ₛca) := by
+  simp_all [superCommuteF_ofCrAnListF_ofCrAnListF,
+    instCommGroup, map_sub, map_smul, neg_smul,
+    superCommuteF_ofCrAnListF_ofCrAnListF,
+    instCommGroup.eq_1, ofList_append_eq_mul, List.append_assoc,
+    neq_bosonic_iff_eq_fermionic]
+  <;> by_cases h1 : (FF |>ₛ Phis1) = bosonic <;>
+    by_cases h2 : (FF |>ₛ Phis2) = bosonic <;>
+    by_cases h3 : (FF |>ₛ Phis3) = bosonic
+  <;> simp_all [h1, h2, h3, mul_self, bosonic_exchangeSign,
+      one_smul, exchangeSign_bosonic, neg_sub,
+      fermionic_exchangeSign_fermionic, neg_smul,
+      bosonic_mul_fermionic, sub_neg_eq_add,
+      mul_bosonic, smul_add, exchangeSign_bosonic,
+      neg_sub, mul_self] <;> abel
+\end{lstlisting}
+}
+\end{paracol}
+
+\captionof{figure}{\ImProver \ optimizes a proof for length, reducing tactic count by 19. }
+\label{fig:ex1-comp-len2}
+}
+
+
+
+% ConNF.External.Basic
+% ConNF.mem_cross_iff
+% 10.0
+% 2.0
+% -8.0
+{
+\setlength{\columnsep}{0.2cm}
+\begin{paracol}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  intro a
+  rw [cross, mem_inter_iff, vCross_spec]
+  constructor
+  · rintro ⟨h₁, b, c, rfl, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj] at h₁
+    obtain ⟨b', c', ⟨rfl, rfl⟩, h₁⟩ := h₁
+    exact ⟨b, c, rfl, h₁, h₂⟩
+  · rintro ⟨b, c, rfl, h₁, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj]
+    exact ⟨⟨c, b, ⟨rfl, rfl⟩, h₁⟩, ⟨b, c, ⟨rfl, rfl⟩, h₂⟩⟩
+\end{lstlisting}
+}
+\switchcolumn
+{
+\textbf{\ImProver \ (length-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  simp_all [cross, mem_inter_iff, vCross_spec,
+    op_mem_converse_iff, op_inj]
+  <;> aesop
+\end{lstlisting}
+}
+\end{paracol}
+\captionof{figure}{\ImProver \ optimizes a proof for length, reducing tactic count by 8.}
+\label{fig:ex1-comp-len}
+}
+
+
+
+
+
+
+% Foundation.Modal.Hilbert.WeakerThan.KD_KDB
+% LO.Modal.Hilbert.KD_weakerThan_KDB
+% 0.0
+% 2.0
+% 2.0
+
+{
+\setlength{\columnsep}{0.2cm}
+\begin{paracol}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {dollar}{{$ \$ $}}1]
+lemma KD_weakerThan_KDB : (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := normal_weakerThan_of_subset dollar by intro; aesop;
+
+\end{lstlisting}
+}
+\switchcolumn
+{
+\textbf{\ImProver \ (modularity-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {·}{{$\cdot$}}1]
+lemma KD_weakerThan_KDB : (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := by
+  -- Introduce a lemma to handle the subset relationship between the axioms of KD and KDB
+  have h₁ : (LO.Modal.Hilbert.KD α).axioms ⊆ (LO.Modal.Hilbert.KDB α).axioms → (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := by
+    intro h
+    -- Apply the lemma that establishes the weakening relation given the subset of axioms
+    apply normal_weakerThan_of_subset
+    -- Use the given subset condition
+    apply h
+  -- Prove the subset relationship between the axioms of KD and KDB
+  have h₂ : (LO.Modal.Hilbert.KD α).axioms ⊆ (LO.Modal.Hilbert.KDB α).axioms := by
+    -- Prove that all axioms of KD are included in KDB
+    intro Phi hPhi
+    cases' hPhi with hPhi hPhi
+    · -- Case: KD's basic modal logic axioms are included in KDB
+      simp_all [LO.Modal.Hilbert.KD]
+    · -- Case: KD's additional axiom (K) is included in KDB
+      simp_all [LO.Modal.Hilbert.KDB]
+  -- Combine the results to conclude the weakening relation
+  exact h₁ h₂
+\end{lstlisting}
+}
+
+\end{paracol}
+\captionof{figure}{\ImProver \ optimizes a proof for modularity, increasing modularity score (see \ref{app:modularity_metric}) by 2.}
+\label{fig:ex1-comp-len}
+}
+
+
+
+% Mathlib.RingTheory.Polynomial.HilbertPoly
+% Polynomial.hilbertPoly_eq_zero_of_le_rootMultiplicity_one
+
+% 0.0
+% 2.0
+% 2.0
+
+{
+\setlength{\columnsep}{0.2cm}
+\begin{paracol}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+
+lemma hilbertPoly_eq_zero_of_le_rootMultiplicity_one
+    {p : F[X]} {d : ℕ} (hdp : d ≤ p.rootMultiplicity 1) :
+    hilbertPoly p d = 0 := by
+  by_cases hp : p = 0
+  · rw [hp, hilbertPoly_zero_left]
+  · rcases exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp 1 with ⟨q, hq1, hq2⟩
+    have heq : p = q * (- 1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
+      simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
+      exact hq1.trans (mul_comm _ _)
+    rw [heq, ← zero_add d, ← Nat.sub_add_cancel hdp, pow_add (1 - X), ← mul_assoc,
+      hilbertPoly_mul_one_sub_pow_add, hilbertPoly]
+
+
+\end{lstlisting}
+}
+\switchcolumn
+{
+\textbf{\ImProver \ (modularity-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+lemma hilbertPoly_eq_zero_of_le_rootMultiplicity_one
+    {p : F[X]} {d : ℕ} (hdp : d ≤ p.rootMultiplicity 1) :
+    hilbertPoly p d = 0 := by
+  -- Consider the case where p is the zero polynomial
+  have h₁ : p = 0 → hilbertPoly p d = 0 := by
+    intro hp
+    rw [hp, hilbertPoly_zero_left]
+  -- Consider the case where p is not the zero polynomial
+  have h₂ : p ≠ 0 → d ≤ p.rootMultiplicity 1 → hilbertPoly p d = 0 := by
+    intro hp hdp
+    -- Express p as a product of a polynomial, a power of -1, and a power of (1 - X)
+    rcases exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp 1 with ⟨q, hq1, hq2⟩
+    -- Derive the equality of p with the product form
+    have heq : p = q * (- 1) ^ p.rootMultiplicity 1 * (1 - X) ^ p.rootMultiplicity 1 := by
+      simp only [mul_assoc, ← mul_pow, neg_mul, one_mul, neg_sub]
+      exact hq1.trans (mul_comm _ _)
+    -- Substitute the product form into the Hilbert polynomial expression and simplify
+    rw [heq, ← zero_add d, ← Nat.sub_add_cancel hdp, pow_add (1 - X), ← mul_assoc,
+      hilbertPoly_mul_one_sub_pow_add, hilbertPoly]
+  -- Combine both cases to conclude the proof
+  by_cases hp : p = 0 <;> simp_all
+  <;> simp_all [h₁, h₂, hdp]
+\end{lstlisting}
+}
+
+\end{paracol}
+\captionof{figure}{\ImProver \ optimizes a proof for modularity, increasing modularity score (see \ref{app:modularity_metric}) by 2.}
+\label{fig:ex1-comp-len}
+}
+
+
+
+
+
+
+

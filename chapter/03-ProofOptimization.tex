@@ -1,0 +1,479 @@
+\chapter{Proof Optimization}\label{chap:framework}
+
+\setlength{\parindent}{1em}
+
+
+% \FloatBarrier
+
+
+Given a verified proof of a theorem, a proof optimization agent's objective is to synthesize a semantically equivalent proof that is ``better'' according to a user-specified objective, while remaining verifiably correct according to the Lean kernel. In this chapter, we formalize this problem and introduce the metrics and evaluation framework used throughout the thesis.
+
+\subsection{Setup and Notation}
+\label{sec:setup}
+
+\begin{definition}[Proof Context, Statement, and Proof]
+Let $\mathcal{C}$ denote \emph{proof contexts} (imports, local declarations, module metadata, etc.), $\mathcal{X}$ \emph{theorem statements}, and $\mathcal{Y}$ \emph{proofs}. We consider triples $(c,x,y)\in \mathcal{C}\times\mathcal{X}\times\mathcal{Y}$, where $y$ is a purported proof of $x$ in $c$ which may or may not be sound.
+\end{definition}
+
+
+\begin{figure*}[tbp]
+% Mathlib.Order.Atoms
+% SetLike.isCoatom_iff
+% 5.0
+% 2.0
+% -3.0
+% \setlength{\columnsep}{0.2cm}
+\begin{minipage}[t]{0.33\textwidth}
+\textbf{Original}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ T ∧ ∀ H g, K ≤ H → g ∉ K → g ∈ H → H = T := by
+  simp_rw [IsCoatom, lt_iff_le_not_le, SetLike.not_le_iff_exists,
+    and_comm (a := _ ≤ _), and_imp, exists_imp, ← and_imp, and_comm]
+\end{lstlisting}
+
+\end{minipage}\begin{minipage}[t]{0.33\textwidth}
+\textbf{Original}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  intro a
+  rw [cross, mem_inter_iff, vCross_spec]
+  constructor
+  · rintro ⟨h₁, b, c, rfl, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj] at h₁
+    obtain ⟨b', c', ⟨rfl, rfl⟩, h₁⟩ := h₁
+    exact ⟨b, c, rfl, h₁, h₂⟩
+  · rintro ⟨b, c, rfl, h₁, h₂⟩
+    simp only [op_mem_converse_iff, vCross_spec, op_inj]
+    exact ⟨⟨c, b, ⟨rfl, rfl⟩, h₁⟩, ⟨b, c, ⟨rfl, rfl⟩, h₂⟩⟩
+\end{lstlisting}
+\end{minipage}\begin{minipage}[t]{0.33\textwidth}
+\textbf{Original}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {dollar}{{$ \$ $}}1]
+lemma KD_weakerThan_KDB : (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := normal_weakerThan_of_subset dollar by intro; aesop;
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}[t]{0.33\textwidth}
+\textbf{ImProver 2 \ (dependency)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ T ∧ ∀ H g, K ≤ H → g ∉ K → g ∈ H → H = T := by
+  constructor <;> intro h
+  <;> simp_all [IsCoatom, lt_iff_le_not_le, SetLike.not_le_iff_exists]
+  <;> tauto
+\end{lstlisting}
+\end{minipage}\begin{minipage}[t]{0.33\textwidth}
+\textbf{ImProver 2 \ (length)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔ ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  simp_all [cross, mem_inter_iff, vCross_spec,
+    op_mem_converse_iff, op_inj]
+  <;> aesop
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[t]{0.33\textwidth}
+\textbf{ImProver 2 \ (modularity)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1 {·}{{$\cdot$}}1]
+lemma KD_weakerThan_KDB : (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := by
+  have h₁ : (LO.Modal.Hilbert.KD α).axioms ⊆ (LO.Modal.Hilbert.KDB α).axioms → (Hilbert.KD α) ≤ₛ (Hilbert.KDB α) := by
+    intro h
+    apply normal_weakerThan_of_subset
+    apply h
+  have h₂ : (LO.Modal.Hilbert.KD α).axioms ⊆ (LO.Modal.Hilbert.KDB α).axioms := by
+    intro Phi hPhi
+    cases' hPhi with hPhi hPhi
+    · simp_all [LO.Modal.Hilbert.KD]
+    · simp_all [LO.Modal.Hilbert.KDB]
+  exact h₁ h₂
+\end{lstlisting}
+\end{minipage}
+\captionof{figure}{ImProver 2 automatically optimizes human-written proofs to reduce explicit dependencies, minimize length, or maximize proof modularity, while maintaining formal correctness. }
+\label{fig:main-demo}
+\end{figure*}
+
+\begin{definition}[Verifier and Valid Proof Set]
+A \emph{verifier} is a computable function
+\[
+\mathrm{v}:\mathcal{C} \times \mathcal{X} \times \mathcal{Y} \to \{0,1\},
+\]
+which outputs $1$ if $y$ is a syntactically correct and sound proof of $x$ in $c$. The set of \emph{valid proofs} of $x$ in context $c$ is
+\[
+\mathcal{F}(c,x) := \{y\in\mathcal{Y}:\mathrm{v}(c,x,y)=1\}.
+\]
+\end{definition}
+
+Two proofs $y,y'\in\mathcal{F}(c,x)$ are said to be \emph{semantically equivalent}: they establish the same mathematical fact, though they may differ arbitrarily in style, structure, or length. We use Lean~4 \cite{LeanTheoremProver} as our verifier throughout this thesis; its kernel and type-checker provide a strong guarantee of correspondence with a type-theoretic model of modern mathematics.
+
+\subsection{Optimization Objective}
+\label{sec:objective}
+
+\begin{definition}[Optimization Metric]
+An \emph{optimization metric} is a computable function
+\[
+\mu:\mathcal{C}\times\mathcal{X}\times\mathcal{Y}\to\mathbb{R}.
+\]
+\end{definition}
+
+\begin{definition}[Improvement Score]
+\label{def:improvement_score}
+Given an input triple $(c, x, y_0)$ with $\mathrm{v}(c,x,y_0)=1$ and a metric $\mu$, the \emph{improvement score} of a candidate proof $y$ is
+\[
+S_\mu(y, y_0 \mid c, x) := \Delta_\mu(c,x,y,y_0) \cdot \mathrm{v}(c,x,y),
+\]
+where $\Delta_\mu(c,x,y,y_0) := \mu(c,x,y) - \mu(c,x,y_0)$.
+That is, the improvement score is the gain in metric value when the candidate compiles correctly, and zero otherwise.
+\end{definition}
+
+The proof optimization problem for a single theorem is then
+\begin{equation}
+\label{eq:po_score}
+\hat{y} = \arg\max_{y \in \mathcal{Y}}\; S_\mu(y, y_0 \mid c, x).
+\end{equation}
+Since $S_\mu(y_0, y_0 \mid c, x) = 0$, returning the original proof is always a feasible but trivial solution. Any $\hat{y}$ with $S_\mu > 0$ is a strictly improved proof.
+
+\begin{remark}
+Proof optimization subsumes neural theorem proving as a special case. If we set $y_0$ to an empty (incorrect) proof and $\mu := \mu_{\mathrm{comp}}$ (the completion metric, Definition~\ref{def:completion}), then $S_\mu(y, y_0 \mid c, x) = \mathrm{v}(c,x,y)$, and solving~\eqref{eq:po_score} reduces to standard theorem proving.
+\end{remark}
+
+In practice, we approximate~\eqref{eq:po_score} via language model-based Lean~4 code generation. For a conditional generator $G$ over proofs and an augmentation scaffold $\Psi$ (defined per system in later chapters), we sample $n$ candidate proofs $y_1,\dots,y_n \sim G(\cdot \mid \Psi(c,x,y_0), \mu)$ and select the best via the \emph{best-of-$n$} procedure defined below.
+
+\subsection{Datasets}
+\label{sec:datasets}
+
+Throughout this thesis, we evaluate proof optimization on Lean~4 datasets spanning a range of mathematical difficulty:
+\begin{itemize}
+    \item \textbf{Mathematics in Lean (MIL)} \cite{MIL}: Lean~4 exercises from an introductory textbook on undergraduate-level mathematics. We use a subset of $72$ theorems as the primary benchmark for ImProver and its ablations.
+    \item \textbf{Compfiles} \cite{compfiles}: Lean~4 formalizations of competition-level mathematics problems. We use a subset of $26$ theorems for evaluation.
+    \item \textbf{Mathlib} \cite{The_mathlib_Community_2020}: Research-level theorems from the main Lean~4 mathematics library. We use a subset of $43$ theorems drawn from Mathlib proper.
+    \item \textbf{miniCTX-v2} \cite{miniCTX}: A held-out test set of theorems drawn from a diverse collection of real-world Lean~4 repositories, including Mathlib, HEPLean, PFR, and Carleson. Constructed to test in-context generalization across heterogeneous formal libraries. Used as the primary benchmark for ImProver~2.
+\end{itemize}
+
+\subsection{Metrics}
+\label{sec:metrics}
+
+We study a collection of metrics designed to be practical, interpretable, and useful for the structural optimization of formal proofs at scale. Each metric is a computable function $\mu : \mathcal{C} \times \mathcal{X} \times \mathcal{Y} \to \mathbb{R}$.
+
+\subsubsection{Metric Definitions}
+\label{sssec:metric_defs}
+
+\paragraph{Length.}
+\label{def:length}
+
+Let $|y|_{\mathrm{tac}}$ denote the number of tactic invocations in a proof $y$. The \emph{length metric} is
+\[
+\mu_{\mathrm{len}}(c,x,y) := -|y|_{\mathrm{tac}}.
+\]
+Shorter proofs are easier to read and maintain and impose less overhead during compilation. Proof shortening (``proof golfing'') is a common activity in formal mathematics~\cite{Mathlib}. This metric is used in both ImProver (Chapter~\ref{chap:improver}) and ImProver~2 (Chapter~\ref{chap:improver2}).
+
+\paragraph{Declarativity.}
+\label{def:declarative}
+
+Let $|y|_{\mathrm{have}}$ denote the number of explicitly typed \texttt{have} tactics in proof $y$. The \emph{declarative metric} is
+\[
+\mu_{\mathrm{decl}}(c,x,y) := \frac{|y|_{\mathrm{have}}}{|y|_{\mathrm{tac}}}.
+\]
+Declarative proofs \cite{serge2010,Wiedijk} are more readable, explicit, and modular: each \texttt{have} tactic names and proves an intermediate claim, making the logical structure of the proof explicit. This metric is used in ImProver (Chapter~\ref{chap:improver}).
+
+\paragraph{Mixed.}
+\label{def:mixed}
+The \emph{mixed metric} penalizes all tactics and rewards declarative ones:
+\[
+\mu_{\mathrm{mix}}(c,x,y) := 5\cdot|y|_{\mathrm{have}} - |y|_{\mathrm{tac}}.
+\]
+Assigning $+5$ to each \texttt{have} tactic and $-1$ to every tactic means a declarative tactic ``pays for'' four additional tactics. This jointly optimizes for brevity and structure. Used in ImProver (Chapter~\ref{chap:improver}).
+
+
+\paragraph{Completion.}
+\label{def:completion}
+
+The \emph{completion metric} measures proof correctness:
+\[
+\mu_{\mathrm{comp}}(c,x,y) := \mathrm{v}(c,x,y) \in \{0,1\}.
+\]
+This is a degenerate metric: any correct proof achieves the optimum. It is used in ImProver (Chapter~\ref{chap:improver}) to demonstrate empirically that proof optimization generalizes neural theorem proving.
+
+\paragraph{Dependencies.}\label{def:dependencies}
+Let $\mathrm{Deps}(c,x,y)$ denote the set of all theorem or lemma names from outside the local file context explicitly referenced in proof $y$. The \emph{dependency metric} is
+\[
+\mu_{\mathrm{dep}}(c, x, y) := -\left|\mathrm{Deps}(c, x, y)\right|.
+\]
+Minimizing the dependency footprint encourages self-contained proofs that do not require memorizing large numbers of external lemma names, improving readability and long-term maintainability. Introduced in ImProver~2 (Chapter~\ref{chap:improver2}).
+
+\paragraph{Modularity.}\label{def:modularity}
+
+The modularity metric requires substantially more machinery, rooted in Lean's elaboration semantics. At a high level, we count the number of independent subproofs that are useful towards the main proof, as a more rigorous measure of proof structure quality than the declarative metric with explicit guards against reward hacking. The following definitions formalize this intuition.
+
+\begin{definition}[Proof Tree and Children]\label{def:proof_tree}
+Lean elaborates tactic proofs by incrementally constructing and solving metavariables. At elaboration step $i$, tactic $\tau_i$ focuses a goal $?m_i$, produces an assignment $\sigma_{i+1}(?m_i) = t_i$, and potentially introduces new metavariables as subgoals. The set of \emph{direct children} of step $i$ is
+\[
+\mathrm{Children}(\tau_i) := \{\text{metavariables occurring free in } t_i\}.
+\]
+The \emph{proof tree} $\mathcal{T}(y)$ is the labeled directed forest over steps $\tau_1,\dots,\tau_T$, extracted from Lean's \texttt{InfoTree}.
+\end{definition}
+
+\begin{definition}[Spawned Goals]\label{def:spawned}
+Define
+\[
+\mathrm{Current}_i := \{?m_i\} \cup \mathrm{Children}(\tau_i),\qquad S_{i+1} := S_i \cup \mathrm{Children}(\tau_i).
+\]
+The \emph{spawned goals} of step $\tau_i$ are
+\[
+\mathrm{Spawned}(\tau_i) := \bigl(\mathrm{Current}_i \setminus \mathrm{Children}(\tau_i)\bigr) \setminus S_i.
+\]
+These are goals that first appear at step $i$, are not logical subgoals of the focused goal, and correspond to independent subproof obligations introduced by tactics such as \texttt{have} and \texttt{calc}.
+\end{definition}
+
+\begin{definition}[Effective Spawned Goals]\label{def:effective_spawned}
+A spawned goal $g$ is \emph{effective} if it satisfies all three guard conditions:
+\begin{enumerate}
+    \item \textbf{Nontriviality.} The subtree $\mathcal{T}_g \subseteq \mathcal{T}(y)$ rooted at $g$ contains more than $2$ tactic steps ($|\mathcal{T}_g| > 2$). This excludes goals discharged immediately by a single automation tactic (e.g.\ \texttt{simp}, \texttt{linarith}, \texttt{ring}).
+    \item \textbf{No duplicates.} The sequent variant hash of $g$ (computed modulo $\beta\delta\iota$-normalization and $\alpha$-equivalence) does not match any previously counted effective spawned goal, preventing reward hacking via repeated restatements of the same obligation.
+    \item \textbf{No wrappers.} The target type of $g$ is not a definitional wrapper of its parent goal's target type, and vice versa. This eliminates trivial $\forall$-introductions and restatements of the parent goal.
+\end{enumerate}
+Formally, let $\mathsf{Intro}(g)$ be the set of proof-relevant hypotheses introduced by the subproof rooted at $g$. Define the monotone operator $\Phi$ on sets of spawned roots by
+
+\begin{align*}
+\Phi(S) :=& \bigl\{\, g \;\big|\; \mathsf{Intro}(g) \text{ used outside all spawned subtrees},\ \\&\text{or}\ \exists\, g' \in S,\, g' \neq g,\, \mathsf{Intro}(g) \text{ used in subtree of } g' \bigr\}.    
+\end{align*}
+
+The set of \emph{effective spawned goals} $\mathcal{E}(y)$ is the least fixed point of $\Phi$ restricted to the set of goals satisfying the three guard conditions above. This fixed-point semantics ensures that a spawned subproof is effective only if its introduced hypotheses are actually used in the main proof or in another effective subproof.
+\end{definition}
+
+With this, we define the \emph{modularity metric} as
+\[
+\mu_{\mathrm{mod}}(c,x,y) := \bigl|\mathcal{E}(y)\bigr|,
+\]
+where $\mathcal{E}(y)$ is the set of effective spawned goals (Definition~\ref{def:effective_spawned}). Modular proofs are easier to read, maintain, and reuse. The guard conditions prevent reward hacking by ensuring that only genuinely independent and substantive subproofs are counted. Figure~\ref{fig:kd5-kd45-proof} illustrates the proof-tree representation used to compute the modularity metric on an example proof.
+Introduced in ImProver~2 (Chapter~\ref{chap:improver2}), and defined in full rigor in Appendix~\ref{app:modularity}. \textbf{TODO PORT OVER IMPROVER 2 APPENDIX}
+
+
+\begin{figure}[ht]
+    \centering
+    \textbf{Example Proof Tree}
+    \begin{scriptsize}
+    \begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={≤ₛ}{{$\leq_s$}}2 {⊆}{{$\subseteq$}}1 {α}{{$\alpha$}}1 {Phi}{{$\varphi$}}1 {→}{{$\rightarrow$}}1 {₁}{{$_1$}}1 {₂}{{$_2$}}1]
+lemma KD5_weakerThan_KD45 : (Hilbert.KD5 α) ≤ₛ (Hilbert.KD45 α) := by
+  have h₁ : (LO.Modal.Hilbert.KD5 α).axioms ⊆ (LO.Modal.Hilbert.KD45 α).axioms → (Hilbert.KD5 α) ≤ₛ (Hilbert.KD45 α) := by
+    intro h
+    apply normal_weakerThan_of_subset
+    <;> assumption
+  have h₂ : (LO.Modal.Hilbert.KD5 α).axioms ⊆ (LO.Modal.Hilbert.KD45 α).axioms := by
+    intro Phi hPhi
+    cases' hPhi with hPhi hPhi
+    <;> simp_all [LO.Modal.Hilbert.KD5, LO.Modal.Hilbert.KD45]
+    <;> aesop
+  exact h₁ h₂
+    \end{lstlisting}
+    \end{scriptsize}
+    
+    
+    % \includegraphics[width=0.5\textwidth]{figures/Modularity/proof_tree_example.png}
+    \resizebox{0.5\columnwidth}{!}{%
+\begin{tikzpicture}[
+    font=\sffamily,
+    >=Latex,
+    % every node/.style={inner sep=0pt}
+]
+
+% Styles
+\tikzset{
+  rootbox/.style={
+    draw=blue!70!black,
+    fill=blue!12,
+    rounded corners=4pt,
+    very thick,
+    minimum width=4.5cm,
+    minimum height=1.1cm,
+    text=blue!70!black,
+    font=\large,%\bfseries\large,
+    align=center
+  },
+  normalbox/.style={
+    draw=black!55,
+    fill=white,
+    rounded corners=4pt,
+    very thick,
+    minimum width=4.1cm,
+    minimum height=1.0cm,
+    text=black!65,
+    font=\large,%\bfseries\large,
+    align=center
+  },
+  effectivebox/.style={
+    draw=red!75!black,
+    fill=red!10,
+    rounded corners=4pt,
+    very thick,
+    minimum width=3.1cm,
+    minimum height=1.0cm,
+    text=red!75!black,
+    font=\large,%\bfseries\large,
+    align=center
+  },
+  termbox/.style={
+    draw=green!60!black,
+    fill=green!15,
+    rounded corners=4pt,
+    very thick,
+    minimum width=0.7cm,
+    minimum height=0.7cm,
+    text=green!40!black,
+    font=\large
+  },
+  solidarrow/.style={
+    draw=black!70,
+    very thick,
+    -{Latex[length=2.5mm]}
+  },
+  dashedarrow/.style={
+    draw=red!75!black,
+    dashed,
+    very thick,
+    -{Latex[length=2.5mm]}
+  },
+  idlabel/.style={
+    font=\scriptsize,
+    text=black!45
+  }
+}
+
+% Nodes
+\node[rootbox]      (n0)  at (0,0)        {\texttt{have h$_1$:[\ldots]:= by}};
+\node[effectivebox] (n1)  at (5,-1)   {\texttt{intro h}};
+
+\node[normalbox]    (n4)  at (0,-2)     {\texttt{have h$_2$:[\ldots]:= by}};
+\node[effectivebox] (n5)  at (-5,-3)  {\texttt{intro $\varphi$ h$\varphi$}};
+
+\node[normalbox]    (n2)  at (5,-3)   {\texttt{apply [\ldots]}};
+\node[normalbox]    (n3)  at (5,-5)   {\texttt{assumption}};
+
+\node[normalbox]    (n10) at (0,-4)    {\texttt{exact h$_1$ h$_2$}};
+
+\node[normalbox]    (n6)  at (-5,-5) {\texttt{cases' h$\varphi$ with h$\varphi$ h$\varphi$}};
+\node[normalbox]    (n7)  at (-7.5,-7)  {\texttt{simp\_all [\ldots]}};
+\node[normalbox]    (n8)  at (-2.5,-7)  {\texttt{simp\_all [\ldots]}};
+\node[normalbox]    (n9)  at (-2.5,-9)  {\texttt{aesop}};
+
+\node[termbox]      (t3)  at (5,-7)   {$\top$};
+\node[termbox]      (t10) at (0,-6)    {$\top$};
+\node[termbox]      (t7)  at (-7.5,-9)  {$\top$};
+\node[termbox]      (t9)  at (-2.5,-11) {$\top$};
+
+% Edges
+\draw[solidarrow]  (n0.south) -- (n4.north);
+\draw[dashedarrow] (n0.east) -- (n1.west);
+
+\draw[solidarrow]  (n1.south) -- (n2.north);
+\draw[solidarrow]  (n2.south) -- (n3.north);
+\draw[solidarrow]  (n3.south) -- (t3.north);
+
+\draw[dashedarrow]  (n4.west) -- (n5.east);
+\draw[solidarrow]  (n4.south) -- (n10.north);
+\draw[solidarrow]  (n10.south) -- (t10.north);
+
+\draw[solidarrow]  (n5.south) -- (n6.north);
+\draw[solidarrow]  (n6.south) -- (n7.north);
+\draw[solidarrow]  (n6.south) -- (n8.north);
+\draw[solidarrow]  (n7.south) -- (t7.north);
+\draw[solidarrow]  (n8.south) -- (n9.north);
+\draw[solidarrow]  (n9.south) -- (t9.north);
+
+\end{tikzpicture}%
+}
+    \caption{Example Lean proof (top) and its generated proof tree (bottom). Note the root node (in blue), and the two effective spawned goals coming from $h_1$ and $h_2$ (in red).}
+    \label{fig:kd5-kd45-proof}
+\end{figure}   
+
+\FloatBarrier
+
+\subsubsection{Metric Summary and Degenerate Solutions}
+\label{sssec:metric_summary}
+
+Table~\ref{tab:metrics_summary} summarizes which metrics are used by each system.
+
+\begin{table}
+\centering
+\caption{Metrics used in ImProver and ImProver~2.}
+\label{tab:metrics_summary}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{ImProver} & \textbf{ImProver~2} \\
+\midrule
+Length          & \checkmark & \checkmark \\
+Declarative     & \checkmark &            \\
+Mixed           & \checkmark &            \\
+Completion      & \checkmark &            \\
+Dependencies    &            & \checkmark \\
+Modularity      &            & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{TODO: GIVE A MORE ROBUST TREATMENT OF FAILURE MODES AND DEGENERATE SOLUTIONS. LIST LIMITATIONS OF EACH METRIC AND HIGHLIGHT HOW THE DESIGN OF METRICS ARE THE PROBLEM OF THE USER; WE FOCUS ON PROVIDING A TOOL TO OPTIMIZE ANY USER-SPECIFIED METRIC, AND PROVIDE SOME EXAMPLES OF USEFUL METRICS, BUT WE MAKE NO CLAIMS ABOUT THE INTRINSIC QUALITY OF ANY PARTICULAR METRIC.} 
+
+A risk with all metrics is the possibility of \emph{degenerate solutions}: proofs that score highly on a metric while not corresponding to its intuitive sense. For example, overuse of \texttt{have} statements can inflate the declarative score despite those statements playing no role in the deductive process. ImProver mitigates this by providing many human-written examples of each metric. ImProver~2's modularity metric addresses it at the level of the metric definition itself, via the guard conditions in Definition~\ref{def:effective_spawned}. The design of robust metrics for formal proof quality remains an active challenge and is discussed in the limitations of each system.
+
+\subsection{Evaluation Framework}
+\label{sec:eval_methodology}
+
+Since proof optimization is a new task with no established evaluation protocol, we define here the evaluation framework used by both systems in this thesis.
+
+\subsubsection{Single-Theorem Evaluation}
+
+Given a generator $G$, an augmentation scaffold $\Psi$, a metric $\mu$, and an input triple $(c,x,y_0)$, we sample $n$ candidate proofs $y_1,\dots,y_n \sim G(\cdot \mid \Psi(c,x,y_0), \mu)$ and select the best candidate via the best-of-$n$ procedure.
+
+\begin{definition}[Best-of-$n$ Selection]\label{def:best_of_n}
+Given $n$ candidate proofs $y_0, y_1,\dots,y_n$, define the \emph{best-of-$n$ output} $\hat{y}$ as
+\[
+\hat{y} = \arg\max_{0 \le i \le n}\; S_\mu(y_i, y_0 \mid c, x).
+\]
+% Equivalently, using $E(y)$ to denote the number of compilation errors in $y$, the pairwise selection function comparing two candidates $y, y'$ is
+% \[
+% \mathrm{Best}(y,y') = \begin{cases}
+%     \arg\max(y,y',\;\text{key: } z \mapsto \mu(c,x,z)), & E(y)=E(y')=0\\
+%     y,   & E(y)=0,\; E(y')>0\\
+%     y',  & E(y)>0,\; E(y')=0\\
+%     \arg\min(y,y',\;\text{key: } z \mapsto E(z)), & E(y)>0,\; E(y')>0
+% \end{cases}
+% \]
+% and $\hat{y}$ is obtained by applying $\mathrm{Best}$ inductively over the $n$ candidates. This policy first selects for correctness, then for metric improvement.
+\end{definition}
+
+Since $S_\mu(y_0, y_0 \mid c, x) = 0$, the original proof is always included as a fallback: $\hat{y}$ is never worse than $y_0$. The expected value $\mathbb{E}[\max_{i} S_\mu(y_i, y_0 \mid c, x)]$ is nondecreasing in $n$, so increasing the sample budget monotonically improves the expected selected score.
+
+\subsubsection{Dataset-Level Evaluation}
+\label{sssec:dataset_eval}
+
+Given a test dataset $\mathcal{D} = \{(c_i, x_i, y_{0,i})\}_{i=1}^{N}$, we track three aggregate quantities. Let $\hat{y}_i$ be the best-of-$n$ output for the $i$-th theorem.
+
+\begin{definition}[Mean Improvement Score]\label{def:mean_improvement}
+The \emph{mean improvement score} over $\mathcal{D}$ is
+\[
+\overline{S}_\mu(\mathcal{D}) := \frac{1}{N}\sum_{i=1}^{N} S_\mu(\hat{y}_i, y_{0,i} \mid c_i, x_i).
+\]
+This is the primary metric throughout this thesis. It jointly rewards generating a compiling proof and achieving a large improvement in $\mu$, and cannot be inflated by returning the original proof (which scores $0$).
+\end{definition}
+
+\begin{definition}[Compilation Accuracy]\label{def:comp_acc}
+The \emph{compilation accuracy} is
+\[
+\mathcal{A}(\mathcal{D}) := \frac{1}{N}\sum_{i=1}^{N}\mathrm{v}(c_i, x_i, \hat{y}_i).
+\]
+This measures the fraction of theorems for which the model produced at least one compiling output.
+\end{definition}
+
+\begin{definition}[Improved Accuracy]\label{def:imp_acc}
+The \emph{improved accuracy} is
+\[
+\mathcal{A}^+_\mu(\mathcal{D}) := \frac{1}{N}\sum_{i=1}^{N}\mathbf{1}\bigl[S_\mu(\hat{y}_i, y_{0,i} \mid c_i, x_i) > 0\bigr].
+\]
+This measures the fraction of theorems for which the model produced a compiling proof with strictly positive metric improvement.
+\end{definition}
+
+\begin{remark}
+These three metrics are complementary. $\mathcal{A}$ measures stability (correctness preservation); $\mathcal{A}^+_\mu$ measures whether the system is solving the optimization problem rather than merely preserving compilability; and $\overline{S}_\mu$ captures both by weighting each success by its magnitude. In reported results, $\overline{S}_\mu$ is always the primary selection criterion.
+\end{remark}

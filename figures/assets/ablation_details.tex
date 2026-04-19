@@ -1,0 +1,146 @@
+
+
+We now proceed to show detailed results from our ablation testing.
+
+% \textbf{Output and CoS: } 
+
+\begin{table}[ht]
+\caption{Output and Chain-of-States Ablations}
+\label{tab:abl-cos}
+\centering
+\small
+\begin{tabular}{ll|cccc}
+\toprule
+Output Format & CoS & Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+\midrule
+\texttt{string} & True & 7.53 & 16.12 & 46.72\% & 16.79\% \\
+\texttt{string}&False & 7.03 & 19.67 & 35.77\% & 15.33\% \\
+\texttt{string list}&\textbf{True} & \textbf{8.04} & \textbf{12.38} & \textbf{64.96\%} & \textbf{21.17\%} \\
+\texttt{string list}&False & 7.04 & 13.58 & 51.82\% & 18.98\% \\
+\texttt{string tree}&True & 7.62 & 15.34 & 49.64\% & 18.25\% \\
+\texttt{string tree}&False & 6.31 & 14.17 & 44.53\% & 16.06\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+By \autoref{tab:abl-cos}, we see that the optimal combination in this testing group is a \texttt{string list} output format with CoS enabled. Fix these values for all future tests.
+
+
+
+
+% \textbf{Example Retrieval: }
+
+
+\begin{table}[h]
+\caption{Example Retrieval Ablations}
+\label{tab:abl-ex}
+\centering
+\small
+\begin{tabular}{l|cccc}
+\toprule
+Examples & Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+\midrule
+0 &  5.67 & 8.44 & 67.15\% & 16.79\% \\
+3 &  8.49 & 13.68 & 62.04\% & 19.71\% \\
+5 &  8.38 & 12.9 & 64.96\% & 21.17\% \\
+7 &  7.56 & 12.04 & 62.77\% & 19.71\% \\
+\textbf{10} &  \textbf{9.34} & \textbf{14.7} & \textbf{63.5\%} & \textbf{21.9\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+ With the previous optimal parameters fixed, run the ablation on the number of examples. By \autoref{tab:abl-ex}, we see that the optimal combination in this testing group is $10$ examples. Fix this value for all future tests.
+
+
+
+
+
+\begin{table}[h]
+\caption{Sampling Method Ablations}
+\label{tab:abl-samp}
+\centering
+\small
+\begin{tabular}{lll|cccc}
+\toprule
+Method & Forward & Keep Best & Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+\midrule
+None &N/A & N/A&  9.34 & 14.7 & 63.5\% & 21.9\% \\
+refinement&1&False &  14.76 & 30.63 & 48.18\% & 30.66\% \\
+refinement&5 &False &  12.5 & 20.88 & 59.85\% & 30.66\% \\
+refinement&1 &True &  14.95 & 14.95 & 100.0\% & 30.66\% \\
+refinement&5 &True &  13.15 & 13.15 & 100.0\% & 29.93\% \\
+\textbf{best-of-n} &N/A&N/A&  \textbf{15.35} & \textbf{18.44} & \textbf{83.21\%} & \textbf{36.5\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+Note that forward and keep-best values are parameters for refinement of how many previous iterations to forward, and whether to keep the most recent or the best iteration in subsequent refinement steps. 
+
+
+
+Now, with the previous optimal parameters fixed, run the ablation on the sample method. By \autoref{tab:abl-samp}, we see that the optimal combination in this testing group is best-of-n. Fix this value for all future tests.
+
+
+
+
+\begin{table}[h]
+\caption{Model and $n$ Ablations}
+\label{tab:abl-n}
+\centering
+\small
+\begin{tabular}{ll|cccc}
+\toprule
+Model & $n$ & Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+\midrule
+gpt-4o & 3 &  19.66 & 24.36 & 80.7\% & 38.6\% \\
+gpt-4o & 5 &  20.12 & 24.97 & 80.56\% & 36.11\% \\
+gpt-4o & 7 &  22.44 & 27.21 & 82.46\% & 42.11\% \\
+gpt-4o & 10 &  21.73 & 25.28 & 85.96\% & 40.35\% \\
+\textbf{gpt-4o} & \textbf{15} &  \textbf{23.51} & \textbf{26.28} & \textbf{89.47\%} & \textbf{45.61\%} \\
+gpt-4o-mini & 3 &  3.65 & 4.63 & 78.95\% & 8.77\% \\
+gpt-4o-mini & 5 &  5.12 & 6.21 & 82.46\% & 10.53\% \\
+gpt-4o-mini & 7 &  3.65 & 4.34 & 84.21\% & 8.77\% \\
+gpt-4o-mini & 10 &  4.99 & 5.69 & 87.72\% & 12.28\% \\
+gpt-4o-mini & 15 &  4.35 & 5.06 & 85.96\% & 12.28\% \\
+gpt-4o-mini & 20 &  4.87 & 5.56 & 87.72\% & 14.04\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+With the previous optimal parameters fixed, run the ablation on the value of $n$ and model. By \autoref{tab:abl-n}, we see that the optimal combination in this testing group is GPT-4o with $n=15$. Fix this value for all future tests.
+
+
+\begin{table}[h]
+\caption{RAG and Combination Sampling Method Ablations}
+\label{tab:abl-rag}
+\centering
+\small
+\begin{tabular}{llll|cccc}
+\toprule
+Combination & $m$ & $m'$  & RAG & Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+\midrule
+best-of-n(refinement) & 3 & 5 & True &  33.78 & 33.78 & 100.0\% & 50.0\% \\
+best-of-n(refinement) & 3 & 5 & False &  31.23 & 31.23 & 100.0\% & 46.88\% \\
+best-of-n(refinement) & 5 & 3 & True &  31.85 & 31.85 & 100.0\% & 50.0\% \\
+best-of-n(refinement) & 5 & 3& False &  31.35 & 31.35 & 100.0\% & 50.0\% \\
+refinement(best-of-n) & 3 & 5 & True &  32.66 & 51.32 & 63.64\% & 48.48\% \\
+refinement(best-of-n) & 3 & 5 & False &  32.88 & 50.1 & 65.62\% & 53.12\% \\
+\textbf{refinement(best-of-n)} & \textbf{5} & \textbf{3} & \textbf{True} &  \textbf{34.88} & \textbf{57.56} & \textbf{60.61\%} & \textbf{54.55\%} \\
+refinement(best-of-n) & 5 & 3 & False &  29.54 & 49.75 & 59.38\% & 43.75\% \\
+best-of-n & N/A & 15 & True &  29.64 & 32.71 & 90.62\% & 56.25\% \\
+best-of-n & N/A & 15 & False &  28.25 & 33.48 & 84.38\% & 53.12\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+With the previous optimal parameters fixed, run the ablation on the combination methods and if RAG is enabled. By \autoref{tab:abl-rag}, we see that the optimal combination in this testing group is a $5$-step refinement with each iteration being a best-of-3 call, with RAG enabled.
+
+
+

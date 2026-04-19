@@ -1,0 +1,198 @@
+% --- Color Palette ---
+\definecolor{cGen}{RGB}{50, 50, 120}      % Deep Navy
+\definecolor{cPrompt}{RGB}{220, 220, 220} % Light Gray
+\definecolor{cBuf}{RGB}{80, 160, 140}     % Teal
+
+% Data Flow Gradient
+\definecolor{cDtrain}{RGB}{100, 149, 237} % Cornflower Blue
+\definecolor{cDre}{RGB}{138, 110, 215}    % Medium Purple
+\definecolor{cDfil}{RGB}{186, 85, 211}    % Medium Orchid
+\definecolor{cDirpo}{RGB}{219, 112, 147}  % Pale Violet Red
+
+% Score Color
+\definecolor{cScore}{RGB}{255, 235, 175}  % Pastel Gold/Yellow
+
+% Backgrounds
+\definecolor{bgInf}{RGB}{240, 248, 255}   % Light Blue
+\definecolor{bgBuf}{RGB}{235, 250, 245}   % Light Teal
+\definecolor{bgShape}{RGB}{248, 240, 252} % Light Lavender
+\definecolor{bgTrain}{RGB}{255, 245, 240} % Light Orange/Peach
+
+
+\begin{figure*}[t]
+\centering
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\resizebox{0.8\linewidth}{!}{%
+\begin{tikzpicture}[
+    font=\small\sffamily,
+    node distance=14mm and 22mm,
+    >={Latex[length=2.5mm, width=1.8mm]},
+    % --- Styles ---
+    % Main Node Style
+    box/.style={
+        draw=black!50,
+        thick,
+        rounded corners=4pt,
+        inner sep=5pt,
+        align=center,
+        text=white,
+        font=\small\bfseries,
+        minimum height=2.3em,
+        % drop shadow={opacity=0.15, shadow xshift=1pt, shadow yshift=-1pt}
+    },
+    % Input/Prompt Style
+    pbox/.style={
+        draw=black!30,
+        fill=cPrompt,
+        text=black!70,
+        rounded corners=3pt,
+        inner sep=3pt,
+        font=\footnotesize
+    },
+    % Score Box Style
+    sbox/.style={
+        draw=orange!60!black, 
+        thick,
+        fill=cScore,
+        text=black!80,
+        rounded corners=4pt,
+        inner sep=5pt,
+        font=\bfseries
+    },
+    % Arrow Style
+    conn/.style={
+        ->,
+        semithick,
+        draw=black!60,
+        rounded corners=5pt
+    },
+    % Tag Style (Default)
+    tag/.style={
+        font=\tiny\sffamily\bfseries,
+        text=black!60,
+        inner sep=2pt,
+        rounded corners=2pt
+    },
+    % Background Regions
+    region/.style={
+        inner sep=14pt,
+        rounded corners=8pt,
+        draw=none
+    },
+    % Section Labels
+    lbl/.style={
+        font=\scriptsize\bfseries\sffamily,
+        text opacity=0.8,
+        inner sep=4pt
+    }
+]
+
+% ---------------------------------------------------------
+% 1. NODES
+% ---------------------------------------------------------
+
+% Center Column
+\node[box, fill=cGen] (Gt) {$G_t$};
+
+% Inference Section
+\node[box, fill=cDtrain, left=of Gt] (Dtrain) {$\mathcal{D}_{\mathrm{nr}}^{(t)}$};
+\node[box, fill=cDtrain, right=of Gt] (Dtest) {$\mathcal{D}_{\mathrm{test}}^{(t)}$};
+
+% Score
+\node[sbox, below=1.4cm of Dtest] (score) 
+    {Score$_t$ $= \overline{S_\mu}(\mathcal{D}^{(t)}_{\mathrm{test}})$};
+
+% Prompts
+\node[pbox] (Ptrain) at ($(Dtrain)!0.5!(Gt) + (0, 1.4cm)$) {$\mathcal{P}_{\mathrm{train}}$};
+\node[pbox] (Ptest)  at ($(Gt)!0.5!(Dtest) + (0, 1.4cm)$) {$\mathcal{P}_{\mathrm{test}}$};
+
+% Data Shaping (Vertical)
+\node[box, fill=cDre, below=2.8cm of Dtrain] (Dre) {$\mathcal{D}_{\mathrm{re}}^{(t)}$};
+\node[box, fill=cDfil, below=of Dre] (Dfil) {$\mathcal{D}_{\mathrm{fil}}^{(t)}$};
+
+% Buffer (Aligned Horizontally)
+\node[box, fill=cBuf, left=2.2cm of Dre] (add) {Add to\\Buffer};
+
+% Calculate intersection point for the horizontal line
+\coordinate (midFlow) at ($(Dtrain.south)!0.5!(Dre.north)$);
+\node[box, fill=cBuf] (retrieve) at (add |- midFlow) {Retrieve\\$\mathcal{D}_{\mathrm{re}}^{(t-1)}$};
+
+% Training Section
+\node[box, fill=cDirpo] (Dirpo) at (Gt |- Dfil) {$\mathcal{D}_{\mathrm{IRPO}}^{(t)}$};
+\node[box, fill=cGen] (Gt1)   at ($(Dirpo)!0.5!(Gt)$) {$G_{t+1}$};
+
+
+% ---------------------------------------------------------
+% 2. CONNECTIONS & LABELS
+% ---------------------------------------------------------
+
+% Gt -> Dtrain (No Tag)
+\draw[conn] (Gt) -- (Dtrain);
+
+% Gt -> Dtest (No Tag)
+\draw[conn] (Gt) -- (Dtest);
+
+% Dtest -> Score (No Tag)
+\draw[conn] (Dtest) -- (score);
+
+% Prompts Merge
+\draw[semithick, black!40] (Ptrain) -- ($(Dtrain)!0.5!(Gt)$);
+\draw[semithick, black!40] (Ptest)  -- ($(Gt)!0.5!(Dtest)$);
+
+% Dtrain -> Dre (With Add Replay Buffer Tag)
+% The tag uses fill=white because this gap is white (outside the colored boxes)
+% Positioned at 0.75 so it is strictly below the intersection point
+\draw[conn] (Dtrain) -- node[tag, fill=white, pos=0.75] {Add Replay Buffer} (Dre);
+
+% Retrieve -> Flow (Horizontal Line)
+\draw[semithick, black!60] (retrieve.east) -- (midFlow);
+
+% Dre -> Dfil (Filter)
+% Uses fill=bgShape so it blends into the purple background
+\draw[conn] (Dre) -- node[tag, fill=bgShape] {Filter} (Dfil);
+
+% Dre -> Add (Store)
+% Uses fill=white as it crosses the whitespace gap mostly
+\draw[conn, dashed] (Dre) -- node[tag, fill=white] {Store} (add);
+
+% Dfil -> Dirpo (Curate Pairs)
+% Located in the gap between sections, so fill=white
+\draw[conn] (Dfil) -- node[tag, fill=bgShape] {Curate Pairs} (Dirpo);
+
+% Dirpo -> Gt+1 (Train)
+% Inside the Orange box, so uses fill=bgTrain
+\draw[conn] (Dirpo) -- node[tag, fill=bgTrain] {Train (IRPO)} (Gt1);
+
+% Gt+1 -> Gt (Update)
+% In whitespace, fill=white
+\draw[conn, dotted, thick] (Gt1) -- node[tag, fill=white] {Update} (Gt);
+
+
+% ---------------------------------------------------------
+% 3. BACKGROUNDS
+% ---------------------------------------------------------
+\begin{pgfonlayer}{bg}
+    % Inference
+    \node[region, fill=bgInf, fit=(Gt)(Dtrain)(Dtest)(Ptrain)(Ptest)] (infBox) {};
+    \node[lbl, text=cDtrain!50!black, anchor=north west] at (infBox.north west) {Inference};
+    
+    % Buffer
+    \node[region, fill=bgBuf, fit=(retrieve)(add)] (bufBox) {};
+    \node[lbl, text=cBuf!50!black, anchor=north west] at (bufBox.north west) {Dataset Buffer};
+    
+    % Data Shaping
+    \node[region, fill=bgShape, fit=(Dre)(Dfil)] (shapeBox) {};
+    \node[lbl, text=cDre!50!black, anchor=south west] at (shapeBox.south west) {Data Shaping};
+    
+    % Training
+    \node[region, fill=bgTrain, fit=(Dirpo)(Gt1)] (trainBox) {};
+    \node[lbl, text=cDirpo!50!black, anchor=south west] at (trainBox.south west) {Training};
+\end{pgfonlayer}
+
+\end{tikzpicture}
+}
+\caption{\textbf{ImProver\textsuperscript{2} training loop.} The diagram illustrates the iterative process of generation, retrieval, filtering, and training. Node colors represent the evolution of data from initial sampling (Blue) through processing (Purple) to training (Magenta).}
+\label{fig:flow_pipeline}
+\end{figure*}

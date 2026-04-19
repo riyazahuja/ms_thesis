@@ -1,0 +1,81 @@
+% \begin{table}[ht]
+% \caption{Proof optimization results. Each cell shows Improvement / Nonempty Improvement.
+% % (improvement restricted to proofs that had > 0 improvement). 
+% }
+% \label{tab:main}
+% \centering
+% \small
+% \begin{tabular}{l|cccccc}
+% \toprule
+% & \multicolumn{2}{c}{\textbf{MIL}}& \multicolumn{2}{c}{\textbf{Compfiles}}& \multicolumn{2}{c}{\textbf{Mathlib}}\\
+% & Length & Readability & Length & Readability & Length & Readability \\
+% \midrule
+% GPT-4o & 6.25 / 18.58 & 4.18 / 14.48 & 2.75 / 30.70& 0.39 / 3.38 & 0.0 / 0.0 & 0.0 / 0.0\\
+% \textbf{\methodname{}} & \textbf{30.54 / 56.56} & \textbf{13.45 / 30.97} & \textbf{18.86 / 54.48} & \textbf{5.74 / 24.89} & \textbf{6.19 / 53.65} & \textbf{4.63 / 33.19}\\ 
+% \bottomrule
+% \end{tabular}
+
+
+
+% % {\footnotesize\texttt{Zero Improvement} (\%) / \texttt{Nonempty Improvement} (\%)}. }
+% % \vspace{-1em} % TODO remove me in camera ready
+% \end{table}
+
+
+\begin{table}[t]
+\caption{Average Proof optimization results.}
+\label{tab:main-avg}
+\centering
+\small
+\begin{tabular}{ll|cccc}
+\toprule
+Metric& Model &Improvement & Nonempty Improvement &Accuracy& Improved Acc.\\
+\midrule
+\multirow{2}{*}{\textbf{Length}} & GPT-4o & 3.7 & 15.15 & 26.36\% & 8.31\% \\
+&\textbf{\methodname{}} &\textbf{20.96} & \textbf{55.29} & \textbf{100.0\%} & \textbf{35.44\%} \\
+\midrule
+\multirow{2}{*}{\textbf{Declarativity}} & GPT-4o &2.21 & 8.02 & 18.75\% & 6.13 \%\\
+&\textbf{\methodname{}} & \textbf{9.34} & \textbf{30.53} & \textbf{100.0}\%& \textbf{24.56\%}\\
+\midrule
+\multirow{2}{*}{\textbf{Mixed}} & GPT-4o &3.51 & 23.90 & 14.70\% & 5.11\% \\
+&\methodname{} & \textbf{27.31} & \textbf{39.24} & \textbf{100.0\%} & \textbf{30.55}\\
+\bottomrule
+\end{tabular}
+\vspace{-1em}
+\end{table}
+
+
+\begin{table}[h]
+\caption{Average proof optimization results}
+\label{tab:main-avg-transposed}
+\centering
+\small
+\begin{tabular}{l|cc|cc|cc}
+\toprule
+ & \multicolumn{2}{c|}{\textbf{Length}} 
+ & \multicolumn{2}{c|}{\textbf{Declarativity}} 
+ & \multicolumn{2}{c}{\textbf{Mixed}} \\
+ & GPT‑4o & \methodname{} 
+ & GPT‑4o & \methodname{} 
+ & GPT‑4o & \methodname{} \\
+\midrule
+Improvement          & 3.7        & 20.96     
+                     & 2.21       & 9.34      
+                     & 3.51       & 27.31     \\
+Nonempty Imp. & 15.15      & 55.29     
+                     & 8.02       & 30.53     
+                     & 23.90      & 39.24     \\
+Accuracy             & 26.36\%    & 100.0\%   
+                     & 18.75\%    & 100.0\%   
+                     & 14.70\%    & 100.0\%   \\
+Improved Acc.        & 8.31\%     & 35.44\%   
+                     & 6.13\%     & 24.56\%   
+                     & 5.11\%     & 30.55\%   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+% [3.5100709219858155, 23.903120567375886, 14.695177304964538, 5.106028368794327]
+% [27.30553191489361, 39.24007092198581, 100.0, 30.548936170212762]
+% 72,26,43

@@ -1,0 +1,225 @@
+\chapter{ImProver}\label{chap:improver}
+
+We introduce \textbf{ImProver}, a large language model agent that rewrites Lean~4 proofs to optimize arbitrary user-defined metrics. ImProver was the first system for automated proof optimization, and showed that naively applying LLMs to this task falls short --- often resulting in incorrect or poorly optimized proofs. We develop several improvements that can be applied on top of a black-box language model, incorporating them into a unified agent.
+
+Figure~\ref{fig:ex1-comp-len-ch} shows an example of ImProver in action: given a human-written proof of a 2022 IMO problem, ImProver automatically rewrites it to be substantially more concise while preserving correctness.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+{
+\textbf{Original (human-written)}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma lemma0 {α : Type} {p : α → α → Prop}
+    (h1 : ∀ x, ∃! y, p x y)
+    (h2 : ∀ x y, p x y ↔ p y x) :
+    ∀ x, Classical.choose
+        (h1 (Classical.choose (h1 x).exists)).exists=x := by
+  intro x
+  obtain ⟨y, h1e, h1u⟩ := h1 x
+  have h2' : Classical.choose (h1 x).exists = y :=
+    h1u _ (Classical.choose_spec (h1 x).exists)
+  rw [h2']
+  obtain ⟨w, h1e', h1u'⟩ := h1 y
+  have h4 := Classical.choose_spec (h1 y).exists
+  have hxw : x = w := by
+    apply h1u'
+    rw [h2]
+    exact h1e
+  rw [hxw]
+  exact h1u' _ h4
+\end{lstlisting}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{ImProver (length-optimized)}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma lemma0 {α : Type} {p : α → α → Prop}
+    (h1 : ∀ x, ∃! y, p x y)
+    (h2 : ∀ x y, p x y ↔ p y x) :
+    ∀ x, Classical.choose
+        (h1 (Classical.choose (h1 x).exists)).exists=x := by
+  intro x
+  obtain ⟨y, h1e, h1u⟩ := h1 x
+  rw [h1u _ (Classical.choose_spec _)]
+  obtain ⟨w, h1e', h1u'⟩ := h1 y
+  rw [h1u' _ ((h2 _ _).mpr h1e)]
+  exact h1u' _ (Classical.choose_spec _)
+\end{lstlisting}
+}
+\end{multicols}
+\vspace{-1em}
+\caption{ImProver automatically rewrites a human-written lemma from the 2022 IMO (Question~2, Compfiles \cite{compfiles}) for length. The optimized proof is correct and more concise.}
+\label{fig:ex1-comp-len-ch}
+\end{figure}
+
+\subsection{Problem Formulation}
+
+Given a theorem statement $x$, additional context $c$, and an initial proof $y_0$, proof optimization consists of generating a new proof $y$ that is correct and minimizes (or maximizes) a metric $\mu(x,c,y_0, y)\rightarrow \mathbb{R}$.
+
+\subsection{Metrics}
+\label{ssec:metrics_31}
+
+By varying the metric, we can perform tasks such as shortening proofs, making them more declarative in structure, or even automated proving. We consider four metrics:
+
+\textit{Length Metric:} The length metric measures the number of tactic invocations in the tactic proof, aiming to reduce the proof's length while ensuring its correctness. Note that shorter proofs often represent more efficient proofs.
+
+\textit{Declarative Metric:} We aim to rewrite proofs to be written in a declarative style \cite{serge2010,Wiedijk}, which is related to the number of independent subproofs in a proof. Intuitively, this corresponds with a sense of structure for the proof, and can be interpreted as being more readable, explicit, or modular in style. Concretely, we evaluate declarativity using the ratio of number of explicitly typed \texttt{have} tactics to total number of tactic invocations.
+
+\textit{Mixed Metric:} We aim to combine the length and declarative metrics as described above to generate proofs that are both concise and declarative. This is done by penalizing all tactics, and rewarding declarative tactics (e.g.\ \texttt{have}) in order to amortize the net total. We then aim to maximize the net score. In practice, we assign a value of $-1$ to each tactic in the proof, and a value of $+5$ for declarative tactics, meaning that each declarative tactic ``pays'' for $4$ additional tactics.
+
+\textit{Completion Metric:} The completion of a proof simply describes its correctness. This is a trivial metric which measures the number of errors present. The completion metric is used for concretely viewing proof optimization as a generalization of neural theorem proving.
+
+\textbf{Degenerate Solutions.} Our goal here has been to provide a flexible means to optimize proofs with respect to any metric that might prove useful. The particular metrics we use here are intentionally simplistic, in that they are used only to test and evaluate the method. The task of designing metrics that correspond more accurately to human criteria or are optimal for various training tasks is left to later work as what defines a good metric are dependent on the use case.
+
+Additionally, we note the possibility of degenerate solutions, as in, generations of proofs that score highly on a certain metric, while not corresponding to the intuitive sense of that metric. For example, overuse of \texttt{have} statements can greatly increase the declarativity of the proof, despite not being used in the proof's deductive process whatsoever. It is undesirable for a model to generate such degenerate solutions, and to account for this, we guide the model with many human-written examples of each metric in question, rather than requiring it to solely maximize a reward function. For more complex, user-defined metrics, the possibilities for degenerate solutions only increases, and as such, guiding models using concrete examples as well as using reward models rather than reward functions to score metrics may mitigate the risks of such degenerate solutions.
+
+\subsection{System Overview}
+\label{sec:improver_overview}
+
+ImProver is built around a black-box LLM generator $y_{\mathrm{out}} \sim G(\cdot \mid x_{\mathrm{in}})$, such as GPT-4o \cite{openai2024gpt4technicalreport}. ImProver augments a baseline prompt (containing the theorem statement, context, and original proof) with a combination of four improvements:
+\begin{enumerate}
+    \item \textbf{Chain-of-States (CoS) prompting} --- annotating intermediate proof states into the prompt (see \S\ref{sec:cos} for definition; \S\ref{ssec:improver_cos} for use in ImProver);
+    \item \textbf{Output formatting} --- enforcing structured output formats to encourage structured proofs;
+    \item \textbf{Sampling methods} --- best-of-$n$, error correction/refinement, and compound combinations;
+    \item \textbf{Retrieval-augmented generation (RAG)} --- providing relevant examples and documentation.
+\end{enumerate}
+
+\subsection{Chain-of-States in ImProver}
+\label{ssec:improver_cos}
+
+Chain-of-States prompting (defined in \S\ref{sec:cos}) was introduced as part of ImProver. Typical formal proofs are a sequence of tactics (akin to steps) and \textit{states} that show the hypotheses and goals at each step. The intermediate states often contain valuable information (e.g., an expression after it has been simplified) that is not present in the tactics alone. To allow the model to reason about these intermediate goals and hypotheses, we use tools from Lean metaprogramming to automatically annotate each proof state as a comment prior to each tactic.
+
+We refer to this method as \textit{Chain-of-States} (CoS) prompting since it makes intermediate states explicit, akin to how chain-of-thought prompting \cite{wei2022chain} makes intermediate steps of a solution explicit (see Chapter~\ref{chap:framework} for the formal definition).
+
+These states are extracted directly and symbolically from the underlying Lean compilation steps using Lean's rich metaprogramming suite. The implementation of this extraction system is modeled from prior work \cite{Trainingdata}. Specifically, in the compiler's elaboration and evaluation stages --- where the parsed theorem code is first converted into concrete syntax trees (in practice, \texttt{Syntax} objects) and abstract syntax trees (\texttt{Expr} objects) --- we convert the CST and AST output objects into the relevant proof data and proof states in the form of proof trees (\texttt{Lean.Elab.InfoTree}). These proof trees contain detailed context and information on a tactic-by-tactic level relating to the modification of the proof state, metavariable context, and proof correctness.
+
+After state extraction is completed and cached for efficient future access, we annotate the proof text itself to contain the intermediate states in the form of comments. Figure~\ref{fig:cos} shows an example.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[t!]
+
+\begin{multicols}{2}
+
+{
+\textbf{Without Chain-of-States}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : s ∩ t ∪ s ∩ u ⊆ s ∩ (t ∪ u)  := by
+  rintro x (⟨xs, xt⟩ | ⟨xs, xu⟩)
+  · use xs; left; exact xt
+  . use xs; right; exact xu
+\end{lstlisting}
+\vspace{-0.8em}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{With Chain-of-States}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : s ∩ t ∪ s ∩ u ⊆ s ∩ (t ∪ u)  := by
+  rintro x (⟨xs, xt⟩ | ⟨xs, xu⟩)
+  /-
+  case inl.intro
+  α : Type u_1
+  s t u : Set α
+  x : α
+  xs : x ∈ s
+  xt : x ∈ t
+  ⊢ x ∈ s ∩ (t ∪ u)
+  case inr.intro
+  α : Type u_1
+  s t u : Set α
+  x : α
+  xs : x ∈ s
+  xu : x ∈ u
+  ⊢ x ∈ s ∩ (t ∪ u)
+  -/
+  · use xs; left; exact xt
+  /-
+  Goals Solved!
+  -/
+  . use xs; right; exact xu
+  /-
+  Goals Solved!
+  -/
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{A Lean proof (left) with Chain-of-States prompting annotations (right).}
+\label{fig:cos}
+\end{figure}
+
+This explicit reasoning aims to help the generator model construct more optimized proofs via additional symbolic data. CoS is especially impactful for the declarative metric: ablation studies (\S\ref{ssec:ablation_results}) confirm that enabling CoS nearly doubles the improvement score on declarativity optimization, and significantly increases improved accuracy.
+
+\subsection{Output Formatting}
+\label{ssec:improver_output}
+
+LLM outputs often contain ancillary and syntactically invalid content, especially before and after the actual proof. Additionally, by applying additional structure to the LLM outputs, we may hope to generate more structured proofs. To analyze this hypothesis, we introduce two additional output formats in addition to the standard \verb|string| output: \verb|string list| and \verb|string tree|. The former enforces the model output of a proof to be a tactic sequence represented as a list of strings, and the latter enforces proofs to be written as proof trees, represented as a tree of strings.
+
+\begin{itemize}
+    \item \verb|string| --- raw proof text (baseline).
+    \item \verb|string list| --- the model outputs a proof as a tactic sequence represented as a list of strings.
+    \item \verb|string tree| --- the model outputs a proof as a tree of strings representing the proof tree structure.
+\end{itemize}
+
+The structured formats encourage the model to produce more organized proofs. Ablation studies show that \verb|string list| combined with CoS maximizes the improvement score.
+
+\subsection{Sampling Methods}
+\label{ssec:improver_sampling}
+
+We introduce different methods of sampling across multiple (sequential or parallel) LLM inference calls, involving best-of-$n$ and iterative refinement implementations, as well as combinations thereof.
+
+\subsubsection{Best-of-$n$}
+
+The best-of-$n$ technique generates multiple ($n$) calls to the language model and selects the ``best'' via a simple selection policy that first prioritizes output correctness, and secondly prioritizes the evaluated metric delta score.
+
+Using a temperature value of $1$, we ensure that our $n$ calls to the model are diverse, as the temperature hyperparameter (ranging between $0$ and $2$) controls the randomness of the outputs. The default value of $1$ ensures that outputs are sufficiently random without sacrificing accuracy and generating unpredictable behavior. Moreover, this allows for sufficient variance that the best-of-$n$ scoring function has many distinct inputs to choose from.
+
+More specifically, our scoring function is given by the $2$-ary comparison function $S$, whose arguments are output objects $y,y'$:
+
+\[S(y,y')=\begin{cases}
+    \max(y,y',\text{key: } z\mapsto \mu(c,x,z)),&E(y)=E(y')=0\\
+    y,&E(y)=0,\ E(y')>0\\
+    y',&E(y)>0,\ E(y')=0\\
+    \min(y,y',\text{key: } z\mapsto E(z)),&E(y)=E(y')>0\\
+\end{cases}\]
+
+where $\mu(z)$ is the metric score of $z$, and $E(z)$ is the number of errors in $z$. This comparison function can be extended to evaluate the best output of any finite $n$ via induction.
+
+\subsubsection{Error Correction and Refinement}
+
+Inspired by self-debugging techniques in code generation \cite{madaan2023selfrefine,chen2023teachinglargelanguagemodels}, ImProver identifies and corrects errors in the generated proofs by iteratively refining its outputs. The refinement process relies on user-defined parameters \verb|n| and \verb|prev_num| to specify the number of iterations and the number of previous iterations' data to forward, respectively. Each iteration carries information on the last \verb|prev_num| iterations, including input, output, metric score, correctness, and error messages.
+
+\subsubsection{Compound Sampling}
+
+Compound prompt functions utilize the curried nature of the back-end implementations of best-of-$n$ and refinement to nest these techniques within one another. For example:
+
+\begin{itemize}
+    \item \verb|best_of_n(refinement(m), n)| is a compound sampling method that runs a best-of-$n$, where each call is an $m$-step refinement.
+    \item \verb|refinement(best_of_n(m), n)| is a compound sampling method that runs an $n$-step refinement, where each step is a best-of-$m$ call to the LLM.
+\end{itemize}
+
+Note that with each of these compound prompt functions, there are always a total of $mn$ LLM calls.
+
+\subsection{Retrieval-Augmented Generation}
+\label{ssec:improver_rag}
+
+ImProver uses MMR (Maximum Marginal Relevance) \cite{10.1145/290941.291025} retrieval-augmented generation to select relevant examples and documents. For a user-specified $k$:
+
+\begin{itemize}
+    \item \textbf{Example retrieval} selects the $k$ most relevant examples of proof optimization on the specific metric being optimized. This functions as multi-shot prompting, providing the model with concrete demonstrations of the desired behavior.
+    \item \textbf{Document retrieval} extracts information from two fixed vector databases:
+    \begin{itemize}
+        \item \textit{Theorem Proving in Lean (TPiL) handbook} \cite{avigad2024tpil} --- containing syntax guides and tactic explanations.
+        \item \textit{Mathlib} \cite{The_mathlib_Community_2020} --- containing thousands of theorems and lemmas.
+    \end{itemize}
+    The Mathlib retriever finds the top $k$ documents that score the highest MMR score against the current theorem. The TPiL retriever finds the top $k$ documents that score the highest MMR score against the current theorem in context and all current error messages, helping the model correct its syntax errors and find useful lemmas to reference.
+\end{itemize}
+
+This retrieval process helps generate more contextually accurate prompts that allow the language model to better correct its own errors as well as find useful lemmas to reference.

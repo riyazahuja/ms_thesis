@@ -1,0 +1,295 @@
+\appendix{System Configuration (ImProver)}
+\label{app:config_improver}
+
+In this appendix, we note the prompts used by \methodname{} both for general LLM prompting, as well as the metric-specific prompts.
+
+\subsection{Template}
+\label{template}
+
+For the main prompt sent to the LLM on each sample, we build a prompt string using a chat prompt template that is then invoked at runtime to fill in the variables.
+
+Namely, these variables include the set of metric prompts, previous results, input theorem, context, a syntax documents, Mathlib documents, and examples. 
+
+The prompt template is a conversation of the format:
+\begin{itemize}
+    \item[] \textbf{Placeholder:} \textit{All metric prompts with a `System' role}
+    \item[] \textbf{System:} You will be given the proof context (i.e. the lean file contents/imports leading up to the theorem declaration) wrapped by <CONTEXT>...</CONTEXT>. 
+    
+    You will be given the previous \textit{num\_prev} input/output pairs as well as their metric ({metric.name}) score and correctness score, as well as any error messages, for your reference to improve upon. Each of these previous results will be wrapped with <PREV I=0></PREV I=0>,...,<PREV I=\textit{num\_prev-1}></PREV I=\textit{num\_prev-1}>, with I=\textit{num\_prev-1} being the most recent result.
+    
+    Remember to use lean 4 syntax, which has significant changes from the lean 3 syntax. 
+    To assist with the syntax relating to the current theorem and current error messages, you will be given \textit{num\_syntax\_docs} documents to refer to for fixing these syntax issues. Each of these documents will be wrapped with <SYNTAX\_DOC>...</SYNTAX\_DOC>.
+    
+    You will also receive \textit{num\_mathlib\_docs} documents relevant to the current theorem to help with formulating your modified proof. Each of these will be wrapped with <CONTENT\_DOC>...</CONTENT\_DOC>
+
+    You will also receive \textit{num\_examples} examples of input-output pairs of proofs that were optimized for the \textit{metric} metric. Each of these will be wrapped with <EXAMPLE>...</EXAMPLE>
+    
+    You will be given the tactic states as comments for reference.
+    The current theorem will be wrapped in <CURRENT>...</CURRENT>
+    \item[]\textbf{System:} \textit{Output format instructions}
+    \item[]\textbf{Placeholder:} \textit{All retrieved syntax documentation}
+    \item[]\textbf{Placeholder:} \textit{All retrieved mathlib documentation}
+    \item[]\textbf{Placeholder:} \textit{All retrieved examples}
+    \item[]\textbf{User:} <CONTEXT>
+                    \textit{context}
+                  </CONTEXT>
+    \item[]\textbf{Placeholder:} \textit{Previous results and inputs/outputs}
+    \item[]\textbf{Placeholder:} \textit{All metric prompts with a `User' role}
+    \item[]\textbf{User:} <CURRENT>
+                    \textit{theorem}
+                  </CURRENT>
+\end{itemize}
+
+This prompt is then invoked and sent to the language model by filling in all the variables and placeholders. Notably, when we invoke the chain given by $\texttt{chain} | \texttt{llm} | \texttt{parser}$, we throttle the invocation with a randomized exponential rate limit throttling to account for API rate limits, especially in highly-parallelized requests like when benchmarking over a large number of theorems.
+
+
+
+
+\subsection{Metric Prompts}
+
+
+
+\textbf{Length Metric}
+
+\begin{itemize}
+    \item[]\textbf{System:} You are an AI assistant who shortens Lean 4 proofs while ensuring their correctness. You will aim to reduce the number of lines of the tactic proof while ensuring that it properly compiles in Lean 4.
+    \item[]\textbf{User:} Shorten the current theorem (wrapped in <CURRENT>...</CURRENT>) to be as short in length—measured in the number of lines of the proof—as possible, while also ensuring that the output is still syntactically correct."
+\end{itemize}
+
+
+\textbf{Declarativity Metric}
+
+\begin{itemize}
+    \item[]\textbf{System:} You are an AI assistant who rewrites Lean 4 proofs to be more readable while ensuring their correctness. We measure readablity by considering the ratio of the number of explicitly typed \texttt{have} tactics against the total number of tactics in the proof, as this is proportional to whether a proof is declarative in style, and thus, readable.
+    \item[]\textbf{User:} Rewrite the current theorem (wrapped in <CURRENT>...</CURRENT>) so it is more readable and declarative and modular. 
+\end{itemize}
+
+
+
+\textbf{Mixed Metric}
+
+\begin{itemize}
+    \item[]\textbf{System:} You are an AI assistant who rewrites Lean 4 proofs to be higher quality, namely, more concise and more readable/declarative in style and structure. We measure the length of a proof by the number of tactics, and readability/declarativity by the number of explicitly typed \texttt{have} tactics.
+
+    \item[]\textbf{User:} Rewrite the current theorem (wrapped in <CURRENT>...</CURRENT>) so it is more readable and declarative and concise, while also being correct. Namely, we penalize 1 point for every tactic, and reward 5 points for every declarative tactic (namely, \texttt{have} statements). Your goal is to maximize that reward function as much as possible while generating a correct proof using the provided template as a starting point.
+\end{itemize}
+
+
+
+\textbf{Completion Metric}
+
+\begin{itemize}
+    \item[]\textbf{System:} You are an AI assistant who automatically solves Lean 4 proofs (as in, generates the tactic proof) and ensures its correctness. You will receive a Lean 4 proof you must modify to eliminate any errors so that it compiles correctly and eliminate any ``sorry''s with full proofs.
+    \item[]\textbf{User:} Rewrite the current theorem (wrapped in <CURRENT>...</CURRENT>) so it is a formal, complete, and correct Lean 4 proof by filling in its tactic proof.
+\end{itemize}
+
+\subsection{Metric Examples}
+In this section, we illustrate side-by-side examples of metric optimization. These examples are part of a larger set of examples provided to the model as described in $\S\ref{template}$. 
+
+\textbf{Length Metric}
+As shown in \autoref{fig:length-ex}, we provide the model an example of using more advanced tactics like \texttt{rintro} and inlining \texttt{apply} statements to shorten the proof from $5$ tactics to $2$.
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+
+{
+\textbf{Suboptimal}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : (P → Q) ∧ (Q → R) → P → R := by
+  intro h p
+  rcases h with ⟨a,b⟩
+  apply b
+  apply a
+  exact p
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{Length Optimized}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : (P → Q) ∧ (Q → R) → P → R := by
+  rintro (⟨hpq,hqr⟩) hp
+  exact hqr (hpq hp)
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{A human-written example of length optimization.}
+\label{fig:length-ex}
+\end{figure}
+
+
+
+
+\textbf{Declarative Metric}
+
+As shown in \autoref{fig:decl-ex}, we provide the model an example of adding an intermediate result \texttt{hp\_nq} with an explicitly written type of \texttt{P → ¬Q}. Additionally, we show the model an example of simplifying tactics and external lemmas and dependencies to solve the problem in a more direct, declarative, and readable manner.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+
+{
+\textbf{Suboptimal}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example (h : ¬ (P ∧ Q)) : ¬ P ∨ ¬ Q := by
+  push_neg at h
+  exact not_or_of_imp h
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{Declarativity Optimized}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example (h : ¬ (P ∧ Q)) : ¬ P ∨ ¬ Q := by
+  have hp_nq : P → ¬ Q := by
+    intro p q
+    exact h ⟨p,q⟩
+  by_cases hp:P
+  . right
+    exact hp_nq hp
+  . left
+    exact hp
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{A human-written example of declarativity optimization.}
+\label{fig:decl-ex}
+\end{figure}
+
+
+
+
+\textbf{Mixed Metric}
+
+As shown in \autoref{fig:mix-ex}, we provide the model an example of adding multiple intermediate results as well as using proof terms and structural modifications to shorten the number of tactics, resulting in a more optimized proof.
+
+We note that although the ``Suboptimal'' example is taken from MIL C04, it is ensured to not be in our testing split to avoid data contamination.
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+
+{
+\textbf{Suboptimal}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : s \ t ∪ t \ s = (s ∪ t) \ (s ∩ t)  := by
+  ext x; constructor
+  · rintro (⟨xs, xnt⟩ | ⟨xt, xns⟩)
+    · constructor
+      left
+      exact xs
+      rintro ⟨_, xt⟩
+      contradiction
+    . constructor
+      right
+      exact xt
+      rintro ⟨xs, _⟩
+      contradiction
+  rintro ⟨xs | xt, nxst⟩
+  · left
+    use xs
+    intro xt
+    apply nxst
+    constructor <;> assumption
+  . right; use xt; intro xs
+    apply nxst
+    constructor <;> assumption
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{Joint Length/Readability Optimized}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example : s \ t ∪ t \ s = (s ∪ t) \ (s ∩ t)   := by
+  ext x
+  constructor
+  have in_union_not_inter : ∀ x, x ∈ s ∪ t → x ∉ s ∩ t → x ∈ (s ∪ t) \ (s ∩ t) := by
+    intro x hx hnx
+    exact ⟨hx, hnx⟩
+  have in_diff_union : ∀ x, (x ∈ s \ t ∨ x ∈ t \ s) → x ∈ (s ∪ t) \ (s ∩ t) := by
+    rintro x (⟨xs, xnt⟩ | ⟨xt, xns⟩)
+    . exact in_union_not_inter x (Or.inl xs) (fun ⟨_, ht⟩ => xnt ht)
+    . exact in_union_not_inter x (Or.inr xt) (fun ⟨hs, _⟩ => xns hs)
+  exact in_diff_union x
+  have in_diff_or : ∀ x, x ∈ (s ∪ t) \ (s ∩ t) → (x ∈ s \ t ∨ x ∈ t \ s) := by
+    rintro x ⟨hx, hnx⟩
+    by_cases xs : x ∈ s
+    . left; exact ⟨xs, fun ht => hnx ⟨xs, ht⟩⟩
+    . right; exact ⟨hx.resolve_left xs, fun hs => hnx ⟨hs, hx.resolve_left xs⟩⟩
+  exact in_diff_or x
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{A human-written example of mixed length/declarativity optimization optimization.}
+\label{fig:mix-ex}
+\end{figure}
+
+
+
+
+
+
+
+
+\textbf{Completion Metric}
+
+
+As shown in \autoref{fig:cmp-ex}, we provide the model an example of showing a property about \texttt{Set}'s, an externally defined datastructure, using simple tactics and forward reasoning, without external lemmas.
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+
+{
+\textbf{Suboptimal}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example {α : Type*} (s : Set α) : s ∩ s = s := by
+    sorry
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{Completion Optimized}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example {α : Type*} (s : Set α) : s ∩ s = s := by
+    ext x
+    constructor
+    . intro h
+        rcases h with ⟨hs,_⟩
+        exact hs
+    . intro h
+        constructor
+        . exact h
+        . exact h
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{A human-written example of proof completion.}
+\label{fig:cmp-ex}
+\end{figure}
+
+
+
+

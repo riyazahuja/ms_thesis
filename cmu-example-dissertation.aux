@@ -13,328 +13,396 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Figures}}{viii}{Doc-Start}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Tables}}{x}{Doc-Start}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Figures}}{v}{Doc-Start}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\textbf  {List of Tables}}{vi}{Doc-Start}\protected@file@percent }
+\citation{LeanTheoremProver}
+\citation{RocqTheoremProver}
+\citation{IsabelleTheoremProver}
+\citation{Mathlib}
+\citation{achim2025aristotleimolevelautomatedtheorem,alphaproof}
+\citation{gu2025proofoptimizer}
+\citation{SeedProver}
 \@writefile{toc}{\contentsline {section}{\numberline {1\hspace  {1em}}\nobreakspace  {}\textbf  {Introduction}}{1}{section*.1}\protected@file@percent }
 \newlabel{chap:intro}{{1}{1}{}{section*.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 1}.1}{\ignorespaces Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance.}}{2}{figure.caption.2}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:pnt-dependency-graph}{{\relax Figure\nobreakspace  {\relax 1}.1}{2}{Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance}{figure.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Thesis Overview}{2}{subsection.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.1}Chapter 2: Centralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.2}Chapter 3: Decentralized Multi-Agent Theorem Proving.}{3}{paragraph.1.2.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.3}Chapter 4: Multi-Agent Reinforcement Learning.}{3}{paragraph.1.2.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.4}Chapter 5: Experiments.}{3}{paragraph.1.2.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1.2.0.5}Chapter 6: Application to Neural Theorem Proving.}{3}{paragraph.1.2.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Contributions}{4}{subsection.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2\hspace  {1em}}\nobreakspace  {}\textbf  {Centralized Multi-Agent Theorem Proving}}{5}{section*.3}\protected@file@percent }
-\newlabel{chap:centralized}{{2}{5}{Contributions}{section*.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Background}{5}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}Syntax}{5}{subsubsection.2.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}Semantics}{6}{subsubsection.2.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3}Libraries}{6}{subsubsection.2.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.4}Library Invariants and Properties}{7}{subsubsection.2.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.5}Axioms and Fully Resolved Sequents}{8}{subsubsection.2.1.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.6}Private and Shared Libraries}{8}{subsubsection.2.1.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The Centralized MATP Problem}{8}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Background: POMDP}{8}{subsubsection.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Background: Action Primitives}{10}{subsubsection.2.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.1}Discrete kernels.}{10}{paragraph.2.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.2}Proof Kernel.}{10}{paragraph.2.2.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.3}Conjecture Kernel.}{11}{paragraph.2.2.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.4}Dependency Closure for Publication.}{11}{paragraph.2.2.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.2.5}Query Model.}{11}{paragraph.2.2.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Definition}{12}{subsubsection.2.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.1}State Space $\mathsf  {S}$.}{12}{paragraph.2.2.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.2}Action Space $\mathsf  {A}$ and Admissibility.}{13}{paragraph.2.2.3.2}\protected@file@percent }
-\newlabel{rem:centralized-admissibility}{{2.2.3.2}{13}{Centralization and admissibility}{paragraph.2.2.3.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.3}Observation Space $\mathsf  {O}$ and Observation Kernel $Z$.}{13}{paragraph.2.2.3.3}\protected@file@percent }
-\newlabel{rem:perfect-public-info}{{2.2.3.3}{14}{Perfect public information}{paragraph.2.2.3.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.4}Transition Kernel $T$.}{14}{paragraph.2.2.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subparagraph}{Step 1: Deterministic Pre-Update.}{14}{section*.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subparagraph}{Step 2: Stochastic Job Completion.}{15}{section*.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subparagraph}{Step 3: Deterministic Post-Update.}{15}{section*.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.5}Full transition kernel.}{15}{paragraph.2.2.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.6}Cost Function.}{16}{paragraph.2.2.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.3.7}Initial distribution $T^0$.}{16}{paragraph.2.2.3.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Example}{16}{subsubsection.2.2.4}\protected@file@percent }
-\newlabel{sec:matp-example}{{2.2.4}{16}{Example}{subsubsection.2.2.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.4.1}Setup.}{16}{paragraph.2.2.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.2.4.2}Dependencies are latent.}{17}{paragraph.2.2.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Optimality of Immediate Publication}{17}{subsection.2.3}\protected@file@percent }
-\newlabel{sec:ppi-wlog}{{2.3}{17}{Optimality of Immediate Publication}{subsection.2.3}{}}
-\newlabel{thm:ppi-relaxation}{{2.1}{17}{PPI as a relaxation}{theorem.2.1}{}}
-\newlabel{rem:ppi-tight}{{2.3}{18}{When PPI is tight}{theorem.2.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Complexity of the Centralized MATP}{18}{subsection.2.4}\protected@file@percent }
-\newlabel{sec:complexity}{{2.4}{18}{Complexity of the Centralized MATP}{subsection.2.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.1}The Non-Conjecturing PPI MATP}{19}{subsubsection.2.4.1}\protected@file@percent }
-\newlabel{sec:nc-ppi}{{2.4.1}{19}{The Non-Conjecturing PPI MATP}{subsubsection.2.4.1}{}}
-\newlabel{def:nc-ppi-matp}{{2.4}{19}{Non-Conjecturing PPI MATP}{definition.2.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2.4.1.1}Latent task set and revelation DAG.}{19}{paragraph.2.4.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.2}Lower Bounds}{19}{subsubsection.2.4.2}\protected@file@percent }
-\newlabel{sec:lower-bounds}{{2.4.2}{19}{Lower Bounds}{subsubsection.2.4.2}{}}
-\newlabel{def:work-depth}{{2.5}{19}{Work and serial depth}{definition.2.5}{}}
-\newlabel{thm:lower-bounds}{{2.2}{20}{Information-theoretic lower bounds}{theorem.2.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.4.3}Hardness}{20}{subsubsection.2.4.3}\protected@file@percent }
-\newlabel{sec:hardness}{{2.4.3}{20}{Hardness}{subsubsection.2.4.3}{}}
-\newlabel{thm:complexity}{{2.3}{20}{Complexity of the Non-Conjecturing PPI MATP}{theorem.2.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}An Algorithm for the Non-Conjecturing PPI MATP}{21}{subsection.2.5}\protected@file@percent }
-\newlabel{sec:algorithm}{{2.5}{21}{An Algorithm for the Non-Conjecturing PPI MATP}{subsection.2.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1}Reactive List Scheduling (RLS)}{21}{subsubsection.2.5.1}\protected@file@percent }
-\newlabel{def:rls}{{2.6}{21}{Reactive List Scheduling}{definition.2.6}{}}
-\newlabel{def:or-rls}{{2.7}{22}{Redundant RLS}{definition.2.7}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.2}Approximation Guarantee}{22}{subsubsection.2.5.2}\protected@file@percent }
-\newlabel{thm:rls-approx}{{2.4}{22}{RLS approximation}{theorem.2.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.3}Redundancy on Revelation Chains}{23}{subsubsection.2.5.3}\protected@file@percent }
-\newlabel{prop:or-benefit}{{2.5}{23}{Redundancy speedup}{theorem.2.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Limits of Centralization}{24}{subsection.2.6}\protected@file@percent }
-\newlabel{sec:limits-centralization}{{2.6}{24}{Limits of Centralization}{subsection.2.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3\hspace  {1em}}\nobreakspace  {}\textbf  {Decentralized Multi-Agent Theorem Proving}}{25}{section*.7}\protected@file@percent }
-\newlabel{sec:decentralized}{{3}{25}{Limits of Centralization}{section*.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Background}{25}{subsection.3.1}\protected@file@percent }
-\newlabel{sec:posg-background}{{3.1}{25}{Background}{subsection.3.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Partially Observable Stochastic Games}{25}{subsubsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Equilibria and Efficiency}{26}{subsubsection.3.1.2}\protected@file@percent }
-\newlabel{def:poa}{{3.10}{26}{Social cost and Price of Anarchy}{definition.3.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}The Multi-Agent Theorem Proving Game (MATPG)}{27}{subsection.3.2}\protected@file@percent }
-\newlabel{sec:matpg}{{3.2}{27}{The Multi-Agent Theorem Proving Game (MATPG)}{subsection.3.2}{}}
-\newlabel{def:matpg}{{3.11}{27}{MATPG}{definition.3.11}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Credit-Based Rewards}{28}{subsubsection.3.2.1}\protected@file@percent }
-\newlabel{sec:credit-rewards}{{3.2.1}{28}{Credit-Based Rewards}{subsubsection.3.2.1}{}}
-\newlabel{def:credit-reward}{{3.12}{28}{Credit-based reward}{definition.3.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}The Publication Externality}{28}{subsection.3.3}\protected@file@percent }
-\newlabel{sec:externality}{{3.3}{28}{The Publication Externality}{subsection.3.3}{}}
-\newlabel{def:pub-externality}{{3.13}{28}{Publication externality}{definition.3.13}{}}
-\newlabel{thm:externality}{{3.6}{28}{Existence of publication externalities}{theorem.3.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Inefficiency of equilibria.}{29}{subsubsection.3.3.1}\protected@file@percent }
-\newlabel{thm:unbounded-poa}{{3.7}{29}{Unbounded PoA without market}{theorem.3.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Market-Mediated MATPG}{30}{subsection.3.4}\protected@file@percent }
-\newlabel{sec:market-matp}{{3.4}{30}{Market-Mediated MATPG}{subsection.3.4}{}}
-\newlabel{def:market-mechanism}{{3.14}{30}{Market mechanism}{definition.3.14}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Collateralized Bilateral Contract Market}{30}{subsubsection.3.4.1}\protected@file@percent }
-\newlabel{sec:contract-market}{{3.4.1}{30}{Collateralized Bilateral Contract Market}{subsubsection.3.4.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.1}Contract types.}{31}{paragraph.3.4.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.2}Trading.}{31}{paragraph.3.4.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.3}Collateral.}{31}{paragraph.3.4.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.4}Settlement.}{31}{paragraph.3.4.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}The Market-Mediated MATPG}{31}{subsubsection.3.4.2}\protected@file@percent }
-\newlabel{sec:market-matpg-def}{{3.4.2}{31}{The Market-Mediated MATPG}{subsubsection.3.4.2}{}}
-\newlabel{def:vamp-game}{{3.15}{31}{Market-Mediated MATPG}{definition.3.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Internalization of Externalities}{32}{subsection.3.5}\protected@file@percent }
-\newlabel{sec:internalization}{{3.5}{32}{Internalization of Externalities}{subsection.3.5}{}}
-\newlabel{thm:internalization}{{3.8}{32}{Market internalization}{theorem.3.8}{}}
-\newlabel{rem:collateral}{{3.5}{33}{Collateral and manipulation resistance}{Item.29}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Equilibrium Analysis}{34}{subsection.3.6}\protected@file@percent }
-\newlabel{sec:equilibria}{{3.6}{34}{Equilibrium Analysis}{subsection.3.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Existence}{34}{subsubsection.3.6.1}\protected@file@percent }
-\newlabel{prop:ne-existence}{{3.9}{34}{Existence of Nash equilibria}{theorem.3.9}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}Price of Anarchy with Market}{34}{subsubsection.3.6.2}\protected@file@percent }
-\newlabel{sec:poa-market}{{3.6.2}{34}{Price of Anarchy with Market}{subsubsection.3.6.2}{}}
-\newlabel{thm:bounded-poa}{{3.10}{34}{Bounded PoA with market}{theorem.3.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Complexity}{36}{subsection.3.7}\protected@file@percent }
-\newlabel{sec:game-complexity}{{3.7}{36}{Complexity}{subsection.3.7}{}}
-\newlabel{thm:game-complexity}{{3.11}{36}{Complexity classification}{theorem.3.11}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Dealing with Intractibility}{37}{subsection.3.8}\protected@file@percent }
-\newlabel{sec:game-summary}{{3.8}{37}{Dealing with Intractibility}{subsection.3.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4\hspace  {1em}}\nobreakspace  {}\textbf  {Multiagent Reinforcement Learning}}{38}{section*.8}\protected@file@percent }
-\newlabel{chap:marl}{{4}{38}{Dealing with Intractibility}{section*.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Weaker Equilibrium Concepts}{38}{subsection.4.1}\protected@file@percent }
-\newlabel{sec:weaker-eq}{{4.1}{38}{Weaker Equilibrium Concepts}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Coarse Correlated Equilibrium}{38}{subsubsection.4.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Extension to Sequential Games}{39}{subsubsection.4.1.2}\protected@file@percent }
-\newlabel{def:policy-cce}{{4.18}{39}{Policy-space CCE for a POSG}{definition.4.18}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}No-Regret Learning and CCE Convergence}{39}{subsection.4.2}\protected@file@percent }
-\newlabel{sec:no-regret}{{4.2}{39}{No-Regret Learning and CCE Convergence}{subsection.4.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}No-Regret Algorithms}{40}{subsubsection.4.2.1}\protected@file@percent }
-\newlabel{thm:no-regret-cce}{{4.12}{40}{No-regret $\Rightarrow $ CCE; Hart--Mas-Colell 2000}{theorem.4.12}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}From Normal-Form to Extensive-Form via Meta-Games}{40}{subsubsection.4.2.2}\protected@file@percent }
-\newlabel{def:psro}{{4.20}{40}{PSRO meta-game}{definition.4.20}{}}
-\newlabel{prop:psro-convergence}{{4.13}{41}{PSRO meta-game convergence}{theorem.4.13}{}}
-\newlabel{def:br-error}{{4.21}{41}{Best-response approximation error}{definition.4.21}{}}
-\newlabel{thm:meta-to-full}{{4.14}{41}{Meta-game CCE $\Rightarrow $ full-game approximate CCE}{theorem.4.14}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}MARL Framework for the MMATPG}{42}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:marl-framework}{{4.3}{42}{MARL Framework for the MMATPG}{subsection.4.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Policy Architecture: Multi-Agent Decision Transformer}{42}{subsubsection.4.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Policy Optimization: MAPPO}{43}{subsubsection.4.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.2.1}Centralized Training, Decentralized Execution (CTDE).}{43}{paragraph.4.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {4.3.2.2}Update rule.}{43}{paragraph.4.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Population-Based Training (Approximate PSRO)}{43}{subsubsection.4.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}Curriculum Learning}{44}{subsubsection.4.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Convergence Guarantees}{44}{subsection.4.4}\protected@file@percent }
-\newlabel{sec:convergence}{{4.4}{44}{Convergence Guarantees}{subsection.4.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Main Convergence Theorem}{44}{subsubsection.4.4.1}\protected@file@percent }
-\newlabel{thm:marl-convergence}{{4.15}{44}{Convergence to approximate CCE}{theorem.4.15}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Efficiency of Learned Equilibria}{45}{subsubsection.4.4.2}\protected@file@percent }
-\newlabel{thm:poa-cce}{{4.16}{46}{PoA of CCE in the MMATPG}{theorem.4.16}{}}
-\newlabel{cor:marl-efficiency}{{4.16.1}{46}{Efficiency of the MARL framework}{corollary.4.16.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Comparison to the Centralized Benchmark}{46}{subsubsection.4.4.3}\protected@file@percent }
-\newlabel{prop:marl-vs-central}{{4.17}{46}{MARL vs.\ centralized RLS}{theorem.4.17}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5\hspace  {1em}}\nobreakspace  {}\textbf  {Experiments}}{48}{section*.9}\protected@file@percent }
-\newlabel{chap:experiments}{{5}{48}{Comparison to the Centralized Benchmark}{section*.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Implementation Details}{48}{subsection.5.1}\protected@file@percent }
-\newlabel{sec:implementation}{{5.1}{48}{Implementation Details}{subsection.5.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.1.0.1}Formula Universe and Latent Graph}{48}{paragraph.5.1.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.1.0.2}Sequent Compression}{49}{paragraph.5.1.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.1.0.3}Proof Kernel}{49}{paragraph.5.1.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.1.0.4}Other Kernels, Market, and Training}{49}{paragraph.5.1.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Experimental Setup}{50}{subsection.5.2}\protected@file@percent }
-\newlabel{sec:exp-setup}{{5.2}{50}{Experimental Setup}{subsection.5.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.2.0.1}Instance parameters.}{50}{paragraph.5.2.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.2.0.2}Baselines.}{50}{paragraph.5.2.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {5.2.0.3}Metrics.}{50}{paragraph.5.2.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Centralized Scheduling}{50}{subsection.5.3}\protected@file@percent }
-\newlabel{sec:exp-centralized}{{5.3}{50}{Centralized Scheduling}{subsection.5.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.1}{\ignorespaces RLS approximation ratio and lower-bound tightness. Each cell: mean $\pm $ std over $100$ instances. Theoretical worst-case bound: $2-1/m$ ($1.50$ for $m=2$, $1.75$ for $m=4$). All empirical ratios are well below the bound. $\mathrm  {OPT}/\mathrm  {LB}$ close to $1$ indicates the lower bound is nearly tight.}}{51}{table.caption.10}\protected@file@percent }
-\newlabel{tab:e1}{{\relax Table\nobreakspace  {\relax 5}.1}{51}{RLS approximation ratio and lower-bound tightness. Each cell: mean $\pm $ std over $100$ instances. Theoretical worst-case bound: $2-1/m$ ($1.50$ for $m=2$, $1.75$ for $m=4$). All empirical ratios are well below the bound. $\mathrm {OPT}/\mathrm {LB}$ close to $1$ indicates the lower bound is nearly tight}{table.caption.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Externality and Market Internalization}{51}{subsection.5.4}\protected@file@percent }
-\newlabel{sec:exp-externality-market}{{5.4}{51}{Externality and Market Internalization}{subsection.5.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}MARL Convergence and Equilibrium Quality}{51}{subsection.5.5}\protected@file@percent }
-\newlabel{sec:exp-marl}{{5.5}{51}{MARL Convergence and Equilibrium Quality}{subsection.5.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.1}{\ignorespaces Publication externality (MATPG, dashed) vs.\ market internalization (MMATPG, solid) across dependency density $\rho $. Left: $\mathrm  {Pub\%}$ drops sharply under credit-based rewards as dependencies increase, while the market holds it near $100\%$. Middle: PoA grows unboundedly without the market; the market keeps it below $1.25$ regardless of $\rho $. Right: resolution rate collapses without the market at high $\rho $; the market maintains near-complete resolution throughout.}}{52}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:e2a}{{\relax Figure\nobreakspace  {\relax 5}.1}{52}{Publication externality (MATPG, dashed) vs.\ market internalization (MMATPG, solid) across dependency density $\rho $. Left: $\mathrm {Pub\%}$ drops sharply under credit-based rewards as dependencies increase, while the market holds it near $100\%$. Middle: PoA grows unboundedly without the market; the market keeps it below $1.25$ regardless of $\rho $. Right: resolution rate collapses without the market at high $\rho $; the market maintains near-complete resolution throughout}{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.2}{\ignorespaces PoA as a function of loss parameter $\ell $. Empirical PoA (solid) lies below the theoretical bound $(2-1/m)/(1-\ell )$ (dashed) throughout, validating the $1/(1-\ell )$ friction factor. At $\ell =0$ the market is a pure bounty system; at $\ell =0.5$ market friction visibly increases equilibrium cost.}}{52}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:e2b}{{\relax Figure\nobreakspace  {\relax 5}.2}{52}{PoA as a function of loss parameter $\ell $. Empirical PoA (solid) lies below the theoretical bound $(2-1/m)/(1-\ell )$ (dashed) throughout, validating the $1/(1-\ell )$ friction factor. At $\ell =0$ the market is a pure bounty system; at $\ell =0.5$ market friction visibly increases equilibrium cost}{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.3}{\ignorespaces Training dynamics over population iterations. Left: exploitability tracks $O(1/\sqrt  {T})$ reference. Middle: PoA converges toward the theoretical bound of $1.67$. Right: entropy annealing avoids premature convergence.}}{53}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:e3-training}{{\relax Figure\nobreakspace  {\relax 5}.3}{53}{Training dynamics over population iterations. Left: exploitability tracks $O(1/\sqrt {T})$ reference. Middle: PoA converges toward the theoretical bound of $1.67$. Right: entropy annealing avoids premature convergence}{figure.caption.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.4}{\ignorespaces Rollout behavior statistics over PSRO training. Publication rate rises as agents internalize market incentives; market participation overshoots then stabilizes as trading becomes more deliberate; idle rate falls as agents learn productive task sequences. Together these confirm that the market externality is being learned away, not just suppressed.}}{53}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:e3-behavior}{{\relax Figure\nobreakspace  {\relax 5}.4}{53}{Rollout behavior statistics over PSRO training. Publication rate rises as agents internalize market incentives; market participation overshoots then stabilizes as trading becomes more deliberate; idle rate falls as agents learn productive task sequences. Together these confirm that the market externality is being learned away, not just suppressed}{figure.caption.14}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.2}{\ignorespaces Policy comparison at convergence ($n=8$, $m=2$, $d=3$, $\ell =0.1$). Theoretical MMATPG PoA bound: $(2-1/m)/(1-\ell ) = 1.67$. MARL achieves bounded PoA and high resolution, substantially improving over the no-market greedy baseline. RLS provides the centralized optimum reference.}}{53}{table.caption.17}\protected@file@percent }
-\newlabel{tab:e3b}{{\relax Table\nobreakspace  {\relax 5}.2}{53}{Policy comparison at convergence ($n=8$, $m=2$, $d=3$, $\ell =0.1$). Theoretical MMATPG PoA bound: $(2-1/m)/(1-\ell ) = 1.67$. MARL achieves bounded PoA and high resolution, substantially improving over the no-market greedy baseline. RLS provides the centralized optimum reference}{table.caption.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.5}{\ignorespaces Population meta-strategy evolution over PSRO iterations. Weights spread across diverse best-response policies in the middle phase (validating opponent diversity) before reconcentrating on robust generalist policies as the meta-game converges.}}{54}{figure.caption.15}\protected@file@percent }
-\newlabel{fig:e3-metastrat}{{\relax Figure\nobreakspace  {\relax 5}.5}{54}{Population meta-strategy evolution over PSRO iterations. Weights spread across diverse best-response policies in the middle phase (validating opponent diversity) before reconcentrating on robust generalist policies as the meta-game converges}{figure.caption.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Ablations}{54}{subsection.5.6}\protected@file@percent }
-\newlabel{sec:exp-ablation}{{5.6}{54}{Ablations}{subsection.5.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Scaling}{54}{subsection.5.7}\protected@file@percent }
-\newlabel{sec:exp-scale}{{5.7}{54}{Scaling}{subsection.5.7}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}Scaling with Task Graph Size}{54}{subsubsection.5.7.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.6}{\ignorespaces Best-response quality over PSRO iterations}}{55}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:e3-epsbr}{{\relax Figure\nobreakspace  {\relax 5}.6}{55}{Best-response quality over PSRO iterations}{figure.caption.16}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.3}{\ignorespaces \textbf  {[PLACEHOLDER]} Ablation. Metrics at convergence (100 iterations or equivalent compute).}}{55}{table.caption.18}\protected@file@percent }
-\newlabel{tab:e4}{{\relax Table\nobreakspace  {\relax 5}.3}{55}{\textbf {[PLACEHOLDER]} Ablation. Metrics at convergence (100 iterations or equivalent compute)}{table.caption.18}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}Scaling with Agent Count}{55}{subsubsection.5.7.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.4}{\ignorespaces Scaling with task graph size $n$. The theoretical PoA bound $(2-1/m)/(1-\ell ) = 1.67$ is independent of $n$; empirical PoA remains well below this bound across all scales. Exploitability increases modestly with $n$ (larger state space is harder to explore) but stays below the convergence threshold. Training time scales polynomially ($\approx O(n^{1.7})$).}}{56}{table.caption.19}\protected@file@percent }
-\newlabel{tab:e5-tasks}{{\relax Table\nobreakspace  {\relax 5}.4}{56}{Scaling with task graph size $n$. The theoretical PoA bound $(2-1/m)/(1-\ell ) = 1.67$ is independent of $n$; empirical PoA remains well below this bound across all scales. Exploitability increases modestly with $n$ (larger state space is harder to explore) but stays below the convergence threshold. Training time scales polynomially ($\approx O(n^{1.7})$)}{table.caption.19}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.5}{\ignorespaces Scaling with agent count $m$. The theoretical PoA bound increases with $m$ (market friction compounds), but absolute makespan decreases (more parallelism). MARL remains below the bound in all cases.}}{56}{table.caption.20}\protected@file@percent }
-\newlabel{tab:e5-agents}{{\relax Table\nobreakspace  {\relax 5}.5}{56}{Scaling with agent count $m$. The theoretical PoA bound increases with $m$ (market friction compounds), but absolute makespan decreases (more parallelism). MARL remains below the bound in all cases}{table.caption.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 5}.7}{\ignorespaces Scaling with agent count $m$. Left: PoA ratio vs.\ $m$; all decentralized policies remain below the theoretical bound. Right: absolute makespan vs.\ $m$; MARL tracks centralized RLS despite operating without a planner.}}{57}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:e5-agents}{{\relax Figure\nobreakspace  {\relax 5}.7}{57}{Scaling with agent count $m$. Left: PoA ratio vs.\ $m$; all decentralized policies remain below the theoretical bound. Right: absolute makespan vs.\ $m$; MARL tracks centralized RLS despite operating without a planner}{figure.caption.21}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6\hspace  {1em}}\nobreakspace  {}\textbf  {Application: Neural Theorem Proving}}{58}{section*.22}\protected@file@percent }
-\newlabel{chap:application}{{6}{58}{Scaling with Agent Count}{section*.22}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Background}{58}{subsection.6.1}\protected@file@percent }
-\newlabel{sec:lean-background}{{6.1}{58}{Background}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Formal Mathematics and Lean\nobreakspace  {}4}{58}{subsubsection.6.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.1}Proof assistants and the kernel trust model.}{58}{paragraph.6.1.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.2}Lean\nobreakspace  {}4 and Mathlib.}{59}{paragraph.6.1.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.1.3}The coordination structure of formalization.}{59}{paragraph.6.1.1.3}\protected@file@percent }
+\citation{alphaproof}
+\citation{GodelProver}
+\citation{jiang2023draft}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Contributions}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Thesis Overview}{2}{subsection.1.3}\protected@file@percent }
+\citation{ImProver}
+\citation{ImProver2}
+\citation{LeanTheoremProver}
+\citation{RocqTheoremProver}
+\citation{IsabelleTheoremProver}
+\citation{Mathlib}
+\citation{SeedProver}
+\citation{serge2010,Wiedijk}
+\citation{prover-verifier-games}
 \citation{polu2020generative}
-\citation{han2021proof}
-\citation{yang2023leandojo}
-\citation{zheng2021minif2f}
-\citation{liu2023fimo}
-\citation{hu2024minictx}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Neural Theorem Proving with LLMs}{60}{subsubsection.6.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.1}Tactic-level proof search.}{60}{paragraph.6.1.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.2}Agentic LLM provers.}{60}{paragraph.6.1.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.3}The coordination gap.}{60}{paragraph.6.1.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.1.2.4}Formal mathematics as an allocation problem.}{61}{paragraph.6.1.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}The Agora Platform}{61}{subsection.6.2}\protected@file@percent }
-\newlabel{sec:agora}{{6.2}{61}{The Agora Platform}{subsection.6.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Architecture}{61}{subsubsection.6.2.1}\protected@file@percent }
-\newlabel{sec:agora-arch}{{6.2.1}{61}{Architecture}{subsubsection.6.2.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.1}Library Mechanics.}{61}{paragraph.6.2.1.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.1}{\ignorespaces Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market.}}{62}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:agora-arch}{{\relax Figure\nobreakspace  {\relax 6}.1}{62}{Agora platform architecture. Library Mechanics owns Lean validation; Market Mechanics owns financial invariants; the Backend Interface exposes MCP tools to LLM agents. The Agent Orchestrator provisions containers and seeds the market}{figure.caption.23}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.2}Market Mechanics.}{63}{paragraph.6.2.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.3}Backend Interface.}{63}{paragraph.6.2.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.1.4}Agent Orchestrator.}{63}{paragraph.6.2.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Verification}{63}{subsubsection.6.2.2}\protected@file@percent }
-\newlabel{sec:verified-agora}{{6.2.2}{63}{Verification}{subsubsection.6.2.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.1}Target attribute.}{63}{paragraph.6.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.2}Axiom policy.}{64}{paragraph.6.2.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.2.3}Contribution validation.}{64}{paragraph.6.2.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Inference-Time MMATPG Mapping}{64}{subsubsection.6.2.3}\protected@file@percent }
-\newlabel{sec:inference-mapping}{{6.2.3}{64}{Inference-Time MMATPG Mapping}{subsubsection.6.2.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.1}Time Discretization}{64}{paragraph.6.2.3.1}\protected@file@percent }
-\newlabel{sec:time-discretization}{{6.2.3.1}{64}{Time Discretization}{paragraph.6.2.3.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.2.3.2}Component Mapping}{65}{paragraph.6.2.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Synthetic Training Data Generation}{66}{subsection.6.3}\protected@file@percent }
-\newlabel{sec:training}{{6.3}{66}{Synthetic Training Data Generation}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Offline MMATPG Extraction}{66}{subsubsection.6.3.1}\protected@file@percent }
-\newlabel{sec:dep-extraction}{{6.3.1}{66}{Offline MMATPG Extraction}{subsubsection.6.3.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.1}Utility Graph Extraction}{66}{paragraph.6.3.1.1}\protected@file@percent }
-\newlabel{sec:util-extraction}{{6.3.1.1}{66}{Utility Graph Extraction}{paragraph.6.3.1.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.2}Kernel Calibration}{67}{paragraph.6.3.1.2}\protected@file@percent }
-\newlabel{sec:kernel-calibration}{{6.3.1.2}{67}{Kernel Calibration}{paragraph.6.3.1.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Synthetic DAG Generation}{67}{subsubsection.6.3.2}\protected@file@percent }
-\newlabel{sec:synthetic-dag}{{6.3.2}{67}{Synthetic DAG Generation}{subsubsection.6.3.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.2.1}Generator design.}{67}{paragraph.6.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.3}Training-to-Inference Gap}{69}{subsubsection.6.3.3}\protected@file@percent }
-\newlabel{sec:gap}{{6.3.3}{69}{Training-to-Inference Gap}{subsubsection.6.3.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Experimental Setup}{69}{subsection.6.4}\protected@file@percent }
-\newlabel{sec:exp-setup}{{6.4}{69}{Experimental Setup}{subsection.6.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Benchmark: MiniCTX PNT}{69}{subsubsection.6.4.1}\protected@file@percent }
-\newlabel{sec:minictx}{{6.4.1}{69}{Benchmark: MiniCTX PNT}{subsubsection.6.4.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Strategy Module Training}{69}{subsubsection.6.4.2}\protected@file@percent }
-\newlabel{sec:strategy-training}{{6.4.2}{69}{Strategy Module Training}{subsubsection.6.4.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.2}{\ignorespaces Comparison between the extracted Prime Number Theorem utility graph and derived synthetic utility graphs sampled across decreasing game sizes.}}{70}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:graph-comparison}{{\relax Figure\nobreakspace  {\relax 6}.2}{70}{Comparison between the extracted Prime Number Theorem utility graph and derived synthetic utility graphs sampled across decreasing game sizes}{figure.caption.24}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {PNT}}}{70}{subfigure.2.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {$n=1024$}}}{70}{subfigure.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {$n=512$}}}{70}{subfigure.2.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {$n=256$}}}{70}{subfigure.2.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(e)}{\ignorespaces {$n=128$}}}{70}{subfigure.2.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.1}{\ignorespaces PNT benchmark statistics and hyperparameters.}}{71}{table.caption.25}\protected@file@percent }
-\newlabel{tab:pnt-stats}{{\relax Table\nobreakspace  {\relax 6}.1}{71}{PNT benchmark statistics and hyperparameters}{table.caption.25}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.3}Systems Under Comparison}{71}{subsubsection.6.4.3}\protected@file@percent }
-\newlabel{sec:systems}{{6.4.3}{71}{Systems Under Comparison}{subsubsection.6.4.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.4}Evaluation Protocol}{72}{subsubsection.6.4.4}\protected@file@percent }
-\newlabel{sec:protocol}{{6.4.4}{72}{Evaluation Protocol}{subsubsection.6.4.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.5}Limitations}{72}{subsubsection.6.4.5}\protected@file@percent }
-\newlabel{sec:limitations}{{6.4.5}{72}{Limitations}{subsubsection.6.4.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Results}{73}{subsection.6.5}\protected@file@percent }
-\newlabel{sec:app-results}{{6.5}{73}{Results}{subsection.6.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Proof Completion}{73}{subsubsection.6.5.1}\protected@file@percent }
-\newlabel{sec:proof-completion}{{6.5.1}{73}{Proof Completion}{subsubsection.6.5.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.2}{\ignorespaces Proof completion on PNT at full budget ($12$ agents where applicable).}}{73}{table.caption.26}\protected@file@percent }
-\newlabel{tab:app-overall}{{\relax Table\nobreakspace  {\relax 6}.2}{73}{Proof completion on PNT at full budget ($12$ agents where applicable)}{table.caption.26}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Anytime Performance}{74}{subsubsection.6.5.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.3}{\ignorespaces Proof completion rate.}}{74}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:anytime}{{\relax Figure\nobreakspace  {\relax 6}.3}{74}{Proof completion rate}{figure.caption.27}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.3}Coordination Quality}{74}{subsubsection.6.5.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.3}{\ignorespaces Coordination metrics (multi-agent systems only).}}{74}{table.caption.28}\protected@file@percent }
-\newlabel{tab:coordination}{{\relax Table\nobreakspace  {\relax 6}.3}{74}{Coordination metrics (multi-agent systems only)}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.4}Qualitative Results: A Case Study in Distributed Proof Development}{74}{subsubsection.6.5.4}\protected@file@percent }
-\newlabel{sec:qualitative}{{6.5.4}{74}{Qualitative Results: A Case Study in Distributed Proof Development}{subsubsection.6.5.4}{}}
-\newlabel{lst:target}{{\relax Listing\nobreakspace  {\relax 6}.1}{75}{Target lemma \texttt {SmallSquareInRectangle} (lines 826--835)}{lstlisting.6.1}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.1}{\ignorespaces Target lemma \texttt  {SmallSquareInRectangle} (lines 826--835).}}{75}{lstlisting.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.1}Bottom of the chain: conjectured helper lemmas.}{75}{paragraph.6.5.4.1}\protected@file@percent }
-\newlabel{lst:leaves}{{\relax Listing\nobreakspace  {\relax 6}.2}{75}{Conjectured leaf lemmas, introduced and resolved by $\alpha _2$ at epoch $t\!\approx \!42$ (lines 499--509)}{lstlisting.6.2}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.2}{\ignorespaces Conjectured leaf lemmas, introduced and resolved by $\alpha _2$ at epoch $t\!\approx \!42$ (lines 499--509).}}{75}{lstlisting.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.4}{\ignorespaces Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt  {SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt  {left\_mem\_rect}, \texttt  {right\_mem\_rect}, \texttt  {RectSubRect'}) were introduced as \emph  {conjectures} by agents during proof construction rather than being listed as targets a priori.}}{76}{figure.caption.29}\protected@file@percent }
-\newlabel{fig:case-study-chain}{{\relax Figure\nobreakspace  {\relax 6}.4}{76}{Dependency chain resolved by three agents collaborating through the Agora scaffold. The target \texttt {SmallSquareInRectangle} sits atop a five-level DAG. Resolving it requires either sequencing proofs bottom-up or parallelizing across independent subchains. Dashed-border nodes (\texttt {left\_mem\_rect}, \texttt {right\_mem\_rect}, \texttt {RectSubRect'}) were introduced as \emph {conjectures} by agents during proof construction rather than being listed as targets a priori}{figure.caption.29}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.2}The first target: \texttt  {rect\_subset\_iff}.}{76}{paragraph.6.5.4.2}\protected@file@percent }
-\newlabel{lst:rectsubsetiff}{{\relax Listing\nobreakspace  {\relax 6}.3}{76}{\texttt {rect\_subset\_iff}, resolved by $\alpha _2$ (lines 511--520)}{lstlisting.6.3}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.3}{\ignorespaces \texttt  {rect\_subset\_iff}, resolved by $\alpha _2$ (lines 511--520).}}{76}{lstlisting.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.3}Parallel work on the other branch.}{77}{paragraph.6.5.4.3}\protected@file@percent }
-\newlabel{lst:nhdsbasis}{{\relax Listing\nobreakspace  {\relax 6}.4}{77}{\texttt {Complex.nhds\_hasBasis\_square}, resolved by $\alpha _3$ (lines 787--801). Longest and most technically demanding proof in the chain}{lstlisting.6.4}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.4}{\ignorespaces \texttt  {Complex.nhds\_hasBasis\_square}, resolved by $\alpha _3$ (lines 787--801). Longest and most technically demanding proof in the chain.}}{77}{lstlisting.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.4}Parallel conjecturing and the utility branch.}{78}{paragraph.6.5.4.4}\protected@file@percent }
-\newlabel{lst:rectsubrectp}{{\relax Listing\nobreakspace  {\relax 6}.5}{78}{\texttt {RectSubRect'}, conjectured and resolved by $\alpha _1$ (lines 546--558), immediately after $\alpha _2$'s \texttt {rect\_subset\_iff} publication}{lstlisting.6.5}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.5}{\ignorespaces \texttt  {RectSubRect'}, conjectured and resolved by $\alpha _1$ (lines 546--558), immediately after $\alpha _2$'s \texttt  {rect\_subset\_iff} publication.}}{78}{lstlisting.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.5}Closing the square branch.}{78}{paragraph.6.5.4.5}\protected@file@percent }
-\newlabel{lst:squaresquare}{{\relax Listing\nobreakspace  {\relax 6}.6}{78}{\texttt {square\_subset\_square}, resolved by $\alpha _1$ at $t\!\approx \!66$ (lines 819--824)}{lstlisting.6.6}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {\relax Listing\nobreakspace  {\relax 6}.6}{\ignorespaces \texttt  {square\_subset\_square}, resolved by $\alpha _1$ at $t\!\approx \!66$ (lines 819--824).}}{78}{lstlisting.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.6}Closing the target.}{79}{paragraph.6.5.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\numberline {6.5.4.7}Coordination summary.}{79}{paragraph.6.5.4.7}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 6}.4}{\ignorespaces Timeline of the \texttt  {SmallSquareInRectangle} dependency chain, as resolved by three agents in the Agora + Strategy run.}}{79}{table.caption.30}\protected@file@percent }
-\newlabel{tab:case-study}{{\relax Table\nobreakspace  {\relax 6}.4}{79}{Timeline of the \texttt {SmallSquareInRectangle} dependency chain, as resolved by three agents in the Agora + Strategy run}{table.caption.30}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{81}{section*.31}\protected@file@percent }
-\newlabel{chap:conclusion}{{7}{81}{Coordination summary}{section*.31}{}}
+\citation{han2022proof,polu2022formal,lample2022hypertree,yang2023leandojo}
+\citation{alphaproof}
+\citation{achim2025aristotleimolevelautomatedtheorem,SeedProver}
+\citation{leandojo,ImProver,GodelProver}
+\citation{frieder2025datamathematicalcopilotsbetter}
+\@writefile{toc}{\contentsline {section}{\numberline {2\hspace  {1em}}\nobreakspace  {}\textbf  {Related Work}}{4}{section*.2}\protected@file@percent }
+\newlabel{chap:related-work}{{2}{4}{Thesis Overview}{section*.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Formal Theorem Proving and Proof Assistants}{4}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:rw_formal}{{2.1}{4}{Formal Theorem Proving and Proof Assistants}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Neural Theorem Proving}{4}{subsection.2.2}\protected@file@percent }
+\newlabel{sec:rw_ntp}{{2.2}{4}{Neural Theorem Proving}{subsection.2.2}{}}
+\citation{hu2024minictxneuraltheoremproving}
+\citation{zheng2022miniff}
+\citation{ImProver}
+\citation{gu2025proofoptimizer}
+\citation{gu2025proofoptimizer}
+\citation{ImProver2}
+\citation{wei2022chain}
+\citation{jiang2023draft,first2023baldur}
+\citation{jiang2023draft}
+\citation{first2023baldur,hu2024minictxneuraltheoremproving}
+\citation{zhou2023docprompting}
+\citation{yang2023leandojo,thakur2024incontext}
+\citation{10.1145/290941.291025}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Proof Optimization}{5}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:rw_optimization}{{2.3}{5}{Proof Optimization}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}LLM Agents and Prompting}{5}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:rw_agents}{{2.4}{5}{LLM Agents and Prompting}{subsection.2.4}{}}
+\citation{DPO}
+\citation{IRPO}
+\citation{ExpertIteration}
+\citation{GRPO}
+\citation{modelCollapse}
+\citation{DraftSketchProve}
+\citation{autoinformalization}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Retrieval-Augmented Generation}{6}{subsection.2.5}\protected@file@percent }
+\newlabel{sec:rw_rag}{{2.5}{6}{Retrieval-Augmented Generation}{subsection.2.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Preference Optimization and Reinforcement Learning}{6}{subsection.2.6}\protected@file@percent }
+\newlabel{sec:rw_rl}{{2.6}{6}{Preference Optimization and Reinforcement Learning}{subsection.2.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Neurosymbolic Methods}{6}{subsection.2.7}\protected@file@percent }
+\newlabel{sec:rw_neurosymbolic}{{2.7}{6}{Neurosymbolic Methods}{subsection.2.7}{}}
+\citation{LeanTheoremProver}
+\@writefile{toc}{\contentsline {section}{\numberline {3\hspace  {1em}}\nobreakspace  {}\textbf  {Proof Optimization}}{8}{section*.3}\protected@file@percent }
+\newlabel{chap:framework}{{3}{8}{Neurosymbolic Methods}{section*.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Setup and Notation}{8}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:setup}{{3.1}{8}{Setup and Notation}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Optimization Objective}{8}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:objective}{{3.2}{8}{Optimization Objective}{subsection.3.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 3}.1}{\ignorespaces ImProver 2 automatically optimizes human-written proofs to reduce explicit dependencies, minimize length, or maximize proof modularity, while maintaining formal correctness. }}{9}{figure.caption.4}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:main-demo}{{\relax Figure\nobreakspace  {\relax 3}.1}{9}{ImProver 2 automatically optimizes human-written proofs to reduce explicit dependencies, minimize length, or maximize proof modularity, while maintaining formal correctness}{figure.caption.4}{}}
+\newlabel{def:improvement_score}{{3.4}{9}{Improvement Score}{definition.3.4}{}}
+\newlabel{eq:po_score}{{{\relax 3}.1}{9}{Optimization Objective}{equation.\relax 3.1}{}}
+\citation{MIL}
+\citation{compfiles}
+\citation{The_mathlib_Community_2020}
+\citation{miniCTX}
+\citation{Mathlib}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Datasets}{10}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:datasets}{{3.3}{10}{Datasets}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Metrics}{10}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:metrics}{{3.4}{10}{Metrics}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Metric Definitions}{10}{subsubsection.3.4.1}\protected@file@percent }
+\newlabel{sssec:metric_defs}{{3.4.1}{10}{Metric Definitions}{subsubsection.3.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.1}Length.}{10}{paragraph.3.4.1.1}\protected@file@percent }
+\newlabel{def:length}{{3.4.1.1}{10}{Length}{paragraph.3.4.1.1}{}}
+\citation{serge2010,Wiedijk}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.2}Declarativity.}{11}{paragraph.3.4.1.2}\protected@file@percent }
+\newlabel{def:declarative}{{3.4.1.2}{11}{Declarativity}{paragraph.3.4.1.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.3}Mixed.}{11}{paragraph.3.4.1.3}\protected@file@percent }
+\newlabel{def:mixed}{{3.4.1.3}{11}{Mixed}{paragraph.3.4.1.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.4}Completion.}{11}{paragraph.3.4.1.4}\protected@file@percent }
+\newlabel{def:completion}{{3.4.1.4}{11}{Completion}{paragraph.3.4.1.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.5}Dependencies.}{11}{paragraph.3.4.1.5}\protected@file@percent }
+\newlabel{def:dependencies}{{3.4.1.5}{11}{Dependencies}{paragraph.3.4.1.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {3.4.1.6}Modularity.}{12}{paragraph.3.4.1.6}\protected@file@percent }
+\newlabel{def:modularity}{{3.4.1.6}{12}{Modularity}{paragraph.3.4.1.6}{}}
+\newlabel{def:proof_tree}{{3.5}{12}{Proof Tree and Children}{definition.3.5}{}}
+\newlabel{def:spawned}{{3.6}{12}{Spawned Goals}{definition.3.6}{}}
+\newlabel{def:effective_spawned}{{3.7}{12}{Effective Spawned Goals}{definition.3.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 3}.2}{\ignorespaces Example Lean proof (top) and its generated proof tree (bottom). Note the root node (in blue), and the two effective spawned goals coming from $h_1$ and $h_2$ (in red).}}{14}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:kd5-kd45-proof}{{\relax Figure\nobreakspace  {\relax 3}.2}{14}{Example Lean proof (top) and its generated proof tree (bottom). Note the root node (in blue), and the two effective spawned goals coming from $h_1$ and $h_2$ (in red)}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Metric Summary and Degenerate Solutions}{14}{subsubsection.3.4.2}\protected@file@percent }
+\newlabel{sssec:metric_summary}{{3.4.2}{14}{Metric Summary and Degenerate Solutions}{subsubsection.3.4.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 3}.1}{\ignorespaces Metrics used in ImProver and ImProver\nobreakspace  {}2.}}{15}{table.caption.6}\protected@file@percent }
+\newlabel{tab:metrics_summary}{{\relax Table\nobreakspace  {\relax 3}.1}{15}{Metrics used in ImProver and ImProver~2}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Evaluation Framework}{15}{subsection.3.5}\protected@file@percent }
+\newlabel{sec:eval_methodology}{{3.5}{15}{Evaluation Framework}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.1}Single-Theorem Evaluation}{15}{subsubsection.3.5.1}\protected@file@percent }
+\newlabel{def:best_of_n}{{3.8}{15}{Best-of-$n$ Selection}{definition.3.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.5.2}Dataset-Level Evaluation}{15}{subsubsection.3.5.2}\protected@file@percent }
+\newlabel{sssec:dataset_eval}{{3.5.2}{15}{Dataset-Level Evaluation}{subsubsection.3.5.2}{}}
+\newlabel{def:mean_improvement}{{3.9}{15}{Mean Improvement Score}{definition.3.9}{}}
+\newlabel{def:comp_acc}{{3.10}{16}{Compilation Accuracy}{definition.3.10}{}}
+\newlabel{def:imp_acc}{{3.11}{16}{Improved Accuracy}{definition.3.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4\hspace  {1em}}\nobreakspace  {}\textbf  {ImProver}}{17}{section*.7}\protected@file@percent }
+\newlabel{chap:improver}{{4}{17}{Dataset-Level Evaluation}{section*.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Motivation and Overview}{17}{subsection.4.1}\protected@file@percent }
+\newlabel{ssec:improver_overview}{{4.1}{17}{Motivation and Overview}{subsection.4.1}{}}
+\citation{wei2022chain}
+\citation{Trainingdata}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Chain-of-States Prompting}{18}{subsection.4.2}\protected@file@percent }
+\newlabel{ssec:cos_imp}{{4.2}{18}{Chain-of-States Prompting}{subsection.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 4}.1}{\ignorespaces A Lean proof (left) with Chain-of-States prompting annotations (right). Intermediate proof states are inserted as comments before each tactic, giving the model symbolic information about the evolving goal state.}}{19}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:cos}{{\relax Figure\nobreakspace  {\relax 4}.1}{19}{A Lean proof (left) with Chain-of-States prompting annotations (right). Intermediate proof states are inserted as comments before each tactic, giving the model symbolic information about the evolving goal state}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Output Formatting}{19}{subsection.4.3}\protected@file@percent }
+\newlabel{ssec:output_fmt}{{4.3}{19}{Output Formatting}{subsection.4.3}{}}
+\citation{madaan2023selfrefine,chen2023teachinglargelanguagemodels}
+\citation{10.1145/290941.291025}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Sampling and Refinement}{20}{subsection.4.4}\protected@file@percent }
+\newlabel{ssec:sampling}{{4.4}{20}{Sampling and Refinement}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Error Correction and Refinement}{20}{subsubsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Compound Methods}{20}{subsubsection.4.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Retrieval-Augmented Generation}{20}{subsection.4.5}\protected@file@percent }
+\newlabel{ssec:rag}{{4.5}{20}{Retrieval-Augmented Generation}{subsection.4.5}{}}
+\citation{avigad2024tpil}
+\citation{The_mathlib_Community_2020}
+\citation{openai2024gpt4technicalreport}
+\@writefile{toc}{\contentsline {section}{\numberline {5\hspace  {1em}}\nobreakspace  {}\textbf  {ImProver Experiments}}{22}{section*.9}\protected@file@percent }
+\newlabel{chap:improver-exp}{{5}{22}{Retrieval-Augmented Generation}{section*.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Experimental Setup}{22}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Ablation Studies}{23}{subsection.5.2}\protected@file@percent }
+\newlabel{sssec:ablations}{{5.2}{23}{Ablation Studies}{subsection.5.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Setup.}{23}{subsubsection.5.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Results.}{23}{subsubsection.5.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.1}{\ignorespaces Ablation results. Each cell in the ablation tests shows \texttt  {best} / \texttt  {worst}, which are the \texttt  {best} and \texttt  {worst} parameter combinations in the test group.}}{24}{table.caption.10}\protected@file@percent }
+\newlabel{tab:abl}{{\relax Table\nobreakspace  {\relax 5}.1}{24}{Ablation results. Each cell in the ablation tests shows \texttt {best} / \texttt {worst}, which are the \texttt {best} and \texttt {worst} parameter combinations in the test group}{table.caption.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.2}{\ignorespaces CoS Declarativity Ablation results.}}{24}{table.caption.11}\protected@file@percent }
+\newlabel{tab:read-abl}{{\relax Table\nobreakspace  {\relax 5}.2}{24}{CoS Declarativity Ablation results}{table.caption.11}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {5.2.2.1}Declarativity and CoS ablation.}{24}{paragraph.5.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {5.2.2.2}Syntax guidance ablation.}{24}{paragraph.5.2.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.3}{\ignorespaces Syntax Guidance Ablation results.}}{25}{table.caption.12}\protected@file@percent }
+\newlabel{tab:syn-abl}{{\relax Table\nobreakspace  {\relax 5}.3}{25}{Syntax Guidance Ablation results}{table.caption.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.4}{\ignorespaces Average Proof optimization results.}}{25}{table.caption.13}\protected@file@percent }
+\newlabel{tab:main-avg}{{\relax Table\nobreakspace  {\relax 5}.4}{25}{Average Proof optimization results}{table.caption.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Main Results}{25}{subsection.5.3}\protected@file@percent }
+\citation{DBLP:journals/corr/abs-2202-01344}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.5}{\ignorespaces Average proof optimization results}}{26}{table.caption.14}\protected@file@percent }
+\newlabel{tab:main-avg-transposed}{{\relax Table\nobreakspace  {\relax 5}.5}{26}{Average proof optimization results}{table.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.6}{\ignorespaces MIL Proof optimization results.}}{26}{table.caption.15}\protected@file@percent }
+\newlabel{tab:main-mil}{{\relax Table\nobreakspace  {\relax 5}.6}{26}{MIL Proof optimization results}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Neural Theorem Proving Evaluation}{26}{subsection.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.7}{\ignorespaces Compfiles Proof optimization results.}}{27}{table.caption.16}\protected@file@percent }
+\newlabel{tab:main-compfiles}{{\relax Table\nobreakspace  {\relax 5}.7}{27}{Compfiles Proof optimization results}{table.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.8}{\ignorespaces Mathlib Proof optimization results.}}{27}{table.caption.17}\protected@file@percent }
+\newlabel{tab:main-lib}{{\relax Table\nobreakspace  {\relax 5}.8}{27}{Mathlib Proof optimization results}{table.caption.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Qualitative Examples}{27}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:qual_ex}{{5.5}{27}{Qualitative Examples}{subsection.5.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Limitations}{27}{subsection.5.6}\protected@file@percent }
+\newlabel{sec:imp1_limitations}{{5.6}{27}{Limitations}{subsection.5.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 5}.9}{\ignorespaces Proof generation results. Each cell shows percent accuracy.}}{28}{table.caption.18}\protected@file@percent }
+\newlabel{tab:comp}{{\relax Table\nobreakspace  {\relax 5}.9}{28}{Proof generation results. Each cell shows percent accuracy}{table.caption.18}{}}
+\citation{IRPO}
+\@writefile{toc}{\contentsline {section}{\numberline {6\hspace  {1em}}\nobreakspace  {}\textbf  {ImProver 2}}{29}{section*.19}\protected@file@percent }
+\newlabel{chap:improver2}{{6}{29}{Limitations}{section*.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Overview}{29}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:improver_spec}{{6.1}{29}{Overview}{subsection.6.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 6}.1}{\ignorespaces \textbf  {ImProver\textsuperscript  {2} training loop.} The diagram illustrates the iterative process of generation, retrieval, filtering, and training. Node colors represent the evolution of data from initial sampling (Blue) through processing (Purple) to training (Magenta).}}{30}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:flow_pipeline}{{\relax Figure\nobreakspace  {\relax 6}.1}{30}{\textbf {ImProver\textsuperscript {2} training loop.} The diagram illustrates the iterative process of generation, retrieval, filtering, and training. Node colors represent the evolution of data from initial sampling (Blue) through processing (Purple) to training (Magenta)}{figure.caption.20}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Neurosymbolic Augmentation}{30}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:generation}{{6.2}{30}{Neurosymbolic Augmentation}{subsection.6.2}{}}
+\newlabel{sec:ns_aug}{{6.2}{30}{Neurosymbolic Augmentation}{subsection.6.2}{}}
+\citation{ImProver2}
+\citation{ImProver}
+\citation{ImProver2}
+\citation{DraftSketchProve}
+\citation{IRPO}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Context}{31}{subsubsection.6.2.1}\protected@file@percent }
+\newlabel{sec:context_extraction}{{6.2.1}{31}{Context}{subsubsection.6.2.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Chain-of-States (CoS)}{31}{subsubsection.6.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Auto-informalization}{31}{subsubsection.6.2.3}\protected@file@percent }
+\citation{modelCollapse}
+\citation{ImProver2}
+\citation{GRPO}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Training}{32}{subsection.6.3}\protected@file@percent }
+\newlabel{sec:training}{{6.3}{32}{Training}{subsection.6.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Datasets and Replay Buffer}{32}{subsubsection.6.3.1}\protected@file@percent }
+\newlabel{sec:training_replay}{{6.3.1}{32}{Datasets and Replay Buffer}{subsubsection.6.3.1}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Preference Pair Creation}}{33}{algorithm.1}\protected@file@percent }
+\newlabel{alg:pref_pair_creation}{{1}{33}{Preference Pair Creation}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {6.3.1.1}IRPO Dataset}{33}{paragraph.6.3.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}IRPO (Iterative Reasoning Preference Optimization)}{33}{subsubsection.6.3.2}\protected@file@percent }
+\newlabel{sec:irpo}{{6.3.2}{33}{IRPO (Iterative Reasoning Preference Optimization)}{subsubsection.6.3.2}{}}
+\citation{Mathlib,HEPLean,PFR,Carleson,ConNF,FLT,Foundation,Seymour}
+\citation{DeepseekR1}
+\citation{ImProver2}
+\@writefile{toc}{\contentsline {section}{\numberline {7\hspace  {1em}}\nobreakspace  {}\textbf  {ImProver 2 Experiments}}{35}{section*.21}\protected@file@percent }
+\newlabel{chap:improver2-exp}{{7}{35}{IRPO (Iterative Reasoning Preference Optimization)}{section*.21}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Setup}{35}{subsection.7.1}\protected@file@percent }
+\newlabel{sec:exp_setup}{{7.1}{35}{Setup}{subsection.7.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.1}Dataset and split}{35}{subsubsection.7.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.2}Evaluation protocol}{35}{subsubsection.7.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.3}Systems compared}{36}{subsubsection.7.1.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.1}{\ignorespaces Inference cost comparison, based on public API pricing at time of submission, and given as the Input/Output cost per 1M tokens.}}{36}{table.caption.22}\protected@file@percent }
+\newlabel{tab:cost}{{\relax Table\nobreakspace  {\relax 7}.1}{36}{Inference cost comparison, based on public API pricing at time of submission, and given as the Input/Output cost per 1M tokens}{table.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Main Results}{36}{subsection.7.2}\protected@file@percent }
+\newlabel{sec:main_results}{{7.2}{36}{Main Results}{subsection.7.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.2}{\ignorespaces \textbf  {Frontier Evaluations.} Comparison with frontier models and prior proof optimization systems. Mean improvement at best@16 on MiniCTX-v2}}{37}{table.caption.23}\protected@file@percent }
+\newlabel{tab:frontier}{{\relax Table\nobreakspace  {\relax 7}.2}{37}{\textbf {Frontier Evaluations.} Comparison with frontier models and prior proof optimization systems. Mean improvement at best@16 on MiniCTX-v2}{table.caption.23}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.3}{\ignorespaces \textbf  {Intra-Family Evaluations.} Intra-family comparison across DeepSeek-R1 model scales. Mean improvement at best@16 on MiniCTX-v2 for all three metrics.}}{37}{table.caption.24}\protected@file@percent }
+\newlabel{tab:intrafamily}{{\relax Table\nobreakspace  {\relax 7}.3}{37}{\textbf {Intra-Family Evaluations.} Intra-family comparison across DeepSeek-R1 model scales. Mean improvement at best@16 on MiniCTX-v2 for all three metrics}{table.caption.24}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.4}{\ignorespaces \textbf  {Per-iteration improvements.} Progression of mean improvement at best@16 on MiniCTX-v2 across IRPO training iterations across all three metrics.}}{38}{table.caption.25}\protected@file@percent }
+\newlabel{tab:iter}{{\relax Table\nobreakspace  {\relax 7}.4}{38}{\textbf {Per-iteration improvements.} Progression of mean improvement at best@16 on MiniCTX-v2 across IRPO training iterations across all three metrics}{table.caption.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Improvement vs Accuracy}{38}{subsection.7.3}\protected@file@percent }
+\newlabel{sec:acc}{{7.3}{38}{Improvement vs Accuracy}{subsection.7.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.5}{\ignorespaces \textbf  {Accuracy Evaluations.} Compilation accuracy and improved accuracy comparison amongst the best@16 mean improvement samples across all three metrics. Each entry is reported as $\mathcal  {A}_\mu ^+ / \mathcal  {A}$, where $\mathcal  {A}_\mu ^+$ is improved accuracy and $\mathcal  {A}$ is compilation accuracy.}}{39}{table.caption.26}\protected@file@percent }
+\newlabel{tab:acc}{{\relax Table\nobreakspace  {\relax 7}.5}{39}{\textbf {Accuracy Evaluations.} Compilation accuracy and improved accuracy comparison amongst the best@16 mean improvement samples across all three metrics. Each entry is reported as $\mathcal {A}_\mu ^+ / \mathcal {A}$, where $\mathcal {A}_\mu ^+$ is improved accuracy and $\mathcal {A}$ is compilation accuracy}{table.caption.26}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.6}{\ignorespaces \textbf  {Accuracy Progression.} Compilation accuracy and improved accuracy progression amongst the best@16 mean improvement samples across IRPO training iterations. Each entry is reported as $\mathcal  {A}_\mu ^+ / \mathcal  {A}$, where $\mathcal  {A}_\mu ^+$ is improved accuracy and $\mathcal  {A}$ is compilation accuracy.}}{39}{table.caption.27}\protected@file@percent }
+\newlabel{tab:iter_acc}{{\relax Table\nobreakspace  {\relax 7}.6}{39}{\textbf {Accuracy Progression.} Compilation accuracy and improved accuracy progression amongst the best@16 mean improvement samples across IRPO training iterations. Each entry is reported as $\mathcal {A}_\mu ^+ / \mathcal {A}$, where $\mathcal {A}_\mu ^+$ is improved accuracy and $\mathcal {A}$ is compilation accuracy}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Performance and Parameter Scaling}{39}{subsection.7.4}\protected@file@percent }
+\newlabel{sec:perf_param}{{7.4}{39}{Performance and Parameter Scaling}{subsection.7.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 7}.1}{\ignorespaces Effect of parameter count on model performance on mean improvement at best@16 across all three metrics, with ImProver 2 \ marked.}}{40}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:param_perf}{{\relax Figure\nobreakspace  {\relax 7}.1}{40}{Effect of parameter count on model performance on mean improvement at best@16 across all three metrics, with ImProver 2 \ marked}{figure.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Comparison to Frontier and Prior Systems}{40}{subsection.7.5}\protected@file@percent }
+\newlabel{sec:frontier_comparison}{{7.5}{40}{Comparison to Frontier and Prior Systems}{subsection.7.5}{}}
+\citation{openai2025gptoss120bgptoss20bmodel}
+\citation{DeepseekR1}
+\newlabel{fig:length_gpt_improver_comparison}{{\caption@xref {fig:length_gpt_improver_comparison}{ on input line 308}}{41}{Comparison to Frontier and Prior Systems}{figure.caption.29}{}}
+\newlabel{fig:declarativity2_gpt_improver_comparison}{{\caption@xref {fig:declarativity2_gpt_improver_comparison}{ on input line 314}}{41}{Comparison to Frontier and Prior Systems}{figure.caption.29}{}}
+\newlabel{fig:dependency_gpt_improver_comparison}{{\caption@xref {fig:dependency_gpt_improver_comparison}{ on input line 320}}{41}{Comparison to Frontier and Prior Systems}{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 7}.2}{\ignorespaces Comparison of ImProver 2 \ against frontier GPT-based models and ImProver, evaluated on mean improvement at best@$n$ on all metrics, from $n=1$ to $n=16$.}}{41}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:gpt_improver_comparison}{{\relax Figure\nobreakspace  {\relax 7}.2}{41}{Comparison of ImProver 2 \ against frontier GPT-based models and ImProver, evaluated on mean improvement at best@$n$ on all metrics, from $n=1$ to $n=16$}{figure.caption.29}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.7}{\ignorespaces \textbf  {Scaffold Evaluations.} Effect of neurosymbolic scaffolding. Mean improvement at best@16 with and without the scaffold $\Psi $, across model families and metrics.}}{42}{table.caption.30}\protected@file@percent }
+\newlabel{tab:scaffold}{{\relax Table\nobreakspace  {\relax 7}.7}{42}{\textbf {Scaffold Evaluations.} Effect of neurosymbolic scaffolding. Mean improvement at best@16 with and without the scaffold $\Psi $, across model families and metrics}{table.caption.30}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Effect of Neurosymbolic Scaffolding}{42}{subsection.7.6}\protected@file@percent }
+\newlabel{sec:scaffold_power}{{7.6}{42}{Effect of Neurosymbolic Scaffolding}{subsection.7.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Training and Iteration}{43}{subsection.7.7}\protected@file@percent }
+\newlabel{sec:train}{{7.7}{43}{Training and Iteration}{subsection.7.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {\relax 7}.3}{\ignorespaces Performance of ImProver 2\ as a function of sample budget across training iterations. Gains are largest in early iterations, with saturation by iterations 2–3 and mild regression thereafter.}}{43}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:all_iterations}{{\relax Figure\nobreakspace  {\relax 7}.3}{43}{Performance of ImProver 2\ as a function of sample budget across training iterations. Gains are largest in early iterations, with saturation by iterations 2–3 and mild regression thereafter}{figure.caption.31}{}}
+\citation{lean_style_guide}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.8}Per-repository heterogeneity}{44}{subsection.7.8}\protected@file@percent }
+\newlabel{sec:repo_hetero}{{7.8}{44}{Per-repository heterogeneity}{subsection.7.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {\relax Table\nobreakspace  {\relax 7}.8}{\ignorespaces \textbf  {Average improvement by project and metric.}}}{44}{table.caption.32}\protected@file@percent }
+\newlabel{tab:project_improvement}{{\relax Table\nobreakspace  {\relax 7}.8}{44}{\textbf {Average improvement by project and metric.}}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.9}Qualitative optimization behaviors}{44}{subsection.7.9}\protected@file@percent }
+\newlabel{sec:qual_behaviors}{{7.9}{44}{Qualitative optimization behaviors}{subsection.7.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.10}Discussion}{45}{subsection.7.10}\protected@file@percent }
+\newlabel{sec:discussion}{{7.10}{45}{Discussion}{subsection.7.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.11}Limitations}{45}{subsection.7.11}\protected@file@percent }
+\newlabel{sec:limitations}{{7.11}{45}{Limitations}{subsection.7.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8\hspace  {1em}}\nobreakspace  {}\textbf  {Conclusion}}{46}{section*.33}\protected@file@percent }
+\newlabel{chap:conclusion}{{8}{46}{Limitations}{section*.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Summary of Contributions}{46}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Key Insights}{47}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.2.0.1}Formal structure exposure is the key ingredient.}{47}{paragraph.8.2.0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.2.0.2}Agentic prompting is effective but expensive.}{47}{paragraph.8.2.0.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.2.0.3}Specialization matters more than scale for structural metrics.}{47}{paragraph.8.2.0.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.2.0.4}Reward shaping requires careful guard rails.}{47}{paragraph.8.2.0.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Direct Comparison}{48}{subsection.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Limitations}{48}{subsection.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5}Future Directions}{48}{subsection.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.1}Multi-step revision.}{49}{paragraph.8.5.0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.2}Human preference evaluation.}{49}{paragraph.8.5.0.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.3}LLM-as-judge metrics.}{49}{paragraph.8.5.0.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.4}Combining ImProver and ImProver\nobreakspace  {}2.}{49}{paragraph.8.5.0.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.5}Application to library maintenance.}{49}{paragraph.8.5.0.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {8.5.0.6}Fine-tuning downstream provers on optimized data.}{49}{paragraph.8.5.0.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6}Closing Remarks}{50}{subsection.8.6}\protected@file@percent }
 \bibdata{supporting-files/thesis}
+\@writefile{toc}{\contentsline {appendix}{{\numberline {\raggedleft  \bfseries  Appendix A}System Configuration (ImProver)}}{51}{subsection.8.6}\protected@file@percent }
+\newlabel{app:config_improver}{{A}{51}{Closing Remarks}{subsection.8.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Template}{51}{subsection.A.1}\protected@file@percent }
+\newlabel{template}{{A.1}{51}{Template}{subsection.A.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Metric Prompts}{52}{subsection.A.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Metric Examples}{53}{subsection.A.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {A}.1}{\ignorespaces A human-written example of length optimization.}}{54}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:length-ex}{{\relax Figure\nobreakspace  {A}.1}{54}{A human-written example of length optimization}{figure.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {A}.2}{\ignorespaces A human-written example of declarativity optimization.}}{54}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:decl-ex}{{\relax Figure\nobreakspace  {A}.2}{54}{A human-written example of declarativity optimization}{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {A}.3}{\ignorespaces A human-written example of mixed length/declarativity optimization optimization.}}{55}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:mix-ex}{{\relax Figure\nobreakspace  {A}.3}{55}{A human-written example of mixed length/declarativity optimization optimization}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {A}.4}{\ignorespaces A human-written example of proof completion.}}{55}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:cmp-ex}{{\relax Figure\nobreakspace  {A}.4}{55}{A human-written example of proof completion}{figure.caption.37}{}}
+\@writefile{toc}{\contentsline {appendix}{{\numberline {\raggedleft  \bfseries  Appendix B}Qualitative Results (ImProver)}}{56}{figure.caption.37}\protected@file@percent }
+\newlabel{app:qual_improver}{{B}{56}{Metric Examples}{figure.caption.37}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.1}Compfiles: Length Optimization}{56}{paragraph.B.0.0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.2}Compfiles: Declarativity Optimization}{56}{paragraph.B.0.0.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.1}{\ignorespaces Optimizing a lemma from IMO 2019 P1 for declarativity}}{56}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:compfiles-read}{{\relax Figure\nobreakspace  {B}.1}{56}{Optimizing a lemma from IMO 2019 P1 for declarativity}{figure.caption.38}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.3}Compfiles: Mixed Optimization}{57}{paragraph.B.0.0.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.2}{\ignorespaces Optimizing a lemma from USAMO 2023 P2 for mixed declarativity/length}}{57}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:compfiles-mix}{{\relax Figure\nobreakspace  {B}.2}{57}{Optimizing a lemma from USAMO 2023 P2 for mixed declarativity/length}{figure.caption.39}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.4}MIL: Length Optimization}{57}{paragraph.B.0.0.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.3}{\ignorespaces Optimizing a lemma from the solutions of MIL CH08 S01 for length}}{57}{figure.caption.40}\protected@file@percent }
+\newlabel{fig:mil-len}{{\relax Figure\nobreakspace  {B}.3}{57}{Optimizing a lemma from the solutions of MIL CH08 S01 for length}{figure.caption.40}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.5}MIL Declarativity Optimization.}{57}{paragraph.B.0.0.5}\protected@file@percent }
+\newlabel{ex2}{{B.0.0.5}{57}{MIL Declarativity Optimization}{paragraph.B.0.0.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.4}{\ignorespaces Optimizing a group-theoretic result from MIL Chapter 8 Section 1 for declarativity.}}{58}{figure.caption.41}\protected@file@percent }
+\newlabel{fig:ex2-MIL-read}{{\relax Figure\nobreakspace  {B}.4}{58}{Optimizing a group-theoretic result from MIL Chapter 8 Section 1 for declarativity}{figure.caption.41}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.6}MIL: Mixed Optimization}{58}{paragraph.B.0.0.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.5}{\ignorespaces Optimizing a lemma from MIL CH08 S01 solution for mixed declarativity/length}}{58}{figure.caption.42}\protected@file@percent }
+\newlabel{fig:mil-mix}{{\relax Figure\nobreakspace  {B}.5}{58}{Optimizing a lemma from MIL CH08 S01 solution for mixed declarativity/length}{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.7}Mathlib: Length Optimization}{59}{paragraph.B.0.0.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.6}{\ignorespaces Optimizing a theorem from \texttt  {Mathlib/FundamentalGroupoid/InducedMaps} for length}}{59}{figure.caption.43}\protected@file@percent }
+\newlabel{fig:mathlib-len}{{\relax Figure\nobreakspace  {B}.6}{59}{Optimizing a theorem from \texttt {Mathlib/FundamentalGroupoid/InducedMaps} for length}{figure.caption.43}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.8}Mathlib: Declarativity Optimization}{59}{paragraph.B.0.0.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.7}{\ignorespaces Optimizing a theorem from \texttt  {Mathlib/FundamentalGroupoid/SimplyConnected} for declarativity}}{59}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:mathlib-read}{{\relax Figure\nobreakspace  {B}.7}{59}{Optimizing a theorem from \texttt {Mathlib/FundamentalGroupoid/SimplyConnected} for declarativity}{figure.caption.44}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.9}Mathlib: Mixed Optimization}{60}{paragraph.B.0.0.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.8}{\ignorespaces Optimizing a theorem from \texttt  {Mathlib/FundamentalGroupoid/SimplyConnected} for mixed length/declarativity}}{60}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:mathlib-mix}{{\relax Figure\nobreakspace  {B}.8}{60}{Optimizing a theorem from \texttt {Mathlib/FundamentalGroupoid/SimplyConnected} for mixed length/declarativity}{figure.caption.45}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.10}Full Proof Generation (MIL).}{60}{paragraph.B.0.0.10}\protected@file@percent }
+\newlabel{ex3}{{B.0.0.10}{60}{Full Proof Generation (MIL)}{paragraph.B.0.0.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.9}{\ignorespaces Solving a group theorem exercise from MIL Chapter 8 Section 1.}}{60}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:ex3-MIL-completion}{{\relax Figure\nobreakspace  {B}.9}{60}{Solving a group theorem exercise from MIL Chapter 8 Section 1}{figure.caption.46}{}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {B.0.0.11}Full Proof Generation (MiniF2F).}{61}{paragraph.B.0.0.11}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {B}.10}{\ignorespaces Solving a number theoretic theorem from MiniF2F.}}{61}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:ex3-F2F-completion}{{\relax Figure\nobreakspace  {B}.10}{61}{Solving a number theoretic theorem from MiniF2F}{figure.caption.47}{}}
+\@writefile{toc}{\contentsline {appendix}{{\numberline {\raggedleft  \bfseries  Appendix C}System Configuration (ImProver2)}}{62}{figure.caption.47}\protected@file@percent }
+\newlabel{app:config_improver2}{{C}{62}{Full Proof Generation (MiniF2F)}{figure.caption.47}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Training}{62}{subsection.C.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}System Prompts}{62}{subsection.C.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.1}Length:}{62}{paragraph.C.2.0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.2}Modularity:}{62}{paragraph.C.2.0.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.3}Dependency:}{62}{paragraph.C.2.0.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.4}Annotation:}{62}{paragraph.C.2.0.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.5}Context:}{62}{paragraph.C.2.0.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.1}{\ignorespaces Training accuracy over time on iteration 3 the of dependency metric. }}{63}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:IRPO_Dependency_Iter_3_Acc}{{\relax Figure\nobreakspace  {C}.1}{63}{Training accuracy over time on iteration 3 the of dependency metric}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.2}{\ignorespaces Training loss over time on iteration 3 of the dependency metric. Loss exhibits an overall downward trend. }}{63}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:IRPO_Dependency_Iter_3_Loss}{{\relax Figure\nobreakspace  {C}.2}{63}{Training loss over time on iteration 3 of the dependency metric. Loss exhibits an overall downward trend}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.3}{\ignorespaces Average margin over time during training on iteration 3 of the dependency metric. }}{63}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:IRPO_Dependency_Iter_3_Margin}{{\relax Figure\nobreakspace  {C}.3}{63}{Average margin over time during training on iteration 3 of the dependency metric}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.4}{\ignorespaces Training statistics during iteration 3 of the dependency metric. Model shows stable performance despite overall regression on this iteration. }}{63}{figure.caption.48}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{\numberline {C.2.0.6}Examples:}{64}{paragraph.C.2.0.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Autoinformalization}{64}{subsection.C.3}\protected@file@percent }
+\newlabel{app:informal}{{C.3}{64}{Autoinformalization}{subsection.C.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}Hyperparameter Grid Search}{64}{subsection.C.4}\protected@file@percent }
+\newlabel{fig:grid_len_1}{{\caption@xref {fig:grid_len_1}{ on input line 103}}{65}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.5.1}{}}
+\newlabel{fig:grid_len_2}{{\caption@xref {fig:grid_len_2}{ on input line 112}}{65}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.5.2}{}}
+\newlabel{fig:grid_len_3}{{\caption@xref {fig:grid_len_3}{ on input line 121}}{65}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.5.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.5}{\ignorespaces Hyperparameter grid searches for the \textbf  {length} metric across iterations 1--3.}}{65}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:grid_len_all}{{\relax Figure\nobreakspace  {C}.5}{65}{Hyperparameter grid searches for the \textbf {length} metric across iterations 1--3}{figure.caption.49}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {t}}}{65}{subfigure.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {t}}}{65}{subfigure.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {t}}}{65}{subfigure.5.3}\protected@file@percent }
+\newlabel{fig:grid_dep_1}{{\caption@xref {fig:grid_dep_1}{ on input line 138}}{66}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.6.1}{}}
+\newlabel{fig:grid_dep_2}{{\caption@xref {fig:grid_dep_2}{ on input line 147}}{66}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.6.2}{}}
+\newlabel{fig:grid_dep_3}{{\caption@xref {fig:grid_dep_3}{ on input line 156}}{66}{Hyperparameter Grid Search}{subfigure.\relax Figure\protect \unhbox \voidb@x \protect \penalty \@M \ {C}.6.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {C}.6}{\ignorespaces Hyperparameter grid searches for the \textbf  {dependency} metric across iterations 1--3.}}{66}{figure.caption.50}\protected@file@percent }
+\newlabel{fig:grid_dep_all}{{\relax Figure\nobreakspace  {C}.6}{66}{Hyperparameter grid searches for the \textbf {dependency} metric across iterations 1--3}{figure.caption.50}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {t}}}{66}{subfigure.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {t}}}{66}{subfigure.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {t}}}{66}{subfigure.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {appendix}{{\numberline {\raggedleft  \bfseries  Appendix D}Qualitative Results (ImProver2)}}{67}{figure.caption.50}\protected@file@percent }
+\newlabel{app:qual_improver2}{{D}{67}{Hyperparameter Grid Search}{figure.caption.50}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Dependency Optimization}{67}{subsection.D.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.1}{\ignorespaces \ optimizes a proof for dependencies, reducing explicit dependencies by 3. }}{67}{figure.D.1}\protected@file@percent }
+\newlabel{fig:ex1-comp-len}{{\relax Figure\nobreakspace  {D}.1}{67}{\ImProver \ optimizes a proof for dependencies, reducing explicit dependencies by 3}{figure.D.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.2}{\ignorespaces \ optimizes a proof for dependencies, reducing explicit dependencies by 2. }}{67}{figure.D.2}\protected@file@percent }
+\newlabel{fig:ex1-comp-len}{{\relax Figure\nobreakspace  {D}.2}{67}{\ImProver \ optimizes a proof for dependencies, reducing explicit dependencies by 2}{figure.D.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Length Optimization}{68}{subsection.D.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.3}{\ignorespaces \ optimizes a proof for length, reducing tactic count by 19. }}{68}{figure.D.3}\protected@file@percent }
+\newlabel{fig:ex1-comp-len2}{{\relax Figure\nobreakspace  {D}.3}{69}{\ImProver \ optimizes a proof for length, reducing tactic count by 19}{figure.D.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.4}{\ignorespaces \ optimizes a proof for length, reducing tactic count by 8.}}{69}{figure.D.4}\protected@file@percent }
+\newlabel{fig:ex1-comp-len}{{\relax Figure\nobreakspace  {D}.4}{69}{\ImProver \ optimizes a proof for length, reducing tactic count by 8}{figure.D.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.5}{\ignorespaces \ optimizes a proof for modularity, increasing modularity score (see \let \reserved@d = *\def \cmu@ln@output }}{69}{figure.D.5}\protected@file@percent }
+\newlabel{fig:ex1-comp-len}{{\relax Figure\nobreakspace  {D}.5}{69}{\ImProver \ optimizes a proof for modularity, increasing modularity score (see \ref {app:modularity_metric}) by 2}{figure.D.5}{}}
 \global\l@chapter@indent 76.3742pt\global\l@appendix@indent 76.3742pt
 \global\newcount\cmu@redefined@appendix@saved\global\cmu@redefined@appendix@saved=0 
-\global\newcount\cmu@appendicies\global\cmu@appendicies=0 
-\@writefile{toc}{\contentsline {section}{{\raggedright  \bfseries  Bibliography\cmu@ln@output }}{82}{section*.32}\protected@file@percent }
+\global\newcount\cmu@appendicies\global\cmu@appendicies=4 
+\@writefile{lof}{\contentsline {figure}{\numberline {\relax Figure\nobreakspace  {D}.6}{\ignorespaces \ optimizes a proof for modularity, increasing modularity score (see \let \reserved@d = *\def \cmu@ln@output }}{70}{figure.D.6}\protected@file@percent }
+\newlabel{fig:ex1-comp-len}{{\relax Figure\nobreakspace  {D}.6}{70}{\ImProver \ optimizes a proof for modularity, increasing modularity score (see \ref {app:modularity_metric}) by 2}{figure.D.6}{}}
 \bibstyle{unsrtnat}
-\gdef \@abspage@last{93}
+\gdef \@abspage@last{77}

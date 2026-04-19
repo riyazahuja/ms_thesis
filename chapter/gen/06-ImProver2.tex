@@ -1,0 +1,492 @@
+% Commands used in this chapter
+\newcommand{\Unassigned}{\text{Unassigned}}
+\newcommand{\dom}{\text{dom}}
+\newcommand{\inst}{\text{inst}}
+\newcommand{\Children}{\text{Children}}
+\newcommand{\Step}{\text{Step}}
+\newcommand{\goalbefore}{\text{goalsbefore}}
+\newcommand{\goalsafter}{\text{goalsafter}}
+\newcommand{\Deps}{\text{Deps}}
+\newcommand{\Current}{\text{Current}}
+\newcommand{\Spawned}{\text{Spawned}}
+\newcommand{\prodmap}{\text{prodmap}}
+
+\chapter{ImProver 2}\label{chap:improver2}
+
+ImProver demonstrated that automated proof optimization is possible using agentic prompting with a large, proprietary language model. However, this approach is expensive and difficult to scale to library-wide deployment. We now present \textbf{ImProver~2}, a self-improving pipeline that trains small language models (SLMs) to optimize Lean proofs under a wide-ranging class of metrics, achieving performance competitive with far larger frontier models at a fraction of the inference cost.
+
+The core idea of ImProver~2 is \textit{iterative preference optimization}: iterating between generating proof candidates, scoring them according to correctness and the desired optimization criterion, and learning from the resulting pairs of higher- and lower-scoring proofs. We additionally give the model access to rich information from the Lean theorem proving environment, including goal states, informalized summaries, lemma context, and examples, which we term \textit{neurosymbolic augmentation}. We use ImProver~2 to train models for three different metrics: the \textit{length} of the proof, \textit{modularity} (the ability to divide the proof into a series of smaller lemmas), and the explicit \textit{dependencies} used by the theorem.
+
+\subsection{Metrics}
+\label{sec:improver2_metrics}
+
+In addition to revisiting the length metric from ImProver, ImProver~2 introduces two new metrics designed in consultation with formal mathematics experts. All three metrics are defined formally in Chapter~\ref{chap:framework}; here we provide the practical motivation and the additional heuristics specific to ImProver~2's treatment of each.
+
+\subsubsection{Length}
+
+We aim to minimize the length of proofs, measured by the number of tactics used. Proof shortening (or ``golfing'') is a common activity in formal mathematics~\cite{Mathlib}, as shorter proofs are often easier to read and maintain and reduce overhead during compilation. The length metric $\mu_{\mathrm{len}}$ is defined as the negative of the number of tactics, so that maximizing the metric corresponds to minimizing proof length.
+
+\subsubsection{Dependencies}
+
+We aim to minimize the dependency footprint of proofs, measured by the number of unique external lemmas explicitly used in the proof. This encourages self-contained proofs that do not require the use or memorization of large numbers of dependency names, improving readability and maintainability.\footnote{We would like to thank Dr.\ Heather Macbeth of Imperial College London for reaching out to suggest the idea behind this metric.}
+
+More specifically, given a theorem and proof $(c, x, y)$, we compute $\Deps_{c,x,y}$, the set of all theorems explicitly named in the proof $y$. The metric is then defined as $\mu_{\mathrm{dep}}(c, x, y) := -|\Deps_{c,x,y}|$.
+
+We note that trivially minimizing dependencies by replacing explicit lemma calls with broad automation tactics (e.g., replacing \texttt{simp only [lemma\_name]} with \texttt{simp}) is technically valid under this metric but changes the nature of the proof's dependency footprint rather than eliminating it. The metric should therefore be interpreted as measuring the \emph{explicit} dependency footprint of the proof.
+
+\subsubsection{Modularity}
+
+We aim to maximize the \textit{modularity} of proofs, which is intuitively understood as the number of independent subproofs in a proof. Modular proofs --- those that decompose complex arguments into smaller, reusable subproofs --- are easier to read, maintain, and reuse. They are also more similar to the style of autoformalized and machine-generated proofs, which often generate proofs in a lemma-first manner. We hypothesize that optimizing for modularity will improve the utility of proofs as training data for downstream theorem provers and autoformalizers.
+
+To quantify modularity, we postprocess Lean proofs to deconstruct them into a tree of tactics, with edges representing the logical dependencies and flow between tactics. In this tree, we mark a subset of edges as ``spawned'' if they correspond to goals that are introduced by the proof but are not direct subgoals of the current tactic. These naturally arise from tactics like \texttt{have}, \texttt{calc}, etc., and correspond with the informal notion of ``modular'' independent subproofs. From here, we define the modularity metric:
+\[
+\mu_{\mathrm{mod}}(c, x, y) = |\{\text{effective spawned goals in } y\}|.
+\]
+
+The modularity metric uses several heuristics to prevent reward hacking: \emph{duplicate detection} (preventing counting the same spawned goal twice), \emph{wrapper detection} (excluding goals that merely wrap another goal without adding content), and \emph{nontriviality filters} (excluding subtrees with fewer than 2 steps). These guards ensure that the model learns genuinely modular proof structure rather than trivially adding empty \texttt{have} statements.
+
+Figure~\ref{fig:kd5-kd45-proof} illustrates the proof-tree representation used to compute the modularity metric on an example proof.
+
+\begin{figure}[ht]
+    \centering
+    \textbf{Example Proof Tree}
+    \begin{scriptsize}
+    \begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={<=s}{{$\leq_s$}}2 {|ss|}{{$\subseteq$}}1]
+lemma KD5_weakerThan_KD45 : (Hilbert.KD5 α) <=s (Hilbert.KD45 α) := by
+  have h₁ : (LO.Modal.Hilbert.KD5 α).axioms |ss| (LO.Modal.Hilbert.KD45 α).axioms →
+            (Hilbert.KD5 α) <=s (Hilbert.KD45 α) := by
+    intro h
+    apply normal_weakerThan_of_subset
+    <;> assumption
+  have h₂ : (LO.Modal.Hilbert.KD5 α).axioms |ss| (LO.Modal.Hilbert.KD45 α).axioms := by
+    intro φ hφ
+    cases' hφ with hφ hφ
+    <;> simp_all [LO.Modal.Hilbert.KD5, LO.Modal.Hilbert.KD45]
+    <;> aesop
+  exact h₁ h₂
+    \end{lstlisting}
+    \end{scriptsize}
+
+    \resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[
+    font=\sffamily,
+    >=Latex,
+]
+
+\tikzset{
+  rootbox/.style={
+    draw=blue!70!black,
+    fill=blue!12,
+    rounded corners=4pt,
+    very thick,
+    minimum width=4.5cm,
+    minimum height=1.1cm,
+    text=blue!70!black,
+    font=\large,
+    align=center
+  },
+  normalbox/.style={
+    draw=black!55,
+    fill=white,
+    rounded corners=4pt,
+    very thick,
+    minimum width=4.1cm,
+    minimum height=1.0cm,
+    text=black!65,
+    font=\large,
+    align=center
+  },
+  effectivebox/.style={
+    draw=red!75!black,
+    fill=red!10,
+    rounded corners=4pt,
+    very thick,
+    minimum width=3.1cm,
+    minimum height=1.0cm,
+    text=red!75!black,
+    font=\large,
+    align=center
+  },
+  termbox/.style={
+    draw=green!60!black,
+    fill=green!15,
+    rounded corners=4pt,
+    very thick,
+    minimum width=0.7cm,
+    minimum height=0.7cm,
+    text=green!40!black,
+    font=\large
+  },
+  solidarrow/.style={
+    draw=black!70,
+    very thick,
+    -{Latex[length=2.5mm]}
+  },
+  dashedarrow/.style={
+    draw=red!75!black,
+    dashed,
+    very thick,
+    -{Latex[length=2.5mm]}
+  },
+  idlabel/.style={
+    font=\scriptsize,
+    text=black!45
+  }
+}
+
+% Nodes
+\node[rootbox]      (n0)  at (0,0)        {\texttt{have h$_1$:[\ldots]:= by}};
+\node[effectivebox] (n1)  at (5,-1)   {\texttt{intro h}};
+
+\node[normalbox]    (n4)  at (0,-2)     {\texttt{have h$_2$:[\ldots]:= by}};
+\node[effectivebox] (n5)  at (-5,-3)  {\texttt{intro $\varphi$ h$\varphi$}};
+
+\node[normalbox]    (n2)  at (5,-3)   {\texttt{apply [\ldots]}};
+\node[normalbox]    (n3)  at (5,-5)   {\texttt{assumption}};
+
+\node[normalbox]    (n10) at (0,-4)    {\texttt{exact h$_1$ h$_2$}};
+
+\node[normalbox]    (n6)  at (-5,-5) {\texttt{cases' h$\varphi$ with h$\varphi$ h$\varphi$}};
+\node[normalbox]    (n7)  at (-7.5,-7)  {\texttt{simp\_all [\ldots]}};
+\node[normalbox]    (n8)  at (-2.5,-7)  {\texttt{simp\_all [\ldots]}};
+\node[normalbox]    (n9)  at (-2.5,-9)  {\texttt{aesop}};
+
+\node[termbox]      (t3)  at (5,-7)   {$\top$};
+\node[termbox]      (t10) at (0,-6)    {$\top$};
+\node[termbox]      (t7)  at (-7.5,-9)  {$\top$};
+\node[termbox]      (t9)  at (-2.5,-11) {$\top$};
+
+% Edges
+\draw[solidarrow]  (n0.south) -- (n4.north);
+\draw[dashedarrow] (n0.east) -- (n1.west);
+
+\draw[solidarrow]  (n1.south) -- (n2.north);
+\draw[solidarrow]  (n2.south) -- (n3.north);
+\draw[solidarrow]  (n3.south) -- (t3.north);
+
+\draw[dashedarrow]  (n4.west) -- (n5.east);
+\draw[solidarrow]  (n4.south) -- (n10.north);
+\draw[solidarrow]  (n10.south) -- (t10.north);
+
+\draw[solidarrow]  (n5.south) -- (n6.north);
+\draw[solidarrow]  (n6.south) -- (n7.north);
+\draw[solidarrow]  (n6.south) -- (n8.north);
+\draw[solidarrow]  (n7.south) -- (t7.north);
+\draw[solidarrow]  (n8.south) -- (n9.north);
+\draw[solidarrow]  (n9.south) -- (t9.north);
+
+\end{tikzpicture}%
+}
+    \caption{Example Lean proof (top) and its generated proof tree (bottom). The root node is shown in blue; the two effective spawned goals from $h_1$ and $h_2$ are shown in red. Terminal nodes ($\top$) are in green.}
+    \label{fig:kd5-kd45-proof}
+\end{figure}
+
+
+\subsection{Overview}
+\label{sec:improver2_overview}
+
+We present ImProver~2, a training pipeline for proof optimization towards a specific metric. Its core purpose is to bootstrap the capabilities of small language models (SLMs) through repeated applications of training, generation, and evaluation/filtering of generated data for use in further iterations. To do so, it utilizes three core components: a reinforcement learning-based training stage, a replay buffer to balance old and newly generated data, and multiple sources of neurosymbolic augmentation to boost generation capabilities. Each is described in detail below.
+
+Given an unmodified base language model $G_0$, at the $t$-th iteration ImProver~2's core loop trains the model $G_{t+1}$ from $G_t$ as follows (also depicted in Figure~\ref{fig:flow_pipeline}):
+
+\begin{enumerate}
+    \item For a budget hyperparameter $n \in \mathbb{N}$, generate $n$ candidate proofs per problem in the training set using the current model $G_t$, providing the model with neurosymbolic augmentation (\S\ref{sec:ns_aug_ch}) and a description of the metric to assist in generation. These new candidate proofs form a dataset $\mathcal{D}^{(t)}_{\mathrm{nr}}$.
+
+    \item The previous iteration's dataset $\mathcal{D}^{(t-1)}_{\mathrm{re}}$ (the \textit{replay buffer}) is interleaved with $\mathcal{D}^{(t)}_{\mathrm{nr}}$ to form $\mathcal{D}^{(t)}_{\mathrm{re}}$ (\S\ref{sec:replay_buffer_ch}).
+
+    \item The model $G_t$ is trained to obtain $G_{t+1}$ using Iterative Reasoning Preference Optimization (IRPO)~\cite{IRPO}, which relies on preference pairs of desirable/undesirable proofs constructed from $\mathcal{D}^{(t)}_{\mathrm{re}}$ (\S\ref{sec:irpo_ch}).
+
+    \item $G_{t+1}$ is evaluated with $n$ samples on the test set to compute the mean improvement score.
+\end{enumerate}
+
+This loop repeats until convergence of the validation improvement score or exhaustion of the compute budget.
+
+% Pipeline flowchart (TikZ)
+% Color definitions
+\definecolor{cGen}{RGB}{50, 50, 120}
+\definecolor{cPrompt}{RGB}{220, 220, 220}
+\definecolor{cBuf}{RGB}{80, 160, 140}
+\definecolor{cDtrain}{RGB}{100, 149, 237}
+\definecolor{cDre}{RGB}{138, 110, 215}
+\definecolor{cDfil}{RGB}{186, 85, 211}
+\definecolor{cDirpo}{RGB}{219, 112, 147}
+\definecolor{cScore}{RGB}{255, 235, 175}
+\definecolor{bgInf}{RGB}{240, 248, 255}
+\definecolor{bgBuf}{RGB}{235, 250, 245}
+\definecolor{bgShape}{RGB}{248, 240, 252}
+\definecolor{bgTrain}{RGB}{255, 245, 240}
+
+\begin{figure}[t]
+\centering
+\pgfdeclarelayer{bg}
+\pgfsetlayers{bg,main}
+
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    font=\small\sffamily,
+    node distance=14mm and 22mm,
+    >={Latex[length=2.5mm, width=1.8mm]},
+    box/.style={
+        draw=black!50,
+        thick,
+        rounded corners=4pt,
+        inner sep=5pt,
+        align=center,
+        text=white,
+        font=\small\bfseries,
+        minimum height=2.3em,
+    },
+    pbox/.style={
+        draw=black!30,
+        fill=cPrompt,
+        text=black!70,
+        rounded corners=3pt,
+        inner sep=3pt,
+        font=\footnotesize
+    },
+    sbox/.style={
+        draw=orange!60!black,
+        thick,
+        fill=cScore,
+        text=black!80,
+        rounded corners=4pt,
+        inner sep=5pt,
+        font=\bfseries
+    },
+    conn/.style={
+        ->,
+        semithick,
+        draw=black!60,
+        rounded corners=5pt
+    },
+    tag/.style={
+        font=\tiny\sffamily\bfseries,
+        text=black!60,
+        inner sep=2pt,
+        rounded corners=2pt
+    },
+    region/.style={
+        inner sep=14pt,
+        rounded corners=8pt,
+        draw=none
+    },
+    lbl/.style={
+        font=\scriptsize\bfseries\sffamily,
+        text opacity=0.8,
+        inner sep=4pt
+    }
+]
+
+% Nodes
+\node[box, fill=cGen] (Gt) {$G_t$};
+\node[box, fill=cDtrain, left=of Gt] (Dtrain) {$\mathcal{D}_{\mathrm{nr}}^{(t)}$};
+\node[box, fill=cDtrain, right=of Gt] (Dtest) {$\mathcal{D}_{\mathrm{test}}^{(t)}$};
+\node[sbox, below=1.4cm of Dtest] (score)
+    {Score$_t$ $= \overline{S_\mu}(\mathcal{D}^{(t)}_{\mathrm{test}})$};
+\node[pbox] (Ptrain) at ($(Dtrain)!0.5!(Gt) + (0, 1.4cm)$) {$\mathcal{P}_{\mathrm{train}}$};
+\node[pbox] (Ptest)  at ($(Gt)!0.5!(Dtest) + (0, 1.4cm)$) {$\mathcal{P}_{\mathrm{test}}$};
+
+\node[box, fill=cDre, below=2.8cm of Dtrain] (Dre) {$\mathcal{D}_{\mathrm{re}}^{(t)}$};
+\node[box, fill=cDfil, below=of Dre] (Dfil) {$\mathcal{D}_{\mathrm{fil}}^{(t)}$};
+
+\node[box, fill=cBuf, left=2.2cm of Dre] (add) {Add to\\Buffer};
+\coordinate (midFlow) at ($(Dtrain.south)!0.5!(Dre.north)$);
+\node[box, fill=cBuf] (retrieve) at (add |- midFlow) {Retrieve\\$\mathcal{D}_{\mathrm{re}}^{(t-1)}$};
+
+\node[box, fill=cDirpo] (Dirpo) at (Gt |- Dfil) {$\mathcal{D}_{\mathrm{IRPO}}^{(t)}$};
+\node[box, fill=cGen] (Gt1)   at ($(Dirpo)!0.5!(Gt)$) {$G_{t+1}$};
+
+% Connections
+\draw[conn] (Gt) -- (Dtrain);
+\draw[conn] (Gt) -- (Dtest);
+\draw[conn] (Dtest) -- (score);
+\draw[semithick, black!40] (Ptrain) -- ($(Dtrain)!0.5!(Gt)$);
+\draw[semithick, black!40] (Ptest)  -- ($(Gt)!0.5!(Dtest)$);
+\draw[conn] (Dtrain) -- node[tag, fill=white, pos=0.75] {Add Replay Buffer} (Dre);
+\draw[semithick, black!60] (retrieve.east) -- (midFlow);
+\draw[conn] (Dre) -- node[tag, fill=bgShape] {Filter} (Dfil);
+\draw[conn, dashed] (Dre) -- node[tag, fill=white] {Store} (add);
+\draw[conn] (Dfil) -- node[tag, fill=bgShape] {Curate Pairs} (Dirpo);
+\draw[conn] (Dirpo) -- node[tag, fill=bgTrain] {Train (IRPO)} (Gt1);
+\draw[conn, dotted, thick] (Gt1) -- node[tag, fill=white] {Update} (Gt);
+
+% Backgrounds
+\begin{pgfonlayer}{bg}
+    \node[region, fill=bgInf, fit=(Gt)(Dtrain)(Dtest)(Ptrain)(Ptest)] (infBox) {};
+    \node[lbl, text=cDtrain!50!black, anchor=north west] at (infBox.north west) {Inference};
+    \node[region, fill=bgBuf, fit=(retrieve)(add)] (bufBox) {};
+    \node[lbl, text=cBuf!50!black, anchor=north west] at (bufBox.north west) {Dataset Buffer};
+    \node[region, fill=bgShape, fit=(Dre)(Dfil)] (shapeBox) {};
+    \node[lbl, text=cDre!50!black, anchor=south west] at (shapeBox.south west) {Data Shaping};
+    \node[region, fill=bgTrain, fit=(Dirpo)(Gt1)] (trainBox) {};
+    \node[lbl, text=cDirpo!50!black, anchor=south west] at (trainBox.south west) {Training};
+\end{pgfonlayer}
+
+\end{tikzpicture}
+}
+\caption{\textbf{ImProver~2 training loop.} The diagram illustrates the iterative process of generation, retrieval, filtering, and training. Node colors represent the evolution of data from initial sampling (blue) through processing (purple) to training (magenta).}
+\label{fig:flow_pipeline}
+\end{figure}
+
+
+\subsection{Generation}
+\label{sec:generation_ch}
+
+A central feature of the ImProver~2 pipeline is its ability to generate its own training data for future iterations. This is performed by running inference on the current model $G_t$, providing it with the theorem statement and the original proof, and requesting an improved version; this is repeated $n$ times per theorem. Additionally, the model's generation capabilities are augmented with information from the proof environment as described below.
+
+\subsection{Neurosymbolic Augmentation}
+\label{sec:ns_aug_ch}
+
+Formal proof environments provide substantial opportunities to obtain relevant information about a proof. We prompt our language model not only with the theorem statement $x$, proof $y_0$, and metric $\mu$, but also with additional neurosymbolic context that exposes structure and dependencies at both formal and informal levels. This augmentation comes from three sources: a context slice to find relevant lemmas or definitions, goal-state traces to highlight the exact effect of each tactic on the progress of the proof, and auto-informalization to provide a higher-level natural language description of the proof in question.
+
+\subsubsection{Context Extraction}
+\label{ssec:context_extraction}
+
+When working with proofs in high-dependency environments such as Mathlib or HEPLean, a given proof $y_0$ likely relies on many lemmas, definitions, and other formal objects defined in the context $c$. We aim to extract and serialize a minimal set of these objects to better inform our generation process.
+
+Specifically, the signatures of all definitions and theorems that are directly referenced by name in the theorem statement $x$ or the original proof $y_0$ are collected. Each is provided to the model along with any associated documentation comments, which generally contain summaries or explanations of the associated declaration. This semantic reachability ensures a minimal, deterministic context bundle.
+
+\subsubsection{Chain-of-States}
+\label{ssec:cos_in_improver2}
+
+ImProver~2 uses Chain-of-States (CoS) prompting as introduced in ImProver and defined in \S\ref{sec:cos}. In ImProver~2, CoS is implemented via Lean's \texttt{InfoTree} structures to obtain and serialize proof states, which are then interleaved into the original proof as comments. This provides the model with precise information about the effect of each tactic on the proof state, enabling more substantive rewrites.
+
+\subsubsection{Auto-Informalization}
+\label{ssec:auto_inform}
+
+Utilizing natural language to guide the generation of formal proofs has been shown to significantly increase the capabilities of LLM-based systems on formal mathematical tasks~\cite{DraftSketchProve}. We therefore expose natural-language sketches of each target proof to the model, providing a fuzzy layer of abstraction that captures the ``meaning'' of formal items while being robust to syntactic variation.
+
+More concretely, we prompt a language model using the proof's CoS information to translate a Lean proof into natural language by explaining the effect of each tactic on the proof state. This informalization is a secondary channel for the generator: outputs are still prompted to be generated formally, and correctness is still judged formally. The informalization serves simply as an additional representation of the target theorem.
+
+
+\subsection{Training Pipeline}
+\label{sec:training_ch}
+
+We build upon the Iterative Reasoning Preference Optimization (IRPO) algorithm~\cite{IRPO} to improve proof optimization capabilities during each round of training. Our architecture differs from the original implementation in three key ways: (1) we use the improvement in score in addition to binary correctness to rank candidates and form preference pairs, creating a denser reward signal; (2) we maintain a replay buffer that mixes newly generated solutions with old data for stable multi-round improvement; and (3) unlike the original IRPO, we mask the reasoning trace during training and train solely on the final output.
+
+\subsubsection{Dataset and Replay Buffer}
+\label{sec:replay_buffer_ch}
+
+Indiscriminate consumption of self-generated training data has been shown to harm performance via model collapse~\cite{modelCollapse}. To avoid this and enable self-improvement, we introduce a novel replay buffer design that filters new samples, combines them with existing training data, and sorts them based on the degree of their improvement for use during training.
+
+Following the generation of samples $\mathcal{D}_\text{nr}^{(t)}$ at iteration $t$, we obtain the new dataset $\mathcal{D}_\text{re}^{(t)}$ via the following steps:
+
+\begin{enumerate}
+    \item Filter $\mathcal{D}_\text{nr}^{(t)}$ for ``replay-eligible'' examples: those that contain improved, compiling solutions from the current iteration.
+    \item For each problem in the filtered set, find its counterpart in $\mathcal{D}_\text{re}^{(t-1)}$ and combine the sets of proof candidates, creating $\mathcal{D}_\text{re}^{(t)}$.
+    \item Filter $\mathcal{D}_\text{re}^{(t)}$ by removing problems with a high overall improvement rate (trivial tasks for the model).
+    \item For each theorem $T$ in $\mathcal{D}_\text{re}^{(t)}$, partition its proofs into ``winners'' $W_T^{(t)}$ (those which compile and have a sufficiently high improvement score) and ``losers'' $L_T^{(t)}$ (all others), forming the filtered dataset $\mathcal{D}_\text{fil}^{(t)}$.
+\end{enumerate}
+
+\subsubsection{Preference Pair Construction}
+
+As IRPO is a preference-based training method, $\mathcal{D}_{\text{fil}}^{(t)}$ is converted into a set of preference pairs. By mixing and matching many potential proofs of a single theorem, we obtain more data points per theorem than group-based RL policies such as GRPO~\cite{GRPO}, compensating for the limited amount of publicly available high-quality Lean training data.
+
+By creating pairs of compiling/non-compiling examples as well as better/worse metric scores, we balance two parallel objectives: learning to write correct Lean syntax and actually improving proofs. This balance is controlled by hyperparameters $W$ and $L$ (number of winners/losers per problem):
+
+\begin{itemize}
+    \item \textbf{Winner-winner pairs}: For two winning proofs $w_1, w_2$ with $\mu(c,x,w_1) > \mu(c,x,w_2)$, create the pair $(w_1, w_2)$, ranked by improvement score.
+    \item \textbf{Winner-loser pairs}: For each winner $w$ and loser $l$, create the pair $(w, l)$, capturing both the correctness and improvement objectives.
+\end{itemize}
+
+Algorithm~\ref{alg:pref_pair_creation} gives the full procedure.
+
+\begin{algorithm}[tb]
+  \caption{Preference Pair Creation}
+  \label{alg:pref_pair_creation}
+  \begin{algorithmic}
+    \STATE {\bfseries Input:} filtered dataset $\mathcal{D}_{\text{fil}}^{(t)}$, hyperparameters $W \in \mathbb{N}$ and $L \in \mathbb{N}$
+    \STATE Initialize $\mathcal{D}_{\text{IRPO}}^{(t)} = [ \ ]$
+    \FOR{$T$ {in} $\mathcal{D}_{\text{fil}}^{(t)}$}
+        \STATE De-duplicate $W_T^{(t)}$ by total improvement score
+        \STATE De-duplicate $L_T^{(t)}$ by string equality
+        \STATE Discard or duplicate elements uniformly at random until $|W_T^{(t)}|=W$ and $|L_T^{(t)}|=L$
+        \FOR{$w_1$ in $W_T^{(t)}$}
+            \FOR{$w_2$ in $W_T^{(t)}$}
+                \IF{$\mu(c, x, w_1) > \mu(c, x, w_2)$}
+                    \STATE $\mathcal{D}_{\text{IRPO}}^{(t)} := (w_1, w_2) \texttt{::} \mathcal{D}_{\text{IRPO}}^{(t)}$
+                \ENDIF
+            \ENDFOR
+        \ENDFOR
+        \FOR{$w$ in $W_T^{(t)}$}
+            \FOR{$l$ in $L_T^{(t)}$}
+                \STATE $\mathcal{D}_{\text{IRPO}}^{(t)} := (w, l) \texttt{::} \mathcal{D}_{\text{IRPO}}^{(t)}$
+            \ENDFOR
+        \ENDFOR
+    \ENDFOR
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{IRPO Training}
+\label{sec:irpo_ch}
+
+With the dataset $\mathcal{D}_{\text{IRPO}}^{(t)}$, we calculate the IRPO loss on each item $T$ as the weighted sum of the DPO loss of the preference pair and the negative log-likelihood (NLL) loss over the winner:
+\begin{align*}
+\mathcal{L}_{\text{IRPO}}(T) ={}& \mathcal{L}_{\text{DPO}}(y_{T,\ell},y_{T,w} \mid \Psi(c_T,x_T,y_{T,0}),\mu) \\
+&+ \alpha\,\mathcal{L}_{\text{NLL}}(y_{T,\ell},y_{T,w} \mid \Psi(c_T,x_T,y_{T,0}),\mu)
+\end{align*}
+where $\Psi$ represents the neurosymbolic augmentation function. After training for one epoch, we obtain $G_{t+1}$.
+
+Importantly, we mask the reasoning trace during training and train solely on the final proof output. This ensures that the model learns the \emph{structure} of good proof rewrites rather than memorizing reasoning patterns from its own chain-of-thought.
+
+\subsection{Illustrative Examples}
+
+Figure~\ref{fig:main-demo} shows three example optimizations produced by ImProver~2 on human-written proofs from research-level Lean libraries: a dependency-reduced version of an atoms-order lemma, a length-minimized version of a set-membership proof, and a modularity-increased version of a modal logic lemma.
+
+\begin{figure}[tbp]
+\begin{minipage}[t]{0.49\textwidth}
+\textbf{Original (dependency)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ ⊤ ∧ ∀ H g,
+      K ≤ H → g ∉ K → g ∈ H → H = ⊤ := by
+  simp_rw [IsCoatom, lt_iff_le_not_le,
+    SetLike.not_le_iff_exists,
+    and_comm (a := _ ≤ _), and_imp,
+    exists_imp, ← and_imp, and_comm]
+\end{lstlisting}
+\textbf{ImProver~2 (dependency-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem isCoatom_iff [OrderTop A] {K : A} :
+    IsCoatom K ↔ K ≠ ⊤ ∧ ∀ H g,
+      K ≤ H → g ∉ K → g ∈ H → H = ⊤ := by
+  constructor <;> intro h
+  <;> simp_all [IsCoatom, lt_iff_le_not_le,
+    SetLike.not_le_iff_exists]
+  <;> tauto
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\textbf{Original (length)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔
+    ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  intro a
+  rw [cross, mem_inter_iff, vCross_spec]
+  constructor
+  · rintro ⟨h₁, b, c, rfl, h₂⟩
+    simp only [op_mem_converse_iff,
+      vCross_spec, op_inj] at h₁
+    obtain ⟨b', c', ⟨rfl, rfl⟩, h₁⟩ := h₁
+    exact ⟨b, c, rfl, h₁, h₂⟩
+  · rintro ⟨b, c, rfl, h₁, h₂⟩
+    simp only [op_mem_converse_iff,
+      vCross_spec, op_inj]
+    exact ⟨⟨c, b, ⟨rfl, rfl⟩, h₁⟩,
+           ⟨b, c, ⟨rfl, rfl⟩, h₂⟩⟩
+\end{lstlisting}
+\textbf{ImProver~2 (length-optimized)}
+\begin{lstlisting}[basicstyle=\tiny\ttfamily]
+theorem mem_cross_iff (x y : TSet γ) :
+    ∀ a, a ∈' cross hβ hγ hδ x y ↔
+    ∃ b c, a = ⟨b, c⟩' ∧ b ∈' x ∧ c ∈' y := by
+  simp_all [cross, mem_inter_iff, vCross_spec,
+    op_mem_converse_iff, op_inj]
+  <;> aesop
+\end{lstlisting}
+\end{minipage}
+\caption{ImProver~2 automatically optimizes human-written proofs to reduce explicit dependencies, minimize length, or maximize proof modularity, while maintaining formal correctness.}
+\label{fig:main-demo}
+\end{figure}

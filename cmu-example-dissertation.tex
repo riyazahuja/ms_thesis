@@ -28,7 +28,7 @@
 
 \usepackage{array}              % For inserting large multi-page tables
 \usepackage{longtable}
-
+\usepackage{placeins}
 \usepackage[numbers]{natbib}    % For proper citations
 \usepackage[
     colorlinks=true, 
@@ -51,10 +51,15 @@
 \usepackage{lipsum}             % For dummy text. You can remove this once you have remove all of the example text. 
 \usepackage{circuitikz}         % For TikZ/circuit diagrams
 \usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes, positioning, calc, fit, backgrounds, quotes}
+\usepackage{pgf}                % For pgfonlayer (used in pipeline diagram)
 
 \usepackage{my-Equations}       % Where I define frequently used equations or symbols for easy use
 \usepackage{multirow}
+\usepackage{multicol}           % For multi-column layouts
 \usepackage{fvextra} % Needed for verbatim in multicol
+\usepackage{algorithm}          % For algorithm environments
+\usepackage{algorithmic}        % For algorithmic pseudocode
 
 \definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
 \definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
@@ -68,6 +73,10 @@
 %\input{lstlean.tex}
 \def\lstlanguagefiles{lstlean.sty}
 \lstset{language=lean}
+\usepackage{arydshln}
+
+\newcommand{\methodname}{ImProver}
+
 % For using row-spanning and column-spanning in tables:
 %\usepackage{multirow}
 
@@ -87,7 +96,7 @@
 %please input your information under this section
 
 %Your thesis title
-\title{Multi-Agent Theorem Proving}
+\title{Neural Proof Optimization}
 % \subtitle{Multiagent Reinforcement Learning and Applications to Formal Mathematics}
 
 % >>>>>>>>> PERSONAL INFORMATION <<<<<<<<<
@@ -105,7 +114,7 @@
 % Optional Metadata for Title Page
 \thesisdate{April 16, 2026}
 % Thesis committee (declare individually), you can also include their affliations, if they are not faculty members at CMU
-\committeememberone{Dr. Prasad Tetali, Chair}
+\committeememberone{Dr. Prasad Tetali}
 \committeemembertwo{Dr. Jeremy Avigad}
 \committeememberthree{Dr. Sean Welleck}
 % \committeememberfour{Professor 4, \textit{MIT, META}} % add their affiliation if outside CMU 
@@ -186,19 +195,13 @@
 % You can directly add you chapter text into this document. But to keep organized you
 % are advised to separate you chapters into their own files, as this example shows
 \input{chapter/01-Introduction}
-\input{chapter/02-Centralized.tex}
-% \input{chapter/02-SchedulingTheory.tex}
-\input{chapter/03-POSG.tex}
-% \input{chapter/04-POSG.tex}
-% \input{chapter/04-CentralizedTaskAllocation}
-% \input{chapter/04-DecentralizedTaskAllocation}
-% \input{chapter/05-VAMP}
-% \input{chapter/07-Equilibria}
-\input{chapter/06-MARL}
-% \input{chapter/07-Implementation}
-\input{chapter/08-Experiments}
-\input{chapter/09-Application}
-\input{chapter/10-Conclusion}
+\input{chapter/02-RelatedWork}
+\input{chapter/03-ProofOptimization}
+\input{chapter/04-ImProver}
+\input{chapter/05-ImProverEval}
+\input{chapter/06-ImProver2}
+\input{chapter/07-ImProver2Eval}
+\input{chapter/08-Conclusion}
 
 
 % \input{chapter/03-Journal-Chapter}
@@ -229,10 +232,10 @@
 
 
 % >>>>>>>>> Appendices (if applicable) <<<<<<<<<<
-% \input{chapter/A-Proofs}
-% \input{chapter/B-ImplementationDetails}
-% \input{chapter/C-AdditionalExperimentalResults}
-% \input{chapter/D-InfrastructureDetails}
+\input{chapter/A1-ConfigImProver.tex}
+\input{chapter/A2-QualImProver.tex}
+\input{chapter/B1-ConfigImProver2.tex}
+\input{chapter/B2-QualImProver2.tex}
 
 
 % \tagstructend

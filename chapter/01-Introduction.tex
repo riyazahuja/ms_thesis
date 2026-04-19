@@ -1,67 +1,32 @@
 \chapter{Introduction}\label{chap:intro}
 
-
-
+\setlength{\parindent}{1em}
 
 \subsection{Motivation}
 
-In 1896, Jacques Hadamard and Charles Jean de la Vallée Poussin independently proved one of the central results of nineteenth-century mathematics: the number of primes less than $n$ grows asymptotically as $n/\ln n$. The Prime Number Theorem had been conjectured by Gauss and Legendre nearly a century earlier from numerical evidence, but its proof required mathematical tools entirely foreign at the time. Indeed, it took Riemann's study of the deep connection between the distribution of primes and the zeros of the zeta function --- combined with subsequent advances in contour integration, the theory of entire functions, and analytic continuation --- that ultimately made the proof possible. The PNT was not proved by a direct combinatorial or number theoretic attack on the primes, rather, it took centuries of collaborative development of shared infrastructure and techniques across disparate domains of mathematics before the pieces could be put together.
+The fundamental virtue of a mathematical proof is that it provides certainty: a deductive argument shows that the assumptions of a mathematical statement logically guarantee the conclusion. In practice, however, informal, natural-language proofs are prone to imprecision, ambiguity, and error. Using a formal language such as Lean~4 \cite{LeanTheoremProver} removes such ambiguity and imprecision, enabling a proof assistant to verify correctness down to the primitives of a formal axiomatic system.
 
-\begin{figure}
-    \centering
-    % \includegraphics[width=\textwidth]{figures/flt_dependency_graph_placeholder.pdf}
-    \includegraphics[scale=0.08]{PNT_dependency.png}
-    \caption{Schematic dependency graph for the Lean formalization effort around the Prime Number Theorem (center). Radial distance measures dependency depth and angular distance measures domain similarity as computed by namespace distance.}
-    \label{fig:pnt-dependency-graph}
-\end{figure}
+Formal proof assistants such as Lean, Rocq \cite{RocqTheoremProver}, and Isabelle \cite{IsabelleTheoremProver} have transformed mathematical practice by making correctness explicit and mechanized. Community libraries such as Lean's Mathlib \cite{Mathlib} now grow at a pace driven both by increasing human contributions and by recent advances in neural theorem proving and autoformalization \cite{achim2025aristotleimolevelautomatedtheorem, alphaproof}. This rapid expansion raises multiple concerns about data quality.
 
+First, this expansion stresses the maintainability, coherence, and long-term usability of libraries due to proofs that are often heterogeneous in style and clarity. Instructors show their students how to shorten their proofs and structure them better, and the maintainers of Mathlib demand revisions to submissions to improve their robustness and adhere to style guidelines. Second, low library quality decreases its utility as training data: modern theorem provers and autoformalizers increasingly train on these very corpora, so the structure and readability of proofs directly shape downstream prover performance \cite{gu2025proofoptimizer}.
 
-This pattern is the rule rather than the exception. Major mathematical breakthroughs almost never arise from isolated effort on a single problem. They emerge from the collaborative, cumulative construction of a shared intellectual infrastructure: definitions, lemmas, techniques, and conceptual frameworks developed by communities of researchers over years or decades.
+Although any two correct formal proofs of a statement equally establish the validity of their conclusion, there are various criteria on which one may be preferred over another. A proof may be more readable, more concise, more modular, or less dependent on obscure library lemmas. When an expert formalizer finishes a proof, they always go back and revise it --- aiming, for example, to improve readability and robustness. Unfortunately, the growth rate of formal libraries already exceeds what human reviewers can reliably curate, and this discrepancy is only expected to widen due to increasing volumes of machine-generated proofs, which even when correct do not carry similar guarantees as to their quality or understandability \cite{SeedProver}.
 
+Moreover, automated proof optimization is not only useful in its own right, but also for improving AI that can find proofs on its own. At the very least, it provides a form of data augmentation: the limited amount of formal training data is a bottleneck for machine learning, and our methods provide ways of generating additional data automatically. Moreover, our methods also provide a means of optimizing the quality and structure of said training data for an arbitrary metric. 
 
+For example, many modern theorem provers (e.g. \cite{alphaproof}, \cite{GodelProver}) rely on the draft-sketch-prove paradigm \cite{jiang2023draft}, which generates proofs by first sketching high level proof outlines with ``holes'' for subproofs/lemmas, and then recursively solving these lemmas. For that purpose, it is useful to have a corpus of proofs written in a structured, modular form that maximizes the number and balance of these subproofs. 
 
-This observation extends beyond pure mathematics. In any domain where progress depends on the accumulation of verified, interdependent results (e.g., software verification, scientific modeling, engineering design) the fundamental challenge is the same: how to allocate the efforts of many heterogeneous agents across a large pool of interdependent tasks, where completing one task may reveal or enable others, and where the ultimate goal is to resolve a designated set of targets as efficiently as possible.
-
-The rapid maturation of formal verification systems (Lean, Rocq, Isabelle) and the emergence of large language models capable of generating formal proofs have made this challenge both more tractable and more urgent. Agentic AI systems are increasingly deployed to tackle large formalization efforts, and early results demonstrate that LLM-based provers can resolve nontrivial proof obligations at scale. However, existing systems overwhelmingly treat theorem proving as a search problem: each proof obligation is attacked independently, and coordination between agents (when multiple agents are used at all) is ad hoc. This leaves substantial efficiency gains on the table, particularly on projects with deep dependency structure, where the order in which results are established matters as much as whether any individual result can be proven.
-
-This thesis reframes multi-agent theorem proving as an allocation problem over interdependent tasks, and develops the formal, game-theoretic, and algorithmic infrastructure to study it.
+\subsection{Contributions}
+\textbf{[TODO]}
 
 \subsection{Thesis Overview}
 
-We begin by formalizing the problem of allocating heterogeneous agents across interdependent proof obligations, first in a centralized setting (a single planner directs all agents) and then in a decentralized setting (agents act independently with private information and individual incentives). We show that decentralization introduces a fundamental market failure and that market mechanisms can internalize this externality, yielding bounded-efficiency equilibria. We develop a multi-agent reinforcement learning framework for approximating these equilibria, and test the entire pipeline on a real Lean~4 codebase.
+Motivated by the need for more efficient and effective proof optimization, this thesis presents the ImProver and ImProver 2 systems, first exploring a simple yet effective agentic scaffolding approach, and then generalizing to a more powerful bootstrapped RL training pipeline.
 
-\paragraph{Chapter 2: Centralized Multi-Agent Theorem Proving.}
-We introduce a formalism for mathematical tasks based on sequents, libraries, and dependency structures, and define the Centralized Multi-Agent Theorem Proving (MATP) problem as a POMDP. We show a reduction of this POMDP to a MDP, establish NP-hardness, and provide an algorithm that achieves a $(2-1/m)$-approximation to the optimal makespan with $m$ agents.
+ImProver (Chapters~\ref{chap:improver}--\ref{chap:improver-exp}) is the first system for automated proof optimization. It is a large language model agent that rewrites Lean proofs to optimize arbitrary user-defined metrics, incorporating Chain-of-States (CoS) prompting, iterative refinement, and retrieval-augmented generation (RAG). ImProver is capable of rewriting undergraduate, competition, and research-level proofs so that they are substantially shorter and more declarative, outperforming naive GPT-4o by $423$--$778\%$ depending on the metric. It also demonstrates that proof optimization generalizes neural theorem proving.
 
-\paragraph{Chapter 3: Decentralized Multi-Agent Theorem Proving.}
-We reformulate the problem as a non-cooperative POSG (the Multi-Agent Theorem Proving Game) in which each agent independently selects actions based on private observations and individual rewards. Under a canonical reward structure, we identify externalities and prove additional inefficiencies in this system. We resolve this by introducing a market mechanism: the Market-Mediated MATPG (MMATPG), and prove it has bounded price of anarchy.
+ImProver~2 (Chapters~\ref{chap:improver2}--\ref{chap:improver2-exp}) addresses the core limitation of ImProver: its reliance on expensive, proprietary large language models. Namely, ImProver~2 trains a 7B-parameter small language model (SLM) to optimize Lean proofs via an IRPO-based iterative self-improvement pipeline, as well as extending the agentic scaffolding techniques of ImProver to apply to more complex metrics and research-level datasets. The resulting model outperforms models orders-of-magnitude larger across metrics, and is even competitive with frontier models such as GPT-5-high on particular metrics.
 
-\paragraph{Chapter 4: Multi-Agent Reinforcement Learning.}
-Motivated by the hardness of exact equilibrium computation, we introduce the coarse correlated equilibrium (CCE) as a tractable relaxation and show that no-regret learning dynamics converge to the CCE set. We develop a transformer-based MARL framework and prove it converges to an $\epsilon$-CCE of the full MMATPG.
+\noindent\textbf{Publications.} 
 
-\paragraph{Chapter 5: Experiments.}
-We describe a synthetic implementation of the MMATPG, and present five experiments validating the theoretical claims: the RLS approximation ratio and lower-bound tightness, the publication externality and its market resolution, MARL convergence to approximate CCE with bounded PoA, ablation of framework components, and scaling behavior across instance sizes.
-
-\paragraph{Chapter 6: Application to Neural Theorem Proving.}
-We instantiate the MMATPG over real Lean~4 codebases and evaluate on the Prime Number Theorem formalization from the MiniCTX benchmark, comparing agentic theorem provers, MMATPG-scaffolded LLM agents, and LLM agents augmented with the MARL-trained strategy module.
-
-
-\subsection{Contributions}
-
-The main contributions of this thesis are:
-
-\begin{enumerate}
-    \item \textbf{Formalism.} We introduce a sequent-and-library formalism for multi-agent theorem proving and define the centralized MATP as a POMDP, establishing PPI as a without-loss-of-generality relaxation.
-    
-    \item \textbf{Centralized complexity and algorithms.} We prove NP-hardness of the centralized makespan problem, establish work and serial-depth lower bounds, and give a $(2-1/m)$-approximate Reactive List Scheduling algorithm.
-    
-    \item \textbf{Game-theoretic formulation.} We define the MATPG (non-cooperative POSG), identify the publication externality, and prove that credit-based rewards yield unbounded Price of Anarchy.
-    
-    \item \textbf{Market mechanism.} We introduce the MMATPG (market-mediated MATPG) with collateralized bilateral contracts, prove that the market internalizes the publication externality, and establish a bounded PoA of $\frac{2-1/m}{1-\ell}$.
-    
-    \item \textbf{Learning framework.} We develop a MARL pipeline (decision transformer + MAPPO + PSRO) with convergence guarantees to approximate CCE, and show that the PoA bound extends to the learned equilibrium.
-    
-    \item \textbf{Synthetic evaluation.} We empirically validate these theoretical claims on synthetic instances and develop a training pipeline for the MMATPG problem.
-    
-    \item \textbf{Real-world instantiation.} We implement and test this market-mediated multi-agent theorem proving over real Lean~4 projects, against state-of-the-art agentic LLM provers.
-\end{enumerate}
+The material in Chapters~\ref{chap:improver} and \ref{chap:improver-exp} is based on the paper ``ImProver: Agent-Based Automated Proof Optimization'' \cite{ImProver}, published at ICLR 2025. The material in Chapters~\ref{chap:improver2} and \ref{chap:improver2-exp} is based on the paper ``ImProver~2: Iteratively Self-Improving LMs for Neurosymbolic Proof Optimization'' \cite{ImProver2}, submitted to ICML 2026.
