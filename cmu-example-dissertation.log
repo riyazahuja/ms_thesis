@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  19 APR 2026 11:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  19 APR 2026 11:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -878,139 +878,182 @@ Package: multicol 2023/03/30 v1.9f multicolumn formatting (FMi)
 \mult@nat@firstbox=\box156
 \colbreak@box=\box157
 \mc@col@check@num=\count389
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/paracol/paracol.sty
+Package: paracol 2018/12/31 v1.35 
+\pcol@currcol=\count390
+\pcol@nextcol=\count391
+\pcol@ncol=\count392
+\pcol@ncolleft=\count393
+\pcol@page=\count394
+\pcol@basepage=\count395
+\pcol@toppage=\count396
+\pcol@footnotebase=\count397
+\pcol@nfootnotes=\count398
+\pcol@mcid=\count399
+\pcol@prevdepth=\dimen339
+\pcol@colht=\dimen340
+\pcol@textfloatsep=\dimen341
+\pcol@lrmargin=\dimen342
+\pagerim=\dimen343
+\pcol@topskip=\skip93
+\belowfootnoteskip=\skip94
+\pcol@topfnotes=\box158
+\pcol@prespan=\box159
+\pcol@rightpage=\box160
+\pcol@colorstack@saved=\box161
+\pcol@tempboxa=\box162
+\pcol@tempboxb=\box163
+\pcol@colorins=\insert252
+\pcol@everyvbox=\toks53
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/fvextra/fvextra.sty
 Package: fvextra 2022/11/30 v1.5 fvextra - extensions and patches for fancyvrb
  (/usr/local/texlive/2023/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2023/01/19 4.5a verbatim text (tvz,hv)
-\FV@CodeLineNo=\count390
+\FV@CodeLineNo=\count400
 \FV@InFile=\read3
-\FV@TabBox=\box158
-\c@FancyVerbLine=\count391
-\FV@StepNumber=\count392
+\FV@TabBox=\box164
+\c@FancyVerbLine=\count401
+\FV@StepNumber=\count402
 \FV@OutFile=\write4
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/lineno/lineno.sty
 Package: lineno 2023/05/20 line numbers on paragraphs v5.3
-\linenopenalty=\count393
-\output=\toks53
-\linenoprevgraf=\count394
-\linenumbersep=\dimen339
-\linenumberwidth=\dimen340
-\c@linenumber=\count395
-\c@pagewiselinenumber=\count396
-\c@LN@truepage=\count397
-\c@internallinenumber=\count398
-\c@internallinenumbers=\count399
-\quotelinenumbersep=\dimen341
-\bframerule=\dimen342
-\bframesep=\dimen343
-\bframebox=\box159
-\linenoamsmath@ams@eqpen=\count400
+\linenopenalty=\count403
+\output=\toks54
+\linenoprevgraf=\count404
+\linenumbersep=\dimen344
+\linenumberwidth=\dimen345
+\c@linenumber=\count405
+\c@pagewiselinenumber=\count406
+\c@LN@truepage=\count407
+\c@internallinenumber=\count408
+\c@internallinenumbers=\count409
+\quotelinenumbersep=\dimen346
+\bframerule=\dimen347
+\bframesep=\dimen348
+\bframebox=\box165
+\linenoamsmath@ams@eqpen=\count410
 LaTeX Info: Redefining \\ on input line 3180.
 )
-\c@FV@TrueTabGroupLevel=\count401
-\c@FV@TrueTabCounter=\count402
-\FV@TabBox@Group=\box160
-\FV@TmpLength=\skip93
-\c@FV@HighlightLinesStart=\count403
-\c@FV@HighlightLinesStop=\count404
-\FV@LoopCount=\count405
-\FV@NCharsBox=\box161
-\FV@BreakIndent=\dimen344
-\FV@BreakIndentNChars=\count406
-\FV@BreakSymbolSepLeft=\dimen345
-\FV@BreakSymbolSepLeftNChars=\count407
-\FV@BreakSymbolSepRight=\dimen346
-\FV@BreakSymbolSepRightNChars=\count408
-\FV@BreakSymbolIndentLeft=\dimen347
-\FV@BreakSymbolIndentLeftNChars=\count409
-\FV@BreakSymbolIndentRight=\dimen348
-\FV@BreakSymbolIndentRightNChars=\count410
-\c@FancyVerbLineBreakLast=\count411
-\FV@LineBox=\box162
-\FV@LineIndentBox=\box163
-\c@FV@BreakBufferDepth=\count412
-\FV@LineWidth=\dimen349
+\c@FV@TrueTabGroupLevel=\count411
+\c@FV@TrueTabCounter=\count412
+\FV@TabBox@Group=\box166
+\FV@TmpLength=\skip95
+\c@FV@HighlightLinesStart=\count413
+\c@FV@HighlightLinesStop=\count414
+\FV@LoopCount=\count415
+\FV@NCharsBox=\box167
+\FV@BreakIndent=\dimen349
+\FV@BreakIndentNChars=\count416
+\FV@BreakSymbolSepLeft=\dimen350
+\FV@BreakSymbolSepLeftNChars=\count417
+\FV@BreakSymbolSepRight=\dimen351
+\FV@BreakSymbolSepRightNChars=\count418
+\FV@BreakSymbolIndentLeft=\dimen352
+\FV@BreakSymbolIndentLeftNChars=\count419
+\FV@BreakSymbolIndentRight=\dimen353
+\FV@BreakSymbolIndentRightNChars=\count420
+\c@FancyVerbLineBreakLast=\count421
+\FV@LineBox=\box168
+\FV@LineIndentBox=\box169
+\c@FV@BreakBufferDepth=\count422
+\FV@LineWidth=\dimen354
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/algorithms/algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
-\@float@every@algorithm=\toks54
-\c@algorithm=\count413
+\@float@every@algorithm=\toks55
+\c@algorithm=\count423
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/algorithms/algorithmic.sty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
-\c@ALC@unique=\count414
-\c@ALC@line=\count415
-\c@ALC@rem=\count416
-\c@ALC@depth=\count417
-\ALC@tlm=\skip94
-\algorithmicindent=\skip95
+\c@ALC@unique=\count424
+\c@ALC@line=\count425
+\c@ALC@rem=\count426
+\c@ALC@depth=\count427
+\ALC@tlm=\skip96
+\algorithmicindent=\skip97
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/tools/bm.sty
+Package: bm 2022/01/05 v1.2f Bold Symbol Support (DPC/FMi)
+\symboldoperators=\mathgroup7
+\symboldletters=\mathgroup8
+\symboldsymbols=\mathgroup9
+Package bm Info: No bold for \OMX/cmex/m/n, using \pmb.
+Package bm Info: No bold for \U/msa/m/n, using \pmb.
+Package bm Info: No bold for \U/msb/m/n, using \pmb.
+Package bm Info: No bold for \U/rsfs/m/n, using \pmb.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/stmaryrd/stmaryrd.sty
+Package: stmaryrd 1994/03/03 St Mary's Road symbol package
+\symstmry=\mathgroup10
+LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
+(Font)                  U/stmry/m/n --> U/stmry/b/n on input line 89.
 ) (./lstlean.sty) (/usr/local/texlive/2023/texmf-dist/tex/latex/arydshln/arydshln.sty
 Package: arydshln 2019/02/21 v1.76 
-\dashlinedash=\dimen350
-\dashlinegap=\dimen351
-\adl@box=\box164
-\adl@height=\dimen352
-\adl@heightsave=\dimen353
-\adl@depth=\dimen354
-\adl@depthsave=\dimen355
-\adl@finaldepth=\dimen356
-\adl@columns=\count418
-\adl@ncol=\count419
-\adl@currentcolumn=\count420
-\adl@currentcolumnsave=\count421
-\adl@totalheight=\count422
-\adl@totalheightsave=\count423
-\adl@dash=\count424
-\adl@gap=\count425
-\adl@cla=\count426
-\adl@clb=\count427
-\adl@everyvbox=\toks55
-\adl@LTpagetotal=\dimen357
+\dashlinedash=\dimen355
+\dashlinegap=\dimen356
+\adl@box=\box170
+\adl@height=\dimen357
+\adl@heightsave=\dimen358
+\adl@depth=\dimen359
+\adl@depthsave=\dimen360
+\adl@finaldepth=\dimen361
+\adl@columns=\count428
+\adl@ncol=\count429
+\adl@currentcolumn=\count430
+\adl@currentcolumnsave=\count431
+\adl@totalheight=\count432
+\adl@totalheightsave=\count433
+\adl@dash=\count434
+\adl@gap=\count435
+\adl@cla=\count436
+\adl@clb=\count437
+\adl@everyvbox=\toks56
+\adl@LTpagetotal=\dimen362
 )
-\c@theorem=\count428
-\c@corollary=\count429
-\c@definition=\count430
-\c@example=\count431
-\cmu@temp@endhead=\box165
+\c@theorem=\count438
+\c@corollary=\count439
+\c@definition=\count440
+\c@example=\count441
+\cmu@temp@endhead=\box171
  (/usr/local/texlive/2023/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
-\c@KVtest=\count432
-\sf@farskip=\skip96
-\sf@captopadj=\dimen358
-\sf@capskip=\skip97
-\sf@nearskip=\skip98
-\c@subfigure=\count433
-\c@subfigure@save=\count434
-\c@lofdepth=\count435
-\c@subtable=\count436
-\c@subtable@save=\count437
-\c@lotdepth=\count438
-\sf@top=\skip99
-\sf@bottom=\skip100
+\c@KVtest=\count442
+\sf@farskip=\skip98
+\sf@captopadj=\dimen363
+\sf@capskip=\skip99
+\sf@nearskip=\skip100
+\c@subfigure=\count443
+\c@subfigure@save=\count444
+\c@lofdepth=\count445
+\c@subtable=\count446
+\c@subtable@save=\count447
+\c@lotdepth=\count448
+\sf@top=\skip101
+\sf@bottom=\skip102
+) (./cmu-example-dissertation.aux
+\cmu@redefined@appendix@saved=\count449
+\cmu@appendicies=\count450
 )
-No file cmu-example-dissertation.aux.
 \openout1 = `cmu-example-dissertation.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 144.
-LaTeX Font Info:    ... okay on input line 144.
-No file cmu-example-dissertation.lot.
-No file cmu-example-dissertation.lof.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 148.
+LaTeX Font Info:    ... okay on input line 148.
+ (./cmu-example-dissertation.lot) (./cmu-example-dissertation.lof)
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1047,17 +1090,17 @@ No file cmu-example-dissertation.lof.
 
 (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count439
-\scratchdimen=\dimen359
-\scratchbox=\box166
-\nofMPsegments=\count440
-\nofMParguments=\count441
-\everyMPshowfont=\toks56
-\MPscratchCnt=\count442
-\MPscratchDim=\dimen360
-\MPnumerator=\count443
-\makeMPintoPDFobject=\count444
-\everyMPtoPDFconversion=\toks57
+\scratchcounter=\count451
+\scratchdimen=\dimen364
+\scratchbox=\box172
+\nofMPsegments=\count452
+\nofMParguments=\count453
+\everyMPshowfont=\toks57
+\MPscratchCnt=\count454
+\MPscratchDim=\dimen365
+\MPnumerator=\count455
+\makeMPintoPDFobject=\count456
+\everyMPtoPDFconversion=\toks58
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -1076,14 +1119,15 @@ Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
    defining Unicode char U+03BC (decimal 956)
    defining Unicode char U+2010 (decimal 8208)
-Package hyperref Info: Link coloring ON on input line 144.
+Package hyperref Info: Link coloring ON on input line 148.
+ (./cmu-example-dissertation.out) (./cmu-example-dissertation.out)
 \@outlinefile=\write5
 \openout5 = `cmu-example-dissertation.out'.
 
  (/usr/local/texlive/2023/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 )
-\c@lstlisting=\count445
+\c@lstlisting=\count457
  [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./chapter/i-dedication.tex) [1
@@ -1103,420 +1147,53 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 LaTeX Font Info:    Trying to load font information for U+rsfs on input line 3.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)) [3
+)
+LaTeX Font Info:    Trying to load font information for U+stmry on input line 3.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)) [3
 
 
 
-]
-No file cmu-example-dissertation.toc.
+] (./cmu-example-dissertation.toc [4
+
+
+] [5] [6])
 \tf@toc=\write6
 \openout6 = `cmu-example-dissertation.toc'.
 
-[4
+ [7] [8] (./cmu-example-dissertation.lof [9
 
-
-]
-No file cmu-example-dissertation.lof.
+] [10])
 \tf@lof=\write7
 \openout7 = `cmu-example-dissertation.lof'.
 
-[5
+ [11] (./cmu-example-dissertation.lot [12
 
-]
-No file cmu-example-dissertation.lot.
+])
 \tf@lot=\write8
 \openout8 = `cmu-example-dissertation.lot'.
 
-[6
+ [13] (./chapter/01-Introduction.tex [1
 
-] (./chapter/01-Introduction.tex
+] [2]) (./chapter/02-RelatedWork.tex [3] [4
 
-Package natbib Warning: Citation `LeanTheoremProver' on page 1 undefined on input line 7.
-
-
-Package natbib Warning: Citation `RocqTheoremProver' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `IsabelleTheoremProver' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `Mathlib' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `achim2025aristotleimolevelautomatedtheorem' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `alphaproof' on page 1 undefined on input line 9.
-
-
-Package natbib Warning: Citation `gu2025proofoptimizer' on page 1 undefined on input line 11.
-
-
-Package natbib Warning: Citation `SeedProver' on page 1 undefined on input line 13.
-
-[1
-
-]
-
-Package natbib Warning: Citation `alphaproof' on page 2 undefined on input line 17.
-
-
-Package natbib Warning: Citation `GodelProver' on page 2 undefined on input line 17.
-
-
-Package natbib Warning: Citation `jiang2023draft' on page 2 undefined on input line 17.
-
-
-LaTeX Warning: Reference `chap:improver' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Reference `chap:improver-exp' on page 2 undefined on input line 26.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 2 undefined on input line 28.
-
-
-LaTeX Warning: Reference `chap:improver2-exp' on page 2 undefined on input line 28.
-
-[2]
-
-LaTeX Warning: Reference `chap:improver' on page 3 undefined on input line 32.
-
-
-LaTeX Warning: Reference `chap:improver-exp' on page 3 undefined on input line 32.
-
-
-Package natbib Warning: Citation `ImProver' on page 3 undefined on input line 32.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 3 undefined on input line 32.
-
-
-LaTeX Warning: Reference `chap:improver2-exp' on page 3 undefined on input line 32.
-
-
-Package natbib Warning: Citation `ImProver2' on page 3 undefined on input line 32.
-
-) (./chapter/02-RelatedWork.tex [3]
-
-Package natbib Warning: Citation `LeanTheoremProver' on page 4 undefined on input line 8.
-
-
-Package natbib Warning: Citation `RocqTheoremProver' on page 4 undefined on input line 8.
-
-
-Package natbib Warning: Citation `IsabelleTheoremProver' on page 4 undefined on input line 8.
-
-
-Package natbib Warning: Citation `Mathlib' on page 4 undefined on input line 8.
-
-
-Package natbib Warning: Citation `SeedProver' on page 4 undefined on input line 8.
-
-
-Package natbib Warning: Citation `serge2010' on page 4 undefined on input line 10.
-
-
-Package natbib Warning: Citation `Wiedijk' on page 4 undefined on input line 10.
-
-
-Package natbib Warning: Citation `prover-verifier-games' on page 4 undefined on input line 10.
-
-
-Package natbib Warning: Citation `polu2020generative' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `han2022proof' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `polu2022formal' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `lample2022hypertree' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `yang2023leandojo' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `alphaproof' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `achim2025aristotleimolevelautomatedtheorem' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `SeedProver' on page 4 undefined on input line 15.
-
-
-Package natbib Warning: Citation `leandojo' on page 4 undefined on input line 17.
-
-
-Package natbib Warning: Citation `ImProver' on page 4 undefined on input line 17.
-
-
-Package natbib Warning: Citation `GodelProver' on page 4 undefined on input line 17.
-
-
-Package natbib Warning: Citation `frieder2025datamathematicalcopilotsbetter' on page 4 undefined on input line 17.
-
-[4
-
-]
-
-Package natbib Warning: Citation `hu2024minictxneuraltheoremproving' on page 5 undefined on input line 19.
-
-
-Package natbib Warning: Citation `zheng2022miniff' on page 5 undefined on input line 19.
-
-
-Package natbib Warning: Citation `ImProver' on page 5 undefined on input line 24.
-
-
-LaTeX Warning: Reference `chap:improver' on page 5 undefined on input line 24.
-
-
-Package natbib Warning: Citation `gu2025proofoptimizer' on page 5 undefined on input line 26.
-
-
-Package natbib Warning: Citation `gu2025proofoptimizer' on page 5 undefined on input line 28.
-
-
-Package natbib Warning: Citation `ImProver2' on page 5 undefined on input line 30.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 5 undefined on input line 30.
-
-
-Package natbib Warning: Citation `wei2022chain' on page 5 undefined on input line 35.
-
-
-LaTeX Warning: Reference `ssec:cos_imp' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `jiang2023draft' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `first2023baldur' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `jiang2023draft' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `first2023baldur' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `hu2024minictxneuraltheoremproving' on page 5 undefined on input line 35.
-
-
-Package natbib Warning: Citation `zhou2023docprompting' on page 5 undefined on input line 40.
-
-
-Package natbib Warning: Citation `yang2023leandojo' on page 5 undefined on input line 40.
-
-
-Package natbib Warning: Citation `thakur2024incontext' on page 5 undefined on input line 40.
-
-
-Package natbib Warning: Citation `10.1145/290941.291025' on page 5 undefined on input line 40.
-
-
-LaTeX Warning: Reference `sec:context_extraction' on page 5 undefined on input line 40.
-
-[5]
+] [5]
 Overfull \hbox (3.19472pt too wide) in paragraph at lines 42--42
 []\OT1/cmr/bx/n/17.28 Preference Op-ti-miza-tion and Re-in-force-ment Learn-
  []
-
-
-Package natbib Warning: Citation `DPO' on page 6 undefined on input line 45.
-
-
-Package natbib Warning: Citation `IRPO' on page 6 undefined on input line 45.
-
-
-Package natbib Warning: Citation `ExpertIteration' on page 6 undefined on input line 47.
-
-
-Package natbib Warning: Citation `GRPO' on page 6 undefined on input line 47.
-
-
-Package natbib Warning: Citation `modelCollapse' on page 6 undefined on input line 49.
-
-
-LaTeX Warning: Reference `sec:context_extraction' on page 6 undefined on input line 56.
-
-
-LaTeX Warning: Reference `ssec:cos_imp' on page 6 undefined on input line 56.
-
-
-LaTeX Warning: Reference `sec:generation' on page 6 undefined on input line 56.
-
-
-Package natbib Warning: Citation `DraftSketchProve' on page 6 undefined on input line 56.
-
-
-Package natbib Warning: Citation `autoinformalization' on page 6 undefined on input line 56.
 
 [6]) (./chapter/03-ProofOptimization.tex [7]
 LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 40.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
+) [8
 
-Package natbib Warning: Citation `LeanTheoremProver' on page 8 undefined on input line 109.
-
-[8
-
-]
-
-LaTeX Warning: Reference `def:completion' on page 9 undefined on input line 139.
-
-
-LaTeX Warning: Reference `eq:po_score' on page 9 undefined on input line 139.
-
-
-LaTeX Warning: Reference `eq:po_score' on page 9 undefined on input line 142.
-
-[9]
-
-Package natbib Warning: Citation `MIL' on page 10 undefined on input line 149.
-
-
-Package natbib Warning: Citation `compfiles' on page 10 undefined on input line 150.
-
-
-Package natbib Warning: Citation `The_mathlib_Community_2020' on page 10 undefined on input line 151.
-
-
-Package natbib Warning: Citation `miniCTX' on page 10 undefined on input line 152.
-
-
-Package natbib Warning: Citation `Mathlib' on page 10 undefined on input line 170.
-
-
-LaTeX Warning: Reference `chap:improver' on page 10 undefined on input line 170.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 10 undefined on input line 170.
-
-[10]
-
-Package natbib Warning: Citation `serge2010' on page 11 undefined on input line 179.
-
-
-Package natbib Warning: Citation `Wiedijk' on page 11 undefined on input line 179.
-
-
-LaTeX Warning: Reference `chap:improver' on page 11 undefined on input line 179.
-
-
-LaTeX Warning: Reference `chap:improver' on page 11 undefined on input line 187.
-
-
-LaTeX Warning: Reference `chap:improver' on page 11 undefined on input line 197.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 11 undefined on input line 204.
-
-[11] [12]
-
-LaTeX Warning: Reference `def:effective_spawned' on page 13 undefined on input line 250.
-
-
-LaTeX Warning: Reference `fig:kd5-kd45-proof' on page 13 undefined on input line 250.
-
-
-LaTeX Warning: Reference `chap:improver2' on page 13 undefined on input line 251.
-
+] [9] [10] [11] [12]
 
 LaTeX Warning: Reference `app:modularity' on page 13 undefined on input line 251.
 
-[13]
+[13] [14] [15]) (./chapter/04-ImProver.tex [16] [17
 
-LaTeX Warning: Reference `tab:metrics_summary' on page 14 undefined on input line 396.
-
-
-LaTeX Warning: Reference `def:effective_spawned' on page 14 undefined on input line 418.
-
-[14] [15]) (./chapter/04-ImProver.tex [16] [17
-
-]
-
-LaTeX Warning: Reference `def:best_of_n' on page 18 undefined on input line 20.
-
-
-LaTeX Warning: Reference `ssec:cos_imp' on page 18 undefined on input line 22.
-
-
-LaTeX Warning: Reference `ssec:output_fmt' on page 18 undefined on input line 23.
-
-
-LaTeX Warning: Reference `ssec:sampling' on page 18 undefined on input line 24.
-
-
-LaTeX Warning: Reference `ssec:rag' on page 18 undefined on input line 25.
-
-
-Package natbib Warning: Citation `wei2022chain' on page 18 undefined on input line 33.
-
-
-LaTeX Warning: Reference `def:proof_tree' on page 18 undefined on input line 35.
-
-
-Package natbib Warning: Citation `Trainingdata' on page 18 undefined on input line 35.
-
-
-LaTeX Warning: Reference `fig:cos' on page 18 undefined on input line 94.
-
-
-LaTeX Warning: Reference `chap:improver-exp' on page 18 undefined on input line 94.
-
-[18]
-
-LaTeX Warning: Reference `chap:improver2' on page 19 undefined on input line 96.
-
-[19]
-
-LaTeX Warning: Reference `chap:improver-exp' on page 20 undefined on input line 107.
-
-
-LaTeX Warning: Reference `def:best_of_n' on page 20 undefined on input line 112.
-
-
-Package natbib Warning: Citation `madaan2023selfrefine' on page 20 undefined on input line 116.
-
-
-Package natbib Warning: Citation `chen2023teachinglargelanguagemodels' on page 20 undefined on input line 116.
-
-
-Package natbib Warning: Citation `10.1145/290941.291025' on page 20 undefined on input line 131.
-
-
-LaTeX Warning: Reference `sssec:metric_summary' on page 20 undefined on input line 133.
-
-[20]
-
-Package natbib Warning: Citation `avigad2024tpil' on page 21 undefined on input line 137.
-
-
-Package natbib Warning: Citation `The_mathlib_Community_2020' on page 21 undefined on input line 138.
-
-) (./chapter/05-ImProverEval.tex [21]
-
-LaTeX Warning: Reference `ssec:improver_overview' on page 22 undefined on input line 9.
-
-
-LaTeX Warning: Reference `sec:datasets' on page 22 undefined on input line 11.
-
-
-Package natbib Warning: Citation `openai2024gpt4technicalreport' on page 22 undefined on input line 13.
-
-
-LaTeX Warning: Reference `chap:improver' on page 22 undefined on input line 13.
-
-
-LaTeX Warning: Reference `sec:eval_methodology' on page 22 undefined on input line 15.
-
-[22
+] [18] [19] [20]) (./chapter/05-ImProverEval.tex [21] [22
 
 ]
 Overfull \hbox (20.41393pt too wide) in paragraph at lines 35--36
@@ -1527,9 +1204,6 @@ Overfull \hbox (20.41393pt too wide) in paragraph at lines 35--36
 Overfull \hbox (0.37065pt too wide) in paragraph at lines 38--39
 \OT1/cmr/m/n/12 avoids the pit-falls of ac-cu-racy alone (which can be gamed by re-turn-ing the in-put) or nonempty
  []
-
-
-LaTeX Warning: Reference `tab:abl' on page 23 undefined on input line 40.
 
 (./figures/assets/ablation.tex
 Overfull \hbox (11.3992pt too wide) in paragraph at lines 8--25
@@ -1544,11 +1218,7 @@ Overfull \hbox (13.54353pt too wide) in paragraph at lines 33--42
  [][] 
  []
 
-)
-
-LaTeX Warning: Reference `tab:read-abl' on page 23 undefined on input line 46.
-
-[23] (./figures/assets/table-main.tex
+) [23] (./figures/assets/table-main.tex
 Overfull \hbox (20.10564pt too wide) in paragraph at lines 30--45
  [][] 
  []
@@ -1574,181 +1244,32 @@ Overfull \hbox (12.46379pt too wide) in paragraph at lines 58--72
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-)
-
-LaTeX Warning: Reference `tab:main-mil' on page 24 undefined on input line 56.
-
-
-LaTeX Warning: Reference `tab:main-compfiles' on page 24 undefined on input line 56.
-
-
-LaTeX Warning: Reference `tab:main-lib' on page 24 undefined on input line 56.
-
-
-LaTeX Warning: Reference `tab:main-avg' on page 24 undefined on input line 56.
-
-[24] [25]
+) [24] [25]
 Overfull \hbox (39.23505pt too wide) in paragraph at lines 73--82
  [][] 
  []
 
-
-LaTeX Warning: Reference `tab:comp' on page 26 undefined on input line 84.
-
-
-Package natbib Warning: Citation `DBLP:journals/corr/abs-2202-01344' on page 26 undefined on input line 86.
-
-
-LaTeX Warning: Reference `chap:framework' on page 26 undefined on input line 86.
-
-[26] [27]) (./chapter/06-ImProver2.tex [28]
-
-LaTeX Warning: Reference `sec:irpo' on page 29 undefined on input line 5.
-
-
-LaTeX Warning: Reference `sec:training_replay' on page 29 undefined on input line 5.
-
-
-LaTeX Warning: Reference `sec:generation' on page 29 undefined on input line 5.
-
-
-LaTeX Warning: Reference `fig:flow_pipeline' on page 29 undefined on input line 11.
-
-
-LaTeX Warning: Reference `sec:generation' on page 29 undefined on input line 13.
-
-
-LaTeX Warning: Reference `sec:ns_aug' on page 29 undefined on input line 13.
-
-
-LaTeX Warning: Reference `sec:training_replay' on page 29 undefined on input line 15.
-
-
-LaTeX Warning: Reference `sec:irpo' on page 29 undefined on input line 17.
-
-
-Package natbib Warning: Citation `IRPO' on page 29 undefined on input line 17.
-
-
-LaTeX Warning: Reference `sec:training_replay' on page 29 undefined on input line 17.
-
-
-LaTeX Warning: Reference `sec:generation' on page 29 undefined on input line 19.
-
-(./figures/flowchart.tex
-\pgf@layerbox@bg=\box167
-\pgf@layerboxsaved@bg=\box168
+[26] [27]) (./chapter/06-ImProver2.tex [28] (./figures/flowchart.tex
+\pgf@layerbox@bg=\box173
+\pgf@layerboxsaved@bg=\box174
  [29
 
-]) [30]
-
-Package natbib Warning: Citation `ImProver2' on page 31 undefined on input line 72.
-
-
-Package natbib Warning: Citation `ImProver' on page 31 undefined on input line 75.
-
-
-Package natbib Warning: Citation `ImProver2' on page 31 undefined on input line 75.
-
-
-Package natbib Warning: Citation `DraftSketchProve' on page 31 undefined on input line 78.
-
-
-Package natbib Warning: Citation `IRPO' on page 31 undefined on input line 88.
-
-[31]
-
-Package natbib Warning: Citation `modelCollapse' on page 32 undefined on input line 93.
-
-
-LaTeX Warning: Reference `sec:generation' on page 32 undefined on input line 95.
-
-
-Package natbib Warning: Citation `ImProver2' on page 32 undefined on input line 103.
-
-
-Package natbib Warning: Citation `GRPO' on page 32 undefined on input line 107.
-
-
-LaTeX Warning: Reference `alg:pref_pair_creation' on page 32 undefined on input line 107.
-
-[32]
+]) [30] [31] [32]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 111.
- [33]) (./chapter/07-ImProver2Eval.tex [34]
+ [33]) (./chapter/07-ImProver2Eval.tex [34] [35
 
-Package natbib Warning: Citation `Mathlib' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `HEPLean' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `PFR' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `Carleson' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `ConNF' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `FLT' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `Foundation' on page 35 undefined on input line 16.
-
-
-Package natbib Warning: Citation `Seymour' on page 35 undefined on input line 16.
-
-
-LaTeX Warning: Reference `def:best_of_n' on page 35 undefined on input line 26.
-
-
-LaTeX Warning: Reference `def:mean_improvement' on page 35 undefined on input line 26.
-
-
-LaTeX Warning: Reference `def:comp_acc' on page 35 undefined on input line 26.
-
-
-LaTeX Warning: Reference `def:imp_acc' on page 35 undefined on input line 26.
-
-
-Package natbib Warning: Citation `DeepseekR1' on page 35 undefined on input line 26.
-
-
-Package natbib Warning: Citation `ImProver2' on page 35 undefined on input line 26.
-
-[35
-
-]
-
-LaTeX Warning: Reference `tab:cost' on page 36 undefined on input line 55.
-
-
-LaTeX Warning: Reference `tab:frontier' on page 36 undefined on input line 122.
-
-
-LaTeX Warning: Reference `tab:intrafamily' on page 36 undefined on input line 122.
-
-[36] [37]
-
-LaTeX Warning: Reference `tab:iter_acc' on page 38 undefined on input line 189.
-
-[38]
-
-LaTeX Warning: Reference `fig:param_perf' on page 39 undefined on input line 252.
-
-[39]
-<figures/Modularity/declarativity2_param_perf.png, id=453, 855.195pt x 493.845pt>
+] [36] [37] [38] [39]
+<figures/Modularity/declarativity2_param_perf.png, id=1083, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_param_perf.png Graphic file (type png)
 <use figures/Modularity/declarativity2_param_perf.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_param_perf.png  used on input line 266.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Dependency/dependency_param_perf.png, id=455, 855.4359pt x 493.845pt>
+<figures/Dependency/dependency_param_perf.png, id=1085, 855.4359pt x 493.845pt>
 File: figures/Dependency/dependency_param_perf.png Graphic file (type png)
 <use figures/Dependency/dependency_param_perf.png>
 Package pdftex.def Info: figures/Dependency/dependency_param_perf.png  used on input line 272.
 (pdftex.def)             Requested size: 230.18253pt x 132.88026pt.
-<figures/Length/length_param_perf.png, id=456, 855.195pt x 493.845pt>
+<figures/Length/length_param_perf.png, id=1086, 855.195pt x 493.845pt>
 File: figures/Length/length_param_perf.png Graphic file (type png)
 <use figures/Length/length_param_perf.png>
 Package pdftex.def Info: figures/Length/length_param_perf.png  used on input line 279.
@@ -1759,63 +1280,38 @@ Overfull \hbox (10.83722pt too wide) in paragraph at lines 296--297
  []
 
 [40 <./figures/Modularity/declarativity2_param_perf.png> <./figures/Dependency/dependency_param_perf.png> <./figures/Length/length_param_perf.png>]
-<figures/Length/length_gpt_improver_comparison.png, id=466, 855.195pt x 493.845pt>
+<figures/Length/length_gpt_improver_comparison.png, id=1094, 855.195pt x 493.845pt>
 File: figures/Length/length_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Length/length_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Length/length_gpt_improver_comparison.png  used on input line 307.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Modularity/declarativity2_gpt_improver_comparison.png, id=467, 855.195pt x 493.845pt>
+<figures/Modularity/declarativity2_gpt_improver_comparison.png, id=1095, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Modularity/declarativity2_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_gpt_improver_comparison.png  used on input line 313.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Dependency/dependency_gpt_improver_comparison.png, id=468, 855.195pt x 493.845pt>
+<figures/Dependency/dependency_gpt_improver_comparison.png, id=1096, 855.195pt x 493.845pt>
 File: figures/Dependency/dependency_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Dependency/dependency_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Dependency/dependency_gpt_improver_comparison.png  used on input line 319.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-
-
-Package natbib Warning: Citation `openai2025gptoss120bgptoss20bmodel' on page 41 undefined on input line 333.
-
-
-Package natbib Warning: Citation `DeepseekR1' on page 41 undefined on input line 333.
-
-[41 <./figures/Length/length_gpt_improver_comparison.png> <./figures/Modularity/declarativity2_gpt_improver_comparison.png> <./figures/Dependency/dependency_gpt_improver_comparison.png>]
-
-LaTeX Warning: Reference `tab:scaffold' on page 42 undefined on input line 428.
-
-[42]
-<figures/Dependency/dependency_iterations.png, id=484, 855.4359pt x 493.845pt>
+ [41 <./figures/Length/length_gpt_improver_comparison.png> <./figures/Modularity/declarativity2_gpt_improver_comparison.png> <./figures/Dependency/dependency_gpt_improver_comparison.png>] [42]
+<figures/Dependency/dependency_iterations.png, id=1113, 855.4359pt x 493.845pt>
 File: figures/Dependency/dependency_iterations.png Graphic file (type png)
 <use figures/Dependency/dependency_iterations.png>
 Package pdftex.def Info: figures/Dependency/dependency_iterations.png  used on input line 457.
 (pdftex.def)             Requested size: 230.18253pt x 132.88026pt.
-<figures/Modularity/declarativity2_iterations.png, id=485, 855.195pt x 493.845pt>
+<figures/Modularity/declarativity2_iterations.png, id=1114, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_iterations.png Graphic file (type png)
 <use figures/Modularity/declarativity2_iterations.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_iterations.png  used on input line 464.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Length/length_iterations.png, id=486, 855.195pt x 493.845pt>
+<figures/Length/length_iterations.png, id=1115, 855.195pt x 493.845pt>
 File: figures/Length/length_iterations.png Graphic file (type png)
 <use figures/Length/length_iterations.png>
 Package pdftex.def Info: figures/Length/length_iterations.png  used on input line 469.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-
-
-LaTeX Warning: Reference `tab:iter' on page 43 undefined on input line 475.
-
-
-LaTeX Warning: Reference `fig:all_iterations' on page 43 undefined on input line 475.
-
-[43 <./figures/Dependency/dependency_iterations.png> <./figures/Modularity/declarativity2_iterations.png> <./figures/Length/length_iterations.png>]
-
-LaTeX Warning: Reference `tab:project_improvement' on page 44 undefined on input line 517.
-
-
-Package natbib Warning: Citation `lean_style_guide' on page 44 undefined on input line 532.
-
-[44]) (./chapter/08-Conclusion.tex [45]
+ [43 <./figures/Dependency/dependency_iterations.png> <./figures/Modularity/declarativity2_iterations.png> <./figures/Length/length_iterations.png>] [44]) (./chapter/08-Conclusion.tex [45]
 Overfull \hbox (5.22626pt too wide) in paragraph at lines 23--24
 []\OT1/cmr/m/n/12 A 7B-parameter model that out-per-forms mod-els orders-of-magnitude larger and matches
  []
@@ -1827,1658 +1323,346 @@ Overfull \hbox (8.70436pt too wide) in paragraph at lines 58--59
 []\OT1/cmr/m/n/12 The mod-u-lar-ity met-ric is a struc-tural proxy; whether main-tain-ers ac-tu-ally pre-fer modularity-
  []
 
-[49]) [50] (./cmu-example-dissertation.bbl) (./chapter/A1-ConfigImProver.tex [51
+[49]) [50] (./cmu-example-dissertation.bbl
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<let>-command' on input line 1.
 
-] [52]
 
-LaTeX Warning: Reference `template' on page 53 undefined on input line 87.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\\' on input line 1.
 
 
-LaTeX Warning: Reference `fig:length-ex' on page 53 undefined on input line 90.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@centercr' on input line 1.
 
 
-LaTeX Warning: Reference `fig:decl-ex' on page 53 undefined on input line 131.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@rightskip' on input line 1.
 
-[53]
 
-LaTeX Warning: Reference `fig:mix-ex' on page 54 undefined on input line 176.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@flushglue' on input line 1.
 
 
-LaTeX Warning: Reference `fig:cmp-ex' on page 54 undefined on input line 254.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\rightskip' on input line 1.
 
-) (./chapter/A2-QualImProver.tex [54] [55]
 
-LaTeX Warning: Reference `fig:ex1-comp-len' on page 56 undefined on input line 10.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@rightskip' on input line 1.
 
 
-LaTeX Warning: Reference `fig:compfiles-read' on page 56 undefined on input line 16.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\finalhyphendemerits' on input line 1.
 
-[56
 
-]
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\z@' on input line 1.
 
-LaTeX Warning: Reference `fig:compfiles-mix' on page 57 undefined on input line 67.
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\leftskip' on input line 1.
 
-LaTeX Warning: Reference `fig:mil-len' on page 57 undefined on input line 109.
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\z@skip' on input line 1.
 
-LaTeX Warning: Reference `fig:ex2-MIL-read' on page 57 undefined on input line 158.
 
-[57]
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\parindent' on input line 1.
 
-LaTeX Warning: Reference `fig:mil-mix' on page 58 undefined on input line 216.
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\z@' on input line 1.
 
-LaTeX Warning: Reference `fig:mathlib-len' on page 58 undefined on input line 264.
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\cmu@ln@output' on input line 1.
 
-./chapter/A2-QualImProver.tex:277: LaTeX Error: Invalid UTF-8 byte sequence (�\lst@EC�).
+[51
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.277 theorem heq_path_of_eq_image : HEq ((πₘ 
-                                                 f).map lbrak p rbrak) ((π�...
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-
-./chapter/A2-QualImProver.tex:277: LaTeX Error: Invalid UTF-8 byte sequence (�\lst@EC�\lst@EC�).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.277 theorem heq_path_of_eq_image : HEq ((πₘ 
-                                                 f).map lbrak p rbrak) ((π�...
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-./chapter/A2-QualImProver.tex:277: Undefined control sequence.
-<recently read> \llbracket 
-                           
-l.277 ...th_of_eq_image : HEq ((πₘ f).map lbrak
-                                                   p rbrak) ((πₘ g).map l...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/A2-QualImProver.tex:277: Undefined control sequence.
-<recently read> \rrbracket 
-                           
-l.277 ..._image : HEq ((πₘ f).map lbrak p rbrak
-                                                  ) ((πₘ g).map lbrak q r...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/A2-QualImProver.tex:277: LaTeX Error: Invalid UTF-8 byte sequence (�\lst@EC�).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.277 ...Eq ((πₘ f).map lbrak p rbrak) ((πₘ 
-                                                  g).map lbrak q rbrak)  := by
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-
-./chapter/A2-QualImProver.tex:277: LaTeX Error: Invalid UTF-8 byte sequence (�\lst@EC�\lst@EC�).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.277 ...Eq ((πₘ f).map lbrak p rbrak) ((πₘ 
-                                                  g).map lbrak q rbrak)  := by
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-./chapter/A2-QualImProver.tex:277: Undefined control sequence.
-<recently read> \llbracket 
-                           
-l.277 ...).map lbrak p rbrak) ((πₘ g).map lbrak
-                                                   q rbrak)  := by
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/A2-QualImProver.tex:277: Undefined control sequence.
-<recently read> \rrbracket 
-                           
-l.277 ...rak p rbrak) ((πₘ g).map lbrak q rbrak
-                                                  )  := by
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/A2-QualImProver.tex:278: LaTeX Error: Invalid UTF-8 byte sequence (�\lst@EC�\lst@EC�).
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.278   simp only [map_eq, ← 
-                               Path.Homotopic.map_lift]; apply Path.Homotopi...
-The document does not appear to be in UTF-8 encoding.
-Try adding \UseRawInputEncoding as the first line of the file
-or specify an encoding such as \usepackage [latin1]{inputenc}
-in the document preamble.
-Alternatively, save the file in UTF-8 using your editor or another tool
-
-./chapter/A2-QualImProver.tex:290: Undefined control sequence.
-l.290 ...eq_image : HEq ((πₘ f).map $\llbracket
-                                                  $p$\rrbracket$) ((πₘ g)...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/A2-QualImProver.tex:290: Undefined control sequence.
-l.290 ...q ((πₘ f).map $\llbracket$p$\rrbracket
-                                                  $) ((πₘ g).map $\llbrac...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/A2-QualImProver.tex:290: Undefined control sequence.
-l.290 ...p$\rrbracket$) ((πₘ g).map $\llbracket
-                                                  $q$\rrbracket$)    := by
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/A2-QualImProver.tex:290: Undefined control sequence.
-l.290 ...) ((πₘ g).map $\llbracket$q$\rrbracket
-                                                  $)    := by
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-[58]
-
-LaTeX Warning: Reference `fig:mathlib-read' on page 59 undefined on input line 306.
-
-
-LaTeX Warning: Reference `fig:mathlib-mix' on page 59 undefined on input line 363.
-
-[59]
-
-LaTeX Warning: Reference `fig:ex3-MIL-completion' on page 60 undefined on input line 425.
-
-
-LaTeX Warning: Reference `fig:ex3-F2F-completion' on page 60 undefined on input line 468.
-
-[60]) (./chapter/B1-ConfigImProver2.tex [61]
-./chapter/B1-ConfigImProver2.tex:11: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.11 \begin{subfigure}{0.6\linewidth}
-                                     
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:11: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.11 \begin{subfigure}{0.6\linewidth}
-                                     
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-LaTeX Warning: File `figures/Dependency/IRPO Dependency Iter 3 Acc.png' not found on input line 12.
-
-
-./chapter/B1-ConfigImProver2.tex:12: Package pdftex.def Error: File `figures/Dependency/IRPO Dependency Iter 3 Acc.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.12 ...Dependency/IRPO Dependency Iter 3 Acc.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Overfull \hbox (15.01373pt too wide) in paragraph at lines 11--13
- [][][] 
+] [52] [53]
+Underfull \hbox (badness 1024) in paragraph at lines 150--154
+[]\OT1/cmr/m/n/12 Shuyan Zhou, Uri Alon, Frank F. Xu, Zheng-bao Jiang, and Gra-ham Neu-big.
  []
 
-./chapter/B1-ConfigImProver2.tex:17: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.17 \begin{subfigure}{0.6\linewidth}
-                                     
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:17: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.17 \begin{subfigure}{0.6\linewidth}
-                                     
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-LaTeX Warning: File `figures/Dependency/IRPO Dependency Iter 3 Loss.png' not found on input line 18.
-
-
-./chapter/B1-ConfigImProver2.tex:18: Package pdftex.def Error: File `figures/Dependency/IRPO Dependency Iter 3 Loss.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.18 ...ependency/IRPO Dependency Iter 3 Loss.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Overfull \hbox (15.01373pt too wide) in paragraph at lines 16--19
- [][][] 
+[54]
+Underfull \hbox (badness 10000) in paragraph at lines 205--208
+[]\OT1/cmr/m/n/12 leanprover-community.  math-e-mat-ics[]in[]lean.  [][]$https : / / github . com /
  []
 
-./chapter/B1-ConfigImProver2.tex:23: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.23 \begin{subfigure}{0.6\linewidth}
-                                     
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:23: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.23 \begin{subfigure}{0.6\linewidth}
-                                     
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-LaTeX Warning: File `figures/Dependency/IRPO Dependency Iter 3 Margin.png' not found on input line 24.
-
-
-./chapter/B1-ConfigImProver2.tex:24: Package pdftex.def Error: File `figures/Dependency/IRPO Dependency Iter 3 Margin.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.24 ...endency/IRPO Dependency Iter 3 Margin.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Overfull \hbox (15.01373pt too wide) in paragraph at lines 22--25
- [][][] 
+[55] [56]
+Underfull \hbox (badness 1675) in paragraph at lines 261--267
+[]\OT1/cmr/m/n/12 Joseph Tooby-Smith.  Hep-lean: Dig-i-tal-is-ing high en-ergy physics.  \OT1/cmr/m/it/12 Com-puter
  []
 
+[57]) (./chapter/A1-ConfigImProver.tex [58] [59
 
-LaTeX Warning: Float too large for page by 923.02168pt on input line 30.
+] [60] [61]) (./chapter/A2-QualImProver.tex [62] [63]
 
-./chapter/B1-ConfigImProver2.tex:36: Undefined control sequence.
-l.36 During generation, \ImProver
-                                  \ is prompted by combining the following p...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+LaTeX Warning: Reference `fig:ex1-comp-len' on page 64 undefined on input line 10.
 
+[64
 
-Overfull \hbox (20.12672pt too wide) in paragraph at lines 40--41
+] [65] [66] [67]) (./chapter/B1-ConfigImProver2.tex [68] [69]
+<figures/Dependency/IRPO Dependency Iter 3 Acc.png, id=1599, 2537.48pt x 1332.98pt>
+File: figures/Dependency/IRPO Dependency Iter 3 Acc.png Graphic file (type png)
+<use figures/Dependency/IRPO Dependency Iter 3 Acc.png>
+Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Acc.png  used on input line 12.
+(pdftex.def)             Requested size: 150.32504pt x 78.95836pt.
+<figures/Dependency/IRPO Dependency Iter 3 Loss.png, id=1600, 2537.48pt x 1332.98pt>
+File: figures/Dependency/IRPO Dependency Iter 3 Loss.png Graphic file (type png)
+<use figures/Dependency/IRPO Dependency Iter 3 Loss.png>
+Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Loss.png  used on input line 17.
+(pdftex.def)             Requested size: 150.32504pt x 78.95836pt.
+<figures/Dependency/IRPO Dependency Iter 3 Margin.png, id=1601, 2537.48pt x 1332.98pt>
+File: figures/Dependency/IRPO Dependency Iter 3 Margin.png Graphic file (type png)
+<use figures/Dependency/IRPO Dependency Iter 3 Margin.png>
+Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Margin.png  used on input line 22.
+(pdftex.def)             Requested size: 150.32504pt x 78.95836pt.
+
+Overfull \hbox (20.12672pt too wide) in paragraph at lines 37--38
 []\OT1/cmtt/m/n/6 You are an expert Lean4 theorem rewriting assistant. Shorten the current Lean4 theorem (wrapped in <CURRENT>...</CURRENT>) to be as short as possible
  []
 
 
-Overfull \hbox (5.1893pt too wide) in paragraph at lines 40--41
+Overfull \hbox (5.1893pt too wide) in paragraph at lines 37--38
 \OT1/cmtt/m/n/6 in length - measured in the number of tactics in the proof - while also ensuring that the output is still a correct proof of the theorem. Be sure to
  []
 
 
-Overfull \hbox (11.56439pt too wide) in paragraph at lines 40--41
+Overfull \hbox (11.56439pt too wide) in paragraph at lines 37--38
 \OT1/cmtt/m/n/6 output your final response as a Lean4 theorem wrapped in <IMPROVED>...</IMPROVED> tags, as shown in the example. Namely, only return the statement and
  []
 
 
-Overfull \hbox (4.189pt too wide) in paragraph at lines 44--45
+Overfull \hbox (4.189pt too wide) in paragraph at lines 41--42
 []\OT1/cmtt/m/n/6 You are an expert Lean4 theorem rewriting assistant. Given a Lean4 theorem enclosed in <CURRENT>...</CURRENT> tags, rewrite the theorem to be as
  []
 
 
-Overfull \hbox (5.1893pt too wide) in paragraph at lines 44--45
+Overfull \hbox (5.1893pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 modular and declarative as possible. Modularity is defined by the number of independent, meaningful subproofs, measured by the occurrence of tactics
  []
 
 
-Overfull \hbox (33.87721pt too wide) in paragraph at lines 44--45
+Overfull \hbox (33.87721pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 that spawn new goals (such as 'have' statements, case splits, automation tactics, or 'calc' blocks) -- with the caveat that these subproofs must be nontrivial
  []
 
 
-Overfull \hbox (2.00175pt too wide) in paragraph at lines 44--45
+Overfull \hbox (2.00175pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 and contribute to the overall proof structure. That means any sort of duplicate, unused, or trivial spawned goals will be ignored and/or penalized;
  []
 
 
-Overfull \hbox (5.1893pt too wide) in paragraph at lines 44--45
+Overfull \hbox (5.1893pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 this includes trivial modifications to spawned goals such as changing binders into forall statements. etc. Your objective is to maximize the number
  []
 
 
-Overfull \hbox (11.56439pt too wide) in paragraph at lines 44--45
+Overfull \hbox (11.56439pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 of these useful, nontrivial, and interesting spawned subproofs, while ensuring that the theorem remains correct and is clearly structured and readable.
  []
 
 
-Overfull \hbox (21.12703pt too wide) in paragraph at lines 44--45
+Overfull \hbox (21.12703pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 Optimize and rewrite the proof structure based on genuine sub-arguments, not superficial goal spawning. Validate that the revised theorem remains correct
  []
 
 
-Overfull \hbox (62.56512pt too wide) in paragraph at lines 44--45
+Overfull \hbox (62.56512pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 and that improvements in modularity are nontrivial and significant. In your output, only provide the improved statement and proof, wrapped in <IMPROVED>...</IMPROVED>
  []
 
 
-Overfull \hbox (5.1893pt too wide) in paragraph at lines 44--45
+Overfull \hbox (5.1893pt too wide) in paragraph at lines 41--42
 \OT1/cmtt/m/n/6 tags, with no additional text or comments. Under no circumstances should you create artificial or superficial modularity in order to optimize for or
  []
 
 
-Overfull \hbox (1.00145pt too wide) in paragraph at lines 49--50
+Overfull \hbox (1.00145pt too wide) in paragraph at lines 46--47
 []\OT1/cmtt/m/n/6 You are an expert Lean4 theorem rewriting assistant. Rewrite the current Lean4 theorem (wrapped in <CURRENT>...</CURRENT>) to be as independent
  []
 
 
-Overfull \hbox (14.75194pt too wide) in paragraph at lines 49--50
+Overfull \hbox (14.75194pt too wide) in paragraph at lines 46--47
 \OT1/cmtt/m/n/6 of external theorems and lemmas as possible. Namely, you aim to rewrite the proof to minimize the number of external dependencies - while also ensuring
  []
 
 
-Overfull \hbox (8.37685pt too wide) in paragraph at lines 49--50
+Overfull \hbox (8.37685pt too wide) in paragraph at lines 46--47
 \OT1/cmtt/m/n/6 that the output is still a correct proof of the theorem. Be sure to output your final response as a Lean4 theorem wrapped in <IMPROVED>...</IMPROVED>
  []
 
 
-Overfull \hbox (5.1893pt too wide) in paragraph at lines 49--50
+Overfull \hbox (5.1893pt too wide) in paragraph at lines 46--47
 \OT1/cmtt/m/n/6 tags, as shown in the example. Namely, only return the statement and proof of the current theorem in Lean4 code, wrapped in <IMPROVED>...</IMPROVED>
  []
 
+[70
 
-Overfull \hbox (20.12672pt too wide) in paragraph at lines 54--55
+ <./figures/Dependency/IRPO Dependency Iter 3 Acc.png> <./figures/Dependency/IRPO Dependency Iter 3 Loss.png> <./figures/Dependency/IRPO Dependency Iter 3 Margin.png>]
+Overfull \hbox (20.12672pt too wide) in paragraph at lines 51--52
 []\OT1/cmtt/m/n/6 A version of the current theorem with the goal states annotated has also been provided for reference (wrapped in <ANNOTATED>...</ANNOTATED>). Namely,
  []
 
 
-Overfull \hbox (8.37685pt too wide) in paragraph at lines 54--55
+Overfull \hbox (8.37685pt too wide) in paragraph at lines 51--52
 \OT1/cmtt/m/n/6 the goal states have been interleaved between tactics as comments to help you better understand the proof and ensure the correctness of your response.
  []
 
 
-Overfull \hbox (1.00145pt too wide) in paragraph at lines 59--60
+Overfull \hbox (1.00145pt too wide) in paragraph at lines 56--57
 []\OT1/cmtt/m/n/6 The proof context, with relevant definitions and theorems, has additionally been provided to help you better understand the proof and ensure the
  []
 
 
-Overfull \hbox (4.189pt too wide) in paragraph at lines 65--66
+Overfull \hbox (4.189pt too wide) in paragraph at lines 62--63
 []\OT1/cmtt/m/n/6 Here are some examples of such optimization, as wrapped in <EXAMPLES>...</EXAMPLES>. Note that these examples are for illustrative purposes only
  []
 
 
-Overfull \hbox (21.12703pt too wide) in paragraph at lines 65--66
+Overfull \hbox (21.12703pt too wide) in paragraph at lines 62--63
 \OT1/cmtt/m/n/6 and should not be copied directly. Instead, use them to understand the kind of optimization expected and apply similar techniques to the current theorem,
  []
 
 
-Overfull \hbox (2.00175pt too wide) in paragraph at lines 65--66
+Overfull \hbox (2.00175pt too wide) in paragraph at lines 62--63
 \OT1/cmtt/m/n/6 using these positive examples as an intuition and guidance on what kinds of optimizations you may do on your current target theorems. Additionally,
  []
 
 
-Overfull \hbox (8.37685pt too wide) in paragraph at lines 65--66
+Overfull \hbox (8.37685pt too wide) in paragraph at lines 62--63
 \OT1/cmtt/m/n/6 you will also be provided with a negative example which will be marked as such. Use it to understand common pitfalls and avoid them in your response.
  []
 
-[62
 
-] [63]
-Overfull \hbox (7.37654pt too wide) in paragraph at lines 74--75
+Overfull \hbox (7.37654pt too wide) in paragraph at lines 71--72
 []\OT1/cmtt/m/n/6 You are an expert informalizer of formal mathematics to natural language. Namely, given a formal theorem and proof in Lean4, you will generate an
  []
 
 
-Overfull \hbox (11.56439pt too wide) in paragraph at lines 74--75
+Overfull \hbox (11.56439pt too wide) in paragraph at lines 71--72
 \OT1/cmtt/m/n/6 informalized statement of this same theorem in natural language, as well as (2) an informalized, natural language version of the same formal proof that
  []
 
 
-Overfull \hbox (17.93948pt too wide) in paragraph at lines 74--75
+Overfull \hbox (17.93948pt too wide) in paragraph at lines 71--72
 \OT1/cmtt/m/n/6 is aligned with the informal statement. Namely, when informalizing the proof, you should convert each tactic of the formal proof into a natural language
  []
 
 
-Overfull \hbox (23.31427pt too wide) in paragraph at lines 78--79
+Overfull \hbox (23.31427pt too wide) in paragraph at lines 75--76
 []\OT1/cmtt/m/n/6 Now, with these examples in mind, it is now your turn to informalize the following formal statement and proof, which is wrapped in <FORMAL>...</FORMAL>
  []
 
 
-Overfull \hbox (29.68936pt too wide) in paragraph at lines 83--84
+Overfull \hbox (29.68936pt too wide) in paragraph at lines 80--81
 []\OT1/cmtt/m/n/6 You may think and reason as much as you want, but ensure that your final answer for (1): the informal statement is wrapped in <STATEMENT>...</STATEMENT>
  []
 
 
-Overfull \hbox (2.00175pt too wide) in paragraph at lines 83--84
+Overfull \hbox (2.00175pt too wide) in paragraph at lines 80--81
 \OT1/cmtt/m/n/6 tags, and (2): the informal proof is wrapped in <PROOF>...</PROOF> tags. Your final answer should have both a <STATEMENT>...</STATEMENT> tag and a
  []
 
 
-Overfull \hbox (8.37685pt too wide) in paragraph at lines 83--84
+Overfull \hbox (8.37685pt too wide) in paragraph at lines 80--81
 \OT1/cmtt/m/n/6 <PROOF>...</PROOF> tag, and if there is no formal proof provided in the input, you may simply output <PROOF></PROOF> for the proof after informalizing
  []
 
-./chapter/B1-ConfigImProver2.tex:99: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.99 \begin{subfigure}[t]{\linewidth}
-                                     
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:99: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.99 \begin{subfigure}[t]{\linewidth}
-                                     
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (12.77782pt too wide) in paragraph at lines 99--99
-[]\OT1/cmr/m/n/10 (a) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 99--99
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Length/length_iter_1_gridsearch_all.png' not found on input line 101.
-
-
-./chapter/B1-ConfigImProver2.tex:101: Package pdftex.def Error: File `figures/Length/length_iter_1_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.101 .../Length/length_iter_1_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-./chapter/B1-ConfigImProver2.tex:108: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.108 \begin{subfigure}[t]{\linewidth}
-                                      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:108: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.108 \begin{subfigure}[t]{\linewidth}
-                                      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (13.33337pt too wide) in paragraph at lines 108--108
-[]\OT1/cmr/m/n/10 (b) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 108--108
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Length/length_iter_2_gridsearch_all.png' not found on input line 110.
-
-
-./chapter/B1-ConfigImProver2.tex:110: Package pdftex.def Error: File `figures/Length/length_iter_2_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.110 .../Length/length_iter_2_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-./chapter/B1-ConfigImProver2.tex:117: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.117 \begin{subfigure}[t]{\linewidth}
-                                      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:117: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.117 \begin{subfigure}[t]{\linewidth}
-                                      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (12.22224pt too wide) in paragraph at lines 117--117
-[]\OT1/cmr/m/n/10 (c) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 117--117
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Length/length_iter_3_gridsearch_all.png' not found on input line 119.
-
-
-./chapter/B1-ConfigImProver2.tex:119: Package pdftex.def Error: File `figures/Length/length_iter_3_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.119 .../Length/length_iter_3_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-LaTeX Warning: Float too large for page by 382.13498pt on input line 126.
-
-[64] [65]
-./chapter/B1-ConfigImProver2.tex:134: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.134 \begin{subfigure}[t]{\linewidth}
-                                      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:134: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.134 \begin{subfigure}[t]{\linewidth}
-                                      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (12.77782pt too wide) in paragraph at lines 134--134
-[]\OT1/cmr/m/n/10 (a) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 134--134
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Dependency/dependency_iter_1_gridsearch_all.png' not found on input line 136.
-
-
-./chapter/B1-ConfigImProver2.tex:136: Package pdftex.def Error: File `figures/Dependency/dependency_iter_1_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.136 ...ncy/dependency_iter_1_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-./chapter/B1-ConfigImProver2.tex:143: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.143 \begin{subfigure}[t]{\linewidth}
-                                      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:143: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.143 \begin{subfigure}[t]{\linewidth}
-                                      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (13.33337pt too wide) in paragraph at lines 143--143
-[]\OT1/cmr/m/n/10 (b) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 143--143
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Dependency/dependency_iter_2_gridsearch_all.png' not found on input line 145.
-
-
-./chapter/B1-ConfigImProver2.tex:145: Package pdftex.def Error: File `figures/Dependency/dependency_iter_2_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.145 ...ncy/dependency_iter_2_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-./chapter/B1-ConfigImProver2.tex:152: Missing number, treated as zero.
-<to be read again> 
-                   }
-l.152 \begin{subfigure}[t]{\linewidth}
-                                      
-A number should have been here; I inserted `0'.
-(If you can't figure out why I needed to see a number,
-look up `weird error' in the index to The TeXbook.)
-
-./chapter/B1-ConfigImProver2.tex:152: Illegal unit of measure (pt inserted).
-<to be read again> 
-                   }
-l.152 \begin{subfigure}[t]{\linewidth}
-                                      
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
-
-Overfull \hbox (12.22224pt too wide) in paragraph at lines 152--152
-[]\OT1/cmr/m/n/10 (c) 
- []
-
-
-Overfull \hbox (3.8889pt too wide) in paragraph at lines 152--152
-|\OT1/cmr/m/n/10 t|  
- []
-
-
-LaTeX Warning: File `figures/Dependency/dependency_iter_3_gridsearch_all.png' not found on input line 154.
-
-
-./chapter/B1-ConfigImProver2.tex:154: Package pdftex.def Error: File `figures/Dependency/dependency_iter_3_gridsearch_all.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.154 ...ncy/dependency_iter_3_gridsearch_all.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-LaTeX Warning: Float too large for page by 396.63498pt on input line 161.
-
-) (./chapter/B2-QualImProver2.tex [66]
-
-./chapter/B2-QualImProver2.tex:16: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.16 \begin{paracol}
-                    {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./chapter/B2-QualImProver2.tex:27: Undefined control sequence.
-l.27 \switchcolumn
-                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:29: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.29 \textbf{\ImProver \ (dependency-optimized)}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:39: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.39 \end{paracol}
-                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
+<figures/Length/length_iter_1_gridsearch_all.png, id=1611, 1293.633pt x 853.5087pt>
+File: figures/Length/length_iter_1_gridsearch_all.png Graphic file (type png)
+<use figures/Length/length_iter_1_gridsearch_all.png>
+Package pdftex.def Info: figures/Length/length_iter_1_gridsearch_all.png  used on input line 98.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+<figures/Length/length_iter_2_gridsearch_all.png, id=1612, 1293.633pt x 853.5087pt>
+File: figures/Length/length_iter_2_gridsearch_all.png Graphic file (type png)
+<use figures/Length/length_iter_2_gridsearch_all.png>
+Package pdftex.def Info: figures/Length/length_iter_2_gridsearch_all.png  used on input line 106.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+<figures/Length/length_iter_3_gridsearch_all.png, id=1613, 1293.633pt x 853.5087pt>
+File: figures/Length/length_iter_3_gridsearch_all.png Graphic file (type png)
+<use figures/Length/length_iter_3_gridsearch_all.png>
+Package pdftex.def Info: figures/Length/length_iter_3_gridsearch_all.png  used on input line 114.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+[71] [72 <./figures/Length/length_iter_1_gridsearch_all.png> <./figures/Length/length_iter_2_gridsearch_all.png> <./figures/Length/length_iter_3_gridsearch_all.png>]
+<figures/Dependency/dependency_iter_1_gridsearch_all.png, id=1631, 1293.633pt x 853.5087pt>
+File: figures/Dependency/dependency_iter_1_gridsearch_all.png Graphic file (type png)
+<use figures/Dependency/dependency_iter_1_gridsearch_all.png>
+Package pdftex.def Info: figures/Dependency/dependency_iter_1_gridsearch_all.png  used on input line 130.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+<figures/Dependency/dependency_iter_2_gridsearch_all.png, id=1632, 1293.633pt x 853.5087pt>
+File: figures/Dependency/dependency_iter_2_gridsearch_all.png Graphic file (type png)
+<use figures/Dependency/dependency_iter_2_gridsearch_all.png>
+Package pdftex.def Info: figures/Dependency/dependency_iter_2_gridsearch_all.png  used on input line 138.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+<figures/Dependency/dependency_iter_3_gridsearch_all.png, id=1633, 1293.633pt x 853.5087pt>
+File: figures/Dependency/dependency_iter_3_gridsearch_all.png Graphic file (type png)
+<use figures/Dependency/dependency_iter_3_gridsearch_all.png>
+Package pdftex.def Info: figures/Dependency/dependency_iter_3_gridsearch_all.png  used on input line 146.
+(pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
+
+
+LaTeX Warning: Float too large for page by 3.4114pt on input line 152.
+
+) (./chapter/B2-QualImProver2.tex [73 <./figures/Dependency/dependency_iter_1_gridsearch_all.png> <./figures/Dependency/dependency_iter_2_gridsearch_all.png> <./figures/Dependency/dependency_iter_3_gridsearch_all.png>]
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 40.
 See the caption package documentation for explanation.
-
-./chapter/B2-QualImProver2.tex:40: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for de...
-l.40 ...es, reducing explicit dependencies by 3. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:40: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for dependencies, reducing explicit...
-l.40 ...es, reducing explicit dependencies by 3. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:40: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for dependencies, reducing explicit...
-l.40 ...es, reducing explicit dependencies by 3. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:58: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.58     \begin{paracol}
-                        {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./chapter/B2-QualImProver2.tex:75: Undefined control sequence.
-l.75 \switchcolumn
-                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:76: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.76 \textbf{\ImProver \ (dependency-optimized)}
-                                                
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:90: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.90 \end{paracol}
-                  
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 91.
 See the caption package documentation for explanation.
 
-./chapter/B2-QualImProver2.tex:91: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for de...
-l.91 ...es, reducing explicit dependencies by 2. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
 
-./chapter/B2-QualImProver2.tex:91: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for dependencies, reducing explicit...
-l.91 ...es, reducing explicit dependencies by 2. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
+(Font)              using `U/stmry/m/n' instead on input line 112.
 
-./chapter/B2-QualImProver2.tex:91: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for dependencies, reducing explicit...
-l.91 ...es, reducing explicit dependencies by 2. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:107: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.107     \begin{paracol}
-                         {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[67
+[74
 
 
 ]
-./chapter/B2-QualImProver2.tex:112: Undefined control sequence.
-<recently read> \bm 
-                    
-l.112 ..._ofCrAnListF (Phis1 Phis2 Phis3 : List FF
-                                                  .CrAnFieldOp) :
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:114: Undefined control sequence.
-<recently read> \bm 
-                    
-l.114     SS
-             (FF |>ₛ Phis1, FF |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:114: Undefined control sequence.
-<recently read> \bm 
-                    
-l.114     SS (FF
-                 |>ₛ Phis1, FF |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:114: Undefined control sequence.
-<recently read> \bm 
-                    
-l.114     SS (FF |>ₛ Phis1, FF
-                                 |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:115: Undefined control sequence.
-<recently read> \bm 
-                    
-l.115     (- SS
-               (FF |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:115: Undefined control sequence.
-<recently read> \bm 
-                    
-l.115     (- SS(FF
-                   |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:115: Undefined control sequence.
-<recently read> \bm 
-                    
-l.115     (- SS(FF |>ₛ Phis2, FF
-                                   |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:116: Undefined control sequence.
-<recently read> \bm 
-                    
-l.116     SS
-            (FF |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:116: Undefined control sequence.
-<recently read> \bm 
-                    
-l.116     SS(FF
-                |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:116: Undefined control sequence.
-<recently read> \bm 
-                    
-l.116     SS(FF |>ₛ Phis1, FF
-                                |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:121: Undefined control sequence.
-<recently read> \bm 
-                    
-l.121   by_cases h1 : (FF
-                          |>ₛ Phis1) = bosonic <;>
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:122: Undefined control sequence.
-<recently read> \bm 
-                    
-l.122     by_cases h2 : (FF
-                            |>ₛ Phis2) = bosonic <;>
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:123: Undefined control sequence.
-<recently read> \bm 
-                    
-l.123     by_cases h3 : (FF
-                            |>ₛ Phis3) = bosonic
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:156: Undefined control sequence.
-l.156 \switchcolumn
-                   
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:157: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.157 \textbf{\ImProver \ (length-optimized)}
-                                             
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:159: Undefined control sequence.
-<recently read> \bm 
-                    
-l.159 ..._ofCrAnListF (Phis1 Phis2 Phis3 : List FF
-                                                  .CrAnFieldOp) :
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:161: Undefined control sequence.
-<recently read> \bm 
-                    
-l.161     SS
-            (FF |>ₛ Phis1, FF |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:161: Undefined control sequence.
-<recently read> \bm 
-                    
-l.161     SS(FF
-                |>ₛ Phis1, FF |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:161: Undefined control sequence.
-<recently read> \bm 
-                    
-l.161     SS(FF |>ₛ Phis1, FF
-                                |>ₛ Phis3) •
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:162: Undefined control sequence.
-<recently read> \bm 
-                    
-l.162     (- SS
-               (FF |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:162: Undefined control sequence.
-<recently read> \bm 
-                    
-l.162     (- SS(FF
-                   |>ₛ Phis2, FF |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:162: Undefined control sequence.
-<recently read> \bm 
-                    
-l.162     (- SS(FF |>ₛ Phis2, FF
-                                   |>ₛ Phis3) • [ofCrAnListF Phis3, [ofC...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:163: Undefined control sequence.
-<recently read> \bm 
-                    
-l.163     SS
-            (FF |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:163: Undefined control sequence.
-<recently read> \bm 
-                    
-l.163     SS(FF
-                |>ₛ Phis1, FF |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:163: Undefined control sequence.
-<recently read> \bm 
-                    
-l.163     SS(FF |>ₛ Phis1, FF
-                                |>ₛ Phis2) • [ofCrAnListF Phis2, [ofCrAn...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:169: Undefined control sequence.
-<recently read> \bm 
-                    
-l.169   <;> by_cases h1 : (FF
-                              |>ₛ Phis1) = bosonic <;>
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:170: Undefined control sequence.
-<recently read> \bm 
-                    
-l.170     by_cases h2 : (FF
-                            |>ₛ Phis2) = bosonic <;>
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:171: Undefined control sequence.
-<recently read> \bm 
-                    
-l.171     by_cases h3 : (FF
-                            |>ₛ Phis3) = bosonic
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:180: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.180 \end{paracol}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 182.
 See the caption package documentation for explanation.
-
-./chapter/B2-QualImProver2.tex:182: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for le...
-l.182 ...or length, reducing tactic count by 19. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:182: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for length, reducing tactic count b...
-l.182 ...or length, reducing tactic count by 19. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:182: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for length, reducing tactic count b...
-l.182 ...or length, reducing tactic count by 19. }
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-[68]
-
-./chapter/B2-QualImProver2.tex:195: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.195 \begin{paracol}
-                     {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./chapter/B2-QualImProver2.tex:213: Undefined control sequence.
-l.213 \switchcolumn
-                   
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:215: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.215 \textbf{\ImProver \ (length-optimized)}
-                                             
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:224: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.224 \end{paracol}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 225.
 See the caption package documentation for explanation.
 
-./chapter/B2-QualImProver2.tex:225: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for le...
-l.225 ... for length, reducing tactic count by 8.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:225: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for length, reducing tactic count b...
-l.225 ... for length, reducing tactic count by 8.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:225: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for length, reducing tactic count b...
-l.225 ... for length, reducing tactic count by 8.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:242: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.242 \begin{paracol}
-                     {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./chapter/B2-QualImProver2.tex:250: Undefined control sequence.
-l.250 \switchcolumn
-                   
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:252: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.252 \textbf{\ImProver \ (modularity-optimized)}
-                                                 
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-./chapter/B2-QualImProver2.tex:276: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.276 \end{paracol}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
+[75]
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 277.
 See the caption package documentation for explanation.
 
-./chapter/B2-QualImProver2.tex:277: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for mo...
-l.277 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
 
-./chapter/B2-QualImProver2.tex:277: Argument of \caption@ydblarg has an extra }.
-<inserted text> 
-                \par 
-l.277 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
-{\@caption \@captype }{\def \reserved@a *{\cmu@ref@ {*}}\reserved@a }\ETC.
-./chapter/B2-QualImProver2.tex:277: Paragraph ended before \caption@ydblarg was complete.
-<to be read again> 
-                   \par 
-l.277 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-./chapter/B2-QualImProver2.tex:277: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for modularity, increasing modulari...
-l.277 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+LaTeX Warning: Reference `app:modularity_metric' on page 76 undefined on input line 277.
 
 
-LaTeX Warning: Reference `app:modularity_metric' on page 69 undefined on input line 277.
-
-./chapter/B2-QualImProver2.tex:277: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for modularity, increasing modulari...
-l.277 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-LaTeX Warning: Reference `app:modularity_metric' on page 69 undefined on input line 277.
-
-
-./chapter/B2-QualImProver2.tex:292: LaTeX Error: Environment paracol undefined.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.292 \begin{paracol}
-                     {2}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-./chapter/B2-QualImProver2.tex:312: Undefined control sequence.
-l.312 \switchcolumn
-                   
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-./chapter/B2-QualImProver2.tex:314: Undefined control sequence.
-<recently read> \ImProver 
-                          
-l.314 \textbf{\ImProver \ (modularity-optimized)}
-                                                 
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-[69]
-
-./chapter/B2-QualImProver2.tex:341: LaTeX Error: \begin{document} ended by \end{paracol}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.341 \end{paracol}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
+LaTeX Warning: Reference `app:modularity_metric' on page 76 undefined on input line 277.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
 (caption)                particular \caption on input line 342.
 See the caption package documentation for explanation.
 
-./chapter/B2-QualImProver2.tex:342: Undefined control sequence.
-<argument> ... {figure}}}{\ignorespaces \ImProver 
-                                                  \ optimizes a proof for mo...
-l.342 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
 
-./chapter/B2-QualImProver2.tex:342: Argument of \caption@ydblarg has an extra }.
-<inserted text> 
-                \par 
-l.342 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-I've run across a `}' that doesn't seem to match anything.
-For example, `\def\a#1{...}' and `\a}' would produce
-this error. If you simply proceed now, the `\par' that
-I've just inserted will cause me to report a runaway
-argument that might be the root of the problem. But if
-your `}' was spurious, just type `2' and it will go away.
-
-Runaway argument?
-{\@caption \@captype }{\def \reserved@a *{\cmu@ref@ {*}}\reserved@a }\ETC.
-./chapter/B2-QualImProver2.tex:342: Paragraph ended before \caption@ydblarg was complete.
-<to be read again> 
-                   \par 
-l.342 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
-./chapter/B2-QualImProver2.tex:342: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for modularity, increasing modulari...
-l.342 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+LaTeX Warning: Reference `app:modularity_metric' on page 76 undefined on input line 342.
 
 
-LaTeX Warning: Reference `app:modularity_metric' on page 70 undefined on input line 342.
+LaTeX Warning: Reference `app:modularity_metric' on page 76 undefined on input line 342.
 
-./chapter/B2-QualImProver2.tex:342: Undefined control sequence.
-<argument> \ImProver 
-                     \ optimizes a proof for modularity, increasing modulari...
-l.342 ... (see \ref{app:modularity_metric}) by 2.}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-LaTeX Warning: Reference `app:modularity_metric' on page 70 undefined on input line 342.
-
-)
-
-LaTeX Warning: Number of appendicies is not known. Rerun to get appendicies right..
-
-[70]
-
-Package natbib Warning: There were undefined citations.
-
-(./cmu-example-dissertation.aux
-\cmu@redefined@appendix@saved=\count446
-\cmu@appendicies=\count447
+) [76] (./cmu-example-dissertation.aux
+\cmu@redefined@appendix@saved=\count458
+\cmu@appendicies=\count459
 )
  ***********
 LaTeX2e <2023-06-01> patch level 1
@@ -3486,33 +1670,27 @@ L3 programming layer <2023-08-11>
  ***********
 
 
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `cmu-example-dissertation.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `cmu-example-dissertation.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  597B48A6C87EE26DD8250CADF56D4EE8;11389.
+Package rerunfilecheck Info: File `cmu-example-dissertation.out' has not changed.
+(rerunfilecheck)             Checksum: 7F179D84483A291E8C212A27AE22D46C;11488.
  ) 
 Here is how much of TeX's memory you used:
- 49750 strings out of 475189
- 1140704 string characters out of 5763832
- 2284254 words of memory out of 5000000
- 69524 multiletter control sequences out of 15000+600000
- 579876 words of font info for 120 fonts, out of 8000000 for 9000
+ 51228 strings out of 475189
+ 1157650 string characters out of 5763832
+ 2333254 words of memory out of 5000000
+ 70895 multiletter control sequences out of 15000+600000
+ 586405 words of font info for 144 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 104i,13n,415p,1654b,2153s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfit0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on cmu-example-dissertation.pdf (77 pages, 2811982 bytes).
+ 104i,13n,385p,4281b,2488s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfit0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/stmaryrd/stmary8.pfb>
+Output written on cmu-example-dissertation.pdf (90 pages, 8648675 bytes).
 PDF statistics:
- 1441 PDF objects out of 1728 (max. 8388607)
- 1261 compressed objects within 13 object streams
- 813 named destinations out of 1000 (max. 500000)
- 58 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2174 PDF objects out of 2487 (max. 8388607)
+ 1952 compressed objects within 20 object streams
+ 875 named destinations out of 1000 (max. 500000)
+ 687 words of extra memory for PDF output out of 10000 (max. 10000000)
 

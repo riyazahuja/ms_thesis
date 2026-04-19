@@ -8,23 +8,20 @@
 
 \begin{figure*}
 \centering
-\begin{subfigure}{0.6\linewidth}
+\begin{minipage}{0.32\linewidth}
     \includegraphics[width=\textwidth]{figures/Dependency/IRPO Dependency Iter 3 Acc.png}
-    \caption{Training accuracy over time on iteration 3 the of dependency metric. }
-    \label{fig:IRPO_Dependency_Iter_3_Acc}
-\end{subfigure}
+    \scriptsize Training accuracy over time on iteration 3 of the dependency metric.
+\end{minipage}
 \hfill
-\begin{subfigure}{0.6\linewidth}
+\begin{minipage}{0.32\linewidth}
     \includegraphics[width=\textwidth]{figures/Dependency/IRPO Dependency Iter 3 Loss.png}
-    \caption{Training loss over time on iteration 3 of the dependency metric. Loss exhibits an overall downward trend. }
-    \label{fig:IRPO_Dependency_Iter_3_Loss}
-\end{subfigure}
+    \scriptsize Training loss over time on iteration 3 of the dependency metric.
+\end{minipage}
 \hfill
-\begin{subfigure}{0.6\linewidth}
+\begin{minipage}{0.32\linewidth}
     \includegraphics[width=\textwidth]{figures/Dependency/IRPO Dependency Iter 3 Margin.png}
-    \caption{Average margin over time during training on iteration 3 of the dependency metric. }
-    \label{fig:IRPO_Dependency_Iter_3_Margin}
-\end{subfigure}
+    \scriptsize Average margin over time during training on iteration 3 of the dependency metric.
+\end{minipage}
 \caption{Training statistics during iteration 3 of the dependency metric. Model shows stable performance despite overall regression on this iteration. }
 
 \end{figure*}
@@ -96,30 +93,27 @@ Input:
 \centering
 \captionsetup{skip=4pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Length/length_iter_1_gridsearch_all.png}
   % \caption{Iteration 1.}
-  \label{fig:grid_len_1}
-\end{subfigure}
+\end{minipage}
 
 % \vspace{-6pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Length/length_iter_2_gridsearch_all.png}
   % \caption{Iteration 2.}
-  \label{fig:grid_len_2}
-\end{subfigure}
+\end{minipage}
 
 % \vspace{-6pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Length/length_iter_3_gridsearch_all.png}
   % \caption{Iteration 3.}
-  \label{fig:grid_len_3}
-\end{subfigure}
+\end{minipage}
 
 \caption{Hyperparameter grid searches for the \textbf{length} metric across iterations 1--3.}
 \label{fig:grid_len_all}
@@ -131,30 +125,27 @@ Input:
 \centering
 \captionsetup{skip=4pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Dependency/dependency_iter_1_gridsearch_all.png}
   % \caption{Iteration 1.}
-  \label{fig:grid_dep_1}
-\end{subfigure}
+\end{minipage}
 
 % \vspace{-6pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Dependency/dependency_iter_2_gridsearch_all.png}
   % \caption{Iteration 2.}
-  \label{fig:grid_dep_2}
-\end{subfigure}
+\end{minipage}
 
 % \vspace{-6pt}
 
-\begin{subfigure}[t]{\linewidth}
+\begin{minipage}[t]{\linewidth}
   \centering
   \includegraphics[width=0.65\linewidth]{figures/Dependency/dependency_iter_3_gridsearch_all.png}
   % \caption{Iteration 3.}
-  \label{fig:grid_dep_3}
-\end{subfigure}
+\end{minipage}
 
 \caption{Hyperparameter grid searches for the \textbf{dependency} metric across iterations 1--3.}
 \label{fig:grid_dep_all}

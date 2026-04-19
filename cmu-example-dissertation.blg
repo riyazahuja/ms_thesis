@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: cmu-example-dissertation.aux
+The style file: unsrtnat.bst
+Database file #1: supporting-files/thesis.bib
+Warning--entry type for "RocqTheoremProver" isn't style-file defined
+--line 939 of file supporting-files/thesis.bib
+You've used 56 entries,
+            2481 wiz_defined-function locations,
+            862 strings with 24358 characters,
+and the built_in function-call counts, 35109 in all, are:
+= -- 1697
+> -- 4471
+< -- 29
++ -- 1552
+- -- 1437
+* -- 3621
+:= -- 6558
+add.period$ -- 202
+call.type$ -- 56
+change.case$ -- 111
+chr.to.int$ -- 53
+cite$ -- 56
+duplicate$ -- 1086
+empty$ -- 1954
+format.name$ -- 1507
+if$ -- 6768
+int.to.chr$ -- 4
+int.to.str$ -- 57
+missing$ -- 27
+newline$ -- 314
+num.names$ -- 184
+pop$ -- 631
+preamble$ -- 1
+purify$ -- 56
+quote$ -- 0
+skip$ -- 748
+stack$ -- 0
+substring$ -- 379
+swap$ -- 247
+text.length$ -- 10
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 389
+warning$ -- 0
+while$ -- 142
+width$ -- 0
+write$ -- 762
+(There was 1 warning)

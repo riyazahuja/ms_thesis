@@ -1,5 +1,5 @@
-\contentsline {chapter}{\textbf {List of Figures}}{v}{Doc-Start}%
-\contentsline {chapter}{\textbf {List of Tables}}{vi}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Figures}}{ix}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Tables}}{xii}{Doc-Start}%
 \contentsline {section}{\numberline {1\hspace {1em}}\nobreakspace {}\textbf {Introduction}}{1}{section*.1}%
 \contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Contributions}{2}{subsection.1.2}%
@@ -89,33 +89,34 @@
 \contentsline {paragraph}{\numberline {8.5.0.5}Application to library maintenance.}{49}{paragraph.8.5.0.5}%
 \contentsline {paragraph}{\numberline {8.5.0.6}Fine-tuning downstream provers on optimized data.}{49}{paragraph.8.5.0.6}%
 \contentsline {subsection}{\numberline {8.6}Closing Remarks}{50}{subsection.8.6}%
-\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix A}System Configuration (ImProver)}}{51}{subsection.8.6}%
-\contentsline {subsection}{\numberline {A.1}Template}{51}{subsection.A.1}%
-\contentsline {subsection}{\numberline {A.2}Metric Prompts}{52}{subsection.A.2}%
-\contentsline {subsection}{\numberline {A.3}Metric Examples}{53}{subsection.A.3}%
-\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix B}Qualitative Results (ImProver)}}{56}{figure.caption.37}%
-\contentsline {paragraph}{\numberline {B.0.0.1}Compfiles: Length Optimization}{56}{paragraph.B.0.0.1}%
-\contentsline {paragraph}{\numberline {B.0.0.2}Compfiles: Declarativity Optimization}{56}{paragraph.B.0.0.2}%
-\contentsline {paragraph}{\numberline {B.0.0.3}Compfiles: Mixed Optimization}{57}{paragraph.B.0.0.3}%
-\contentsline {paragraph}{\numberline {B.0.0.4}MIL: Length Optimization}{57}{paragraph.B.0.0.4}%
-\contentsline {paragraph}{\numberline {B.0.0.5}MIL Declarativity Optimization.}{57}{paragraph.B.0.0.5}%
-\contentsline {paragraph}{\numberline {B.0.0.6}MIL: Mixed Optimization}{58}{paragraph.B.0.0.6}%
-\contentsline {paragraph}{\numberline {B.0.0.7}Mathlib: Length Optimization}{59}{paragraph.B.0.0.7}%
-\contentsline {paragraph}{\numberline {B.0.0.8}Mathlib: Declarativity Optimization}{59}{paragraph.B.0.0.8}%
-\contentsline {paragraph}{\numberline {B.0.0.9}Mathlib: Mixed Optimization}{60}{paragraph.B.0.0.9}%
-\contentsline {paragraph}{\numberline {B.0.0.10}Full Proof Generation (MIL).}{60}{paragraph.B.0.0.10}%
-\contentsline {paragraph}{\numberline {B.0.0.11}Full Proof Generation (MiniF2F).}{61}{paragraph.B.0.0.11}%
-\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix C}System Configuration (ImProver2)}}{62}{figure.caption.47}%
-\contentsline {subsection}{\numberline {C.1}Training}{62}{subsection.C.1}%
-\contentsline {subsection}{\numberline {C.2}System Prompts}{62}{subsection.C.2}%
-\contentsline {paragraph}{\numberline {C.2.0.1}Length:}{62}{paragraph.C.2.0.1}%
-\contentsline {paragraph}{\numberline {C.2.0.2}Modularity:}{62}{paragraph.C.2.0.2}%
-\contentsline {paragraph}{\numberline {C.2.0.3}Dependency:}{62}{paragraph.C.2.0.3}%
-\contentsline {paragraph}{\numberline {C.2.0.4}Annotation:}{62}{paragraph.C.2.0.4}%
-\contentsline {paragraph}{\numberline {C.2.0.5}Context:}{62}{paragraph.C.2.0.5}%
-\contentsline {paragraph}{\numberline {C.2.0.6}Examples:}{64}{paragraph.C.2.0.6}%
-\contentsline {subsection}{\numberline {C.3}Autoinformalization}{64}{subsection.C.3}%
-\contentsline {subsection}{\numberline {C.4}Hyperparameter Grid Search}{64}{subsection.C.4}%
-\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix D}Qualitative Results (ImProver2)}}{67}{figure.caption.50}%
-\contentsline {subsection}{\numberline {D.1}Dependency Optimization}{67}{subsection.D.1}%
-\contentsline {subsection}{\numberline {D.2}Length Optimization}{68}{subsection.D.2}%
+\contentsline {section}{{\raggedright \bfseries Bibliography\cmu@ln@output }}{51}{section*.34}%
+\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix A}System Configuration (ImProver)}}{59}{section*.35}%
+\contentsline {subsection}{\numberline {A.1}Template}{59}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}Metric Prompts}{60}{subsection.A.2}%
+\contentsline {subsection}{\numberline {A.3}Metric Examples}{61}{subsection.A.3}%
+\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix B}Qualitative Results (ImProver)}}{64}{figure.caption.39}%
+\contentsline {paragraph}{\numberline {B.0.0.1}Compfiles: Length Optimization}{64}{paragraph.B.0.0.1}%
+\contentsline {paragraph}{\numberline {B.0.0.2}Compfiles: Declarativity Optimization}{64}{paragraph.B.0.0.2}%
+\contentsline {paragraph}{\numberline {B.0.0.3}Compfiles: Mixed Optimization}{64}{paragraph.B.0.0.3}%
+\contentsline {paragraph}{\numberline {B.0.0.4}MIL: Length Optimization}{65}{paragraph.B.0.0.4}%
+\contentsline {paragraph}{\numberline {B.0.0.5}MIL Declarativity Optimization.}{65}{paragraph.B.0.0.5}%
+\contentsline {paragraph}{\numberline {B.0.0.6}MIL: Mixed Optimization}{65}{paragraph.B.0.0.6}%
+\contentsline {paragraph}{\numberline {B.0.0.7}Mathlib: Length Optimization}{66}{paragraph.B.0.0.7}%
+\contentsline {paragraph}{\numberline {B.0.0.8}Mathlib: Declarativity Optimization}{67}{paragraph.B.0.0.8}%
+\contentsline {paragraph}{\numberline {B.0.0.9}Mathlib: Mixed Optimization}{67}{paragraph.B.0.0.9}%
+\contentsline {paragraph}{\numberline {B.0.0.10}Full Proof Generation (MIL).}{68}{paragraph.B.0.0.10}%
+\contentsline {paragraph}{\numberline {B.0.0.11}Full Proof Generation (MiniF2F).}{68}{paragraph.B.0.0.11}%
+\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix C}System Configuration (ImProver2)}}{70}{figure.caption.49}%
+\contentsline {subsection}{\numberline {C.1}Training}{70}{subsection.C.1}%
+\contentsline {subsection}{\numberline {C.2}System Prompts}{70}{subsection.C.2}%
+\contentsline {paragraph}{\numberline {C.2.0.1}Length:}{70}{paragraph.C.2.0.1}%
+\contentsline {paragraph}{\numberline {C.2.0.2}Modularity:}{70}{paragraph.C.2.0.2}%
+\contentsline {paragraph}{\numberline {C.2.0.3}Dependency:}{71}{paragraph.C.2.0.3}%
+\contentsline {paragraph}{\numberline {C.2.0.4}Annotation:}{71}{paragraph.C.2.0.4}%
+\contentsline {paragraph}{\numberline {C.2.0.5}Context:}{71}{paragraph.C.2.0.5}%
+\contentsline {paragraph}{\numberline {C.2.0.6}Examples:}{71}{paragraph.C.2.0.6}%
+\contentsline {subsection}{\numberline {C.3}Autoinformalization}{71}{subsection.C.3}%
+\contentsline {subsection}{\numberline {C.4}Hyperparameter Grid Search}{71}{subsection.C.4}%
+\contentsline {appendix}{{\numberline {\raggedleft \bfseries Appendix D}Qualitative Results (ImProver2)}}{74}{figure.caption.52}%
+\contentsline {subsection}{\numberline {D.1}Dependency Optimization}{74}{subsection.D.1}%
+\contentsline {subsection}{\numberline {D.2}Length Optimization}{74}{subsection.D.2}%

@@ -271,7 +271,7 @@ Consider \autoref{fig:mathlib-len}, which optimizes a theorem in algebraic topol
 {
 \textbf{Original (human-written)}
 \begin{scriptsize}
-\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={lbrak}{$\llbracket$}1 {rbrak}{$\rrbracket$}1 ]
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={π}{{\ensuremath{\mathrm{\mathnormal{\pi}}}}}1 {ₘ}{{\ensuremath{_m}}}1 {←}{{\ensuremath{\leftarrow}}}1 {lbrak}{{$\llbracket$}}1 {rbrak}{{$\rrbracket$}}1]
 /-- If `f(p(t) = g(q(t))` for two paths `p` and `q`, then the induced path homotopy classes
 `f(p)` and `g(p)` are the same as well, despite having a priori different types -/
 theorem heq_path_of_eq_image : HEq ((πₘ f).map lbrak p rbrak) ((πₘ g).map lbrak q rbrak)  := by
@@ -284,10 +284,10 @@ theorem heq_path_of_eq_image : HEq ((πₘ f).map lbrak p rbrak) ((πₘ g).map 
 {
 \textbf{\methodname{} (length-optimized)}
 \begin{scriptsize}
-\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,mathescape]
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={π}{{\ensuremath{\mathrm{\mathnormal{\pi}}}}}1 {ₘ}{{\ensuremath{_m}}}1 {lbrak}{{$\llbracket$}}1 {rbrak}{{$\rrbracket$}}1]
 /-- If `f(p(t) = g(q(t))` for two paths `p` and `q`, then the induced path homotopy classes
 `f(p)` and `g(p)` are the same as well, despite having a priori different types -/
-theorem heq_path_of_eq_image : HEq ((πₘ f).map $\llbracket$p$\rrbracket$) ((πₘ g).map $\llbracket$q$\rrbracket$)    := by
+theorem heq_path_of_eq_image : HEq ((πₘ f).map lbrak p rbrak) ((πₘ g).map lbrak q rbrak)    := by
   exact Path.Homotopic.hpath_hext hfg
 \end{lstlisting}
 \end{scriptsize}
@@ -506,7 +506,6 @@ theorem mathd_numbertheory_345 :
 \vspace{-1em}
 \label{fig:ex3-F2F-completion}
 \end{figure}
-
 
 
 

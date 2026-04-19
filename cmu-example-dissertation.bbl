@@ -1,0 +1,314 @@
+\begin{thebibliography}{56}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Moura and Ullrich(2021)]{LeanTheoremProver}
+Leonardo~de Moura and Sebastian Ullrich.
+\newblock The lean 4 theorem prover and programming language.
+\newblock In Andr{\'e} Platzer and Geoff Sutcliffe, editors, \emph{Automated Deduction -- CADE 28}, pages 625--635, Cham, 2021. Springer International Publishing.
+\newblock ISBN 978-3-030-79876-5.
+
+\bibitem[{The Coq Development Team}(2024)]{RocqTheoremProver}
+{The Coq Development Team}.
+\newblock The coq proof assistant, September 2024.
+\newblock URL \url{https://doi.org/10.5281/zenodo.14542673}.
+
+\bibitem[Wenzel et~al.(2008)Wenzel, Paulson, and Nipkow]{IsabelleTheoremProver}
+Makarius Wenzel, Lawrence~C. Paulson, and Tobias Nipkow.
+\newblock The isabelle framework.
+\newblock In Otmane~Ait Mohamed, C{\'e}sar Mu{\~{n}}oz, and Sofi{\`e}ne Tahar, editors, \emph{Theorem Proving in Higher Order Logics}, pages 33--38, Berlin, Heidelberg, 2008. Springer Berlin Heidelberg.
+\newblock ISBN 978-3-540-71067-7.
+
+\bibitem[{The Mathlib Community}(2020)]{Mathlib}
+{The Mathlib Community}.
+\newblock The lean mathematical library.
+\newblock In \emph{Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs}, CPP 2020, page 367–381, New York, NY, USA, 2020. Association for Computing Machinery.
+\newblock ISBN 9781450370974.
+\newblock \doi{10.1145/3372885.3373824}.
+\newblock URL \url{https://doi.org/10.1145/3372885.3373824}.
+
+\bibitem[Achim et~al.(2025)Achim, Best, Bietti, Der, Fédérico, Gukov, Halpern-Leistner, Henningsgard, Kudryashov, Meiburg, Michelsen, Patterson, Rodriguez, Scharff, Shanker, Sicca, Sowrirajan, Swope, Tamas, Tenev, Thomm, Williams, and Wu]{achim2025aristotleimolevelautomatedtheorem}
+Tudor Achim, Alex Best, Alberto Bietti, Kevin Der, Mathïs Fédérico, Sergei Gukov, Daniel Halpern-Leistner, Kirsten Henningsgard, Yury Kudryashov, Alexander Meiburg, Martin Michelsen, Riley Patterson, Eric Rodriguez, Laura Scharff, Vikram Shanker, Vladmir Sicca, Hari Sowrirajan, Aidan Swope, Matyas Tamas, Vlad Tenev, Jonathan Thomm, Harold Williams, and Lawrence Wu.
+\newblock Aristotle: Imo-level automated theorem proving, 2025.
+\newblock URL \url{https://arxiv.org/abs/2510.01346}.
+
+\bibitem[AlphaProof and Teams(2024)]{alphaproof}
+AlphaProof and AlphaGeometry Teams.
+\newblock {AI} achieves silver-medal standard solving international mathematical olympiad problems.
+\newblock \url{https://deepmind.google/discover/blog/ai-solves-imo-problems-at-silver-medal-level/}, 2024.
+
+\bibitem[Gu et~al.(2025)Gu, Piotrowski, Gloeckle, Yang, and Markosyan]{gu2025proofoptimizer}
+Alex Gu, Bartosz Piotrowski, Fabian Gloeckle, Kaiyu Yang, and Aram~H. Markosyan.
+\newblock Proofoptimizer: Training language models to simplify proofs without human demonstrations.
+\newblock In \emph{The 5th Workshop on Mathematical Reasoning and AI at NeurIPS 2025}, 2025.
+\newblock URL \url{https://openreview.net/forum?id=ghxS7M35FU}.
+
+\bibitem[Chen et~al.(2025)Chen, Chen, Du, Hu, Jiang, Jie, Jin, Jin, Li, Shi, Wang, Wang, Wei, Wei, Xin, Yang, Gao, Yuan, Zhan, Zheng, Zhou, and Zhu]{SeedProver}
+Jiangjie Chen, Wenxiang Chen, Jiacheng Du, Jinyi Hu, Zhicheng Jiang, Allan Jie, Xiaoran Jin, Xing Jin, Chenggang Li, Wenlei Shi, Zhihong Wang, Mingxuan Wang, Chenrui Wei, Shufa Wei, Huajian Xin, Fan Yang, Weihao Gao, Zheng Yuan, Tianyang Zhan, Zeyu Zheng, Tianxi Zhou, and Thomas~Hanwen Zhu.
+\newblock Seed-prover 1.5: Mastering undergraduate-level theorem proving via learning from experience, 2025.
+\newblock URL \url{https://arxiv.org/abs/2512.17260}.
+
+\bibitem[Lin et~al.(2025)Lin, Tang, Lyu, Yang, Chung, Zhao, Jiang, Geng, Ge, Sun, Wu, Gesi, Lu, Acuna, Yang, Lin, Choi, Chen, Arora, and Jin]{GodelProver}
+Yong Lin, Shange Tang, Bohan Lyu, Ziran Yang, Jui-Hui Chung, Haoyu Zhao, Lai Jiang, Yihan Geng, Jiawei Ge, Jingruo Sun, Jiayun Wu, Jiri Gesi, Ximing Lu, David Acuna, Kaiyu Yang, Hongzhou Lin, Yejin Choi, Danqi Chen, Sanjeev Arora, and Chi Jin.
+\newblock {Goedel-Prover-V2}: Scaling formal theorem proving with scaffolded data synthesis and self-correction, 2025.
+\newblock URL \url{https://arxiv.org/abs/2508.03613}.
+
+\bibitem[Jiang et~al.(2023{\natexlab{a}})Jiang, Welleck, Zhou, Lacroix, Liu, Li, Jamnik, Lample, and Wu]{jiang2023draft}
+Albert~Qiaochu Jiang, Sean Welleck, Jin~Peng Zhou, Timothee Lacroix, Jiacheng Liu, Wenda Li, Mateja Jamnik, Guillaume Lample, and Yuhuai Wu.
+\newblock Draft, sketch, and prove: Guiding formal theorem provers with informal proofs.
+\newblock In \emph{The Eleventh International Conference on Learning Representations}, 2023{\natexlab{a}}.
+\newblock URL \url{https://openreview.net/forum?id=SMa9EAovKMC}.
+
+\bibitem[Ahuja et~al.(2025)Ahuja, Avigad, Tetali, and Welleck]{ImProver}
+Riyaz Ahuja, Jeremy Avigad, Prasad Tetali, and Sean Welleck.
+\newblock Improver: Agent-based automated proof optimization.
+\newblock In Y.~Yue, A.~Garg, N.~Peng, F.~Sha, and R.~Yu, editors, \emph{International Conference on Representation Learning}, volume 2025, pages 29521--29543, 2025.
+\newblock URL \url{https://proceedings.iclr.cc/paper_files/paper/2025/file/4864005cfdea7ebd07086ed1b9846825-Paper-Conference.pdf}.
+
+\bibitem[Ahuja et~al.(2026)Ahuja, Rowney, Avigad, and Welleck]{ImProver2}
+Riyaz Ahuja, Tate Rowney, Jeremy Avigad, and Sean Welleck.
+\newblock Improver 2: Iteratively self-improving lms for neurosymbolic proof optimization, 2026.
+\newblock Submitted to ICML 2026.
+
+\bibitem[Autexier and Dietrich(2010)]{serge2010}
+Serge Autexier and Dominik Dietrich.
+\newblock A tactic language for declarative proofs.
+\newblock In Matt Kaufmann and Lawrence~C. Paulson, editors, \emph{Interactive Theorem Proving}, pages 99--114, Berlin, Heidelberg, 2010. Springer Berlin Heidelberg.
+
+\bibitem[Wiedijk(2004)]{Wiedijk}
+Freek Wiedijk.
+\newblock Formal proof sketches.
+\newblock In Stefano Berardi, Mario Coppo, and Ferruccio Damiani, editors, \emph{Types for Proofs and Programs}, pages 378--393, Berlin, Heidelberg, 2004. Springer Berlin Heidelberg.
+\newblock ISBN 978-3-540-24849-1.
+
+\bibitem[Anil et~al.(2021)Anil, Zhang, Wu, and Grosse]{prover-verifier-games}
+Cem Anil, Guodong Zhang, Yuhuai Wu, and Roger Grosse.
+\newblock Learning to give checkable answers with prover-verifier games, 2021.
+\newblock URL \url{https://arxiv.org/abs/2108.12099}.
+
+\bibitem[Polu and Sutskever(2020)]{polu2020generative}
+Stanislas Polu and Ilya Sutskever.
+\newblock Generative language modeling for automated theorem proving, 2020.
+
+\bibitem[Han et~al.(2022)Han, Rute, Wu, Ayers, and Polu]{han2022proof}
+Jesse~Michael Han, Jason Rute, Yuhuai Wu, Edward Ayers, and Stanislas Polu.
+\newblock Proof artifact co-training for theorem proving with language models.
+\newblock In \emph{International Conference on Learning Representations}, 2022.
+\newblock URL \url{https://openreview.net/forum?id=rpxJc9j04U}.
+
+\bibitem[Polu et~al.(2022{\natexlab{a}})Polu, Han, Zheng, Baksys, Babuschkin, and Sutskever]{polu2022formal}
+Stanislas Polu, Jesse~Michael Han, Kunhao Zheng, Mantas Baksys, Igor Babuschkin, and Ilya Sutskever.
+\newblock Formal mathematics statement curriculum learning, 2022{\natexlab{a}}.
+
+\bibitem[Lample et~al.(2022)Lample, Lacroix, anne Lachaux, Rodriguez, Hayat, Lavril, Ebner, and Martinet]{lample2022hypertree}
+Guillaume Lample, Timothee Lacroix, Marie anne Lachaux, Aurelien Rodriguez, Amaury Hayat, Thibaut Lavril, Gabriel Ebner, and Xavier Martinet.
+\newblock Hypertree proof search for neural theorem proving.
+\newblock In Alice~H. Oh, Alekh Agarwal, Danielle Belgrave, and Kyunghyun Cho, editors, \emph{Advances in Neural Information Processing Systems}, 2022.
+\newblock URL \url{https://openreview.net/forum?id=J4pX8Q8cxHH}.
+
+\bibitem[Yang et~al.(2023{\natexlab{a}})Yang, Swope, Gu, Chalamala, Song, Yu, Godil, Prenger, and Anandkumar]{yang2023leandojo}
+Kaiyu Yang, Aidan Swope, Alex Gu, Rahul Chalamala, Peiyang Song, Shixing Yu, Saad Godil, Ryan Prenger, and Anima Anandkumar.
+\newblock {LeanDojo}: Theorem proving with retrieval-augmented language models.
+\newblock In \emph{Neural Information Processing Systems (NeurIPS)}, 2023{\natexlab{a}}.
+
+\bibitem[Yang et~al.(2023{\natexlab{b}})Yang, Swope, Gu, Chalamala, Song, Yu, Godil, Prenger, and Anandkumar]{leandojo}
+Kaiyu Yang, Aidan Swope, Alex Gu, Rahul Chalamala, Peiyang Song, Shixing Yu, Saad Godil, Ryan Prenger, and Anima Anandkumar.
+\newblock {LeanDojo}: Theorem proving with retrieval-augmented language models.
+\newblock In \emph{Neural Information Processing Systems (NeurIPS)}, 2023{\natexlab{b}}.
+\newblock URL \url{https://icml.cc/virtual/2023/27190}.
+
+\bibitem[Frieder et~al.(2025)Frieder, Bayer, Looi, Loader, Berner, Collins, Juhász, Ruehle, Welleck, Poesia, Griffiths, Weller, Goyal, Freer, Lukasiewicz, and Gowers]{frieder2025datamathematicalcopilotsbetter}
+Simon Frieder, Jonas Bayer, Sam Looi, Jacob Loader, Julius Berner, Katherine~M. Collins, András Juhász, Fabian Ruehle, Sean Welleck, Gabriel Poesia, Ryan-Rhys Griffiths, Adrian Weller, Anirudh Goyal, Cameron Freer, Thomas Lukasiewicz, and Timothy Gowers.
+\newblock Data for mathematical copilots: Better ways of presenting proofs for machine learning, 2025.
+\newblock URL \url{https://arxiv.org/abs/2412.15184}.
+
+\bibitem[Hu et~al.(2024)Hu, Zhu, and Welleck]{hu2024minictxneuraltheoremproving}
+Jiewen Hu, Thomas Zhu, and Sean Welleck.
+\newblock minictx: Neural theorem proving with (long-)contexts, 2024.
+\newblock URL \url{https://arxiv.org/abs/2408.03350}.
+
+\bibitem[Zheng et~al.(2022)Zheng, Han, and Polu]{zheng2022miniff}
+Kunhao Zheng, Jesse~Michael Han, and Stanislas Polu.
+\newblock minif2f: a cross-system benchmark for formal olympiad-level mathematics.
+\newblock In \emph{International Conference on Learning Representations}, 2022.
+\newblock URL \url{https://openreview.net/forum?id=9ZPegFuFTFv}.
+
+\bibitem[Wei et~al.(2022)Wei, Wang, Schuurmans, Bosma, brian ichter, Xia, Chi, Le, and Zhou]{wei2022chain}
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, brian ichter, Fei Xia, Ed~H. Chi, Quoc~V Le, and Denny Zhou.
+\newblock Chain of thought prompting elicits reasoning in large language models.
+\newblock In Alice~H. Oh, Alekh Agarwal, Danielle Belgrave, and Kyunghyun Cho, editors, \emph{Advances in Neural Information Processing Systems}, 2022.
+\newblock URL \url{https://openreview.net/forum?id=_VjQlMeSB_J}.
+
+\bibitem[First et~al.(2023)First, Rabe, Ringer, and Brun]{first2023baldur}
+Emily First, Markus~N. Rabe, Talia Ringer, and Yuriy Brun.
+\newblock Baldur: Whole-proof generation and repair with large language models, 2023.
+
+\bibitem[Zhou et~al.(2023)Zhou, Alon, Xu, Jiang, and Neubig]{zhou2023docprompting}
+Shuyan Zhou, Uri Alon, Frank~F. Xu, Zhengbao Jiang, and Graham Neubig.
+\newblock Docprompting: Generating code by retrieving the docs.
+\newblock In \emph{The Eleventh International Conference on Learning Representations}, 2023.
+\newblock URL \url{https://openreview.net/forum?id=ZTCxT2t2Ru}.
+
+\bibitem[Thakur et~al.(2024)Thakur, Tsoukalas, Wen, Xin, and Chaudhuri]{thakur2024incontext}
+Amitayush Thakur, George Tsoukalas, Yeming Wen, Jimmy Xin, and Swarat Chaudhuri.
+\newblock An in-context learning agent for formal theorem-proving, 2024.
+
+\bibitem[Carbonell and Goldstein(1998)]{10.1145/290941.291025}
+Jaime Carbonell and Jade Goldstein.
+\newblock The use of mmr, diversity-based reranking for reordering documents and producing summaries.
+\newblock In \emph{Proceedings of the 21st Annual International ACM SIGIR Conference on Research and Development in Information Retrieval}, SIGIR '98, page 335–336, New York, NY, USA, 1998. Association for Computing Machinery.
+\newblock ISBN 1581130155.
+\newblock \doi{10.1145/290941.291025}.
+\newblock URL \url{https://doi.org/10.1145/290941.291025}.
+
+\bibitem[Rafailov et~al.(2023)Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn]{DPO}
+Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D Manning, and Chelsea Finn.
+\newblock Direct preference optimization: Your language model is secretly a reward model, 2023.
+
+\bibitem[Pang et~al.(2024)Pang, Yuan, Cho, He, Sukhbaatar, and Weston]{IRPO}
+Richard~Yuanzhe Pang, Weizhe Yuan, Kyunghyun Cho, He~He, Sainbayar Sukhbaatar, and Jason Weston.
+\newblock Iterative reasoning preference optimization, 2024.
+\newblock URL \url{https://arxiv.org/abs/2404.19733}.
+
+\bibitem[Anthony et~al.(2017)Anthony, Tian, and Barber]{ExpertIteration}
+Thomas Anthony, Zheng Tian, and David Barber.
+\newblock Thinking fast and slow with deep learning and tree search.
+\newblock \emph{Advances in Neural Information Processing Systems}, 30, 2017.
+
+\bibitem[Shao et~al.(2024)Shao, Wang, Zhu, nd~Junxiao~Song, Zhang, Li, Wu, and Guo]{GRPO}
+Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin~Xu nd~Junxiao~Song, Mingchuan Zhang, Y.K. Li, Y.~Wu, and Daya Guo.
+\newblock Deepseekmath: Pushing the limits of mathematical reasoning in open language models, 2024.
+\newblock URL \url{https://arxiv.org/abs/2402.03300}.
+
+\bibitem[Shumailov et~al.(2024)Shumailov, Shumaylov, Zhao, Papernot, Anderson, and Gal]{modelCollapse}
+Ilia Shumailov, Zakhar Shumaylov, Yiren Zhao, Nicolas Papernot, Ross Anderson, and Yarin Gal.
+\newblock Ai models collapse when trained on recursively generated data.
+\newblock \emph{Nature}, page 755–759, 2024.
+\newblock URL \url{https://doi.org/10.1038/s41586-024-07566-y}.
+
+\bibitem[Jiang et~al.(2023{\natexlab{b}})Jiang, Welleck, Zhou, Li, Liu, Jamnik, Lacroix, Wu, and Lample]{DraftSketchProve}
+Albert~Qiaochu Jiang, Sean Welleck, Jin~Peng Zhou, Wenda Li, Jiacheng Liu, Mateja Jamnik, Timoth{'{e}}e Lacroix, Yuhuai Wu, and Guillaume Lample.
+\newblock {Draft}, {Sketch}, and {Prove}: {Guiding} formal theorem provers with informal proofs.
+\newblock In \emph{International Conference on Learning Representations}, 2023{\natexlab{b}}.
+\newblock URL \url{https://doi.org/10.48550/arXiv.2210.12283}.
+
+\bibitem[Hattori et~al.(2025)Hattori, Matsuzaki, and Fujiwara]{autoinformalization}
+Seiji Hattori, Takuya Matsuzaki, and Makoto Fujiwara.
+\newblock Natural language translation of formal proofs through informalization of proof steps and recursive summarization along proof structure.
+\newblock In Lucie Flek, Shashi Narayan, Le~Hong Phuong, and Jiahuan Pei, editors, \emph{Proceedings of the 18th International Natural Language Generation Conference}, pages 376--389, Hanoi, Vietnam, October 2025. Association for Computational Linguistics.
+\newblock URL \url{https://aclanthology.org/2025.inlg-main.23/}.
+
+\bibitem[{leanprover-community}(2024)]{MIL}
+{leanprover-community}.
+\newblock mathematics\_in\_lean.
+\newblock \url{https://github.com/leanprover-community/mathematics\_in\_lean}, 2024.
+
+\bibitem[{David Renshaw}(2024)]{compfiles}
+{David Renshaw}.
+\newblock compfiles.
+\newblock \url{https://github.com/dwrensha/compfiles}, 2024.
+
+\bibitem[mathlib Community(2020)]{The_mathlib_Community_2020}
+The mathlib Community.
+\newblock The lean mathematical library.
+\newblock In \emph{Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs}, POPL ’20. ACM, January 2020.
+\newblock \doi{10.1145/3372885.3373824}.
+\newblock URL \url{http://dx.doi.org/10.1145/3372885.3373824}.
+
+\bibitem[Hu et~al.(2025)Hu, Zhu, and Welleck]{miniCTX}
+Jiewen Hu, Thomas Zhu, and Sean Welleck.
+\newblock mini{CTX}: Neural theorem proving with (long-)contexts.
+\newblock In \emph{The Thirteenth International Conference on Learning Representations}, 2025.
+\newblock URL \url{https://openreview.net/forum?id=KIgaAqEFHW}.
+
+\bibitem[{Kim Morrison}(2024)]{Trainingdata}
+{Kim Morrison}.
+\newblock lean-training-data.
+\newblock \url{https://github.com/kim-em/lean-training-data}, 2024.
+
+\bibitem[Madaan et~al.(2023)Madaan, Tandon, Gupta, Hallinan, Gao, Wiegreffe, Alon, Dziri, Prabhumoye, Yang, Gupta, Majumder, Hermann, Welleck, Yazdanbakhsh, and Clark]{madaan2023selfrefine}
+Aman Madaan, Niket Tandon, Prakhar Gupta, Skyler Hallinan, Luyu Gao, Sarah Wiegreffe, Uri Alon, Nouha Dziri, Shrimai Prabhumoye, Yiming Yang, Shashank Gupta, Bodhisattwa~Prasad Majumder, Katherine Hermann, Sean Welleck, Amir Yazdanbakhsh, and Peter Clark.
+\newblock Self-refine: Iterative refinement with self-feedback.
+\newblock In \emph{Thirty-seventh Conference on Neural Information Processing Systems}, 2023.
+\newblock URL \url{https://openreview.net/forum?id=S37hOerQLB}.
+
+\bibitem[Chen et~al.(2023)Chen, Lin, Schärli, and Zhou]{chen2023teachinglargelanguagemodels}
+Xinyun Chen, Maxwell Lin, Nathanael Schärli, and Denny Zhou.
+\newblock Teaching large language models to self-debug, 2023.
+\newblock URL \url{https://arxiv.org/abs/2304.05128}.
+
+\bibitem[Avigad et~al.(2024)Avigad, de~Moura, Kong, and Ullrich]{avigad2024tpil}
+Jeremy Avigad, Leonardo de~Moura, Soonho Kong, and Sebastian Ullrich.
+\newblock \emph{Theorem Proving in Lean 4}.
+\newblock Carnegie Mellon University, 2024.
+\newblock Available at \url{https://leanprover.github.io/theorem_proving_in_lean4/}.
+
+\bibitem[OpenAI et~al.(2024)OpenAI, Achiam, Adler, Agarwal, Ahmad, Akkaya, Aleman, Almeida, Altenschmidt, Altman, Anadkat, Avila, Babuschkin, Balaji, Balcom, Baltescu, Bao, Bavarian, Belgum, Bello, Berdine, Bernadett-Shapiro, Berner, Bogdonoff, Boiko, Boyd, Brakman, Brockman, Brooks, Brundage, Button, Cai, Campbell, Cann, Carey, Carlson, Carmichael, Chan, Chang, Chantzis, Chen, Chen, Chen, Chen, Chen, Chess, Cho, Chu, Chung, Cummings, Currier, Dai, Decareaux, Degry, Deutsch, Deville, Dhar, Dohan, Dowling, Dunning, Ecoffet, Eleti, Eloundou, Farhi, Fedus, Felix, Fishman, Forte, Fulford, Gao, Georges, Gibson, Goel, Gogineni, Goh, Gontijo-Lopes, Gordon, Grafstein, Gray, Greene, Gross, Gu, Guo, Hallacy, Han, Harris, He, Heaton, Heidecke, Hesse, Hickey, Hickey, Hoeschele, Houghton, Hsu, Hu, Hu, Huizinga, Jain, Jain, Jang, Jiang, Jiang, Jin, Jin, Jomoto, Jonn, Jun, Kaftan, Łukasz Kaiser, Kamali, Kanitscheider, Keskar, Khan, Kilpatrick, Kim, Kim, Kim, Kirchner, Kiros, Knight, Kokotajlo, Łukasz Kondraciuk, Kondrich, Konstantinidis, Kosic, Krueger, Kuo, Lampe, Lan, Lee, Leike, Leung, Levy, Li, Lim, Lin, Lin, Litwin, Lopez, Lowe, Lue, Makanju, Malfacini, Manning, Markov, Markovski, Martin, Mayer, Mayne, McGrew, McKinney, McLeavey, McMillan, McNeil, Medina, Mehta, Menick, Metz, Mishchenko, Mishkin, Monaco, Morikawa, Mossing, Mu, Murati, Murk, Mély, Nair, Nakano, Nayak, Neelakantan, Ngo, Noh, Ouyang, O'Keefe, Pachocki, Paino, Palermo, Pantuliano, Parascandolo, Parish, Parparita, Passos, Pavlov, Peng, Perelman, de~Avila Belbute~Peres, Petrov, de~Oliveira~Pinto, Michael, Pokorny, Pokrass, Pong, Powell, Power, Power, Proehl, Puri, Radford, Rae, Ramesh, Raymond, Real, Rimbach, Ross, Rotsted, Roussez, Ryder, Saltarelli, Sanders, Santurkar, Sastry, Schmidt, Schnurr, Schulman, Selsam, Sheppard, Sherbakov, Shieh, Shoker, Shyam, Sidor, Sigler, Simens, Sitkin, Slama, Sohl, Sokolowsky, Song, Staudacher, Such, Summers, Sutskever, Tang, Tezak, Thompson, Tillet, Tootoonchian, Tseng, Tuggle, Turley, Tworek, Uribe, Vallone, Vijayvergiya, Voss, Wainwright, Wang, Wang, Wang, Ward, Wei, Weinmann, Welihinda, Welinder, Weng, Weng, Wiethoff, Willner, Winter, Wolrich, Wong, Workman, Wu, Wu, Wu, Xiao, Xu, Yoo, Yu, Yuan, Zaremba, Zellers, Zhang, Zhang, Zhao, Zheng, Zhuang, Zhuk, and Zoph]{openai2024gpt4technicalreport}
+OpenAI, Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia~Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman, Shyamal Anadkat, Red Avila, Igor Babuschkin, Suchir Balaji, Valerie Balcom, Paul Baltescu, Haiming Bao, Mohammad Bavarian, Jeff Belgum, Irwan Bello, Jake Berdine, Gabriel Bernadett-Shapiro, Christopher Berner, Lenny Bogdonoff, Oleg Boiko, Madelaine Boyd, Anna-Luisa Brakman, Greg Brockman, Tim Brooks, Miles Brundage, Kevin Button, Trevor Cai, Rosie Campbell, Andrew Cann, Brittany Carey, Chelsea Carlson, Rory Carmichael, Brooke Chan, Che Chang, Fotis Chantzis, Derek Chen, Sully Chen, Ruby Chen, Jason Chen, Mark Chen, Ben Chess, Chester Cho, Casey Chu, Hyung~Won Chung, Dave Cummings, Jeremiah Currier, Yunxing Dai, Cory Decareaux, Thomas Degry, Noah Deutsch, Damien Deville, Arka Dhar, David Dohan, Steve Dowling, Sheila Dunning, Adrien Ecoffet, Atty Eleti, Tyna Eloundou, David Farhi, Liam Fedus, Niko Felix, Simón~Posada Fishman, Juston Forte, Isabella Fulford, Leo Gao, Elie Georges, Christian Gibson, Vik Goel, Tarun Gogineni, Gabriel Goh, Rapha Gontijo-Lopes, Jonathan Gordon, Morgan Grafstein, Scott Gray, Ryan Greene, Joshua Gross, Shixiang~Shane Gu, Yufei Guo, Chris Hallacy, Jesse Han, Jeff Harris, Yuchen He, Mike Heaton, Johannes Heidecke, Chris Hesse, Alan Hickey, Wade Hickey, Peter Hoeschele, Brandon Houghton, Kenny Hsu, Shengli Hu, Xin Hu, Joost Huizinga, Shantanu Jain, Shawn Jain, Joanne Jang, Angela Jiang, Roger Jiang, Haozhun Jin, Denny Jin, Shino Jomoto, Billie Jonn, Heewoo Jun, Tomer Kaftan, Łukasz Kaiser, Ali Kamali, Ingmar Kanitscheider, Nitish~Shirish Keskar, Tabarak Khan, Logan Kilpatrick, Jong~Wook Kim, Christina Kim, Yongjik Kim, Jan~Hendrik Kirchner, Jamie Kiros, Matt Knight, Daniel Kokotajlo, Łukasz Kondraciuk, Andrew Kondrich, Aris Konstantinidis, Kyle Kosic, Gretchen Krueger, Vishal Kuo, Michael Lampe, Ikai Lan, Teddy Lee, Jan Leike, Jade Leung, Daniel Levy, Chak~Ming Li, Rachel Lim, Molly Lin, Stephanie Lin, Mateusz Litwin, Theresa Lopez, Ryan Lowe, Patricia Lue, Anna Makanju, Kim Malfacini, Sam Manning, Todor Markov, Yaniv Markovski, Bianca Martin, Katie Mayer, Andrew Mayne, Bob McGrew, Scott~Mayer McKinney, Christine McLeavey, Paul McMillan, Jake McNeil, David Medina, Aalok Mehta, Jacob Menick, Luke Metz, Andrey Mishchenko, Pamela Mishkin, Vinnie Monaco, Evan Morikawa, Daniel Mossing, Tong Mu, Mira Murati, Oleg Murk, David Mély, Ashvin Nair, Reiichiro Nakano, Rajeev Nayak, Arvind Neelakantan, Richard Ngo, Hyeonwoo Noh, Long Ouyang, Cullen O'Keefe, Jakub Pachocki, Alex Paino, Joe Palermo, Ashley Pantuliano, Giambattista Parascandolo, Joel Parish, Emy Parparita, Alex Passos, Mikhail Pavlov, Andrew Peng, Adam Perelman, Filipe de~Avila Belbute~Peres, Michael Petrov, Henrique~Ponde de~Oliveira~Pinto, Michael, Pokorny, Michelle Pokrass, Vitchyr~H. Pong, Tolly Powell, Alethea Power, Boris Power, Elizabeth Proehl, Raul Puri, Alec Radford, Jack Rae, Aditya Ramesh, Cameron Raymond, Francis Real, Kendra Rimbach, Carl Ross, Bob Rotsted, Henri Roussez, Nick Ryder, Mario Saltarelli, Ted Sanders, Shibani Santurkar, Girish Sastry, Heather Schmidt, David Schnurr, John Schulman, Daniel Selsam, Kyla Sheppard, Toki Sherbakov, Jessica Shieh, Sarah Shoker, Pranav Shyam, Szymon Sidor, Eric Sigler, Maddie Simens, Jordan Sitkin, Katarina Slama, Ian Sohl, Benjamin Sokolowsky, Yang Song, Natalie Staudacher, Felipe~Petroski Such, Natalie Summers, Ilya Sutskever, Jie Tang, Nikolas Tezak, Madeleine~B. Thompson, Phil Tillet, Amin Tootoonchian, Elizabeth Tseng, Preston Tuggle, Nick Turley, Jerry Tworek, Juan Felipe~Cerón Uribe, Andrea Vallone, Arun Vijayvergiya, Chelsea Voss, Carroll Wainwright, Justin~Jay Wang, Alvin Wang, Ben Wang, Jonathan Ward, Jason Wei, CJ~Weinmann, Akila Welihinda, Peter Welinder, Jiayi Weng, Lilian Weng, Matt Wiethoff, Dave Willner, Clemens Winter, Samuel Wolrich, Hannah Wong, Lauren Workman, Sherwin Wu, Jeff Wu, Michael Wu, Kai Xiao, Tao Xu, Sarah Yoo, Kevin Yu, Qiming Yuan, Wojciech Zaremba, Rowan Zellers, Chong Zhang, Marvin Zhang, Shengjia Zhao, Tianhao Zheng, Juntang Zhuang, William Zhuk, and Barret Zoph.
+\newblock Gpt-4 technical report, 2024.
+\newblock URL \url{https://arxiv.org/abs/2303.08774}.
+
+\bibitem[Polu et~al.(2022{\natexlab{b}})Polu, Han, Zheng, Baksys, Babuschkin, and Sutskever]{DBLP:journals/corr/abs-2202-01344}
+Stanislas Polu, Jesse~Michael Han, Kunhao Zheng, Mantas Baksys, Igor Babuschkin, and Ilya Sutskever.
+\newblock Formal mathematics statement curriculum learning.
+\newblock \emph{CoRR}, abs/2202.01344, 2022{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/2202.01344}.
+
+\bibitem[Tooby-Smith(2025)]{HEPLean}
+Joseph Tooby-Smith.
+\newblock Heplean: Digitalising high energy physics.
+\newblock \emph{Computer Physics Communications}, 308:\penalty0 109457, 2025.
+\newblock ISSN 0010-4655.
+\newblock \doi{https://doi.org/10.1016/j.cpc.2024.109457}.
+\newblock URL \url{https://www.sciencedirect.com/science/article/pii/S0010465524003801}.
+
+\bibitem[Tao(2026)]{PFR}
+Terrance Tao.
+\newblock Pfr blueprint, 2026.
+\newblock URL \url{https://teorth.github.io/pfr/blueprint.pdf}.
+
+\bibitem[van Doorn et~al.(2026)van Doorn, Rothgang, Monticone, Rui, Sundstrom, de~Frutos-Fernández, de~Velde, Gouezel, Diedering, Portegies, and Roos]{Carleson}
+Floris van Doorn, Michael Rothgang, Pietro Monticone, Jeremy Tan~Jie Rui, James Sundstrom, María~Inés de~Frutos-Fernández, Ruben~Van de~Velde, Sebastien Gouezel, Leo Diedering, Jim Portegies, and Joris Roos.
+\newblock Formalizing carleson's theorem in lean, 2026.
+\newblock URL \url{https://florisvandoorn.com/carleson/}.
+
+\bibitem[Wilshaw(2026)]{ConNF}
+Sky Wilshaw.
+\newblock New foundations is consistent, 2026.
+\newblock URL \url{https://leanprover-community.github.io/con-nf/print/print.pdf}.
+
+\bibitem[Buzzard and Taylor(2026)]{FLT}
+Kevin Buzzard and Richard Taylor.
+\newblock Fermat's last theorem, 2026.
+\newblock URL \url{https://imperialcollegelondon.github.io/FLT/blueprint.pdf}.
+
+\bibitem[Saito and Noguchi(2026)]{Foundation}
+Shogo Saito and Mashu Noguchi.
+\newblock Foundation, 2026.
+\newblock URL \url{https://github.com/FormalizedFormalLogic/Foundation}.
+
+\bibitem[Sergeev et~al.(2026)Sergeev, Dvorak, Figueroa-Reid, Hamadani, Hwang, Karunus, Kolmogorov, Meiburg, Nelson, and Sandey]{Seymour}
+Ivan Sergeev, Martin Dvorak, Tristan Figueroa-Reid, Rida Hamadani, Byung-Hak Hwang, Evgenia Karunus, Vladimir Kolmogorov, Alex Meiburg, Peter Nelson, and Mark Sandey.
+\newblock Regularity of 1-, 2-, and 3-sums of matroids, 2026.
+\newblock URL \url{https://ivan-sergeyev.github.io/seymour/blueprint.pdf}.
+
+\bibitem[DeepSeek-AI(2025)]{DeepseekR1}
+DeepSeek-AI.
+\newblock Deepseek-r1: Incentivizing reasoning capability in llms via reinforcement learning, 2025.
+\newblock URL \url{https://arxiv.org/abs/2501.12948}.
+
+\bibitem[OpenAI et~al.(2025)OpenAI, :, Agarwal, Ahmad, Ai, Altman, Applebaum, Arbus, Arora, Bai, Baker, Bao, Barak, Bennett, Bertao, Brett, Brevdo, Brockman, Bubeck, Chang, Chen, Chen, Cheung, Clark, Cook, Dukhan, Dvorak, Fives, Fomenko, Garipov, Georgiev, Glaese, Gogineni, Goucher, Gross, Guzman, Hallman, Hehir, Heidecke, Helyar, Hu, Huet, Huh, Jain, Johnson, Koch, Kofman, Kundel, Kwon, Kyrylov, Le, Leclerc, Lennon, Lessans, Lezcano-Casado, Li, Li, Lin, Liss, Lily, Liu, Liu, Lu, Lu, Martinovic, McCallum, McGrath, McKinney, McLaughlin, Mei, Mostovoy, Mu, Myles, Neitz, Nichol, Pachocki, Paino, Palmie, Pantuliano, Parascandolo, Park, Pathak, Paz, Peran, Pimenov, Pokrass, Proehl, Qiu, Raila, Raso, Ren, Richardson, Robinson, Rotsted, Salman, Sanjeev, Schwarzer, Sculley, Sikchi, Simon, Singhal, Song, Stuckey, Sun, Tillet, Toizer, Tsimpourlas, Vyas, Wallace, Wang, Wang, Watkins, Weil, Wendling, Whinnery, Whitney, Wong, Yang, Yang, Yasunaga, Ying, Zaremba, Zhan, Zhang, Zhang, Zhang, and Zhao]{openai2025gptoss120bgptoss20bmodel}
+OpenAI, :, Sandhini Agarwal, Lama Ahmad, Jason Ai, Sam Altman, Andy Applebaum, Edwin Arbus, Rahul~K. Arora, Yu~Bai, Bowen Baker, Haiming Bao, Boaz Barak, Ally Bennett, Tyler Bertao, Nivedita Brett, Eugene Brevdo, Greg Brockman, Sebastien Bubeck, Che Chang, Kai Chen, Mark Chen, Enoch Cheung, Aidan Clark, Dan Cook, Marat Dukhan, Casey Dvorak, Kevin Fives, Vlad Fomenko, Timur Garipov, Kristian Georgiev, Mia Glaese, Tarun Gogineni, Adam Goucher, Lukas Gross, Katia~Gil Guzman, John Hallman, Jackie Hehir, Johannes Heidecke, Alec Helyar, Haitang Hu, Romain Huet, Jacob Huh, Saachi Jain, Zach Johnson, Chris Koch, Irina Kofman, Dominik Kundel, Jason Kwon, Volodymyr Kyrylov, Elaine~Ya Le, Guillaume Leclerc, James~Park Lennon, Scott Lessans, Mario Lezcano-Casado, Yuanzhi Li, Zhuohan Li, Ji~Lin, Jordan Liss, Lily, Liu, Jiancheng Liu, Kevin Lu, Chris Lu, Zoran Martinovic, Lindsay McCallum, Josh McGrath, Scott McKinney, Aidan McLaughlin, Song Mei, Steve Mostovoy, Tong Mu, Gideon Myles, Alexander Neitz, Alex Nichol, Jakub Pachocki, Alex Paino, Dana Palmie, Ashley Pantuliano, Giambattista Parascandolo, Jongsoo Park, Leher Pathak, Carolina Paz, Ludovic Peran, Dmitry Pimenov, Michelle Pokrass, Elizabeth Proehl, Huida Qiu, Gaby Raila, Filippo Raso, Hongyu Ren, Kimmy Richardson, David Robinson, Bob Rotsted, Hadi Salman, Suvansh Sanjeev, Max Schwarzer, D.~Sculley, Harshit Sikchi, Kendal Simon, Karan Singhal, Yang Song, Dane Stuckey, Zhiqing Sun, Philippe Tillet, Sam Toizer, Foivos Tsimpourlas, Nikhil Vyas, Eric Wallace, Xin Wang, Miles Wang, Olivia Watkins, Kevin Weil, Amy Wendling, Kevin Whinnery, Cedric Whitney, Hannah Wong, Lin Yang, Yu~Yang, Michihiro Yasunaga, Kristen Ying, Wojciech Zaremba, Wenting Zhan, Cyril Zhang, Brian Zhang, Eddie Zhang, and Shengjia Zhao.
+\newblock gpt-oss-120b \& gpt-oss-20b model card, 2025.
+\newblock URL \url{https://arxiv.org/abs/2508.10925}.
+
+\bibitem[mathlib Community(2024)]{lean_style_guide}
+The mathlib Community.
+\newblock Library style guidelines.
+\newblock \url{https://leanprover-community.github.io/contribute/style.html}, 2024.
+\newblock Accessed: 2026-04-18.
+
+\end{thebibliography}
