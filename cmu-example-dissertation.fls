@@ -2,7 +2,7 @@ PWD /Users/ahuja/Downloads/Ahuja MS Thesis
 INPUT /usr/local/texlive/2023/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT cmu-example-dissertation.tex
+INPUT /Users/ahuja/Downloads/Ahuja MS Thesis/cmu-example-dissertation.tex
 OUTPUT cmu-example-dissertation.log
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls

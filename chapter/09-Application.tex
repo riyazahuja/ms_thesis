@@ -249,15 +249,51 @@ MiniCTX (Hu et al., 2024) evaluates theorem provers on real Lean~4 repositories 
 \toprule
 \textbf{Metric} & \textbf{Value} \\
 \midrule
-Total declarations & 911 \\
-\texttt{sorry}'d targets $|\Phi^*|$ & 92 \\
-Dependency DAG depth & 18 \\
-Avg.\ dependencies per target & 0.30 \\
+Total extracted PNT declarations & 6,563 \\
+\texttt{sorry}'d benchmark targets $|\Phi^*|$ & 92 \\
 Easy / Medium / Hard split & 39 / 41 / 12 \\
-\textbf{TODO synth graph parameters, agents hparams, etc.} & \\
+Internal dependency edges & 27,898 \\
+Dependency DAG max layer & 37 \\
+Dependency DAG layers & 38 \\
+Avg.\ internal dependencies per declaration & 4.2508 \\
+Median internal dependencies per declaration & 0 \\
+Max internal dependencies for one declaration & 288 \\
+Zero-dependency declarations & 4,216 \\
+Declarations used by at least one other declaration & 5,044 \\
+Declarations never used by another declaration & 1,519 \\
+Dependency-use frequency $p_{50}/p_{75}/p_{90}/p_{95}/p_{99}$ & 1 / 1 / 3 / 20 / 64 \\
+Max dependency-use frequency & 85 \\
+Fitted domain count & 730 \\
+% Top fitted domain sizes & 424 / 412 / 403 / 357 / 276 \\
+% \midrule
+% Domain sampling exponent & 0.9 \\
+% Target domain count rule & $\max(3,\lfloor 730n/6563\rceil)$ \\
+% Foundation-node fraction & 0.02 \\
+% Fitted foundation-node count at source scale & 131 \\
+% Foundation dependency probability & 0.0491 \\
+% Dependency count model & empirical by topological layer \\
+% Dependency tail cap for generated size $n$ & $\max(4,\lfloor 0.25n\rceil)$ \\
+% Reuse-fitness model & empirical dependency-use frequency by layer \\
+% Foundation reuse-fitness model & empirical top-2\% dependency-use frequencies \\
+% Parent domain weight & source domain-profile + global-domain mixture \\
+% Same-domain parent bonus & 0.08 \\
+% Layer proximity factor & $(1 + 0.35\Delta\ell)^{-1}$ \\
+% Reuse quota exponent & 1.85 \\
+% Foundation parent boost & 1.25 \\
+% Hub fallback fraction & 0.05 \\
+\midrule
+% Default agents in harness & 3 \\
+Initial cash per agent wallet & 1,000 \\
+Run timeout / offer stop-time delay & 3600 s \\
+Offer price & 0.1 \\
+Offer units per target & 100 \\
+Default model & \texttt{anthropic/claude-haiku-4.5} \\
+% Lean LSP MCP enabled by default & yes \\
+% Compaction period / trigger / memory cap & 10 cycles / 60k chars / 12k chars \\
 \bottomrule
 \end{tabular}
 \end{table}
+
 
 
 \subsubsection{Strategy Module Training}\label{sec:strategy-training}
@@ -409,15 +445,22 @@ The proof invokes two non-trivial lemmas: \texttt{Complex.nhds\_hasBasis\_square
   mathlib/.style={target, fill={rgb,255:red,235; green,235; blue,235}},
   edge/.style={-{Stealth[length=2.2mm]}, thick}
 ]
-\node[target] (top) at (0,0) {\texttt{SmallSquareInRectangle}\\$\alpha_2,\ t\!\approx\!79$\\final target};
-\node[target] (nhds) at (-3.9,-1.8) {\texttt{Complex.nhds\_hasBasis\_square}\\$\alpha_3,\ t\!\approx\!71$};
-\node[target] (sqsub) at (3.9,-1.8) {\texttt{square\_subset\_square}\\$\alpha_1,\ t\!\approx\!66$};
+\node[target] (top) at (0,0) {\texttt{SmallSquareInRectangle}\\
+    $\alpha_2,\ {\approx}2850\,\mathrm{s}$\\final target};
+\node[target] (nhds) at (-3.9,-1.8) {\texttt{Complex.nhds\_hasBasis\_square}\\
+    $\alpha_3,\ {\approx}2550\,\mathrm{s}$};
+\node[target] (sqsub) at (3.9,-1.8) {\texttt{square\_subset\_square}\\
+    $\alpha_1,\ {\approx}2400\,\mathrm{s}$};
 \node[mathlib] (sqapply) at (-5.7,-3.45) {\texttt{Square\_apply}\\already in Mathlib};
 \node[mathlib] (rectnhds) at (-2.1,-3.45) {\texttt{rectangle\_mem\_nhds\_iff}\\already in Mathlib};
-\node[conjecture] (rectsub) at (3.9,-3.45) {\texttt{RectSubRect'}\\$\alpha_1,\ t\!\approx\!64$\\conjectured};
-\node[target] (iff) at (3.9,-5.1) {\texttt{rect\_subset\_iff}\\$\alpha_2,\ t\!\approx\!58$};
-\node[conjecture] (left) at (2.0,-6.75) {\texttt{left\_mem\_rect}\\$\alpha_2,\ t\!\approx\!42$\\conjectured};
-\node[conjecture] (right) at (5.8,-6.75) {\texttt{right\_mem\_rect}\\$\alpha_2,\ t\!\approx\!42$\\conjectured};
+\node[conjecture] (rectsub) at (3.9,-3.45) {\texttt{RectSubRect'}\\
+    $\alpha_1,\ {\approx}2300\,\mathrm{s}$\\conjectured};
+\node[target] (iff) at (3.9,-5.1) {\texttt{rect\_subset\_iff}\\
+    $\alpha_2,\ {\approx}2100\,\mathrm{s}$};
+\node[conjecture] (left) at (2.0,-6.75) {\texttt{left\_mem\_rect}\\
+    $\alpha_2,\ {\approx}1500\,\mathrm{s}$\\conjectured};
+\node[conjecture] (right) at (5.8,-6.75) {\texttt{right\_mem\_rect}\\
+    $\alpha_2,\ {\approx}1500\,\mathrm{s}$\\conjectured};
 \draw[edge] (top) -- (nhds);
 \draw[edge] (top) -- (sqsub);
 \draw[edge] (nhds) -- (sqapply);
@@ -436,7 +479,7 @@ The proof invokes two non-trivial lemmas: \texttt{Complex.nhds\_hasBasis\_square
 \paragraph{Bottom of the chain: conjectured helper lemmas.}
 At the start of the run, the chain's roots were not present in the Lean file at all. The two trivial helpers \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect}---asserting that the corner points of a rectangle lie within it---were conjectured by agent $\alpha_2$ midway through its attempt to prove \texttt{rect\_subset\_iff}. Upon introspecting the proof goal and identifying that the forward direction of the iff required concrete witnesses, $\alpha_2$ issued a $\mathrm{Conj}(\phi)$ action whose proposal distribution (conditioned on the current proof context) placed high mass on exactly these two helper statements. The conjectured lemmas were trivial and resolved in the same epoch:
  
-\begin{lstlisting}[caption={Conjectured leaf lemmas, introduced and resolved by $\alpha_2$ at epoch $t\!\approx\!42$ (lines 499--509).},label={lst:leaves}]
+\begin{lstlisting}[caption={Conjectured leaf lemmas, introduced and resolved by $\alpha_2$ at epoch $t\!\approx\!1500\,\mathrm{s}$ (lines 499--509).},label={lst:leaves}]
 lemma left_mem_rect (z w : ℂ) : z ∈ Rectangle z w := by
   apply And.intro (by norm_num) (by norm_num)
  
@@ -463,7 +506,7 @@ lemma rect_subset_iff {z w z' w' : ℂ} :
         grind
 \end{lstlisting}
  
-The forward direction uses \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect} directly (lines 514 and 516); the reverse direction is discharged by \texttt{grind} after unfolding definitions. $\alpha_2$ published this result at approximately epoch $t\!\approx\!58$.
+The forward direction uses \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect} directly (lines 514 and 516); the reverse direction is discharged by \texttt{grind} after unfolding definitions. $\alpha_2$ published this result at approximately epoch $t\!\approx\!2100\,\mathrm{s}$.
  
 \paragraph{Parallel work on the other branch.}
 While $\alpha_2$ was working at the bottom of the \texttt{square\_subset\_square} branch, agent $\alpha_3$ was simultaneously making progress on the other direct parent of \texttt{SmallSquareInRectangle}---the neighborhood basis lemma \texttt{Complex.nhds\_hasBasis\_square}. This target's upstream dependencies (\texttt{Square\_apply}, \texttt{rectangle\_mem\_nhds\_iff}) were already resolved in Mathlib, so $\alpha_3$ could attack it directly without waiting for any publication events. This proof is the technically hardest in the chain: it requires showing both that every standard neighborhood contains some square and that every square is itself a neighborhood.
@@ -496,7 +539,7 @@ theorem Complex.nhds_hasBasis_square (p : ℂ) : (𝓝 p).HasBasis (0 < ·) (Squ
              cases min_cases (-i + p.im) (i + p.im) <;> linarith ⟩⟩
 \end{lstlisting}
  
-$\alpha_3$ published this result at epoch $t\!\approx\!71$, slightly after $\alpha_2$'s \texttt{rect\_subset\_iff} publication.
+$\alpha_3$ published this result at epoch $t\!\approx\!2550\,\mathrm{s}$, slightly after $\alpha_2$'s \texttt{rect\_subset\_iff} publication.
  
 \paragraph{Parallel conjecturing and the utility branch.}
 Meanwhile, agent $\alpha_1$ had been assigned \texttt{square\_subset\_square} by the strategy module. Upon inspecting this goal, $\alpha_1$ determined that the natural proof required an intermediate lemma relating rectangle inclusion to coordinate-wise inequalities in a stronger form than \texttt{rect\_subset\_iff}. $\alpha_1$ conjectured \texttt{RectSubRect'}, a useful but non-target generalization expressing rectangle inclusion directly in terms of componentwise real/imaginary inequalities:
@@ -516,12 +559,12 @@ lemma RectSubRect' {z₀ z₁ z₂ z₃ : ℂ} (x₀_le_x₁ : z₀.re ≤ z₁.
           ; exact Set.mem_uIcc_of_le ( by linarith ) ( by linarith ) ]
 \end{lstlisting}
  
-Notice that this proof directly invokes \texttt{rect\_subset\_iff.mpr} at line 551---a reference that was only valid after $\alpha_2$'s publication at $t\!\approx\!58$. The dependency-unlock event triggered a reengagement of $\alpha_1$, whose strategy-module recommendation was updated to proceed with the stalled \texttt{RectSubRect'} attempt. $\alpha_1$ published \texttt{RectSubRect'} at $t\!\approx\!64$.
+Notice that this proof directly invokes \texttt{rect\_subset\_iff.mpr} at line 551---a reference that was only valid after $\alpha_2$'s publication at $t\!\approx\!2100\,\mathrm{s}$. The dependency-unlock event triggered a reengagement of $\alpha_1$, whose strategy-module recommendation was updated to proceed with the stalled \texttt{RectSubRect'} attempt. $\alpha_1$ published \texttt{RectSubRect'} at $t\!\approx\!2300\,\mathrm{s}$.
  
 \paragraph{Closing the square branch.}
 With \texttt{RectSubRect'} now public, $\alpha_1$ resolved \texttt{square\_subset\_square} almost immediately:
  
-\begin{lstlisting}[caption={\texttt{square\_subset\_square}, resolved by $\alpha_1$ at $t\!\approx\!66$ (lines 819--824).},label={lst:squaresquare}]
+\begin{lstlisting}[caption={\texttt{square\_subset\_square}, resolved by $\alpha_1$ at $t\!\approx\!2400\,\mathrm{s}$ (lines 819--824).},label={lst:squaresquare}]
 lemma square_subset_square {p : ℂ} {c₁ c₂ : ℝ} (hc₁ : 0 < c₁) (hc : c₁ ≤ c₂) :
     Square p c₁ ⊆ Square p c₂ := by
       apply RectSubRect';
@@ -531,7 +574,7 @@ lemma square_subset_square {p : ℂ} {c₁ c₂ : ℝ} (hc₁ : 0 < c₁) (hc : 
 The proof is a two-line invocation of the conjectured lemma \texttt{RectSubRect'} (line 822) followed by a uniform \texttt{linarith} closer. This is a striking example of what the conjecture action enables: $\alpha_1$ produced a four-line final proof because it had earlier invested effort in creating the right auxiliary abstraction. A system without a conjecture primitive would have needed to inline the full argument into \texttt{square\_subset\_square} directly, duplicating work each time a similar pattern arose.
  
 \paragraph{Closing the target.}
-By epoch $t\!\approx\!72$, both direct dependencies of \texttt{SmallSquareInRectangle} were public, and the market was pricing its \texttt{PriceySatisfiedByAsset} contract accordingly. The strategy module directed $\alpha_2$ (newly freed after its own earlier publications) to this target. The final proof (Listing~\ref{lst:target}) makes two direct calls: \texttt{Complex.nhds\_hasBasis\_square p} at line 832, and \texttt{square\_subset\_square} at line 834. It was published at $t\!\approx\!79$.
+By epoch $t\!\approx\!2600\,\mathrm{s}$, both direct dependencies of \texttt{SmallSquareInRectangle} were public, and the market was pricing its \texttt{PriceySatisfiedByAsset} contract accordingly. The strategy module directed $\alpha_2$ (newly freed after its own earlier publications) to this target. The final proof (Listing~\ref{lst:target}) makes two direct calls: \texttt{Complex.nhds\_hasBasis\_square p} at line 832, and \texttt{square\_subset\_square} at line 834. It was published at $t\!\approx\!2850\,\mathrm{s}$.
  
 \paragraph{Coordination summary.}
 Table~\ref{tab:case-study} summarizes the temporal allocation of work across the three agents involved in this chain.
@@ -543,26 +586,28 @@ Table~\ref{tab:case-study} summarizes the temporal allocation of work across the
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{r|l|l|l|l}
 \toprule
-\textbf{Epoch} & \textbf{Agent} & \textbf{Declaration} & \textbf{Kind} & \textbf{Enabled by} \\
+\textbf{Time (s)} & \textbf{Agent} & \textbf{Declaration} & \textbf{Kind} & \textbf{Enabled by} \\
 \midrule
-$t\!\approx\!42$ & $\alpha_2$ & \texttt{left\_mem\_rect} & conjectured & --- \\
-$t\!\approx\!42$ & $\alpha_2$ & \texttt{right\_mem\_rect} & conjectured & --- \\
-$t\!\approx\!58$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & \texttt{left/right\_mem\_rect} \\
-$t\!\approx\!64$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
-$t\!\approx\!66$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
-$t\!\approx\!71$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & (Mathlib only) \\
-$t\!\approx\!79$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & \textbf{final target} & \texttt{nhds\_hasBasis\_square}\\ &&&&\texttt{square\_subset\_square} \\
+${\approx}1500$ & $\alpha_2$ & \texttt{left\_mem\_rect}  & conjectured & --- \\
+${\approx}1500$ & $\alpha_2$ & \texttt{right\_mem\_rect} & conjectured & --- \\
+${\approx}2100$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & \texttt{left/right\_mem\_rect} \\
+${\approx}2300$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
+${\approx}2400$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
+${\approx}2550$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & (Mathlib only) \\
+${\approx}2850$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & \textbf{final target}
+    & \texttt{nhds\_hasBasis\_square},\\
+    &&&& \texttt{square\_subset\_square} \\
 \bottomrule
 \end{tabular}
 \end{table}
  
 Several features of this trace illustrate the coordination mechanisms at work.
  
-First, we observe parallelism on independent subchains. $\alpha_3$ worked on \texttt{Complex.nhds\_hasBasis\_square} (the hardest proof in the chain) concurrently with $\alpha_1$ and $\alpha_2$'s progress up the \texttt{square\_subset\_square} branch. These two subchains share only the final target, so no publication events propagated between them until the last step. Epochs $t \in [42, 71]$ saw three agents doing fully independent, non-duplicative work.
+First, we observe parallelism on independent subchains. $\alpha_3$ worked on \texttt{Complex.nhds\_hasBasis\_square} (the hardest proof in the chain) concurrently with $\alpha_1$ and $\alpha_2$'s progress up the \texttt{square\_subset\_square} branch. These two subchains share only the final target, so no publication events propagated between them until the last step. Epochs $t \in [1500, 2550]\,\mathrm{s}$ saw three agents doing fully independent, non-duplicative work.
  
 Second, we see conjecture as task decomposition. Three of the seven declarations in the chain (\texttt{left\_mem\_rect}, \texttt{right\_mem\_rect}, \texttt{RectSubRect'}) did not appear in the original target set. They were introduced by agents mid-proof as auxiliary decompositions. Without a conjecture primitive, the work done by these three helpers would have had to be inlined into each of their users, substantially inflating the size (and difficulty) of the downstream proofs.
  
-Third, publication-triggered cascades: The publication of \texttt{rect\_subset\_iff} at $t\!\approx\!58$ immediately unblocked $\alpha_1$'s stalled attempt on \texttt{RectSubRect'}, and the publication of \texttt{RectSubRect'} at $t\!\approx\!64$ immediately unblocked \texttt{square\_subset\_square}. Each publication was a dependency-unlock event that explicitly pushed towards the social optimum. One could observe settlement of the corresponding long contracts and a reweighting of open offers.
+Third, publication-triggered cascades: The publication of \texttt{rect\_subset\_iff} at $t\!\approx\!2100\,\mathrm{s}$ immediately unblocked $\alpha_1$'s stalled attempt on \texttt{RectSubRect'}, and the publication of \texttt{RectSubRect'} at $t\!\approx\!2300\,\mathrm{s}$ immediately unblocked \texttt{square\_subset\_square}. Each publication was a dependency-unlock event that explicitly pushed towards the social optimum. One could observe settlement of the corresponding long contracts and a reweighting of open offers.
 
 
 Fourth, the three agents took on qualitatively different work: $\alpha_2$ did bottom-of-chain scaffolding (the trivial helpers and their direct consumer, \texttt{rect\_subset\_iff}); $\alpha_1$ handled the utility-graph-middle work (\texttt{RectSubRect'} and \texttt{square\_subset\_square}); $\alpha_3$ handled the hardest independent proof (\texttt{Complex.nhds\_hasBasis\_square}).

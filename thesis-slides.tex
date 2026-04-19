@@ -1360,30 +1360,57 @@ The synthetic kernel is stationary and Markovian; real LLM agents are not. The d
 The generator preserves dependency geometry while allowing many fresh training episodes.
 \end{frame}
 
-\begin{frame}{PNT Benchmark}
-\small
-\begin{columns}[T,onlytextwidth]
-\column{0.45\textwidth}
-\begin{block}{MiniCTX PNT}
+\begin{frame}{PNT Benchmark: Extracted Graph}
+\scriptsize
+\centering
+\resizebox{0.86\textwidth}{!}{%
 \begin{tabular}{lr}
 \toprule
-Metric & Value \\
+\textbf{Metric} & \textbf{Value} \\
 \midrule
-Total declarations & 911 \\
-Sorry targets & 92 \\
-DAG depth & 18 \\
-Avg. dependencies per target & 0.30 \\
-Easy / Medium / Hard & 39 / 41 / 12 \\
+Total extracted PNT declarations & 6,563 \\
+\texttt{sorry}'d benchmark targets $|\Phi^*|$ & 92 \\
+Easy / Medium / Hard split & 39 / 41 / 12 \\
+Internal dependency edges & 27,898 \\
+Dependency DAG max layer & 37 \\
+Dependency DAG layers & 38 \\
+Avg.\ internal dependencies per declaration & 4.2508 \\
+Median internal dependencies per declaration & 0 \\
+Max internal dependencies for one declaration & 288 \\
+Zero-dependency declarations & 4,216 \\
 \bottomrule
-\end{tabular}
-\end{block}
-\column{0.5\textwidth}
-\begin{itemize}
-  \item Systems fill sorry'd targets under a fixed wall-clock budget.
-  \item Agora systems use verified publication and market bounties.
-  \item Strategy variant adds learned recommendations at each decision epoch.
-\end{itemize}
-\end{columns}
+\end{tabular}}
+
+\vspace{0.8em}
+\small
+The benchmark is much larger than the target set: $92$ sorry'd targets sit inside a $6{,}563$-declaration extracted dependency graph.
+\end{frame}
+
+\begin{frame}{PNT Benchmark: Reuse and Harness}
+\scriptsize
+\centering
+\resizebox{0.86\textwidth}{!}{%
+\begin{tabular}{lr}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Declarations used by at least one other declaration & 5,044 \\
+Declarations never used by another declaration & 1,519 \\
+Dependency-use frequency $p_{50}/p_{75}/p_{90}/p_{95}/p_{99}$ & 1 / 1 / 3 / 20 / 64 \\
+Max dependency-use frequency & 85 \\
+Fitted domain count & 730 \\
+\midrule
+Initial cash per agent wallet & 1,000 \\
+Run timeout / offer stop-time delay & 3600 s \\
+Offer price & 0.1 \\
+Offer units per target & 100 \\
+Default model & \texttt{anthropic/claude-haiku-4.5} \\
+\bottomrule
+\end{tabular}}
+
+\vspace{0.8em}
+\small
+Systems fill sorry'd targets under a fixed budget; Agora variants add verified publication, market bounties, and optional learned strategy recommendations.
 \end{frame}
 
 \begin{frame}{Systems Under Comparison}
@@ -1487,15 +1514,15 @@ Agora Scaffold & $21\%$ & 5 & --- \\
   target/.style={node,fill=mLight},
   arr/.style={-{Stealth[length=2mm]},thick,mDarkTeal}
 ]
-\node[target] (top) {\texttt{SmallSquare}\\\texttt{InRectangle}\\$\alpha_2,t\approx79$};
-\node[target,below left=0.9cm and 1.0cm of top] (nhds) {\texttt{nhds\_has}\\\texttt{Basis\_square}\\$\alpha_3,t\approx71$};
-\node[target,below right=0.9cm and 1.0cm of top] (sqsub) {\texttt{square\_subset}\\\texttt{\_square}\\$\alpha_1,t\approx66$};
+\node[target] (top) {\texttt{SmallSquare}\\\texttt{InRectangle}\\$\alpha_2,\approx2850\,\mathrm{s}$};
+\node[target,below left=0.9cm and 1.0cm of top] (nhds) {\texttt{nhds\_has}\\\texttt{Basis\_square}\\$\alpha_3,\approx2550\,\mathrm{s}$};
+\node[target,below right=0.9cm and 1.0cm of top] (sqsub) {\texttt{square\_subset}\\\texttt{\_square}\\$\alpha_1,\approx2400\,\mathrm{s}$};
 \node[node,fill=gray!15,below left=0.85cm and 0.15cm of nhds] (sqapply) {\texttt{Square\_apply}\\Mathlib};
 \node[node,fill=gray!15,below right=0.85cm and 0.15cm of nhds] (rectnhds) {\texttt{rectangle\_mem}\\\texttt{\_nhds\_iff}\\Mathlib};
-\node[conj,below=0.9cm of sqsub] (rectsub) {\texttt{RectSubRect'}\\$\alpha_1,t\approx64$};
-\node[target,below=0.9cm of rectsub] (iff) {\texttt{rect\_subset\_iff}\\$\alpha_2,t\approx58$};
-\node[conj,below left=0.8cm and 0.25cm of iff] (left) {\texttt{left\_mem}\\\texttt{\_rect}\\$t\approx42$};
-\node[conj,below right=0.8cm and 0.25cm of iff] (right) {\texttt{right\_mem}\\\texttt{\_rect}\\$t\approx42$};
+\node[conj,below=0.9cm of sqsub] (rectsub) {\texttt{RectSubRect'}\\$\alpha_1,\approx2300\,\mathrm{s}$};
+\node[target,below=0.9cm of rectsub] (iff) {\texttt{rect\_subset\_iff}\\$\alpha_2,\approx2100\,\mathrm{s}$};
+\node[conj,below left=0.8cm and 0.25cm of iff] (left) {\texttt{left\_mem}\\\texttt{\_rect}\\$\alpha_2,\approx1500\,\mathrm{s}$};
+\node[conj,below right=0.8cm and 0.25cm of iff] (right) {\texttt{right\_mem}\\\texttt{\_rect}\\$\alpha_2,\approx1500\,\mathrm{s}$};
 \draw[arr] (top) -- (nhds);
 \draw[arr] (top) -- (sqsub);
 \draw[arr] (nhds) -- (sqapply);
@@ -1512,7 +1539,7 @@ Agora Scaffold & $21\%$ & 5 & --- \\
 Dashed nodes were not original targets; agents introduced them as conjectured helper lemmas.
 \end{frame}
 
-\begin{frame}[fragile]{Listing 1: Helper Lemmas, $\alpha_2$, $t\approx42$}
+\begin{frame}[fragile]{Listing 1: Helper Lemmas, $\alpha_2$, $\approx1500\,\mathrm{s}$}
 \scriptsize
 Conjectured leaf lemmas introduced while proving \texttt{rect\_subset\_iff}.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1526,7 +1553,7 @@ lemma right_mem_rect (z w : ℂ) : w ∈ Rectangle z w := by
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Listing 2: First Target, $\alpha_2$, $t\approx58$}
+\begin{frame}[fragile]{Listing 2: First Target, $\alpha_2$, $\approx2100\,\mathrm{s}$}
 \scriptsize
 \texttt{rect\_subset\_iff}, enabled by the two helper lemmas.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1542,7 +1569,7 @@ lemma rect_subset_iff {z w z' w' : ℂ} :
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Listing 3: Utility Lemma, $\alpha_1$, $t\approx64$}
+\begin{frame}[fragile]{Listing 3: Utility Lemma, $\alpha_1$, $\approx2300\,\mathrm{s}$}
 \scriptsize
 \texttt{RectSubRect'}, conjectured after \texttt{rect\_subset\_iff} became public.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1561,7 +1588,7 @@ lemma RectSubRect' {z₀ z₁ z₂ z₃ : ℂ} (x₀_le_x₁ : z₀.re ≤ z₁.
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Listing 4: Square Monotonicity, $\alpha_1$, $t\approx66$}
+\begin{frame}[fragile]{Listing 4: Square Monotonicity, $\alpha_1$, $\approx2400\,\mathrm{s}$}
 \scriptsize
 \texttt{square\_subset\_square}, enabled by the conjectured \texttt{RectSubRect'} lemma.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1572,7 +1599,7 @@ lemma square_subset_square {p : ℂ} {c₁ c₂ : ℝ} (hc₁ : 0 < c₁) (hc : 
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Listing 5: Hard Branch, $\alpha_3$, $t\approx71$}
+\begin{frame}[fragile]{Listing 5: Hard Branch, $\alpha_3$, $\approx2550\,\mathrm{s}$}
 \scriptsize
 \texttt{Complex.nhds\_hasBasis\_square}, the longest proof in this chain.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1604,7 +1631,7 @@ theorem Complex.nhds_hasBasis_square (p : ℂ) : (𝓝 p).HasBasis (0 < ·) (Squ
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Listing 6: Final Target, $\alpha_2$, $t\approx79$}
+\begin{frame}[fragile]{Listing 6: Final Target, $\alpha_2$, $\approx2850\,\mathrm{s}$}
 \scriptsize
 \texttt{SmallSquareInRectangle}, enabled by both direct parent targets.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1625,7 +1652,7 @@ lemma SmallSquareInRectangle {z w p : ℂ} (pInRectInterior : Rectangle z w ∈ 
 \begin{itemize}
   \item Agent $\alpha_2$ begins on \texttt{rect\_subset\_iff}.
   \item The proof needs endpoint-membership facts not present as targets.
-  \item $\alpha_2$ conjectures and proves \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect} at about epoch 42.
+  \item $\alpha_2$ conjectures and proves \texttt{left\_mem\_rect} and \texttt{right\_mem\_rect} at about $1500\,\mathrm{s}$.
   \item These become public helper lemmas, turning a blocked proof into a straightforward \texttt{simp}/\texttt{grind} proof.
   \item This illustrates the conjecture primitive: agents are not only solving targets, but creating useful intermediate infrastructure.
 \end{itemize}
@@ -1647,21 +1674,21 @@ lemma SmallSquareInRectangle {z w p : ℂ} (pInRectInterior : Rectangle z w ∈ 
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{r|l|l|l|l}
 \toprule
-\textbf{Epoch} & \textbf{Agent} & \textbf{Declaration} & \textbf{Kind} & \textbf{Enabled by} \\
+\textbf{Time (s)} & \textbf{Agent} & \textbf{Declaration} & \textbf{Kind} & \textbf{Enabled by} \\
 \midrule
-$t\approx42$ & $\alpha_2$ & \texttt{left\_mem\_rect} & conjectured & --- \\
-$t\approx42$ & $\alpha_2$ & \texttt{right\_mem\_rect} & conjectured & --- \\
-$t\approx58$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & helpers \\
-$t\approx64$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
-$t\approx66$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
-$t\approx71$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & Mathlib \\
-$t\approx79$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & final target & both branches \\
+$\approx1500$ & $\alpha_2$ & \texttt{left\_mem\_rect} & conjectured & --- \\
+$\approx1500$ & $\alpha_2$ & \texttt{right\_mem\_rect} & conjectured & --- \\
+$\approx2100$ & $\alpha_2$ & \texttt{rect\_subset\_iff} & target & helpers \\
+$\approx2300$ & $\alpha_1$ & \texttt{RectSubRect'} & conjectured & \texttt{rect\_subset\_iff} \\
+$\approx2400$ & $\alpha_1$ & \texttt{square\_subset\_square} & target & \texttt{RectSubRect'} \\
+$\approx2550$ & $\alpha_3$ & \texttt{Complex.nhds\_hasBasis\_square} & target & Mathlib \\
+$\approx2850$ & $\alpha_2$ & \texttt{SmallSquareInRectangle} & final target & both branches \\
 \bottomrule
 \end{tabular}}
 
 \vspace{0.8em}
 \small
-The trace shows parallelism on independent subchains, conjecture as task decomposition, and publication-triggered cascades.
+The trace shows parallelism from $1500$--$2550$ s, conjecture as task decomposition, and publication-triggered cascades.
 \end{frame}
 
 \begin{frame}{Case Study: Why It Matters}

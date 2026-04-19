@@ -1,6 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1776351010 "/Users/ahuja/Downloads/Ahuja MS Thesis/thesis-slides.tex" "thesis-slides.pdf" "thesis-slides" 1776351018 0
-  "/Users/ahuja/Downloads/Ahuja MS Thesis/thesis-slides.tex" 1776351010 64537 329e4e933bb59c367255cae2a71d3fed ""
+["pdflatex"] 1776352398 "thesis-slides.tex" "thesis-slides.pdf" "thesis-slides" 1776352406 0
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -62,7 +61,6 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb" 1248133631 36094 798f80770b3b148ceedd006d487db67c ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb" 1248133631 24420 52dbb8e8aa0069a1b987309557f8d303 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb" 1248133631 24373 a91d375736817a75026663adcb2190c1 ""
-  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb" 1248133631 25095 0ff1f6d531b320ecbbd6ea84d875816c ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb" 1248133631 25168 33771b85f45c82138dd7745db7092d1c ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi9.pfb" 1248133631 25029 6f2cec9646ca278302ed7d604e506e3e ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
@@ -76,6 +74,7 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb" 1215737283 162624 9dcc92cd3b1dfe2ecc80e6da7f2eb6bd ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb" 1215737283 154599 ded6d7c21788a8930eadc7fef7518942 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb" 1215737283 149037 995a6f1e12c1d647b99b1cf55db78699 ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfsi0900.pfb" 1215737283 104439 1f54ea8e1ac70aef314d908bf06aa7c6 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0500.pfb" 1215737283 101283 a0d071b28db2831f9baed0e0529f09ae ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0600.pfb" 1215737283 99931 c4bf5cbd82bc527fffa6bd4047ab5d6a ""
@@ -321,11 +320,11 @@
   "figures/pnt_synth_256.pdf" 1776312108 40759 307d4fdd049dee2f7fe78093550b9eee ""
   "figures/pnt_synth_512.pdf" 1776312108 87756 285a41d968db36216e44561ce88ea2ee ""
   "figures/pnt_synth_og.pdf" 1776312107 1049818 8816f6e8d12cf06740f5d2092145bbdd ""
-  "thesis-slides.aux" 1776351018 15434 cff1c42d7bf203ca9797e2422e88e493 "pdflatex"
-  "thesis-slides.nav" 1776351018 10313 39fb68a1e0b005a75fa19f237e7fae78 "pdflatex"
-  "thesis-slides.out" 1776351018 836 de1494e36c2bc65014e36a6f4d7f2038 "pdflatex"
-  "thesis-slides.tex" 1776351010 64537 329e4e933bb59c367255cae2a71d3fed ""
-  "thesis-slides.vrb" 1776351018 893 cdef64eb9458161188522bc8be0d9a5a "pdflatex"
+  "thesis-slides.aux" 1776352406 15563 ece2553e3c3e86b99d0cd6cf3c07cd20 "pdflatex"
+  "thesis-slides.nav" 1776352406 10406 fe5fbd42931a93e63d58e24e5acbfcbc "pdflatex"
+  "thesis-slides.out" 1776352406 836 de1494e36c2bc65014e36a6f4d7f2038 "pdflatex"
+  "thesis-slides.tex" 1776352371 65780 4a33d1255a00f79b2d3ac796b84c9599 ""
+  "thesis-slides.vrb" 1776352406 907 464f944844193a4b15df33a0d9793d1b "pdflatex"
   (generated)
   "thesis-slides.aux"
   "thesis-slides.log"

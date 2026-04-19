@@ -1,4 +1,4 @@
-\frametitle{Listing 6: Final Target, $\alpha _2$, $t\approx 79$}
+\frametitle{Listing 6: Final Target, $\alpha _2$, $\approx 2850\,\mathrm {s}$}
 \scriptsize
 \texttt{SmallSquareInRectangle}, enabled by both direct parent targets.
 \begin{lstlisting}[basicstyle=\ttfamily\tiny]
