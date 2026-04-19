@@ -207,48 +207,60 @@ Minimizing the dependency footprint encourages self-contained proofs that do not
 
 The modularity metric requires substantially more machinery, rooted in Lean's elaboration semantics. At a high level, we count the number of independent subproofs that are useful towards the main proof, as a more rigorous measure of proof structure quality than the declarative metric with explicit guards against reward hacking. The following definitions formalize this intuition.
 
-\begin{definition}[Proof Tree and Children]\label{def:proof_tree}
-Lean elaborates tactic proofs by incrementally constructing and solving metavariables. At elaboration step $i$, tactic $\tau_i$ focuses a goal $?m_i$, produces an assignment $\sigma_{i+1}(?m_i) = t_i$, and potentially introduces new metavariables as subgoals. The set of \emph{direct children} of step $i$ is
+\subparagraph{Lean elaboration semantics.} Lean elaborates tactic proofs by incrementally constructing and solving metavariables. At any point in elaboration, the system maintains a metavariable context $M = (\Delta, \sigma)$, where $\Delta$ is a finite set of metavariable declarations of the form $?m : (\Gamma_{?m} \vdash A_{?m})$ with local context $\Gamma_{?m}$ and target type $A_{?m}$, and $\sigma$ is a partial assignment mapping metavariables to terms. A \emph{goal} is an unassigned metavariable $?m \in \Delta \setminus \mathrm{dom}(\sigma)$, and at elaboration step $i$ Lean maintains a list of \emph{active goals} $\mathcal{A}_i$. Each tactic step $\tau_i$ focuses a goal $?m_i \in \mathcal{A}_i$, produces an assignment $\sigma_{i+1}(?m_i) = t_i$, and potentially introduces new metavariables corresponding to subgoals. The set of newly created metavariables is exactly the set of free metavariables occurring in $t_i$ after assignment.
+
+\begin{definition}[Direct Children]\label{def:proof_tree}
+The \emph{direct children} of step $\tau_i$ are
 \[
-\mathrm{Children}(\tau_i) := \{\text{metavariables occurring free in } t_i\}.
+\mathrm{Children}(\tau_i) := \{\text{metavariables occurring free in } t_i\},
 \]
-The \emph{proof tree} $\mathcal{T}(y)$ is the labeled directed forest over steps $\tau_1,\dots,\tau_T$, extracted from Lean's \texttt{InfoTree}.
+representing the direct subgoals of the focused goal $?m_i$.
 \end{definition}
 
-\begin{definition}[Spawned Goals]\label{def:spawned}
-Define
+Lean tactics, however, may surface additional obligations that are \emph{not} direct children of $?m_i$. These arise from nested tactic blocks (\texttt{have}, \texttt{calc}, \texttt{by}), from automation introducing auxiliary lemmas, from goal defocus/refocus patterns, and from tactics that internally elaborate their own subproofs. To capture this distinction, let
 \[
-\mathrm{Current}_i := \{?m_i\} \cup \mathrm{Children}(\tau_i),\qquad S_{i+1} := S_i \cup \mathrm{Children}(\tau_i).
+\mathrm{Current}_i := \{?m_i\} \cup \mathrm{Children}(\tau_i),\qquad S_{i+1} := S_i \cup \mathrm{Children}(\tau_i),
 \]
+so that $S_i$ records all metavariables that have previously appeared as children.
+
+\begin{definition}[Spawned Goals]\label{def:spawned}
 The \emph{spawned goals} of step $\tau_i$ are
 \[
 \mathrm{Spawned}(\tau_i) := \bigl(\mathrm{Current}_i \setminus \mathrm{Children}(\tau_i)\bigr) \setminus S_i.
 \]
-These are goals that first appear at step $i$, are not logical subgoals of the focused goal, and correspond to independent subproof obligations introduced by tactics such as \texttt{have} and \texttt{calc}.
+Intuitively, these are goals that first appear at step $i$, are not logical subgoals of the focused goal, and correspond to independent subproof obligations introduced by tactics such as \texttt{have} and \texttt{calc}.
 \end{definition}
 
-\begin{definition}[Effective Spawned Goals]\label{def:effective_spawned}
-A spawned goal $g$ is \emph{effective} if it satisfies all three guard conditions:
-\begin{enumerate}
-    \item \textbf{Nontriviality.} The subtree $\mathcal{T}_g \subseteq \mathcal{T}(y)$ rooted at $g$ contains more than $2$ tactic steps ($|\mathcal{T}_g| > 2$). This excludes goals discharged immediately by a single automation tactic (e.g.\ \texttt{simp}, \texttt{linarith}, \texttt{ring}).
-    \item \textbf{No duplicates.} The sequent variant hash of $g$ (computed modulo $\beta\delta\iota$-normalization and $\alpha$-equivalence) does not match any previously counted effective spawned goal, preventing reward hacking via repeated restatements of the same obligation.
-    \item \textbf{No wrappers.} The target type of $g$ is not a definitional wrapper of its parent goal's target type, and vice versa. This eliminates trivial $\forall$-introductions and restatements of the parent goal.
-\end{enumerate}
-Formally, let $\mathsf{Intro}(g)$ be the set of proof-relevant hypotheses introduced by the subproof rooted at $g$. Define the monotone operator $\Phi$ on sets of spawned roots by
+\subparagraph{Proof graph over steps.} We represent a proof as a directed graph over steps rather than metavariables. Let steps be indexed by $i = 1,\dots,T$. Define a \emph{normal edge} $i \to j$ if the goal solved at step $j$ is a direct child of step $i$, and a \emph{spawned edge} $i \rightsquigarrow j$ if the goal solved at step $j$ was spawned at step $i$. This yields a labeled directed forest
+\[
+\mathcal{T}(y) = (V,\ E_{\mathrm{normal}},\ E_{\mathrm{spawned}}),
+\]
+with $E_{\mathrm{spawned}} \subseteq E_{\mathrm{normal}}$. We refer to this structure as the \emph{proof tree}, extracted from Lean's \texttt{InfoTree}.
 
+\subparagraph{Canonical goal representation.} To prevent adversarial or spurious inflation of modularity, goals are compared modulo definitional equality, $\alpha$-equivalence, and universal abstraction. Each goal is assigned a canonical representation consisting of (i) a base target hash; (ii) a sorted list of hypothesis type hashes (proof-relevant hypotheses only); (iii) a set of \emph{sequent variant hashes}, obtained by progressively discharging $\forall$-binders and implications; and (iv) a set of \emph{target-only variant hashes}, used for wrapper detection. All hashes are computed after $\beta\delta\iota$-normalization, metadata erasure, binder-name scrubbing (for $\alpha$-invariance), and replacement of free variables by deterministic canonical constants. This representation ensures that goals differing only by irrelevant syntactic structure or parameter order are identified.
+
+\subparagraph{Duplicate and wrapper detection.} A spawned goal is considered a \emph{duplicate} and discarded if either (i) its sequent variant hash matches any previously seen goal (global duplicate), or (ii) its target is a definitional wrapper of its parent goal, i.e.\ $\mathrm{target}(g_{\mathrm{child}}) \in \mathrm{targetVariants}(g_{\mathrm{parent}})$ or vice versa. This eliminates several classes of reward hacking --- trivial $\forall$-introductions, restatements of the parent goal, and redundant lemma spawning.
+
+\subparagraph{Nontriviality filter.} Let $T_g$ be the subtree of steps rooted at a spawned goal $g$. We require $|T_g| > 2$ to ensure that the goal is not discharged by a single automation step. Empirically, this excludes trivial goals solvable by tactics such as \texttt{simp}, \texttt{tauto}, \texttt{linarith}, \texttt{ring}, \texttt{aesop}, and \texttt{grind}.
+
+\subparagraph{Effectiveness via fixed-point semantics.} Let each spawned goal $g$ introduce a set of proof variables $\mathsf{Intro}(g)$ corresponding to hypotheses unavailable in the parent context. We say that a spawned subtree rooted at $g$ is \emph{effective} if its introduced hypotheses are used in the main (non-spawned) proof, or in another spawned subtree that is itself effective. Formally, define the monotone operator $\Phi$ on sets of spawned roots by
 \begin{align*}
-\Phi(S) :=& \bigl\{\, g \;\big|\; \mathsf{Intro}(g) \text{ used outside all spawned subtrees},\ \\&\text{or}\ \exists\, g' \in S,\, g' \neq g,\, \mathsf{Intro}(g) \text{ used in subtree of } g' \bigr\}.    
+\Phi(S) :=\; \bigl\{\, g \;\big|\;&\, \mathsf{Intro}(g) \text{ is used outside all spawned subtrees},\\
+&\text{or}\ \exists\, g' \in S,\, g' \neq g,\, \mathsf{Intro}(g) \text{ used in subtree } g' \bigr\}.
 \end{align*}
 
-The set of \emph{effective spawned goals} $\mathcal{E}(y)$ is the least fixed point of $\Phi$ restricted to the set of goals satisfying the three guard conditions above. This fixed-point semantics ensures that a spawned subproof is effective only if its introduced hypotheses are actually used in the main proof or in another effective subproof.
+\begin{definition}[Effective Spawned Goals]\label{def:effective_spawned}
+The set of \emph{effective spawned goals} $\mathcal{E}(y)$ is the least fixed point of $\Phi$, restricted to spawned roots that satisfy the nontriviality, no-duplicates, and no-wrappers guard conditions above. This is computed by standard fixed-point iteration and is guaranteed to terminate, since the set of spawned roots is finite.
 \end{definition}
 
-With this, we define the \emph{modularity metric} as
+\begin{definition}[Modularity Metric]\label{def:modularity_metric}
+Given a verified proof $y$ of $(c,x)$, the \emph{modularity metric} is
 \[
-\mu_{\mathrm{mod}}(c,x,y) := \bigl|\mathcal{E}(y)\bigr|,
+\mu_{\mathrm{mod}}(c,x,y) := \bigl|\mathcal{E}(y)\bigr|.
 \]
-where $\mathcal{E}(y)$ is the set of effective spawned goals (Definition~\ref{def:effective_spawned}). Modular proofs are easier to read, maintain, and reuse. The guard conditions prevent reward hacking by ensuring that only genuinely independent and substantive subproofs are counted. Figure~\ref{fig:kd5-kd45-proof} illustrates the proof-tree representation used to compute the modularity metric on an example proof.
-Introduced in ImProver~2 (Chapter~\ref{chap:improver2}), and defined in full rigor in Appendix~\ref{app:modularity}. \textbf{TODO PORT OVER IMPROVER 2 APPENDIX}
+\end{definition}
+
+Modular proofs are easier to read, maintain, and reuse. The guard conditions operate at the kernel level on term-level constructions rather than on tactic syntax, which substantially narrows the reward-hacking surface relative to purely syntactic counts like the declarative metric. Figure~\ref{fig:kd5-kd45-proof} illustrates the proof-tree representation used to compute $\mu_{\mathrm{mod}}$ on an example proof.
 
 
 \begin{figure}[ht]
@@ -413,9 +425,24 @@ Modularity      &            & \checkmark \\
 \end{tabular}
 \end{table}
 
-\textbf{TODO: GIVE A MORE ROBUST TREATMENT OF FAILURE MODES AND DEGENERATE SOLUTIONS. LIST LIMITATIONS OF EACH METRIC AND HIGHLIGHT HOW THE DESIGN OF METRICS ARE THE PROBLEM OF THE USER; WE FOCUS ON PROVIDING A TOOL TO OPTIMIZE ANY USER-SPECIFIED METRIC, AND PROVIDE SOME EXAMPLES OF USEFUL METRICS, BUT WE MAKE NO CLAIMS ABOUT THE INTRINSIC QUALITY OF ANY PARTICULAR METRIC.} 
+\subsubsection{Failure Modes and the Role of the User}
+\label{sssec:failure_modes}
 
-A risk with all metrics is the possibility of \emph{degenerate solutions}: proofs that score highly on a metric while not corresponding to its intuitive sense. For example, overuse of \texttt{have} statements can inflate the declarative score despite those statements playing no role in the deductive process. ImProver mitigates this by providing many human-written examples of each metric. ImProver~2's modularity metric addresses it at the level of the metric definition itself, via the guard conditions in Definition~\ref{def:effective_spawned}. The design of robust metrics for formal proof quality remains an active challenge and is discussed in the limitations of each system.
+A risk shared by every metric is the possibility of \emph{degenerate solutions}: proofs that score well on the metric without corresponding to its intuitive purpose. We make no claim that the specific metrics in Table~\ref{tab:metrics_summary} are optimal, canonical, or universally preferred proxies for proof quality. Our systems are tools for optimizing an arbitrary user-specified metric $\mu$; the metrics studied in this thesis are illustrative examples of what can be optimized, not prescriptions for what should be. The choice of metric, and any claim that optimizing it yields better proofs in some external sense, is the responsibility of the user. With that caveat, it is instructive to enumerate the characteristic failure modes of each metric we study.
+
+\paragraph{Length.} The length metric rewards any reduction in tactic count, including rewrites that replace structured proofs with single-line proof terms. Such rewrites are correct and shorter but may obscure proof structure and readability. However, in practice. Length should therefore be interpreted as a toy metric to gauge the effectiveness of our agent, as a measure of syntactic compactness rather than readability.
+
+\paragraph{Declarativity.} The declarativity metric is a syntactic count: the ratio of \texttt{have} tactics to total tactics. It is vulnerable to \texttt{have}-padding, in which a model inserts nominally-typed intermediate statements that play no deductive role. ImProver mitigates this in practice by prompting with human-written declarative examples, but the metric itself offers no kernel-level protection. This limitation is addressed by the modularity metric introduced in ImProver~2.
+
+\paragraph{Mixed.} The mixed metric combines length and declarativity additively. It inherits both failure modes --- aggressive shortening and \texttt{have}-padding --- but lessens the impact of each, as such ancillary have statements would decrease the length reward and such proof-term replacement would eliminate such have statements.
+
+\paragraph{Completion.} Completion is optimal at any correct proof, so any rewrite that simply preserves correctness is a global optimum. This is the intended behaviour (completion is used only to demonstrate that proof optimization subsumes neural theorem proving), but it should not be interpreted as a quality metric.
+
+\paragraph{Dependencies.} The dependency metric measures the explicit dependency footprint --- the set of externally named lemmas referenced in the proof text --- not the logical dependency structure of the proof. A consequence is that a rewrite from \texttt{rw [Nat.add\_comm, Nat.add\_assoc]} to \texttt{omega} scores strictly better, even though the two proofs have identical logical dependencies. This is not a degenerate solution, as it is aligned directly with Mathlib's style guidance \cite{lean_style_guide} for the sake of prevent brittle proofs.
+
+\paragraph{Modularity.} The modularity metric's guard conditions (nontriviality, no duplicates, no wrappers, fixed-point effectiveness) explicitly rule out several canonical forms of reward hacking at the kernel level: inserting duplicate \texttt{have}s, solving spawned goals with a single automation step, or wrapping the parent goal in a trivially restated sub-obligation. However, this does not guarantee that every modularity-increasing rewrite is mathematically readable. Modularity is therefore best understood as a structural measure aimed at proofs written in a draft-sketch-prove or lemma-decomposition style \cite{jiang2023draft}, not a validated proxy for human-maintainer preference. We do not claim that maintainers prefer modularity-optimized proofs, and a human-preference study is identified as important future work.
+
+Across all of these metrics, the consistent pattern is that sharper structural definitions (as in modularity) reduce the reward-hacking surface relative to purely syntactic counts (as in declarativity), but no metric we study is immune. Our position is that robust metric design is itself a research problem: we provide a framework for optimizing any computable $\mu$, and demonstrate it on metrics for which the failure modes are well-characterized, without claiming that these metrics are the correct ones to optimize in every context.
 
 \subsection{Evaluation Framework}
 \label{sec:eval_methodology}

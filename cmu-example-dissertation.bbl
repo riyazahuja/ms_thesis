@@ -224,6 +224,12 @@ Jiewen Hu, Thomas Zhu, and Sean Welleck.
 \newblock In \emph{The Thirteenth International Conference on Learning Representations}, 2025.
 \newblock URL \url{https://openreview.net/forum?id=KIgaAqEFHW}.
 
+\bibitem[mathlib Community(2024)]{lean_style_guide}
+The mathlib Community.
+\newblock Library style guidelines.
+\newblock \url{https://leanprover-community.github.io/contribute/style.html}, 2024.
+\newblock Accessed: 2026-04-18.
+
 \bibitem[{Kim Morrison}(2024)]{Trainingdata}
 {Kim Morrison}.
 \newblock lean-training-data.
@@ -304,11 +310,5 @@ DeepSeek-AI.
 OpenAI, :, Sandhini Agarwal, Lama Ahmad, Jason Ai, Sam Altman, Andy Applebaum, Edwin Arbus, Rahul~K. Arora, Yu~Bai, Bowen Baker, Haiming Bao, Boaz Barak, Ally Bennett, Tyler Bertao, Nivedita Brett, Eugene Brevdo, Greg Brockman, Sebastien Bubeck, Che Chang, Kai Chen, Mark Chen, Enoch Cheung, Aidan Clark, Dan Cook, Marat Dukhan, Casey Dvorak, Kevin Fives, Vlad Fomenko, Timur Garipov, Kristian Georgiev, Mia Glaese, Tarun Gogineni, Adam Goucher, Lukas Gross, Katia~Gil Guzman, John Hallman, Jackie Hehir, Johannes Heidecke, Alec Helyar, Haitang Hu, Romain Huet, Jacob Huh, Saachi Jain, Zach Johnson, Chris Koch, Irina Kofman, Dominik Kundel, Jason Kwon, Volodymyr Kyrylov, Elaine~Ya Le, Guillaume Leclerc, James~Park Lennon, Scott Lessans, Mario Lezcano-Casado, Yuanzhi Li, Zhuohan Li, Ji~Lin, Jordan Liss, Lily, Liu, Jiancheng Liu, Kevin Lu, Chris Lu, Zoran Martinovic, Lindsay McCallum, Josh McGrath, Scott McKinney, Aidan McLaughlin, Song Mei, Steve Mostovoy, Tong Mu, Gideon Myles, Alexander Neitz, Alex Nichol, Jakub Pachocki, Alex Paino, Dana Palmie, Ashley Pantuliano, Giambattista Parascandolo, Jongsoo Park, Leher Pathak, Carolina Paz, Ludovic Peran, Dmitry Pimenov, Michelle Pokrass, Elizabeth Proehl, Huida Qiu, Gaby Raila, Filippo Raso, Hongyu Ren, Kimmy Richardson, David Robinson, Bob Rotsted, Hadi Salman, Suvansh Sanjeev, Max Schwarzer, D.~Sculley, Harshit Sikchi, Kendal Simon, Karan Singhal, Yang Song, Dane Stuckey, Zhiqing Sun, Philippe Tillet, Sam Toizer, Foivos Tsimpourlas, Nikhil Vyas, Eric Wallace, Xin Wang, Miles Wang, Olivia Watkins, Kevin Weil, Amy Wendling, Kevin Whinnery, Cedric Whitney, Hannah Wong, Lin Yang, Yu~Yang, Michihiro Yasunaga, Kristen Ying, Wojciech Zaremba, Wenting Zhan, Cyril Zhang, Brian Zhang, Eddie Zhang, and Shengjia Zhao.
 \newblock gpt-oss-120b \& gpt-oss-20b model card, 2025.
 \newblock URL \url{https://arxiv.org/abs/2508.10925}.
-
-\bibitem[mathlib Community(2024)]{lean_style_guide}
-The mathlib Community.
-\newblock Library style guidelines.
-\newblock \url{https://leanprover-community.github.io/contribute/style.html}, 2024.
-\newblock Accessed: 2026-04-18.
 
 \end{thebibliography}

@@ -69,10 +69,27 @@ Namly, theseformal proof environments provide substantial opportunities to obtai
 \label{sec:context_extraction}
 When working with proofs in high-dependency environments, it is likely that a given proof $y_0$ relies on many lemmas, definitions, and other formal objects defined in the context $c$. We aim to extract and serialize a minimal set of these objects to better inform our generation process.
 
-More specifically, the signatures of all definitions and theorems that are directly referenced by name in the theorem statement $x$ or the original proof $y_0$ are collected. Each of these is provided to the model, along with any associated documentation comments (which generally contain summaries or explanations of the associated declaration). Further details are provided in \cite{ImProver2}. 
+To facilitate extraction of relevant context from the proof environment, we consider the Lean~4 concrete syntax tree (CST) and abstract syntax tree (AST). The CST preserves surface tokens and references locations in source code; the AST resolves names, binds variables, and canonicalizes declarations (e.g., definition/theorem/structure/etc. nodes). Context extraction uses both:
+\begin{itemize}
+    \item \textbf{CST view (textual reachability):} harvest all surface identifiers and their source spans that occur in $x$ and in the proof text of $y_0$.
+    \item \textbf{AST view (semantic reachability):} resolve those identifiers to fully qualified symbols under the language's environment (imports, namespaces, instances, modules); record declaration categories (e.g., definition, theorem) and provenance (module/package).
+\end{itemize}
+
+\paragraph{Graphs and the slice.}
+From the AST we build two standard graphs: (i) an import DAG over files/modules, and (ii) an entity graph whose vertices are declarations (constants, lemmas, definitions) with edges for semantic references (uses in types/bodies). Let $\mathsf{touch}(x,y_0)$ be the set of AST nodes directly referenced by the CST identifiers collected from $x$ and $y_0$ (optionally augmented by a dynamic trace of proof states, if available). The context slice is then the subgraph
+\[S(c,x,y_0) = \mathrm{Reach}\big(G_{\mathrm{ent}},\,\mathsf{touch}(x,y_0)\big),\]
+optionally restricted by the import DAG to a budgeted neighborhood. We then serialize each element of $S$ with metadata describing its object type (e.g.\ lemma, definition), along with a stable snippet of its source content.
+
+Because selection is driven by AST resolution, $\Psi_{\text{ctx}}$ is invariant to superficial edits (whitespace, formatting) and robust to local refactors ($\alpha$-renaming within a module). The slice size grows with the reachable subgraph, not with raw file size, yielding a compact, minimal, and deterministic bundle of proof context that is read-only with respect to the program state.
 
 \subsubsection{Chain-of-States (CoS)}
-Chain-of-states prompting \cite{ImProver} provides a language model with the explicit state and remaining goals of a proof following the application of each tactic/step, providing richer information about the proof's structure than is normally available. We utilize Lean's \texttt{InfoTree} structures to obtain and serialize these states, and interleave them into the original proof as comments. This process is described formally in \cite{ImProver2}.
+Chain-of-states prompting \cite{ImProver} provides a language model with the explicit state and remaining goals of a proof following the application of each tactic/step, providing richer information about the proof's structure than is normally available. We utilize Lean's \texttt{InfoTree} structures to obtain and serialize these states, and interleave them into the original proof as comments.
+
+More formally, given a verified proof $y_0$, let its tactic steps be indexed by $i=1,\dots,T$. From the \texttt{InfoTree} we obtain, for each step, the pair $(\texttt{goalsBefore}_i,\texttt{goalsAfter}_i)$ along with a pretty-printed tactic $\tau_i$. We then define
+\[
+\Psi_{\text{cos}}(y_0)\ =\ \big\langle\,(\texttt{goalsBefore}_i,\ \tau_i,\ \texttt{goalsAfter}_i)\,\big\rangle_{i=1}^T,
+\]
+and serialize each triple as a short snippet in which the goal lists are pretty-printed into comments adjacent to $\tau_i$. This turns hidden kernel states into explicit cues the model can condition on.
 
 \subsubsection{Auto-informalization}
 Utilizing natural language to guide the generation of formal proofs has been shown to significantly increase the capabilities of LLM-based systems on formal mathematical tasks \cite{DraftSketchProve}. We therefore expose natural-language sketches of each target proof to the model, providing a fuzzy layer of abstraction that captures the ``meaning'' of formal items while being robust to syntactic variation and surface-level noise. 
@@ -90,21 +107,76 @@ Finally, unlike the original IRPO construction, where training is done on both t
 
 \subsubsection{Datasets and Replay Buffer}
 \label{sec:training_replay}
-Indiscriminate consumption of self-generated training data has been shown to harm performance in language models, collapsing the tails of their distribution \cite{modelCollapse}. To avoid this issue and enable self-improvement, we introduce a novel replay buffer design that filters new samples, combines them with existing training data, and sort them based on the degree of their improvement for use during training. 
+Indiscriminate consumption of self-generated training data has been shown to harm performance in language models, collapsing the tails of their distribution \cite{modelCollapse}. To avoid this issue and enable self-improvement, we introduce a novel replay buffer design that filters new samples, combines them with existing training data, and sorts them based on the degree of their improvement for use during training.
 
-Specifically, following the generation of samples $\mathcal{D}_\text{nr}^{(t)}$ at iteration $t$ (see \ref{sec:generation}), we utilize this and the previous iteration's dataset $\mathcal{D}_\text{re}^{(t-1)}$ to obtain the new dataset $\mathcal{D}_\text{re}^{(t)}$ via the following steps:
+Given the problem set $\mathcal{P} = \mathcal{P}_{\mathrm{train}} \cup \mathcal{P}_{\mathrm{test}}$ and the current iteration-$t$ model $G_t$, we run generation as described in \S\ref{sec:generation} to obtain $n$ candidate proofs per problem in $\mathcal{P}_{\mathrm{train}}$. This yields the raw (no-replay) dataset
+\begin{align*}
+    \mathcal{D}^{(t)}_{\mathrm{nr}}
+    &= \{(c_T,x_T,y_{T,0},\{(y_{T,i},\widehat{s}_{T,i})\}_{i=1}^{n})\}_{T \in \mathcal{P}_{\mathrm{train}}} \\
+    &= \{(c_T,x_T,y_{T,0},\mathcal{Y}_T^{(t)})\}_{T \in \mathcal{P}_{\mathrm{train}}}
+\end{align*}
+where $\widehat{s}_{T,i} = S_\mu(y_{T,i},y_{T,0}\mid c_T,x_T)$ is the improvement score of candidate $y_{T,i}$ over the baseline $y_{T,0}$.
+
+We then construct the replay dataset $\mathcal{D}^{(t)}_{\mathrm{re}}$ by post-processing $\mathcal{D}^{(t)}_{\mathrm{nr}}$ together with the previous iteration's post-processed dataset $\mathcal{D}^{(t-1)}_{\mathrm{re}}$. The procedure is parameterized by a target replay proportion $\rho\in[0,1]$, a replay mode $\texttt{mode}\in\{\texttt{mark},\texttt{join},\texttt{replace}\}$, an improvement-rate cap $\pi_{\max}\in[0,1]$, and a minimum gap $\gamma \in [0,1]$.
+
+\paragraph{Improvement rate and eligibility.}
+For problem $T$, we define its improvement rate at iteration $j$ by
+\[
+\pi_T^{(j)}=\frac{1}{n}\sum_{i=1}^n \mathbb{I}\!\left[\text{v}(c_T,x_T,y_{T,i}^{(j)})=1\ \wedge\ \widehat{s}_{T,i}^{(j)}>0\right].
+\]
+A problem is \emph{replay-eligible} at iteration $t$ iff it had at least one improved, compiling solution in some previous iteration $j<t$. We maintain a reservoir $\mathcal{E}$ of replay-eligible problems with preference for ``easy'' items (largest $\pi_T^{(j)}$ across $j<t$).
+
+\paragraph{Replay buffer construction.}
+We build the post-replay dataset in two main steps.
+
 \begin{enumerate}
-    \item Filter $\mathcal{D}_\text{nr}^{(t)}$ for ``replay-eligible" examples (those that contain improved, compiling solutions from previous iterations).
-    \item For each proof in the filtered set, find its counterpart in $\mathcal{D}_\text{re}^{(t-1)}$, and combine the sets of proof candidates from each one, creating our new dataset $\mathcal{D}_\text{re}^{(t)}$.
-    \item Filter $\mathcal{D}_\text{re}^{(t)}$ by removing problems that had a high overall improvement rate (i.e. those that represent trivial tasks for the model).
-    
-    \item For each theorem $T$ in $\mathcal{D}_\text{re}^{(t)}$, partition its set of proofs into a ``winners" or ``losers" category (denoted $W_T^{(t)}$ and $L_T^{(t)})$, with ``winners" being those which compile and have a sufficiently high improvement score, and ``losers" containing all other proofs. We call this filtered and partitioned dataset $\mathcal{D}_\text{fil}^{(t)}$.
+    \item \textit{Mark.} First, mark problems in $\mathcal{D}^{(t)}_{\mathrm{nr}}$ as \textsc{replay} or \textsc{frontier} so that the fraction of replay equals $\rho$:
+    \begin{enumerate}
+        \item Start with the subset of problems that are replay-eligible; if their fraction exceeds $\rho$, downsample them by removing the highest-$\pi_T$ items (i.e.\ the ``easiest'') until the replay fraction is $\rho$ (capped at $\pi_{\max}$).
+        \item If their fraction is below $\rho$, replace uniformly-chosen frontier items by items sampled from the reservoir $\mathcal{E}$ (taken from $\mathcal{D}^{(t-1)}_{\mathrm{re}}$) until the replay fraction reaches $\rho$ as best as possible. This keeps dataset size fixed while achieving the target mix.
+    \end{enumerate}
+    After this step, every item is tagged as \textsc{replay} or \textsc{frontier} and the target mix is satisfied.
+
+    \item \textit{Merge.} For each item marked \textsc{replay} with key $(c_T,x_T,y_{T,0})$, find its counterpart in $\mathcal{D}^{(t-1)}_{\mathrm{re}}$, say with candidate (multi)set $\mathcal{\widetilde{Y}}^{(t-1)}_T$. Then we case on \texttt{mode}:
+    \begin{itemize}
+        \item \texttt{join}: set $\mathcal{\widetilde{Y}}^{(t)}_T = \mathcal{Y}^{(t)}_T \cup \mathcal{\widetilde{Y}}^{(t-1)}_T$, deduplicated by normalized proof text. This increases candidate diversity for IRPO.
+        \item \texttt{replace}: set $\mathcal{\widetilde{Y}}^{(t)}_T = \mathcal{\widetilde{Y}}^{(t-1)}_T$, overwriting the current candidates with the previous iteration's.
+        \item \texttt{mark}: skip this step (no candidate-level splice). In other words, set $\mathcal{\widetilde{Y}}^{(t)}_T = \mathcal{Y}^{(t)}_T$.
+    \end{itemize}
 \end{enumerate}
-This process is described in more detail in \cite{ImProver2}. 
+
+\noindent With this, we obtain the replay dataset
+\[
+\mathcal{D}^{(t)}_{\mathrm{re}} = \Big\{\,\big(c_T,x_T,y_{T,0},\ \mathcal{\widetilde{Y}}^{(t)}_T\big)\ \Big|\ T\in\mathcal{P}_{\mathrm{train}}\Big\}.
+\]
+
+\paragraph{Filtering.}
+Finally, we post-process $\mathcal{D}^{(t)}_{\mathrm{re}}$ by filtering out low-quality candidates and separating the samples into winner ($W$) and loser ($L$) sets. Specifically, we filter the high-improvement-rate problems (those which were sufficiently ``easy'' for the model to improve on many candidates) by removing problems $T$ with $\pi_T^{(t)} > \pi_{\max}$. That is, we define
+\[
+\widetilde{\mathcal{P}}^{(t)} = \mathcal{P}_{\mathrm{train}} \setminus \{T \mid \pi_T^{(t)} > \pi_{\max}\}.
+\]
+Then, for each problem $T$ in $\widetilde{\mathcal{P}}^{(t)}$, we partition $\mathcal{\widetilde{Y}}^{(t)}_T = W_T^{(t)} \cup L_T^{(t)}$ with
+\begin{itemize}
+    \item $W_T^{(t)} = \{y \in \mathcal{\widetilde{Y}}^{(t)}_T \mid \text{v}(c_T,x_T,y) = 1 \land \widehat{s}_{T,y} > \delta^{(t)}\}$, where $\delta^{(t)}$ is the $\gamma$-th percentile of all scores $\{\widehat{s}_{T,i} : T \in \widetilde{\mathcal{P}}^{(t)},\ y_i \in \mathcal{\widetilde{Y}}^{(t)}_T\}$.
+    \item $L_T^{(t)} = \mathcal{\widetilde{Y}}^{(t)}_T \setminus W_T^{(t)}$.
+\end{itemize}
+In other words, winners are those candidates that compile and have an improvement score above the $\gamma$-th percentile threshold across all samples in the dataset, while losers are the rest. The finalized filtered post-replay dataset is
+\[
+\mathcal{D}_{\text{fil}}^{(t)} = \Big\{(c_T,x_T,y_{T,0},W_T^{(t)},L_T^{(t)}) \mid T \in \widetilde{\mathcal{P}}^{(t)}\Big\}.
+\]
 
 
 \paragraph{IRPO Dataset}
-As IRPO is a preference-based training method, $\mathcal{D}_{\text{fil}}^{(t)}$ is partitioned into a set of preference pairs. By mixing and matching many potential proofs of a single theorem, we glean a higher quantity of data points per theorem than would be available through group-based RL policies such as GRPO \cite{GRPO}, compensating for the limited amount of publicly available high-quality Lean training data. Additionally, by creating pairs of compiling/non-compiling examples as well as better/worse metric score, we balance the two parallel goals of learning to write correct Lean syntax and actually making improvements to proofs; this balance is dictated by the hyperparameters $W$ and $L$ in Algorithm \ref{alg:pref_pair_creation}. 
+As IRPO is a preference-based training method, $\mathcal{D}_{\text{fil}}^{(t)}$ is partitioned into a set of preference pairs. By mixing and matching many potential proofs of a single theorem, we glean a higher quantity of data points per theorem than would be available through group-based RL policies such as GRPO \cite{GRPO}, compensating for the limited amount of publicly available high-quality Lean training data. Additionally, by creating pairs of compiling/non-compiling examples as well as better/worse metric score, we balance the two parallel goals of learning to write correct Lean syntax and actually making improvements to proofs; this balance is dictated by the hyperparameters $W$ and $L$ in Algorithm~\ref{alg:pref_pair_creation}.
+
+Concretely, this process is parameterized by $W,L \in \mathbb{N}$, which control the number of winners and losers sampled per problem. For a given problem $T$ in $\widetilde{\mathcal{P}}^{(t)}$, we first deduplicate $W_T^{(t)}$ by equal scores $\widehat{s}_{T,i} = \widehat{s}_{T,j}$ and deduplicate $L_T^{(t)}$ by string equality. We then form two families of preference pairs:
+\[
+\mathfrak{P}^{\ell\to w}_T=\{(b,g): b\in L_T^{(t)},\ g\in W_T^{(t)}\}, \qquad
+\mathfrak{P}^{w\to w}_T=\{(g',g): g,g'\in W_T^{(t)},\ \widehat{s}_{T,g}>\widehat{s}_{T,g'}\}.
+\]
+The IRPO training dataset is then
+\[\mathcal{D}_{\text{IRPO}}^{(t)} = \bigcup_{T \in \widetilde{\mathcal{P}}^{(t)}} (\mathfrak{P}^{\ell\to w}_T \cup \mathfrak{P}^{w\to w}_T),\]
+which can be reinterpreted elementwise as a collection of tuples $(c_T,x_T,y_{T,0},y_{T,\ell},y_{T,w})$.
 
 
 \begin{algorithm}[tb]

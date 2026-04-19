@@ -17,7 +17,14 @@ Moreover, automated proof optimization is not only useful in its own right, but 
 For example, many modern theorem provers (e.g. \cite{alphaproof}, \cite{GodelProver}) rely on the draft-sketch-prove paradigm \cite{jiang2023draft}, which generates proofs by first sketching high level proof outlines with ``holes'' for subproofs/lemmas, and then recursively solving these lemmas. For that purpose, it is useful to have a corpus of proofs written in a structured, modular form that maximizes the number and balance of these subproofs. 
 
 \subsection{Contributions}
-\textbf{[TODO]}
+
+We make the following contributions:
+\begin{itemize}
+    \item \textbf{A formalization of the proof optimization task.} We define proof optimization over a verified proof $(c,x,y_0)$ and an arbitrary user-specified metric $\mu$, separating the problem of finding a proof (neural theorem proving) from the problem of rewriting a proof to be shorter, more structured, or less dependent on external lemmas. We show that neural theorem proving is a strict special case of this framework.
+    \item \textbf{ImProver: an agentic system for proof optimization.} We introduce ImProver (Chapters~\ref{chap:improver}--\ref{chap:improver-exp}), a GPT-4o-based agent that rewrites Lean proofs, outperforms a naive GPT-4o baseline by $423$--$778\%$ across undergraduate-level proofs.
+    \item \textbf{ImProver~2: a trained small model for proof optimization.} We introduce ImProver~2 (Chapters~\ref{chap:improver2}--\ref{chap:improver2-exp}), a pipeline that bootstraps a 7B-parameter model to optimize proofs using a novel IRPO RL pipeline and upgraded neurosymbolic scaffold, outperforming models orders of magnitude larger and extends ImProver to research-level proof optimization.
+    \item \textbf{Empirical evidence that formal-structure exposure is the key lever.} Across both systems, gains track neurosymbolic augmentation rather than model scale alone: the scaffold nearly doubles length improvement on DeepSeek-R1 7B before any preference optimization, and also boosts frontier models when applied at inference time. We argue this supports the thesis that proof optimization is primarily a specialization problem, not a scale problem.
+\end{itemize}
 
 \subsection{Thesis Overview}
 

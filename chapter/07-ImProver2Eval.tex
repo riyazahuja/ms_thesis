@@ -55,7 +55,7 @@ GPT-5 (High) & API & \$1.25 / \$10  \\
 Our main evaluation compares ImProver 2\ against three classes of baselines on MiniCTX-v2 under best@16 sampling: (i) the \texttt{DeepSeek-R1} family at multiple scales, to study parameter scaling within a fixed model family; (ii) frontier GPT-based and open-weight systems, including \texttt{GPT-5-high} (a full-size high-reasoning variant), \texttt{GPT-5-chat}, \texttt{GPT-5-mini}, \texttt{GPT-5-nano}, and \texttt{GPT-oss-120B}; and (iii) the prior \texttt{ImProver} system and its base model \texttt{GPT-4o}. Current inference costs for each system is displayed in Table~\ref{tab:cost}.
 
 
-We also evaluate all generators with and without the neurosymbolic scaffold $\Psi$ to isolate the effect of augmentation from the effect of training.
+We also evaluate all generators with and without the neurosymbolic scaffold to isolate the effect of augmentation from the effect of training.
 For each metric, we train IRPO until validation improvement regresses and report the best checkpoint for that objective.
 
 % We formulate our main results to compare several iterations of ImProver 2's IRPO pipeline on MiniCTX-v2, evaluated on the best@16 improvement score across all three metrics. In particular, we compare ImProver 2 to (i) its \texttt{DeepSeek-R1} model family across various parameter sizes; (ii) frontier GPT-based models such as \texttt{GPT-5-chat} (a nonreasoning variant of \texttt{GPT-5}, chosen due to resource constraints), \texttt{GPT-5-mini}, \texttt{GPT-5-nano}, and \texttt{GPT-oss-120B}; and (iii) prior work on proof optimization, namely, \texttt{ImProver} and its base model \texttt{GPT-4o}. We additionally augment all the aforementioned models with our neurosymbolic scaffold $\Psi$ and similarly compare its best@16 mean improvement score to the unscaffolded version.
@@ -444,6 +444,17 @@ Given the broader pattern across both open and closed models, we view this as an
 Overall, the scaffold appears to expand the set of useful rewrites the model can reliably attempt.
 By exposing goal-state information, relevant context, and informal abstractions, it helps both small and large models move beyond surface-level editing toward more substantive proof refactoring by improving models' abilities to search over valid higher-value rewrites under a fixed sampling budget.
 
+\subsubsection{Neurosymbolic Ablation}
+In addition to the above results, we study the effect of each of our sources of neurosymbolic scaffolding on model performance, finding that each one added increases length-metric performance (Figure \ref{fig:neuro_ablations}), though with diminishing returns.
+
+\begin{figure}[th]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/Length/length_neuro_ablation.png}
+    \caption{Effect of neurosymbolic augmentation on base model performance (\texttt{DeepSeek-R1-Distill-Qwen-7B}) on the length metric, vs. number of samples generated. Each source of augmentation shows noticeable improvement in average score on some $n$ values. }
+    \label{fig:neuro_ablations}
+\end{figure}
+
+
 
 \subsection{Training and Iteration}
 \label{sec:train}
@@ -521,7 +532,6 @@ We treat these repository-level results as descriptive rather than definitive, s
 
 
 
-
 \subsection{Qualitative optimization behaviors}
 \label{sec:qual_behaviors}
 
@@ -556,9 +566,13 @@ We note that the modularity metric is a structural proxy motivated by draft-sket
 % \paragraph{Failure modes of ImProver~2.} Three failure modes are visible in the results. First, training saturates after two to four rounds on all three metrics (Section~\ref{sec:train}); further self-improvement rounds on a fixed dataset yield diminishing returns, and escaping this saturation likely requires either larger preference datasets or a richer curriculum. Second, the model is a single-step generator and does not perform in-context refinement; when it produces an incorrect rewrite on a hard theorem, it has no mechanism for recovery analogous to ImProver's error-correction loop. Third, the structural metrics themselves are proxies: modularity is defined by a fixed-point filter on spawned goals and dependencies by an explicit-reference count, and while both are designed to resist trivial gaming (duplicate detection, wrapper detection, nontriviality filters), neither is validated against human maintainer preference. The qualitative examples suggest that the learned behaviours are reasonable, but a formal-mathematician study remains an important piece of outstanding work. These failure modes motivate the limitations discussed in the next section.
 
 
-
-
 % \subsection{Limitations}
 % \label{sec:limitations}
 
-% [todo: limitations (see reviewer comments)]
+% Several limitations of ImProver~2 are worth making explicit, both to calibrate the claims above and to scope future work.
+
+% \paragraph{Metrics as structural proxies.} The modularity and dependency metrics are designed as \emph{structural} proxies for proof quality and are not validated against human-maintainer preferences. Dependency counts the explicit named facts in a proof, not the logical dependencies of the proof term: rewriting \texttt{simp only [a, b, c]} into a bare \texttt{simp} reduces the dependency count even though the latter invokes a larger simp set through Mathlib's attribute system. Similarly, the modularity metric rewards nontrivial spawned goals as detected by its fixed-point filter, which captures most wrapper and duplicate behaviors but cannot guarantee that a given spawned goal is \emph{meaningfully} a sub-argument. Both metrics should therefore be read as operational definitions suitable for bootstrapping a learned model, not as ground truth for proof quality. A small-scale formal-mathematician study evaluating optimized rewrites against unchanged baselines --- ideally blinded and controlled --- is the natural next step for grounding these proxies, and is discussed further in Section~\ref{sec:limitations-future}.
+
+% \paragraph{Single-step generation and lack of revision.} The trained model is a single-inference-call generator with no internal refinement loop. When its rewrite fails to compile or regresses on the metric, it has no mechanism analogous to ImProver's error-correction pass to recover. The best-of-$n$ selection used throughout evaluation partially masks this limitation at evaluation time, but it does not address the underlying architectural gap: ImProver~2 does not learn \emph{when} to stop, \emph{when} to revise, or \emph{how} to incorporate compiler feedback into its next draft. Training a model to perform iterative revision --- effectively internalizing ImProver's refinement loop into the weights --- is a natural direction for future work.
+
+% \paragraph{Training saturation.} All three metrics exhibit training saturation after two to four iterations of IRPO (Section~\ref{sec:train}). Once the replay buffer and preference filters have extracted the available improvement signal from the fixed train split, further rounds yield diminishing and sometimes negative returns. This is consistent with the bounded preference signal of a fixed problem set but also constrains the upper bound on self-improvement without curriculum growth or explicit exploration mechanisms.
