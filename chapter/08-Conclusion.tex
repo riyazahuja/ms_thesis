@@ -6,64 +6,40 @@ This thesis has presented two systems for automated proof optimization in Lean~4
 
 \subsection{Summary of Contributions}
 
-\textbf{ImProver} introduced the proof optimization task and demonstrated its feasibility using agentic prompting with a frontier language model. Its key technical contributions are:
-\begin{itemize}
-    \item The formalization of proof optimization as a task, with a flexible metric framework;
-    \item Chain-of-States (CoS) prompting, which annotates intermediate proof states as comments in the proof, providing symbolic information to the LLM;
-    \item Error correction and refinement loops that iteratively improve generated proofs;
-    \item Retrieval-augmented generation using the Mathlib library and TPiL handbook;
-    \item Empirical demonstration that proof optimization generalizes neural theorem proving.
-\end{itemize}
+ImProver introduced the proof optimization task and demonstrated its feasibility using agentic prompting around a frontier language model. Its contributions span the formulation and the machinery needed to make optimization practical: it formalizes proof optimization as a task with a flexible metric framework, introduces Chain-of-States prompting as a mechanism for annotating intermediate proof states as comments in the generation context, and adds error correction and refinement loops that iteratively rewrite generated proofs. Retrieval-augmented generation over the Mathlib library and the \textit{Theorem Proving in Lean} handbook supplies the model with relevant examples and API documentation. Together these components show that proof optimization strictly generalizes neural theorem proving, and that agentic prompting alone is already capable of producing meaningful gains on length, declarativity, and mixed objectives.
 
-\textbf{ImProver~2} addressed the cost and scalability limitations of ImProver by training a small, specialized model. Its key technical contributions are:
-\begin{itemize}
-    \item An iterative self-improvement pipeline using IRPO with a novel replay buffer that prevents model collapse;
-    \item Neurosymbolic augmentation (context extraction, CoS, auto-informalization) that consistently improves performance across model sizes;
-    \item Two novel proof optimization metrics: Modularity (maximizing independent subproofs) and Dependencies (minimizing explicitly named external lemmas);
-    \item A 7B-parameter model that outperforms models orders-of-magnitude larger and matches frontier models on structural metrics.
-\end{itemize}
+ImProver~2 addresses the cost and scalability limitations of the first system by replacing the frontier-model agent with a small, specialized model trained to optimize proofs directly. Its contributions are both methodological and empirical: an iterative self-improvement pipeline built on iterative reasoning preference optimization (IRPO), stabilized by a novel replay buffer that prevents model collapse across rounds; a neurosymbolic augmentation strategy (context extraction, Chain-of-States, auto-informalization) that consistently improves performance across model sizes; and two novel metrics, modularity and dependencies, that target the structural quality and external-lemma footprint of a proof rather than merely its length. The resulting 7B-parameter model outperforms models orders of magnitude larger on structural metrics and matches frontier models on dependencies.
 
-\subsection{Key Insights}
+% \subsection{Key Insights}
 
-Several insights emerge from comparing the two systems.
+% The first insight is that formal structure exposure is the key ingredient for proof optimization. Both systems derive their performance from exposing the structure of the Lean proof environment to the model. In ImProver this is done at inference time via Chain-of-States prompting: the model sees intermediate proof states as it generates. In ImProver~2 it is done at training time via neurosymbolic augmentation: the model learns from filtered, augmented preference pairs. The same underlying principle --- giving the model access to formal symbolic data about the proof --- drives gains across both paradigms.
 
-\paragraph{Formal structure exposure is the key ingredient.} Both systems derive their performance from exposing the structure of the Lean proof environment to the model. In ImProver, this is done at inference time via CoS prompting: the model sees intermediate proof states as it generates. In ImProver~2, this is done at training time via neurosymbolic augmentation: the model learns from filtered, augmented preference pairs. The same underlying principle --- giving the model access to formal symbolic data about the proof --- drives performance gains across both paradigms.
+% A second insight is that agentic prompting, while effective, is expensive. ImProver shows that frontier LLMs with the right scaffold can perform sophisticated proof optimization, and on our evaluated datasets it produces proofs that are substantially shorter or more structured than the originals. But each theorem can require many LLM calls with document retrieval, which makes library-scale deployment prohibitively costly. This observation is what motivates moving from prompting to training.
 
-\paragraph{Agentic prompting is effective but expensive.} ImProver demonstrates that frontier LLMs, with the right prompting, can perform sophisticated proof optimization. The system achieves strong results on all three datasets and all three metrics, often producing proofs that are substantially shorter or more structured. However, each theorem requires up to 15 LLM calls with document retrieval, making library-scale deployment prohibitively expensive.
+% A third insight is that, for structural metrics, specialization matters more than scale. ImProver~2 demonstrates that a properly trained 7B model outperforms 671B models on modularity and dependencies. This suggests that structural proof optimization is a specialization problem as much as a scale problem: the bottleneck is not reasoning capacity but whether the model has been adapted to the formal structure of the task.
 
-\paragraph{Specialization matters more than scale for structural metrics.} ImProver~2 demonstrates that a 7B model, properly trained, outperforms a 671B model on modularity and dependencies. This suggests that structural proof optimization is a specialization problem as much as a scale problem: the bottleneck is not reasoning capacity but whether the model has been adapted to the formal structure of the task.
+% Finally, reward shaping in this domain requires careful guard rails. Both systems encountered the risk of degenerate solutions: proofs that score highly on a metric without achieving its intent. ImProver mitigates this by guiding the model with human-written examples; ImProver~2 uses formal heuristics (duplicate detection, wrapper detection, nontriviality filters) to define the modularity metric in a way that is robust to reward hacking. The design of robust metrics for formal proof quality remains an open challenge.
 
-\paragraph{Reward shaping requires careful guard rails.} Both systems encountered the risk of degenerate solutions: proofs that score highly on a metric without achieving its intent. ImProver addresses this by guiding the model with human-written examples. ImProver~2 uses formal heuristics (duplicate detection, wrapper detection, nontriviality filters) to define the modularity metric in a way that is robust to reward hacking. The design of robust metrics for formal proof quality remains an open challenge.
+% \subsection{Direct Comparison}
 
-\subsection{Direct Comparison}
+% The two systems are complementary rather than competing. On the length metric, ImProver achieves a mean improvement score of $0.355$ on miniCTX-v2 compared to ImProver~2's $0.330$. This edge is consistent with ImProver's use of an agentic strategy backed by a frontier model and explicit multi-shot example retrieval for each metric. The gap is modest, however, and ImProver's per-theorem cost is orders of magnitude higher than that of the trained small model.
 
-The two systems are complementary rather than competing. On the length metric, ImProver achieves a mean improvement score of $0.355$ on MiniCTX-v2 compared to ImProver~2's $0.330$. This edge is consistent with ImProver's use of an agentic strategy with a frontier model specifically prompted for proof shortening, and its explicit multi-shot example retrieval for each metric. The gap is modest, however, and ImProver's cost per theorem is orders of magnitude higher.
+% On the structural metrics ImProver~2 is decisively better. For modularity it achieves $0.143$ against ImProver's $0.088$, a $63\%$ improvement; for dependencies the gap is even larger, $0.206$ versus $0.047$. These results indicate that iterative structural supervision trains refactoring capabilities that agentic prompting alone does not reliably acquire: a model that has seen thousands of preference-ranked examples of modular rewrites internalizes what modular structure looks like in a way that in-context examples cannot capture.
 
-On the structural metrics, ImProver~2 is decisively better. For modularity, ImProver~2 achieves $0.143$ compared to ImProver's $0.088$ --- a $63\%$ improvement. For dependencies, the gap is even larger: $0.206$ for ImProver~2 versus $0.047$ for ImProver. These results demonstrate that iterative structural supervision trains refactoring capabilities that agentic prompting alone does not reliably acquire. A model that has seen thousands of preference-ranked examples of modular rewrites learns what modular structure looks like in a way that in-context examples cannot capture.
+% The neurosymbolic scaffold (context extraction, CoS, auto-informalization) is beneficial across both systems. Applied to a baseline DeepSeek-R1 7B model, it nearly doubles the length improvement score even before any preference optimization training, and applied to frontier models it yields similarly large gains. This suggests that the scaffold would also benefit ImProver's GPT-4o base --- a direction not explored in this thesis.
 
-The neurosymbolic scaffold (context extraction, CoS, auto-informalization) is beneficial across both systems. Applying the scaffold to a baseline DeepSeek-R1 7B model nearly doubles its length improvement score even before any preference optimization training. Applying it to frontier models yields similarly large gains. This suggests that the scaffold would benefit ImProver's GPT-4o base as well --- a direction not explored in this thesis.
-
+[todo redo this section and future directions based on attached reviewer comments]
 \subsection{Limitations}
 
-\textbf{ImProver} is limited by high cost per theorem (up to 15 GPT-4o calls), dependence on closed-source models, and relatively small evaluation datasets ($72 + 26 + 43$ theorems). These constraints limit both reproducibility and the statistical significance of the results.
+ImProver is limited by a high per-theorem cost (many GPT-4o calls with document retrieval), dependence on a closed-source proprietary model, and relatively small evaluation datasets ($72 + 26 + 43$ theorems). These constraints limit both reproducibility and the statistical significance of the results, and make library-scale deployment impractical at current API pricing.
 
-\textbf{ImProver~2} is limited by single-step generation (no iterative revision within a single inference call), the fact that the modularity and dependency metrics are structural proxies not yet validated against human maintainer preferences, and training saturation after 2--4 iterations, which limits how much improvement the self-improvement loop can extract from a fixed dataset.
+ImProver~2 is limited by single-step generation (no iterative revision within a single inference call), by the fact that its modularity and dependency metrics are structural proxies not yet validated against human maintainer preferences, and by training saturation after two to four iterations, which bounds how much additional improvement the self-improvement loop can extract from a fixed dataset.
 
 \subsection{Future Directions}
 
-Several natural extensions are motivated by the findings and limitations of this work.
+Several natural extensions are motivated by the findings and limitations of this work. ImProver~2 currently generates improved proofs in a single step, and training it to perform multi-step iterative revision --- in effect internalizing the refinement loop used by ImProver --- would combine the strengths of the two systems. Orthogonally, the modularity metric is a structural proxy, and a study involving formal mathematicians evaluating the qualitative output of both systems would be valuable for grounding the metrics in real-world utility. More subjective or probabilistic metrics, for example using an LLM-as-judge system to score proof readability, could provide richer optimization targets and better alignment with human preferences.
 
-\paragraph{Multi-step revision.} ImProver~2 currently generates improved proofs in a single generation step. Future work could train proof optimizers to perform iterative revision cycles, enabling in-context error fixing similar to ImProver's refinement loop.
-
-\paragraph{Human preference evaluation.} The modularity metric is a structural proxy; whether maintainers actually prefer modularity-optimized proofs remains unknown. A study involving formal mathematicians evaluating the qualitative output of both systems would be valuable for grounding the metrics in real-world utility.
-
-\paragraph{LLM-as-judge metrics.} More subjective or probabilistic metrics --- e.g., using an LLM-as-judge system to score proof readability --- could provide richer optimization targets and better alignment with human preferences.
-
-\paragraph{Combining ImProver and ImProver~2.} ImProver's retrieval strategy provides complementary capabilities to ImProver~2's trained model. A unified system that applies neurosymbolic augmentation at both training and inference time, with additional retrieval, may push performance further.
-
-\paragraph{Application to library maintenance.} Both systems operate on individual theorems; scaling to the full Mathlib library (hundreds of thousands of theorems) and maintaining consistency across inter-dependent rewrites is an open engineering and research challenge.
-
-\paragraph{Fine-tuning downstream provers on optimized data.} A key motivation for proof optimization is improving the quality of training data for downstream neural provers. Empirically validating that provers trained on ImProver- or ImProver~2-optimized corpora outperform those trained on unoptimized data would confirm the training data quality hypothesis.
+A further direction is to combine ImProver and ImProver~2 directly. ImProver's retrieval strategy provides complementary capabilities to the trained model, and a unified system that applies neurosymbolic augmentation at both training and inference time, together with retrieval over Mathlib and documentation, may push performance further. At a larger scale, both systems currently operate on individual theorems, and extending them to the full Mathlib library --- maintaining consistency across inter-dependent rewrites --- is an open engineering and research challenge in its own right. Finally, a core motivation for proof optimization is improving the quality of training data for downstream neural provers; empirically validating that provers trained on ImProver- or ImProver~2-optimized corpora outperform those trained on unoptimized data would confirm the training-data-quality hypothesis underlying this line of work.
 
 \subsection{Closing Remarks}
 

@@ -525,34 +525,40 @@ We treat these repository-level results as descriptive rather than definitive, s
 \subsection{Qualitative optimization behaviors}
 \label{sec:qual_behaviors}
 
-[todo: make sure to ref the figure in chapter 3, as well as the corresponding appendix]
+Beyond the aggregate metrics, ImProver~2 learns distinct families of refactoring behaviors that align with the intended objective. Figure~\ref{fig:main-demo} in Chapter~\ref{chap:framework} previews three such behaviors on a representative example per metric, and Appendix~\ref{app:qual_improver2} collects additional rewrites across the miniCTX-v2 test repositories.
 
-Beyond aggregate metrics, ImProver 2\ learns distinct families of refactoring behaviors that align with the intended objective.
-For length minimization, the model frequently merges local tactic sequences into shorter automation-heavy proofs, replacing explicit intermediate steps with more compact combinations of simplification and search.
-For dependency minimization, it often rewrites proofs to rely on more local reasoning, generic automation, or broader lemmas, reducing the number of explicitly named external facts. This metric may also replace brittle, version-specific \texttt{simp only} or \texttt{rw} chains with broader automation tactics such as \texttt{simp}, a pattern that is consistent with Mathlib's own style guidance~\cite{lean_style_guide} but which means the metric should be interpreted as measuring explicit dependency footprint rather than capturing 
-every dimension of proof quality.
+\subsubsection{Length minimization}
 
-For modularity, it introduces intermediate claims and clearer proof boundaries, turning flat tactic scripts into proofs with more reusable substructure. We note that the modularity metric is a structural proxy motivated by 
-draft-sketch-prove workflows and lemma decomposition in neural provers; it is not 
-a validated proxy for human maintainer preference, and a study of whether 
-maintainers prefer modularity-optimized proofs remains an important direction for 
-future work.
+The model frequently merges local tactic sequences into shorter automation-heavy proofs, replacing explicit intermediate steps with more compact combinations of simplification and search. The \texttt{summerCommute\_jacobi\_ofCrAnListF} rewrite from HepLean (Figure~\ref{fig:improver2-length-super-commute}) is illustrative: the original proof case-splits on eight combinations of bosonic/fermionic status and discharges each with a bespoke \texttt{simp only} lemma list, whereas ImProver~2 collapses the case split into a single \texttt{simp\_all} over a shared lemma set followed by \texttt{by\_cases} chained with \texttt{<;>} combinators, reducing the tactic count by~$19$. The \texttt{mem\_cross\_iff} rewrite from ConNF (Figure~\ref{fig:improver2-length-mem-cross}) similarly replaces a nested \texttt{rintro}/\texttt{obtain} skeleton with a two-line \texttt{simp\_all; aesop} script, eliminating eight tactics while remaining semantically equivalent.
 
-These behaviors are qualitatively important because they show that the model is not merely exploiting superficial quirks of the metrics.
-Instead, the resulting proofs often reflect recognizable mathematical refactoring patterns of the kind a human maintainer might intentionally perform.
-The qualitative examples therefore support the interpretation of the quantitative results: ImProver 2\ is learning reusable structural transformations, rather than only memorizing a small set of syntactic shortcuts.
+\subsubsection{Dependency minimization}
 
+The model rewrites proofs to rely on more local reasoning, generic automation, or broader lemmas, reducing the number of explicitly named external facts. In \texttt{isCoatom\_iff} (Figure~\ref{fig:improver2-dep-isCoatom}) ImProver~2 replaces a hand-tuned \texttt{simp\_rw} chain that names five Mathlib lemmas with a combinator-driven \texttt{constructor; simp\_all; tauto} pattern that names only two, eliminating three explicit dependencies. This behaviour also often replaces brittle, version-specific \texttt{simp only} or \texttt{rw} chains with broader automation tactics such as \texttt{simp}, which is consistent with Mathlib's own style guidance~\cite{lean_style_guide}. We emphasise that the dependency metric measures the explicit dependency footprint of a proof rather than every dimension of proof quality: a tactic like \texttt{simp} still relies implicitly on its simp set, and the metric should be read accordingly.
+
+\subsubsection{Modularity maximization}
+
+The model introduces intermediate claims and clearer proof boundaries, turning flat tactic scripts into proofs with more reusable substructure. The \texttt{KD\_weakerThan\_KDB} rewrite in modal logic (Figure~\ref{fig:improver2-modularity-kd-kdb}) transforms a single-line \texttt{aesop} finisher into a proof that first states the reduction lemma \texttt{h\textsubscript{1}} (``a subset of axioms implies weaker-than''), then proves the required axiom subset \texttt{h\textsubscript{2}}, and finally applies the two. The \texttt{hilbertPoly\_eq\_zero\_of\_le\_rootMultiplicity\_one} rewrite from Mathlib (Figure~\ref{fig:improver2-modularity-hilbert-poly}) likewise pulls the two branches of a \texttt{by\_cases} apart into named sub-lemmas before recombining them. Both produce nontrivial spawned goals that satisfy the modularity metric's duplicate-detection and wrapper-detection filters defined in Chapter~\ref{chap:framework}.
+
+We note that the modularity metric is a structural proxy motivated by draft-sketch-prove workflows and lemma decomposition in neural provers; it is not a validated proxy for human maintainer preference, and a study of whether maintainers prefer modularity-optimized proofs remains an important direction for future work. With that caveat, these behaviors are qualitatively important because they show that the model is not merely exploiting superficial quirks of the metrics. Instead, the resulting proofs often reflect recognizable mathematical refactoring patterns of the kind a human maintainer might intentionally perform, which supports the interpretation of the quantitative results: ImProver~2 is learning reusable structural transformations, rather than memorising a small set of syntactic shortcuts.
 
 
+% \subsection{Discussion}
+% \label{sec:discussion}
+
+% Taken together, the quantitative and qualitative results support a single claim: training a small, specialized model with formal-structure supervision is a more effective route to proof optimization than scaling prompting alone. This subsection unpacks that claim along three axes --- the comparison against ImProver, the role of the neurosymbolic scaffold, and the failure modes that remain.
+
+% \paragraph{ImProver~2 extends ImProver rather than replacing it.} ImProver established proof optimization as a feasible task and identified Chain-of-States prompting as the key mechanism for exposing formal structure to a language model. Its main limitations were reliance on a closed-source frontier model, high per-theorem cost, and small evaluation datasets (Section~\ref{sec:imp1_limitations}). ImProver~2 addresses each of these directly. Where ImProver depends on GPT-4o and multi-call agentic sampling, ImProver~2 is a single-inference-call 7B open model; where ImProver is evaluated on $72 + 26 + 43$ curated theorems, ImProver~2 is evaluated on miniCTX-v2 spanning seven research repositories including Mathlib, HepLean, PFR, Carleson, ConNF, Seymour, FLT, and Foundation. The head-to-head comparison in Figure~\ref{fig:gpt_improver_comparison} shows that despite these reductions in cost and model size, ImProver~2 is competitive with ImProver on length ($0.330$ vs.\ $0.355$) and substantially better on modularity ($0.143$ vs.\ $0.088$) and dependencies ($0.206$ vs.\ $0.047$). The two systems therefore trace a progression rather than a replacement: ImProver's insights about CoS and formal-structure exposure are what make specialization viable, and ImProver~2 shows that once those ingredients exist, the agent can be compressed into a trained model without sacrificing performance.
+
+% \paragraph{The scaffold is the load-bearing component across scales.} The scaffold ablation in Section~\ref{sec:scaffold_power} shows that neurosymbolic augmentation yields consistent improvements across the full range of evaluated systems, from the 7B DeepSeek-R1 baseline through GPT-oss-120B to GPT-5-high. On DeepSeek-R1 7B alone, the scaffold nearly doubles the length improvement score before any preference optimization training. On frontier models it yields gains of comparable magnitude. This pattern --- scaffold benefits that do not diminish with scale --- suggests that access to intermediate proof states, context, and informalizations addresses a bottleneck that raw parameter count does not. It also suggests that ImProver's original GPT-4o base would itself benefit from the full ImProver~2 scaffold, which is a direction not pursued in this thesis but follows naturally from the evidence.
+
+% \paragraph{Specialization dominates scale on structural metrics.} The within-family scaling analysis in Section~\ref{sec:perf_param} shows that larger base models help, but the effect of specialization is larger still: ImProver~2 at 7B outperforms DeepSeek-R1 at 671B on modularity and dependencies. The trade-off analysis in Section~\ref{sec:acc} gives a consistent picture --- frontier models can sometimes reach higher compilation accuracy, but they do not extract nearly as much structural improvement per correct rewrite. This is not surprising given that preference optimization directly shapes the distribution over rewrites towards those that increase the target metric, whereas prompting a general-purpose model leaves the choice of rewrite largely to its pretraining distribution. The qualitative rewrites in Section~\ref{sec:qual_behaviors} make the same point concretely: the model produces named intermediates, case-split hoists, and automation rewrites that are recognizable refactoring patterns rather than metric-gaming syntactic tricks.
+
+% \paragraph{Failure modes of ImProver~2.} Three failure modes are visible in the results. First, training saturates after two to four rounds on all three metrics (Section~\ref{sec:train}); further self-improvement rounds on a fixed dataset yield diminishing returns, and escaping this saturation likely requires either larger preference datasets or a richer curriculum. Second, the model is a single-step generator and does not perform in-context refinement; when it produces an incorrect rewrite on a hard theorem, it has no mechanism for recovery analogous to ImProver's error-correction loop. Third, the structural metrics themselves are proxies: modularity is defined by a fixed-point filter on spawned goals and dependencies by an explicit-reference count, and while both are designed to resist trivial gaming (duplicate detection, wrapper detection, nontriviality filters), neither is validated against human maintainer preference. The qualitative examples suggest that the learned behaviours are reasonable, but a formal-mathematician study remains an important piece of outstanding work. These failure modes motivate the limitations discussed in the next section.
 
 
-\subsection{Discussion}
-\label{sec:discussion}
-
-[todo: discuss the the results, their implications, compare to ImProver and disucss how ImProver 2 naturaally extends ImProver and compensates for its limitations. Discuss the scaffold results too. And the qualitatives touch on them again too, but now in the broader context of the results as a whole, and also failure modes and limtiations of improver 2]
 
 
-\subsection{Limitations}
-\label{sec:limitations}
+% \subsection{Limitations}
+% \label{sec:limitations}
 
-[todo: limitations (see reviewer comments)]
+% [todo: limitations (see reviewer comments)]

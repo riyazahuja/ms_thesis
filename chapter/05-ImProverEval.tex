@@ -90,7 +90,142 @@ Specialized NTP models such as Lean Expert Iteration \cite{DBLP:journals/corr/ab
 \subsection{Qualitative Examples}
 \label{sec:qual_ex}
 
-[todo: make sure to ref the figure in chapter 4, and move one example from each metric from the appendix to here.]
+To complement the aggregate metrics, we examine representative rewrites produced by ImProver on each of the three metrics. These examples illustrate the qualitative behaviours that the scaffold encourages; the worked Chain-of-States annotation in Figure~\ref{fig:cos} in Chapter~\ref{chap:improver} shows the intermediate symbolic state information that ImProver receives during generation. Additional examples across MIL, Compfiles, and Mathlib are collected in Appendix~\ref{app:qual_improver}.
+
+\paragraph{Length optimization (MIL).} Figure~\ref{fig:qual-len-ch5} optimizes an exercise solution from MIL Chapter~8 Section~1 (group theory) for length. ImProver restructures the two \texttt{rintro} branches into single-line chains using semicolons and replaces a \texttt{calc} block with a proof term \texttt{(congr\_arg \(\psi\) hz).trans hy}, shortening the proof from $9$ to $7$ tactic invocations without altering the overall case split.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+{
+\textbf{Original (human-written)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example (φ : G →* H) (ψ : H →* K) (S : Subgroup G) :
+    map (ψ.comp φ) S = map ψ (S.map φ)  := by
+  ext x
+  simp only [mem_map]
+  constructor
+  · rintro ⟨y, y_in, hy⟩
+    exact ⟨φ y, ⟨y, y_in, rfl⟩, hy⟩
+  · rintro ⟨y, ⟨z, z_in, hz⟩, hy⟩
+    use z, z_in
+    calc ψ.comp φ z = ψ (φ z) := rfl
+    _               = ψ y := by congr
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{ImProver (length-optimized)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+example (φ : G →* H) (ψ : H →* K) (S : Subgroup G) :
+    map (ψ.comp φ) S = map ψ (S.map φ)   := by
+  ext x
+  simp only [mem_map]
+  constructor
+  rintro ⟨y, y_in, hy⟩; exact ⟨φ y, ⟨y, y_in, rfl⟩, hy⟩
+  rintro ⟨y, ⟨z, z_in, hz⟩, hy⟩; exact ⟨z, z_in, (congr_arg ψ hz).trans hy⟩
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{Length optimization: a group-theoretic lemma from MIL Chapter~8 Section~1.}
+\label{fig:qual-len-ch5}
+\end{figure}
+
+\paragraph{Declarativity optimization (Compfiles).} Figure~\ref{fig:qual-decl-ch5} shows a lemma from IMO~2019 Problem~1 optimized for declarativity. The original proof threads a chain of rewrites through a single \texttt{refine} block. ImProver exposes two named intermediate hypotheses --- \texttt{linear\_property} and \texttt{g\_smul} --- that correspond to reusable algebraic facts about $g$, and then completes the proof by instantiating those lemmas at specific arguments. The resulting proof is longer but its logical structure is explicit: each \texttt{have} is a candidate for extraction into a standalone lemma.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+{
+\textbf{Original (human-written)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma additive_to_int_linear (f : ℤ → ℤ) (h: ∀ (x y : ℤ), f (x + y) = f x + f y):
+   ∃ c, ∀ a, f a = c * a  := by
+  let g := AddMonoidHom.toIntLinearMap <| AddMonoidHom.mk' f h
+  refine ⟨f 1, fun a => ?_⟩
+  change g a = g 1 * a
+  rw [mul_comm, ← smul_eq_mul, ← LinearMap.map_smul, smul_eq_mul, mul_one]
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{ImProver (declarativity-optimized)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma additive_to_int_linear (f : ℤ → ℤ) (h: ∀ (x y : ℤ), f (x + y) = f x + f y):
+   ∃ c, ∀ a, f a = c * a   := by
+  let g := AddMonoidHom.toIntLinearMap <| AddMonoidHom.mk' f h
+  have linear_property : ∀ a, f a = g a := by
+    intro a
+    rfl
+  have g_smul : ∀ a, g a = g 1 * a := by
+    intro a
+    rw [mul_comm, ← smul_eq_mul, ← LinearMap.map_smul, smul_eq_mul, mul_one]
+  refine ⟨f 1, fun a => ?_⟩
+  have f_eq_g : f a = g a := linear_property a
+  have g_a_eq : g a = g 1 * a := g_smul a
+  rw [f_eq_g, linear_property 1, g_a_eq]
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{Declarativity optimization: a lemma from IMO~2019 P1 (Compfiles).}
+\label{fig:qual-decl-ch5}
+\end{figure}
+
+\paragraph{Mixed optimization (MIL).} Figure~\ref{fig:qual-mix-ch5} optimizes a group-theoretic lemma from MIL for the mixed length/declarativity metric. ImProver collapses the case analysis inside \texttt{suffices} into a single declarative \texttt{have} that proves the biconditional directly via anonymous constructor syntax, and then discharges the goal with a single \texttt{simpa ... using this}. The rewrite simultaneously reduces tactic count and introduces a named intermediate fact --- exactly the behaviour the mixed metric targets.
+
+\setlength{\columnsep}{0.2cm}
+\begin{figure}[ht]
+\begin{multicols}{2}
+{
+\textbf{Original (human-written)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma eq_bot_iff_card {G : Type*} [Group G] {H : Subgroup G} [Fintype H] :
+    H = ⊥ ↔ card H = 1  := by
+  suffices (∀ x ∈ H, x = 1) ↔ ∃ x ∈ H, ∀ a ∈ H, a = x by
+    simpa [eq_bot_iff_forall, card_eq_one_iff]
+  constructor
+  · intro h
+    use 1, H.one_mem
+  · rintro ⟨y, -, hy'⟩ x hx
+    calc x = y := hy' x hx
+    _      = 1 := (hy' 1 H.one_mem).symm
+\end{lstlisting}
+\end{scriptsize}
+}
+\vfill\null
+\columnbreak
+{
+\textbf{ImProver (mix-optimized)}
+\begin{scriptsize}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+lemma eq_bot_iff_card {G : Type*} [Group G] {H : Subgroup G} [Fintype H] :
+    H = ⊥ ↔ card H = 1     := by
+  have : (∀ x ∈ H, x = 1) ↔ ∃ x ∈ H, ∀ a ∈ H, a = x :=
+    ⟨λ h => ⟨1, H.one_mem, h⟩, λ ⟨y, _, hy'⟩ x hx => (hy' 1 H.one_mem).symm ▸ hy' x hx⟩
+  simpa [eq_bot_iff_forall, card_eq_one_iff] using this
+\end{lstlisting}
+\end{scriptsize}
+}
+\end{multicols}
+\vspace{-2.5em}
+\caption{Mixed length/declarativity optimization: a lemma from MIL Chapter~8 Section~1.}
+\label{fig:qual-mix-ch5}
+\end{figure}
+
+These three rewrites --- a length shortening by structural compression, a declarativity rewrite that names reusable intermediates, and a mixed rewrite that achieves both simultaneously --- illustrate the qualitative range of transformations the ImProver scaffold produces. They also highlight that optimization for a given metric can produce genuinely different proof styles on the same theorem, rather than just mechanical shortenings or \texttt{have}-padding.
 
 
 
