@@ -93,7 +93,14 @@ example : s ∩ t ∪ s ∩ u ⊆ s ∩ (t ∪ u)  := by
 
 Figure~\ref{fig:cos} shows an example. This explicit proof-state context aims to help the generator construct more optimized proofs by exposing the symbolic structure of what each tactic does. The ablation study in Chapter~\ref{chap:improver-exp} confirms that CoS is the most impactful single component of ImProver: enabling CoS nearly doubles the improvement score for declarativity optimization and substantially improves accuracy across all metrics.
 
-ImProver~2 (Chapter~\ref{chap:improver2}) extends CoS prompting by integrating it with additional neurosymbolic context sources --- context extraction and auto-informalization --- building on the same InfoTree extraction infrastructure.
+\paragraph{Formal definition.}\label{def:cos}
+More formally, given a verified proof $y_0$, let its tactic steps be indexed by $i=1,\dots,T$. From the \texttt{InfoTree} we obtain, for each step, the pair $(\texttt{goalsBefore}_i,\texttt{goalsAfter}_i)$ along with the pretty-printed tactic $\tau_i$. The Chain-of-States transformation is then
+\[
+\Psi_{\text{cos}}(y_0)\ =\ \big\langle\,(\texttt{goalsBefore}_i,\ \tau_i,\ \texttt{goalsAfter}_i)\,\big\rangle_{i=1}^T,
+\]
+serialized into the proof as comments adjacent to each $\tau_i$. This turns hidden kernel states into explicit cues the model can condition on.
+
+ImProver~2 (Chapter~\ref{chap:improver2}) reuses this same $\Psi_{\text{cos}}$ transformation as one of three neurosymbolic channels, integrating it with additional context-extraction and auto-informalization channels built on the same InfoTree infrastructure.
 
 \subsection{Output Formatting}
 \label{ssec:output_fmt}

@@ -83,18 +83,14 @@ optionally restricted by the import DAG to a budgeted neighborhood. We then seri
 Because selection is driven by AST resolution, $\Psi_{\text{ctx}}$ is invariant to superficial edits (whitespace, formatting) and robust to local refactors ($\alpha$-renaming within a module). The slice size grows with the reachable subgraph, not with raw file size, yielding a compact, minimal, and deterministic bundle of proof context that is read-only with respect to the program state.
 
 \subsubsection{Chain-of-States (CoS)}
-Chain-of-states prompting \cite{ImProver} provides a language model with the explicit state and remaining goals of a proof following the application of each tactic/step, providing richer information about the proof's structure than is normally available. We utilize Lean's \texttt{InfoTree} structures to obtain and serialize these states, and interleave them into the original proof as comments.
-
-More formally, given a verified proof $y_0$, let its tactic steps be indexed by $i=1,\dots,T$. From the \texttt{InfoTree} we obtain, for each step, the pair $(\texttt{goalsBefore}_i,\texttt{goalsAfter}_i)$ along with a pretty-printed tactic $\tau_i$. We then define
-\[
-\Psi_{\text{cos}}(y_0)\ =\ \big\langle\,(\texttt{goalsBefore}_i,\ \tau_i,\ \texttt{goalsAfter}_i)\,\big\rangle_{i=1}^T,
-\]
-and serialize each triple as a short snippet in which the goal lists are pretty-printed into comments adjacent to $\tau_i$. This turns hidden kernel states into explicit cues the model can condition on.
+We again employ the Chain-of-States technique described in \ref{ssec:cos_imp} to expose the internal proof states of the original proof $y_0$ to the model. As shown in ImProver, his provides a richer signal about the structure of the proof and the effect of each tactic than is available from the original proof text alone, which may be more difficult for the model to parse and understand.
 
 \subsubsection{Auto-informalization}
 Utilizing natural language to guide the generation of formal proofs has been shown to significantly increase the capabilities of LLM-based systems on formal mathematical tasks \cite{DraftSketchProve}. We therefore expose natural-language sketches of each target proof to the model, providing a fuzzy layer of abstraction that captures the ``meaning'' of formal items while being robust to syntactic variation and surface-level noise. 
 
 More concretely, we prompt a language model using the proof's chain-of-states information as described above to translate a Lean proof into natural language by explaining the effect of each tactic on the proof state and providing this to the proof optimizer model. We emphasize that this informalization is a secondary channel for the generator and serves simply as an additional representation of the target theorem; outputs are still prompted to be generated formally, and correctness is still judged formally.
+
+The details of the prompting and generation process for each of these channels are described in Appendix~\ref{app:informal}.
 
 
 \subsection{Training}

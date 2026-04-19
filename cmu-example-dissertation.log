@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  19 APR 2026 13:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.25)  19 APR 2026 13:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1196,47 +1196,15 @@ Overfull \hbox (20.41393pt too wide) in paragraph at lines 35--36
 []\OT1/cmr/m/it/12 Compound meth-ods and RAG. \OT1/cmr/m/n/12 We eval-u-ate com-pound sam-pling (\OT1/cmtt/m/n/12 refinement(best[]of[]$\OML/cmm/m/it/12 m[]$\OT1/cmtt/m/n/12 ,
  []
 
-
-Overfull \hbox (0.37065pt too wide) in paragraph at lines 38--39
-\OT1/cmr/m/n/12 avoids the pit-falls of ac-cu-racy alone (which can be gamed by re-turn-ing the in-put) or nonempty
- []
-
 (./figures/assets/ablation.tex
-Overfull \hbox (11.3992pt too wide) in paragraph at lines 8--25
- [][] 
- []
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./figures/assets/read_ablation.tex
-Overfull \hbox (13.54353pt too wide) in paragraph at lines 33--42
- [][] 
- []
-
-) [25] (./figures/assets/table-main.tex
-Overfull \hbox (20.10564pt too wide) in paragraph at lines 30--45
- [][] 
- []
-
+) (./figures/assets/read_ablation.tex) [25] (./figures/assets/table-main.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) (./figures/assets/main-details.tex
-Overfull \hbox (12.46379pt too wide) in paragraph at lines 6--22
- [][] 
- []
-
-
-Overfull \hbox (12.46379pt too wide) in paragraph at lines 33--47
- [][] 
- []
-
-
-Overfull \hbox (12.46379pt too wide) in paragraph at lines 58--72
- [][] 
- []
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1251,25 +1219,25 @@ Overfull \hbox (39.23505pt too wide) in paragraph at lines 73--82
  [33
 
 ]) [34] [35] [36] [37] [38]
-LaTeX Font Info:    Trying to load font information for U+euf on input line 174.
+LaTeX Font Info:    Trying to load font information for U+euf on input line 170.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 183.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 179.
 ) (./chapter/07-ImProver2Eval.tex [39] [40] [41
 
 ] [42] [43] [44] [45]
-<figures/Modularity/declarativity2_param_perf.png, id=1189, 855.195pt x 493.845pt>
+<figures/Modularity/declarativity2_param_perf.png, id=1191, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_param_perf.png Graphic file (type png)
 <use figures/Modularity/declarativity2_param_perf.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_param_perf.png  used on input line 266.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Dependency/dependency_param_perf.png, id=1191, 855.4359pt x 493.845pt>
+<figures/Dependency/dependency_param_perf.png, id=1193, 855.4359pt x 493.845pt>
 File: figures/Dependency/dependency_param_perf.png Graphic file (type png)
 <use figures/Dependency/dependency_param_perf.png>
 Package pdftex.def Info: figures/Dependency/dependency_param_perf.png  used on input line 272.
 (pdftex.def)             Requested size: 230.18253pt x 132.88026pt.
-<figures/Length/length_param_perf.png, id=1192, 855.195pt x 493.845pt>
+<figures/Length/length_param_perf.png, id=1194, 855.195pt x 493.845pt>
 File: figures/Length/length_param_perf.png Graphic file (type png)
 <use figures/Length/length_param_perf.png>
 Package pdftex.def Info: figures/Length/length_param_perf.png  used on input line 279.
@@ -1280,38 +1248,38 @@ Overfull \hbox (10.83722pt too wide) in paragraph at lines 296--297
  []
 
 [46 <./figures/Modularity/declarativity2_param_perf.png> <./figures/Dependency/dependency_param_perf.png> <./figures/Length/length_param_perf.png>]
-<figures/Length/length_gpt_improver_comparison.png, id=1200, 855.195pt x 493.845pt>
+<figures/Length/length_gpt_improver_comparison.png, id=1202, 855.195pt x 493.845pt>
 File: figures/Length/length_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Length/length_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Length/length_gpt_improver_comparison.png  used on input line 307.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Modularity/declarativity2_gpt_improver_comparison.png, id=1201, 855.195pt x 493.845pt>
+<figures/Modularity/declarativity2_gpt_improver_comparison.png, id=1203, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Modularity/declarativity2_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_gpt_improver_comparison.png  used on input line 313.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Dependency/dependency_gpt_improver_comparison.png, id=1202, 855.195pt x 493.845pt>
+<figures/Dependency/dependency_gpt_improver_comparison.png, id=1204, 855.195pt x 493.845pt>
 File: figures/Dependency/dependency_gpt_improver_comparison.png Graphic file (type png)
 <use figures/Dependency/dependency_gpt_improver_comparison.png>
 Package pdftex.def Info: figures/Dependency/dependency_gpt_improver_comparison.png  used on input line 319.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
  [47 <./figures/Length/length_gpt_improver_comparison.png> <./figures/Modularity/declarativity2_gpt_improver_comparison.png> <./figures/Dependency/dependency_gpt_improver_comparison.png>] [48]
-<figures/Length/length_neuro_ablation.png, id=1220, 855.195pt x 493.845pt>
+<figures/Length/length_neuro_ablation.png, id=1222, 855.195pt x 493.845pt>
 File: figures/Length/length_neuro_ablation.png Graphic file (type png)
 <use figures/Length/length_neuro_ablation.png>
 Package pdftex.def Info: figures/Length/length_neuro_ablation.png  used on input line 452.
 (pdftex.def)             Requested size: 399.29463pt x 230.57747pt.
-<figures/Dependency/dependency_iterations.png, id=1221, 855.4359pt x 493.845pt>
+<figures/Dependency/dependency_iterations.png, id=1223, 855.4359pt x 493.845pt>
 File: figures/Dependency/dependency_iterations.png Graphic file (type png)
 <use figures/Dependency/dependency_iterations.png>
 Package pdftex.def Info: figures/Dependency/dependency_iterations.png  used on input line 468.
 (pdftex.def)             Requested size: 230.18253pt x 132.88026pt.
-<figures/Modularity/declarativity2_iterations.png, id=1222, 855.195pt x 493.845pt>
+<figures/Modularity/declarativity2_iterations.png, id=1224, 855.195pt x 493.845pt>
 File: figures/Modularity/declarativity2_iterations.png Graphic file (type png)
 <use figures/Modularity/declarativity2_iterations.png>
 Package pdftex.def Info: figures/Modularity/declarativity2_iterations.png  used on input line 475.
 (pdftex.def)             Requested size: 230.18253pt x 132.91794pt.
-<figures/Length/length_iterations.png, id=1223, 855.195pt x 493.845pt>
+<figures/Length/length_iterations.png, id=1225, 855.195pt x 493.845pt>
 File: figures/Length/length_iterations.png Graphic file (type png)
 <use figures/Length/length_iterations.png>
 Package pdftex.def Info: figures/Length/length_iterations.png  used on input line 480.
@@ -1411,17 +1379,17 @@ LaTeX Warning: Reference `fig:ex1-comp-len' on page 69 undefined on input line 1
 [69
 
 ] [70] [71] [72]) (./chapter/B1-ConfigImProver2.tex [73] [74]
-<figures/Dependency/IRPO Dependency Iter 3 Acc.png, id=1706, 2537.48pt x 1332.98pt>
+<figures/Dependency/IRPO Dependency Iter 3 Acc.png, id=1708, 2537.48pt x 1332.98pt>
 File: figures/Dependency/IRPO Dependency Iter 3 Acc.png Graphic file (type png)
 <use figures/Dependency/IRPO Dependency Iter 3 Acc.png>
 Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Acc.png  used on input line 12.
 (pdftex.def)             Requested size: 150.32504pt x 78.95836pt.
-<figures/Dependency/IRPO Dependency Iter 3 Loss.png, id=1707, 2537.48pt x 1332.98pt>
+<figures/Dependency/IRPO Dependency Iter 3 Loss.png, id=1709, 2537.48pt x 1332.98pt>
 File: figures/Dependency/IRPO Dependency Iter 3 Loss.png Graphic file (type png)
 <use figures/Dependency/IRPO Dependency Iter 3 Loss.png>
 Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Loss.png  used on input line 17.
 (pdftex.def)             Requested size: 150.32504pt x 78.95836pt.
-<figures/Dependency/IRPO Dependency Iter 3 Margin.png, id=1708, 2537.48pt x 1332.98pt>
+<figures/Dependency/IRPO Dependency Iter 3 Margin.png, id=1710, 2537.48pt x 1332.98pt>
 File: figures/Dependency/IRPO Dependency Iter 3 Margin.png Graphic file (type png)
 <use figures/Dependency/IRPO Dependency Iter 3 Margin.png>
 Package pdftex.def Info: figures/Dependency/IRPO Dependency Iter 3 Margin.png  used on input line 22.
@@ -1578,33 +1546,33 @@ Overfull \hbox (8.37685pt too wide) in paragraph at lines 80--81
 \OT1/cmtt/m/n/6 <PROOF>...</PROOF> tag, and if there is no formal proof provided in the input, you may simply output <PROOF></PROOF> for the proof after informalizing
  []
 
-<figures/Length/length_iter_1_gridsearch_all.png, id=1718, 1293.633pt x 853.5087pt>
+<figures/Length/length_iter_1_gridsearch_all.png, id=1720, 1293.633pt x 853.5087pt>
 File: figures/Length/length_iter_1_gridsearch_all.png Graphic file (type png)
 <use figures/Length/length_iter_1_gridsearch_all.png>
 Package pdftex.def Info: figures/Length/length_iter_1_gridsearch_all.png  used on input line 98.
 (pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
-<figures/Length/length_iter_2_gridsearch_all.png, id=1719, 1293.633pt x 853.5087pt>
+<figures/Length/length_iter_2_gridsearch_all.png, id=1721, 1293.633pt x 853.5087pt>
 File: figures/Length/length_iter_2_gridsearch_all.png Graphic file (type png)
 <use figures/Length/length_iter_2_gridsearch_all.png>
 Package pdftex.def Info: figures/Length/length_iter_2_gridsearch_all.png  used on input line 106.
 (pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
-<figures/Length/length_iter_3_gridsearch_all.png, id=1720, 1293.633pt x 853.5087pt>
+<figures/Length/length_iter_3_gridsearch_all.png, id=1722, 1293.633pt x 853.5087pt>
 File: figures/Length/length_iter_3_gridsearch_all.png Graphic file (type png)
 <use figures/Length/length_iter_3_gridsearch_all.png>
 Package pdftex.def Info: figures/Length/length_iter_3_gridsearch_all.png  used on input line 114.
 (pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
 [76] [77 <./figures/Length/length_iter_1_gridsearch_all.png> <./figures/Length/length_iter_2_gridsearch_all.png> <./figures/Length/length_iter_3_gridsearch_all.png>]
-<figures/Dependency/dependency_iter_1_gridsearch_all.png, id=1738, 1293.633pt x 853.5087pt>
+<figures/Dependency/dependency_iter_1_gridsearch_all.png, id=1740, 1293.633pt x 853.5087pt>
 File: figures/Dependency/dependency_iter_1_gridsearch_all.png Graphic file (type png)
 <use figures/Dependency/dependency_iter_1_gridsearch_all.png>
 Package pdftex.def Info: figures/Dependency/dependency_iter_1_gridsearch_all.png  used on input line 130.
 (pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
-<figures/Dependency/dependency_iter_2_gridsearch_all.png, id=1739, 1293.633pt x 853.5087pt>
+<figures/Dependency/dependency_iter_2_gridsearch_all.png, id=1741, 1293.633pt x 853.5087pt>
 File: figures/Dependency/dependency_iter_2_gridsearch_all.png Graphic file (type png)
 <use figures/Dependency/dependency_iter_2_gridsearch_all.png>
 Package pdftex.def Info: figures/Dependency/dependency_iter_2_gridsearch_all.png  used on input line 138.
 (pdftex.def)             Requested size: 305.33789pt x 201.44714pt.
-<figures/Dependency/dependency_iter_3_gridsearch_all.png, id=1740, 1293.633pt x 853.5087pt>
+<figures/Dependency/dependency_iter_3_gridsearch_all.png, id=1742, 1293.633pt x 853.5087pt>
 File: figures/Dependency/dependency_iter_3_gridsearch_all.png Graphic file (type png)
 <use figures/Dependency/dependency_iter_3_gridsearch_all.png>
 Package pdftex.def Info: figures/Dependency/dependency_iter_3_gridsearch_all.png  used on input line 146.
@@ -1672,18 +1640,18 @@ Package rerunfilecheck Info: File `cmu-example-dissertation.out' has not changed
 (rerunfilecheck)             Checksum: 8041529116CAC52A09367B216DD86D5E;11127.
  ) 
 Here is how much of TeX's memory you used:
- 51362 strings out of 475189
- 1160750 string characters out of 5763832
+ 51366 strings out of 475189
+ 1160801 string characters out of 5763832
  2333254 words of memory out of 5000000
- 70946 multiletter control sequences out of 15000+600000
+ 70949 multiletter control sequences out of 15000+600000
  587886 words of font info for 150 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 106i,13n,435p,4281b,2488s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 107i,13n,440p,4281b,2488s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/euler/eufm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfit0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/stmaryrd/stmary8.pfb>
-Output written on cmu-example-dissertation.pdf (95 pages, 8896114 bytes).
+Output written on cmu-example-dissertation.pdf (95 pages, 8895987 bytes).
 PDF statistics:
- 2312 PDF objects out of 2487 (max. 8388607)
- 2074 compressed objects within 21 object streams
- 951 named destinations out of 1000 (max. 500000)
+ 2314 PDF objects out of 2487 (max. 8388607)
+ 2076 compressed objects within 21 object streams
+ 952 named destinations out of 1000 (max. 500000)
  668 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -5,21 +5,21 @@
 \label{tab:abl}
 \centering
 \small
-\begin{tabular}{l|cccc}
+\begin{tabular}{l|ccc}
 \toprule
-& Improvement& Nonempty Improve.& Accuracy & Improved Acc.\\
+& Improvement& Accuracy & Improved Acc.\\
 \midrule
-GPT-4o-mini&  0 & 0 & 3.62\% & 0\%\\
-GPT-4o & 7.03 & 19.67 & 35.77\% & 15.33\%\\
+GPT-4o-mini&  0 & 3.62\% & 0\%\\
+GPT-4o & 7.03 & 35.77\% & 15.33\%\\
 % \midrule
-% Ablations \\ 
-+ Output and CoS &8.04 / 6.31 & 12.38 / 14.17 & 64.96\% / 44.53\% & 21.17\% / 16.06\% \\
-+ Example Retrieval & 9.34 / 5.67 & 14.7 / 8.44 & 63.5\% / 67.15\% & 21.9\% / 16.79\% \\
-+ Sampling Method &15.35 / 9.34 & 18.44 / 14.7 & 83.21\% / 63.5\% & 36.5\% / 21.9\% \\
-+ $n$ and Model & 23.51 / 3.65 & 26.28 / 4.63 & 89.47\% / 78.95\% & 45.61\% / 8.77\% \\
-+ Combos and RAG & 34.88 / 28.25 & 57.56 / 33.48 & 60.61\% / 84.38\% & 54.55\% / 53.12\% \\
+% Ablations \\
++ Output and CoS &8.04 / 6.31 & 64.96\% / 44.53\% & 21.17\% / 16.06\% \\
++ Example Retrieval & 9.34 / 5.67 & 63.5\% / 67.15\% & 21.9\% / 16.79\% \\
++ Sampling Method &15.35 / 9.34 & 83.21\% / 63.5\% & 36.5\% / 21.9\% \\
++ $n$ and Model & 23.51 / 3.65 & 89.47\% / 78.95\% & 45.61\% / 8.77\% \\
++ Combos and RAG & 34.88 / 28.25 & 60.61\% / 84.38\% & 54.55\% / 53.12\% \\
 \midrule
-\textbf{\methodname{}} & \textbf{34.88} & \textbf{57.56} & \textbf{100\%} & \textbf{54.55\%}\\
+\textbf{\methodname{}} & \textbf{34.88} & \textbf{100\%} & \textbf{54.55\%}\\
 \bottomrule
 \end{tabular}
 
