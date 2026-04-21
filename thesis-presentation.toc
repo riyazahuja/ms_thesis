@@ -1,0 +1,7 @@
+\beamer@sectionintoc {1}{Motivation}{4}{0}{1}
+\beamer@sectionintoc {2}{Proof Optimization}{24}{0}{2}
+\beamer@sectionintoc {3}{ImProver}{49}{0}{3}
+\beamer@sectionintoc {4}{ImProver Experiments}{61}{0}{4}
+\beamer@sectionintoc {5}{ImProver\nobreakspace {}2}{76}{0}{5}
+\beamer@sectionintoc {6}{ImProver\nobreakspace {}2 Experiments}{89}{0}{6}
+\beamer@sectionintoc {7}{Conclusions}{114}{0}{7}

@@ -1,0 +1,35 @@
+\frametitle{Qualitative: Modularity Increase}
+\vspace{0.2em}
+{\small \texttt{KD\_weakerThan\_KDB} (Seymour) --- flat proof $\to$ 2 effective named subgoals}
+\begin{columns}[T]
+\begin{column}{0.40\textwidth}
+\textbf{Original}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={<=s}{{$\leq_s$}}2]
+lemma KD_weakerThan_KDB :
+  (Hilbert.KD $\alpha$) <=s
+  (Hilbert.KDB $\alpha$) :=
+  normal_weakerThan_of_subset
+    (by intro; aesop)
+\end{lstlisting}
+\small Flat; modularity $= 0$.
+\end{column}
+\begin{column}{0.57\textwidth}
+\textbf{ImProver~2}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,literate={<=s}{{$\leq_s$}}2 {subset}{{$\subseteq$}}1]
+lemma KD_weakerThan_KDB :
+  (Hilbert.KD $\alpha$) <=s
+  (Hilbert.KDB $\alpha$) := by
+  have h1 : KD.axioms subset
+    KDB.axioms ->
+    KD <=s KDB := by
+    apply normal_weakerThan_of_subset
+  have h2 : KD.axioms subset
+    KDB.axioms := by
+    intro phi hphi
+    cases hphi <;>
+      simp_all [KD, KDB]
+  exact h1 h2
+\end{lstlisting}
+\small 2 effective spawned goals: $h_1$, $h_2$.
+\end{column}
+\end{columns}

@@ -1,5 +1,5 @@
-\contentsline {chapter}{\textbf {List of Figures}}{ix}{Doc-Start}%
-\contentsline {chapter}{\textbf {List of Tables}}{xii}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Figures}}{title}{Doc-Start}%
+\contentsline {chapter}{\textbf {List of Tables}}{title}{Doc-Start}%
 \contentsline {section}{\numberline {1\hspace {1em}}\nobreakspace {}\textbf {Introduction}}{1}{section*.1}%
 \contentsline {subsection}{\numberline {1.1}Motivation}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Contributions}{2}{subsection.1.2}%
