@@ -1,4 +1,4 @@
-\begin{thebibliography}{56}
+\begin{thebibliography}{55}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -62,17 +62,6 @@ Albert~Qiaochu Jiang, Sean Welleck, Jin~Peng Zhou, Timothee Lacroix, Jiacheng Li
 \newblock In \emph{The Eleventh International Conference on Learning Representations}, 2023{\natexlab{a}}.
 \newblock URL \url{https://openreview.net/forum?id=SMa9EAovKMC}.
 
-\bibitem[Ahuja et~al.(2025)Ahuja, Avigad, Tetali, and Welleck]{ImProver}
-Riyaz Ahuja, Jeremy Avigad, Prasad Tetali, and Sean Welleck.
-\newblock Improver: Agent-based automated proof optimization.
-\newblock In Y.~Yue, A.~Garg, N.~Peng, F.~Sha, and R.~Yu, editors, \emph{International Conference on Representation Learning}, volume 2025, pages 29521--29543, 2025.
-\newblock URL \url{https://proceedings.iclr.cc/paper_files/paper/2025/file/4864005cfdea7ebd07086ed1b9846825-Paper-Conference.pdf}.
-
-\bibitem[Ahuja et~al.(2026)Ahuja, Rowney, Avigad, and Welleck]{ImProver2}
-Riyaz Ahuja, Tate Rowney, Jeremy Avigad, and Sean Welleck.
-\newblock Improver 2: Iteratively self-improving lms for neurosymbolic proof optimization, 2026.
-\newblock Submitted to ICML 2026.
-
 \bibitem[Autexier and Dietrich(2010)]{serge2010}
 Serge Autexier and Dominik Dietrich.
 \newblock A tactic language for declarative proofs.
@@ -119,6 +108,12 @@ Kaiyu Yang, Aidan Swope, Alex Gu, Rahul Chalamala, Peiyang Song, Shixing Yu, Saa
 \newblock {LeanDojo}: Theorem proving with retrieval-augmented language models.
 \newblock In \emph{Neural Information Processing Systems (NeurIPS)}, 2023{\natexlab{b}}.
 \newblock URL \url{https://icml.cc/virtual/2023/27190}.
+
+\bibitem[Ahuja et~al.(2025)Ahuja, Avigad, Tetali, and Welleck]{ImProver}
+Riyaz Ahuja, Jeremy Avigad, Prasad Tetali, and Sean Welleck.
+\newblock Improver: Agent-based automated proof optimization.
+\newblock In Y.~Yue, A.~Garg, N.~Peng, F.~Sha, and R.~Yu, editors, \emph{International Conference on Representation Learning}, volume 2025, pages 29521--29543, 2025.
+\newblock URL \url{https://proceedings.iclr.cc/paper_files/paper/2025/file/4864005cfdea7ebd07086ed1b9846825-Paper-Conference.pdf}.
 
 \bibitem[Frieder et~al.(2025)Frieder, Bayer, Looi, Loader, Berner, Collins, Juhász, Ruehle, Welleck, Poesia, Griffiths, Weller, Goyal, Freer, Lukasiewicz, and Gowers]{frieder2025datamathematicalcopilotsbetter}
 Simon Frieder, Jonas Bayer, Sam Looi, Jacob Loader, Julius Berner, Katherine~M. Collins, András Juhász, Fabian Ruehle, Sean Welleck, Gabriel Poesia, Ryan-Rhys Griffiths, Adrian Weller, Anirudh Goyal, Cameron Freer, Thomas Lukasiewicz, and Timothy Gowers.
