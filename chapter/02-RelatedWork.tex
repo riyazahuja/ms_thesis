@@ -23,7 +23,7 @@ The miniCTX benchmark \cite{hu2024minictxneuraltheoremproving} evaluates neural 
 
 Automated proof optimization --- the task of rewriting a verified proof to make it better with respect to some criterion while preserving correctness --- was introduced as a formal task by ImProver \cite{ImProver} (Chapter~\ref{chap:improver} of this thesis). ImProver created a system capable of optimizing towards multiple metrics of improvement; however, it relied on general-purpose closed-source models (GPT-4o), leading to substantial deployment costs and limited ability to improve performance beyond these models' baseline.
 
-Concurrent work by \cite{gu2025proofoptimizer} focused solely on optimizing the token count of proofs according to a complex tokenizer intended to reduce compilation time. This work does not examine other metrics, leaving out important use cases and limiting its utility to research mathematicians.
+Subsequent work by \cite{gu2025proofoptimizer} focused solely on optimizing the token count of proofs according to a complex tokenizer intended to reduce compilation time. This work does not examine other metrics, leaving out important use cases and limiting its utility to research mathematicians.
 
 Low library quality also decreases its utility as training data: modern theorem provers and autoformalizers increasingly train on these very corpora, so the structure and readability of proofs directly shape downstream prover performance \cite{gu2025proofoptimizer}.
 
